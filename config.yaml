@@ -64,23 +64,21 @@ contact: 'brett.johnson@dfo-mpo.gc.ca'
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
-- introduction.md
-- session-1.Rmd
-- session-1-rmd.Rmd
-- session-2-rmd.Rmd
-- session-3-rmd.Rmd
-- session-4-rmd.Rmd
+episodes:
 - introduction.Rmd
+- session-1.Rmd
+- session-2.Rmd
+- session-3.Rmd
+- session-4.Rmd
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
