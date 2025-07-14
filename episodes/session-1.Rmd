@@ -1,39 +1,29 @@
 ---
-title: 'Session-1'
+title: 'Concept Decomposition'
 teaching: 10
 exercises: 2
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do you write a lesson using R Markdown and `{sandpaper}`?
+- How do I decompose terms found in different data sets?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use markdown with the new lesson template
-- Demonstrate how to include pieces of code, figures, and nested challenge blocks
+- Explain how to decompose terms into smaller concepts
+- Demonstrate how decompose terms using real world juvenile sockeye datasets
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown][pandoc] for static files (with extension `.md`) and
-[R Markdown][r-markdown] for dynamic files that can render code into output
-(with extension `.Rmd`). Please refer to the [Introduction to The Carpentries
-Workbench][carpentries-workbench] for full documentation.
+Concept decomposition is the process of breaking down complex terms into smaller, more granular concepts. This is particularly useful in data analysis, where terms may be used inconsistently across different datasets. By decomposing terms, we can ensure we understand the underlying concepts and can integrate the data more effectively.
 
-What you need to know is that there are three sections required for a valid
-Carpentries lesson template:
+This lesson will guide you through the process of decomposing terms found in different datasets, using real-world juvenile sockeye datasets as examples.
 
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
+
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
@@ -44,9 +34,9 @@ associated with the lessons. They appear in the "Instructor View"
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 1: Can you do it?
+## Challenge 1: Can you decompose length and weight terms?
 
-What is the output of this command?
+
 
 ```r
 paste("This", "new", "lesson", "looks", "good")
