@@ -3,9 +3,11 @@ title: "Introduction to Salmon Knowledge Modelling"
 teaching: 10
 exercises: 2
 ---
+
 :::::::::::::::::::::::::::::::::::::: questions 
 -   What are controlled vocabularies and why are they important for data interoperability?
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
 ## Introduction
 
 This workshop helps participants collaboratively develop, document, and align controlled vocabularies to improve data interoperability in salmon research and management. It emphasizes practical, community-centered steps that support long-term reusability and transparency, while remaining adaptable to other organizations or domains.
@@ -19,6 +21,7 @@ Inconsistent terminology prevents data integration and makes shared understandin
 -   Enabling clear documentation and communication
 
 -   Forming the foundation for ontologies and semantic integration
+
 
 ::::::::::::::::::::::::::::::::::::: objectives
 ### Learning Approach

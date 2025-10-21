@@ -4,12 +4,10 @@ teaching: 90
 exercises: 1
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
-
+:::::::::::::::::::::::::::::::::::::: questions
 -   Are the terms I need already defined somewhere else?
 -   How can I responsibly reuse existing terms and URIs?
 -   What are the benefits of aligning early rather than reinventing?
-
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
