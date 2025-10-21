@@ -1,117 +1,110 @@
 ---
-title: 'Session-3'
-teaching: 10
+title: 'Aligning with Others — Create Mapping Tables and Crosswalks'
+teaching: 90
 exercises: 2
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do you write a lesson using R Markdown and `{sandpaper}`?
+- How do I connect my terms with those used in other datasets or agencies?
+- What relationships exist between similar terms?
+- How do I clarify whether two terms really mean the same thing?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use markdown with the new lesson template
-- Demonstrate how to include pieces of code, figures, and nested challenge blocks
+- Build a mapping table (crosswalk) comparing terms across datasets.
+- Use simple semantic relationship types (same_as, close_match, broader_than, narrower_than).
+- Learn how to identify equivalent or near-equivalent terms through metadata review and consultation.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
+::::::::::::::::::::::::::::::::::::::: instructor
+1. Concept: Why Alignment Matters (10 min)
+Explain that mapping terms is how we translate between datasets.
+Example:
 
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown][pandoc] for static files (with extension `.md`) and
-[R Markdown][r-markdown] for dynamic files that can render code into output
-(with extension `.Rmd`). Please refer to the [Introduction to The Carpentries
-Workbench][carpentries-workbench] for full documentation.
+Dataset A: sex (M/F)
 
-What you need to know is that there are three sections required for a valid
-Carpentries lesson template:
+Dataset B: gender_code (1/2)
+→ Both represent the same concept but use different encodings.
 
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
+2. Demonstration: Creating a Crosswalk (15 min)
+Instructor compares two small CSVs, shows how to:
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+Identify possible term matches
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
+Decide on relationship type (same_as, close_match, etc.)
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Record reasoning in the notes field
+
+3. 🧠 Challenge / Activity 1: Build a Mapping Table (40 min)
+4. 🧠 Challenge / Activity 2: Semantic Refinement (15 min)
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 1: Can you do it?
+## Challenge 1: Build a Mapping Table (40 min)
 
-What is the output of this command?
+Goal: Align terms across two datasets and document relationships.
+Steps:
 
-```r
-paste("This", "new", "lesson", "looks", "good")
-```
+Each group works with two provided datasets.
+
+Identify at least 5 potential overlapping terms.
+
+For each pair, fill out the crosswalk template with:
+
+Dataset A term
+
+Dataset B term
+
+Relationship type
+
+Notes on definition differences or units
+
+If a match is uncertain, discuss how you’d clarify (e.g., contact data author).
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge 
+## Challenge 2: Semantic Refinement (15 min)
+
+Goal: Describe hierarchical relationships.
+
+Choose one pair and add hierarchical detail:
+
+e.g., “Chinook” is narrower_than “Salmonid species”
+
+“Adult return timing” is broader_than “Peak migration week.”
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::instructor
+5. Discussion & Reflection (10 min)
+Prompt questions:
+
+What kinds of differences were most common?
+
+How can mapping tables reduce confusion across projects?
+
+How might you maintain or share these mappings?
+:::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::: solution 
 
-## Output
- 
-```output
-[1] "This new lesson looks good"
-```
+## Expected Outputs
 
+- Completed mapping table linking terms across two datasets.
+
+- Understanding of how to express equivalence or relatedness.
+
+- Foundation for the next stage: governance and publication of vocabularies.
 :::::::::::::::::::::::::::::::::
 
 
-## Challenge 2: how do you nest solutions within challenge blocks?
-
-:::::::::::::::::::::::: solution 
-
-You can add a line with at least three colons and a `solution` tag.
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Figures
-
-You can include figures generated from R Markdown:
-
-
-``` r
-pie(
-  c(Sky = 78, "Sunny side of pyramid" = 17, "Shady side of pyramid" = 5), 
-  init.angle = 315, 
-  col = c("deepskyblue", "yellow", "yellow3"), 
-  border = FALSE
-)
-```
-
-<div class="figure" style="text-align: center">
-<img src="fig/session-3-rendered-pyramid-1.png" alt="pie chart illusion of a pyramid"  />
-<p class="caption">Sun arise each and every morning</p>
-</div>
-Or you can use pandoc markdown for static figures with the following syntax:
-
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
-
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
-
-## Math
-
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
-
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
-::::::::::::::::::::::::::::::::::::: keypoints 
-
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
+:::::::::::::::::::::::::::::::::: keypoints
+- Alignment makes data interoperable across organizations.
+- Mapping tables document where meaning overlaps or diverges.
+- Relationships like same_as, close_match, broader_than provide clarity for integration.
+::::::::::::::::::::::::::::::::::::::::::::
