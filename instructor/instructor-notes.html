@@ -292,7 +292,19 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="session-4.html">5. Session-4</a>
+        <a href="session-4.html">5. From Terms to Meaning: Framing Knowledge with Competency Questions</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush7">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading7">
+        <a href="session-5.html">6. From Concepts to Semantics — Introducing SKOS</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -481,14 +493,81 @@ small CSVs, shows how to:</li>
 <p>How can mapping tables reduce confusion across projects?</p>
 <p>How might you maintain or share these mappings?</p>
 <hr>
-<br></section><section id="session-4"><h2 class="section-heading"><a href="session-4.html">Session-4</a></h2>
+<br></section><section id="session-4"><h2 class="section-heading"><a href="session-4.html">From Terms to Meaning: Framing Knowledge with Competency Questions</a></h2>
 <hr class="half-width">
 <h3 id="session-4-headingInstructor1">
 <a href="session-4.html#headingInstructor1">Instructor Note</a><a class="anchor" aria-label="anchor" href="#session-4-headingInstructor1"></a>
 </h3>
+<ol style="list-style-type: decimal">
+<li>Concept Introduction (15 min)</li>
+</ol>
+<p>Prompt discussion:</p>
+<p>“If your vocabulary or ontology were a smart assistant, what
+questions would you want it to answer?”</p>
+<p>Use this to introduce Competency Questions as a design tool.</p>
+<p>Explain: Competency Questions (CQs) help define:</p>
+<p>What knowledge must be represented.</p>
+<p>How concepts are related.</p>
+<p>Which data connections are needed to answer real-world questions.</p>
+<p>Example:</p>
+<p>“Are differences in sockeye smolt condition at ocean entry
+contributing to differences in adult return abundances between Fraser
+River and Bristol Bay populations?” → This implies relationships between
+smolt condition, population, location, ocean entry timing, and adult
+return abundance.</p>
+<p>Show how each CQ points toward relationships that need to exist in
+the ontology (e.g., “hasCondition,” “occursAt,”
+“belongsToPopulation”).</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Demonstration: Deriving CQs from Data (10 min)</li>
+</ol>
+<p>Instructor uses one term from the data dictionary (e.g., brood_year)
+and models a possible CQ:</p>
+<p>“How does brood year relate to adult return abundance?”</p>
+<p>“Which brood years correspond to years of low marine survival?”</p>
+<p>Show how these questions hint at:</p>
+<p>Entities: brood year, adult return, marine survival rate</p>
+<p>Relationships: occurs_in_year, affects, has_rate</p>
+<p>Explain that this is the first step in translating vocabulary terms
+into knowledge relationships.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>🧠 Challenge / Activity 1: Writing Competency Questions (35
+min)</li>
+</ol>
+<hr>
+<br><h3 id="session-4-headingInstructor2">
+<a href="session-4.html#headingInstructor2">Instructor Note</a><a class="anchor" aria-label="anchor" href="#session-4-headingInstructor2"></a>
+</h3>
+<p>Facilitator Notes:</p>
+<p>Encourage specificity. Instead of “What affects salmon survival?”,
+refine to “Does earlier ocean entry date affect survival of Fraser River
+Chinook smolts?”</p>
+<p>Keep language natural — these aren’t queries yet, just conceptual
+targets.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>🧩 Challenge / Activity 2: Extracting Relationships (20 min)</li>
+</ol>
+<hr>
+<br></section><section id="session-5"><h2 class="section-heading"><a href="session-5.html">From Concepts to Semantics — Introducing SKOS</a></h2>
+<hr class="half-width">
+<h3 id="session-5-headingInstructor1">
+<a href="session-5.html#headingInstructor1">Instructor Note</a><a class="anchor" aria-label="anchor" href="#session-5-headingInstructor1"></a>
+</h3>
 <p>Inline instructor notes can help inform instructors of timing
 challenges associated with the lessons. They appear in the “Instructor
 View”</p>
+<hr>
+<br><h3 id="session-5-headingInstructor2">
+<a href="session-5.html#headingInstructor2">Instructor Note</a><a class="anchor" aria-label="anchor" href="#session-5-headingInstructor2"></a>
+</h3>
+<p>💬 Reflection (10 min)</p>
+<p>Discuss as a group:</p>
+<ul>
+<li>What patterns or redundancies did you notice in your terms?</li>
+<li>Which concepts could be reused from an existing vocabulary?</li>
+<li>How does formalizing these relationships help you answer your
+Competency Questions from Module 4?</li>
+</ul>
 <hr>
 <br></section></section>
 </div>
