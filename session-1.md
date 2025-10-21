@@ -1,56 +1,94 @@
 ---
 title: 'Reusing Terms — Search and Integrate Existing Vocabularies'
-teaching: 10
-exercises: 2
+teaching: 90
+exercises: 1
 ---
 
-::: questions
+:::::::::::::::::::::::::::::::::::::: questions
 -   Are the terms I need already defined somewhere else?
 -   How can I responsibly reuse existing terms and URIs?
 -   What are the benefits of aligning early rather than reinventing?
-:::
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-::: objectives
+::::::::::::::::::::::::::::::::::::: objectives
+
 -   Learn how to discover and evaluate existing vocabularies relevant to your domain (e.g., Darwin Core, WoRMS, OBO ontologies).
 -   Understand how to reuse URIs and integrate external definitions into your own data dictionary.
 -   Practice linking your data elements to authoritative terms where appropriate.
-:::
+
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-Concept decomposition is the process of breaking down complex terms into smaller, more granular concepts. This is particularly useful in data analysis, where terms may be used inconsistently across different datasets. By decomposing terms, we can ensure we understand the underlying concepts and can integrate the data more effectively.
+::::::::::::::::::::::::::::::::::::::: instructor
+1.  Warm-up Discussion (10 min) Ask:
 
-This lesson will guide you through the process of decomposing terms found in different datasets, using real-world juvenile sockeye datasets as examples.
+“What challenges do you face when merging data from other sources?”
 
-::: challenge
-## Challenge 1: Search for existing vocabularies using repositories like FAIRsharing.org, Linked Open Vocabularies (LOV), or w3id.org.
-:::
+“Has anyone tried to interpret someone else’s dataset and gotten confused by a term?” → Summarize: inconsistent naming blocks reuse and synthesis.
 
-::: solution
-``` output
-[1] "This new lesson looks good"
-```
-:::
+2.  Concept: Why Reuse? (10 min) Explain that reusing existing terms ensures that data “speak the same language.” Example:
 
-::: challenge
-## Challenge 2: For 3–5 of your dataset’s column names, find potential matches in an existing vocabulary.
-:::
+Instead of inventing “broodYear”, reuse the URI <http://purl.dataone.org/odo/SALMON_00000520>.
 
-::: solution
-You can add a line with at least three colons and a `solution` tag.
-:::
+This URI points to a definition that others already understand.
 
-::: instructor
-Discussion: When to reuse vs. when to define new terms.
-:::
+3.  Demonstration: Searching Existing Vocabularies (15 min) Instructor shares screen:
 
-::: challenge
-## Challenge 3: Update your data dictionary to include external URIs and citation links.
-:::
+Search for “salmon” or “brood year” on BioPortal.bioontology.org or NVS.
 
-::: keypoints
--   Use `.md` files for episodes when you want static content
--   Use `.Rmd` files for episodes when you need to generate output
--   Run `sandpaper::check_lesson()` to identify any issues with your lesson
--   Run `sandpaper::build_lesson()` to preview your lesson locally
-:::
+Show how to view term metadata (label, definition, URI, license).
+
+Demonstrate copying the URI into the Data Dictionary Template.
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: challenge
+## Challenge 1: Find and reuse (30 min)
+
+Goal: Identify existing vocabulary terms that match your own dataset.
+
+Steps:
+
+1.  Select 3–5 column names from your dataset.
+
+2.  Search for equivalent terms in one or more repositories.
+
+3.  Record matches in the Data Dictionary Template:
+
+-   Your local term
+-   External URI
+-   Source vocabulary name
+-   Notes on whether it’s an exact or close match
+:::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::: instructor
+Group Debrief (10 min)
+Ask:
+
+Which terms were easy to find?
+
+Which were hard or missing?
+
+When would you decide to reuse vs. define your own?
+
+5. Reflection (10 min)
+Discuss the downstream benefits:
+
+Reusing terms enables automatic linking and machine-readability.
+
+Fewer mapping issues later when integrating salmon datasets.
+:::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+## Expected Outputs
+
+Updated data dictionary with at least three reused terms and their URIs.
+
+Learners understand how to find, evaluate, and record external vocabularies.
+
+::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::: keypoints
+-   Controlled vocabularies capture shared meaning of terms.
+-   Reusing existing URIs improves interoperability and credibility.
+-   Reuse saves time, avoids duplication, and makes future integration easier.
+::::::::::::::::::::::::::::::::::::::::::::
