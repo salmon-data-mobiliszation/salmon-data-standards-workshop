@@ -1,111 +1,99 @@
 ---
-title: 'Session-2'
-teaching: 10
-exercises: 2
+title: 'Documenting Terms — Write Clear, Useful Definitions'
+teaching: 90
+exercises: 1
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do you write a lesson using R Markdown and `{sandpaper}`?
+- How can I make sure others understand and correctly use my terms?
+- What makes a good definition or label?
+- How should I record units, examples, and relationships between terms?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use markdown with the new lesson template
-- Demonstrate how to include pieces of code, figures, and nested challenge blocks
+- Extract and describe terms from their dataset.
+- Write unambiguous, well-structured definitions.
+- Record associated metadata (units, codes, examples).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
+::::::::::::::::::::::::::::::::::::::: instructor
+1. Concept: What Makes a Good Definition? (15 min)
+Show two examples:
+❌ “Run timing: when fish come back.”
+✅ “Run timing: The seasonal period during which adult salmon return from the ocean to their natal freshwater spawning areas.”
+Discuss why clarity, precision, and context matter.
 
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown][pandoc] for static files (with extension `.md`) and
-[R Markdown][r-markdown] for dynamic files that can render code into output
-(with extension `.Rmd`). Please refer to the [Introduction to The Carpentries
-Workbench][carpentries-workbench] for full documentation.
+2. Demonstration: Documenting a Term (10 min)
+Instructor walks through one dataset column, filling in the template:
 
-What you need to know is that there are three sections required for a valid
-Carpentries lesson template:
+Label: brood_year
 
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
+Definition: “The calendar year when the majority of parental salmon spawned.”
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+Unit: “Year (YYYY)”
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
+Example: “2017”
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Notes: “Equivalent to term in DFO Salmon Concept Scheme.”
+
+3. Activity: Extract and define (40 min)
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 1: Can you do it?
+## Challenge 1: Extract and define (40 min)
 
-What is the output of this command?
+Goal: Create clear, consistent documentation for your own dataset terms.
 
-```r
-paste("This", "new", "lesson", "looks", "good")
-```
+Review your dataset and list 10–15 column names. Record in a shared data dictionary template (CSV):
+
+- Label (term name)
+
+- Definition (clear, context-rich description)
+
+- Units or codes used
+
+- Example value(s)
+
+- Notes on ambiguity or uncertainty
+::::::::::::::::::::::::::::::::::::::::::::::: 
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+4. Discussion: Patterns and Pitfalls (15 min)
+
+Which terms were hardest to define?
+
+Were there local abbreviations or codes that need clarification?
+
+How can we document uncertainty? (e.g., “derived from visual estimate”).
+
+5. Reflection (10 min)
+Connect to next steps:
+
+A well-documented data dictionary is the foundation for term alignment.
+
+Later modules will link these definitions to others via mappings.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::: solution 
 
-## Output
- 
-```output
-[1] "This new lesson looks good"
-```
+## Expected Outputs
 
+- A draft data dictionary covering at least 10 key terms.
+
+- Peer-reviewed feedback on definition clarity.
+
+- Improved awareness of semantic gaps in existing data.
 :::::::::::::::::::::::::::::::::
 
-
-## Challenge 2: how do you nest solutions within challenge blocks?
-
-:::::::::::::::::::::::: solution 
-
-You can add a line with at least three colons and a `solution` tag.
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Figures
-
-You can include figures generated from R Markdown:
-
-```{r pyramid, fig.alt = "pie chart illusion of a pyramid", fig.cap = "Sun arise each and every morning"}
-pie(
-  c(Sky = 78, "Sunny side of pyramid" = 17, "Shady side of pyramid" = 5), 
-  init.angle = 315, 
-  col = c("deepskyblue", "yellow", "yellow3"), 
-  border = FALSE
-)
-```
-Or you can use pandoc markdown for static figures with the following syntax:
-
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
-
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
-
-## Math
-
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
-
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
-::::::::::::::::::::::::::::::::::::: keypoints 
-
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
+:::::::::::::::::::::::::::::::::: keypoints
+- A data dictionary is the bridge between raw data and understanding.
+- Good definitions reduce misinterpretation and support machine processing.
+- Documentation is both a social and technical task.
+::::::::::::::::::::::::::::::::::::::::::::
