@@ -1,101 +1,96 @@
 ---
-title: 'Concept Decomposition'
-teaching: 10
-exercises: 2
+title: 'Reusing Terms — Search and Integrate Existing Vocabularies'
+teaching: 90
+exercises: 1
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do I decompose terms found in different data sets?
+-   Are the terms I need already defined somewhere else?
+-   How can I responsibly reuse existing terms and URIs?
+-   What are the benefits of aligning early rather than reinventing?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to decompose terms into smaller concepts
-- Demonstrate how decompose terms using real world juvenile sockeye datasets
+-   Learn how to discover and evaluate existing vocabularies relevant to your domain (e.g., Darwin Core, WoRMS, OBO ontologies).
+-   Understand how to reuse URIs and integrate external definitions into your own data dictionary.
+-   Practice linking your data elements to authoritative terms where appropriate.
 
-::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-Concept decomposition is the process of breaking down complex terms into smaller, more granular concepts. This is particularly useful in data analysis, where terms may be used inconsistently across different datasets. By decomposing terms, we can ensure we understand the underlying concepts and can integrate the data more effectively.
+::::::::::::::::::::::::::::::::::::::: instructor
+1.  Warm-up Discussion (10 min) Ask:
 
-This lesson will guide you through the process of decomposing terms found in different datasets, using real-world juvenile sockeye datasets as examples.
+“What challenges do you face when merging data from other sources?”
 
+“Has anyone tried to interpret someone else’s dataset and gotten confused by a term?” → Summarize: inconsistent naming blocks reuse and synthesis.
 
+2.  Concept: Why Reuse? (10 min) Explain that reusing existing terms ensures that data “speak the same language.” Example:
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+Instead of inventing “broodYear”, reuse the URI <http://purl.dataone.org/odo/SALMON_00000520>.
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
+This URI points to a definition that others already understand.
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+3.  Demonstration: Searching Existing Vocabularies (15 min) Instructor shares screen:
 
-::::::::::::::::::::::::::::::::::::: challenge 
+Search for “salmon” or “brood year” on BioPortal.bioontology.org or NVS.
 
-## Challenge 1: Can you decompose length and weight terms?
+Show how to view term metadata (label, definition, URI, license).
 
+Demonstrate copying the URI into the Data Dictionary Template.
+::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::::::::::: challenge
+## Challenge 1: Find and reuse (30 min)
 
-```r
-paste("This", "new", "lesson", "looks", "good")
-```
+Goal: Identify existing vocabulary terms that match your own dataset.
 
-:::::::::::::::::::::::: solution 
+Steps:
 
-## Output
- 
-```output
-[1] "This new lesson looks good"
-```
+1.  Select 3–5 column names from your dataset.
 
-:::::::::::::::::::::::::::::::::
+2.  Search for equivalent terms in one or more repositories.
 
+3.  Record matches in the Data Dictionary Template:
 
-## Challenge 2: how do you nest solutions within challenge blocks?
+-   Your local term
+-   External URI
+-   Source vocabulary name
+-   Notes on whether it’s an exact or close match
+:::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::: instructor
+Group Debrief (10 min)
+Ask:
 
-:::::::::::::::::::::::: solution 
+Which terms were easy to find?
 
-You can add a line with at least three colons and a `solution` tag.
+Which were hard or missing?
 
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
+When would you decide to reuse vs. define your own?
 
-## Figures
+5. Reflection (10 min)
+Discuss the downstream benefits:
 
-You can include figures generated from R Markdown:
+Reusing terms enables automatic linking and machine-readability.
 
-```{r pyramid, fig.alt = "pie chart illusion of a pyramid", fig.cap = "Sun arise each and every morning"}
-pie(
-  c(Sky = 78, "Sunny side of pyramid" = 17, "Shady side of pyramid" = 5), 
-  init.angle = 315, 
-  col = c("deepskyblue", "yellow", "yellow3"), 
-  border = FALSE
-)
-```
-Or you can use pandoc markdown for static figures with the following syntax:
+Fewer mapping issues later when integrating salmon datasets.
+:::::::::::::::::::::::::::::::::::::::::::::::::
 
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
+::::::::::::::::::::::::: solution
+## Expected Outputs
 
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
+Updated data dictionary with at least three reused terms and their URIs.
 
-## Math
+Learners understand how to find, evaluate, and record external vocabularies.
 
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
+::::::::::::::::::::::::::::::::::
 
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
-::::::::::::::::::::::::::::::::::::: keypoints 
-
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
+:::::::::::::::::::::::::::::::::: keypoints
+-   Controlled vocabularies capture shared meaning of terms.
+-   Reusing existing URIs improves interoperability and credibility.
+-   Reuse saves time, avoids duplication, and makes future integration easier.
+::::::::::::::::::::::::::::::::::::::::::::
