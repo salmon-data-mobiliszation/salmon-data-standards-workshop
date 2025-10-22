@@ -1,110 +1,150 @@
 ---
-title: 'Aligning with Others — Create Mapping Tables and Crosswalks'
+title: 'Documenting Terms — Write Clear, Useful Definitions'
 teaching: 90
-exercises: 2
+exercises: 5
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do I connect my terms with those used in other datasets or agencies?
-- What relationships exist between similar terms?
-- How do I clarify whether two terms really mean the same thing?
+- How can I make sure others understand and correctly use my terms?
+- What makes a good definition or label?
+- How should I record units, examples, and relationships between terms?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Build a mapping table (crosswalk) comparing terms across datasets.
-- Use simple semantic relationship types (same_as, close_match, broader_than, narrower_than).
-- Learn how to identify equivalent or near-equivalent terms through metadata review and consultation.
+- Extract and describe terms from their dataset.
+- Write unambiguous, well-structured definitions.
+- Record associated metadata (units, codes, examples).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Introduction
+
+You’ve identified the key terms used in your datasets — and maybe even found some existing ones to reuse.
+Now comes the part that makes your work understandable, trustworthy, and reusable: clear documentation.
+
+Inconsistent or missing definitions are one of the biggest barriers to data reuse. For example:
+
+What does “sample date” really mean — collection date, processing date, or submission date?
+
+Does “juvenile” refer to an age class, a length range, or a life stage?
+
+What are the units? Are they consistent across datasets?
+
+This session will help you document your terms precisely, so anyone — whether a collaborator, data manager, or future researcher — can understand exactly what you meant.
+
+::::::::::::::::::::: callout
+
+🧩 Core Ideas
+
+Documentation is data. It’s the layer that makes data understandable and reusable.
+
+A well-documented term includes:
+
+- Preferred label: the human-readable name.
+- Definition: what the term means and how it’s used.
+- Units or scale: how it’s measured.
+- Example values: what typical data look like.
+
+Notes: clarifications, special cases, or links to other terms.
+
+Think of your data dictionary as a user manual for your dataset.
+
+:::::::::::::::::::::::::::::
+
+### Example
+
+| Term                 | Definition                                                                    | Units                 | Example    | Notes                                                   |
+| -------------------- | ----------------------------------------------------------------------------- | --------------------- | ---------- | ------------------------------------------------------- |
+| **Condition factor** | A measure of fish body condition, typically calculated as weight/length³.     | dimensionless         | 1.05       | Used as an indicator of energy reserves at smolt stage. |
+| **Smolt age**        | The age (in years) of a salmon when it migrates from freshwater to the ocean. | years                 | 2          | Derived from scale analysis.                            |
+| **Capture date**     | The date when a specimen was physically collected in the field.               | ISO 8601 (YYYY-MM-DD) | 2023-05-14 | Not to be confused with processing or tagging date.     |
+
+
+The more clearly you describe your terms now, the easier it becomes to share, integrate, and align your data later — especially when mapping to vocabularies or building ontologies.
+
 ::::::::::::::::::::::::::::::::::::::: instructor
-1. Concept: Why Alignment Matters (10 min)
-Explain that mapping terms is how we translate between datasets.
-Example:
 
-Dataset A: sex (M/F)
+1. Concept: What Makes a Good Definition? (15 min)
+Show two examples:
+❌ “Run timing: when fish come back.”
+✅ “Run timing: The seasonal period during which adult salmon return from the ocean to their natal freshwater spawning areas.”
+Discuss why clarity, precision, and context matter.
 
-Dataset B: gender_code (1/2)
-→ Both represent the same concept but use different encodings.
+2. Demonstration: Documenting a Term (10 min)
+Instructor walks through one dataset column, filling in the template:
 
-2. Demonstration: Creating a Crosswalk (15 min)
-Instructor compares two small CSVs, shows how to:
+Label: brood_year
 
-Identify possible term matches
+Definition: “The calendar year when the majority of parental salmon spawned.”
 
-Decide on relationship type (same_as, close_match, etc.)
+Unit: “Year (YYYY)”
 
-Record reasoning in the notes field
+Example: “2017”
 
-3. 🧠 Challenge / Activity 1: Build a Mapping Table (40 min)
-4. 🧠 Challenge / Activity 2: Semantic Refinement (15 min)
+Notes: “Equivalent to term in DFO Salmon Concept Scheme.”
+
+3. Activity: Extract and define (40 min)
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 1: Build a Mapping Table (40 min)
+## Challenge 1: Extract and define (40 min)
 
-Goal: Align terms across two datasets and document relationships.
-Steps:
+Goal: Create clear, consistent documentation for your own dataset terms.
 
-Each group works with two provided datasets.
+Review your dataset and list 10–15 column names. Record in a shared data dictionary template (CSV):
 
-Identify at least 5 potential overlapping terms.
+- Label (term name)
 
-For each pair, fill out the crosswalk template with:
+- Definition (clear, context-rich description)
 
-Dataset A term
+- Units or codes used
 
-Dataset B term
+- Example value(s)
 
-Relationship type
+- Notes on ambiguity or uncertainty
 
-Notes on definition differences or units
+::::::::::::::::::::::::::::::::::::::::::::::: 
 
-If a match is uncertain, discuss how you’d clarify (e.g., contact data author).
-:::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-::::::::::::::::::::::::::::::::::::: challenge 
-## Challenge 2: Semantic Refinement (15 min)
+4. Discussion: Patterns and Pitfalls (15 min)
 
-Goal: Describe hierarchical relationships.
+Which terms were hardest to define?
 
-Choose one pair and add hierarchical detail:
+Were there local abbreviations or codes that need clarification?
 
-e.g., “Chinook” is narrower_than “Salmonid species”
+How can we document uncertainty? (e.g., “derived from visual estimate”).
 
-“Adult return timing” is broader_than “Peak migration week.”
-:::::::::::::::::::::::::::::::::::::::::::::::
+5. Reflection (10 min)
+Connect to next steps:
 
-:::::::::::::::::::::::::::::::::::::::instructor
-5. Discussion & Reflection (10 min)
-Prompt questions:
+A well-documented data dictionary is the foundation for term alignment.
 
-What kinds of differences were most common?
+Later modules will link these definitions to others via mappings.
 
-How can mapping tables reduce confusion across projects?
-
-How might you maintain or share these mappings?
-:::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::: solution 
 
 ## Expected Outputs
 
-- Completed mapping table linking terms across two datasets.
+- A draft data dictionary covering at least 10 key terms.
 
-- Understanding of how to express equivalence or relatedness.
+- Peer-reviewed feedback on definition clarity.
 
-- Foundation for the next stage: governance and publication of vocabularies.
+- Improved awareness of semantic gaps in existing data.
+
 :::::::::::::::::::::::::::::::::
 
-
 :::::::::::::::::::::::::::::::::: keypoints
-- Alignment makes data interoperable across organizations.
-- Mapping tables document where meaning overlaps or diverges.
-- Relationships like same_as, close_match, broader_than provide clarity for integration.
+
+- A data dictionary is the bridge between raw data and understanding.
+- Good definitions reduce misinterpretation and support machine processing.
+- Documentation is both a social and technical task.
+
 ::::::::::::::::::::::::::::::::::::::::::::

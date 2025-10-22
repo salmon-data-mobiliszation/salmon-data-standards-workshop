@@ -1,158 +1,173 @@
 ---
-title: 'From Terms to Meaning: Framing Knowledge with Competency Questions'
+title: 'Concept Decomposition'
 teaching: 90
 exercises: 2
 ---
 
-::: questions
--  What is a Competency Question (CQ) and how does it help in ontology development?
-:::
+:::::::::::::::::::::::::::::::::::::: questions 
 
-::: objectives
--   Explain what a Competency Question (CQ) is and why it’s useful in ontology development.
--   Formulate domain-relevant CQs that reveal how concepts connect and what data relationships matter.
--   Use CQs to guide vocabulary refinement and early ontology design.
--   Understand how CQs validate whether a knowledge model meets its intended purpose.
-:::
+- What are the components that make up a concept?
+- How do I tell when two terms are the same, related, or overlapping?
+- What patterns or relationships exist among my documented terms?
+- How can I show these relationships clearly?
 
-## Introduction
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Why Competency Questions?
+::::::::::::::::::::::::::::::::::::: objectives
 
-Think of CQs as the "user stories" of ontology design — they describe what users (researchers, managers, etc.) need to know or compare, and ensure your data terms and structures can support those needs.
+- Decompose complex concepts into simpler, more explicit parts.
+- Identify relationships (e.g., broader, narrower, related) among terms.
+- Use visual mapping to show how concepts connect.
+- Prepare a set of refined concepts that can be formalized in a schema.
 
-They help you: - Focus on purpose-driven vocabulary development - Identify data gaps early - Build alignment between scientists, data managers, and modelers
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-Example: Salmon Data Integration Context
+## Introduction 
 
-Imagine you have multiple datasets on sockeye salmon:
+Now that your terms are well-defined and documented, the next step is to look beneath the surface — to unpack how those terms relate to one another.
 
--   Fraser River dataset: smolt length, weight, and ocean entry date
--   Bristol Bay dataset: similar metrics, but uses different column names and sampling protocols
+This process, called concept decomposition, helps you:
 
-Possible Competency Questions might be:
+- See what each concept really means.
+- Identify overlaps or hidden distinctions between terms.
+- Prepare for formal modeling (where meaning becomes machine-readable).
 
--   “Is the average smolt condition at ocean entry higher in one population than another?”
--   “Do differences in smolt condition explain variation in adult return rates?”
+For example:  
+The term “juvenile salmon” might seem simple — until you realize it includes age, size, and life stage. By decomposing it into parts (“life stage: juvenile”, “species: salmon”, “habitat: freshwater”), you make the meaning explicit and ready for alignment with other datasets or vocabularies.
 
-From these questions, you can see what concepts need alignment: condition factor, smolt stage, population, region, and return abundance.
+:::::::::::::::::: callout
 
-::: instructor
-1.  Concept Introduction (15 min)
+🧩 Core Ideas
 
-Prompt discussion:
+- Concept decomposition means breaking a term down into its essential pieces of meaning.
 
-“If your vocabulary or ontology were a smart assistant, what questions would you want it to answer?”
+- It helps you move from words → structure.
 
-Use this to introduce Competency Questions as a design tool.
+- Relationships matter: knowing how one term connects to another is as important as defining it.
 
-Explain: Competency Questions (CQs) help define:
+- Visualizing your terms helps spot patterns and inconsistencies.
 
-What knowledge must be represented.
+::::::::::::::::::::::::::
 
-How concepts are related.
+### Example
 
-Which data connections are needed to answer real-world questions.
+| Term                 | Broader Concept | Narrower Concept | Related Concept |
+| -------------------- | --------------- | ---------------- | --------------- |
+| **Juvenile salmon**  | Salmon          | Parr             | Smolt           |
+| **Smolt**            | Juvenile salmon | —                | Ocean migrant   |
+| **Spawning habitat** | Habitat         | Redd site        | —               |
 
-Example:
 
-“Are differences in sockeye smolt condition at ocean entry contributing to differences in adult return abundances between Fraser River and Bristol Bay populations?” → This implies relationships between smolt condition, population, location, ocean entry timing, and adult return abundance.
+From this, we can see that _Smolt_ is a narrower stage within _Juvenile salmon_, and that _Spawning habitat_ relates to but is distinct from _Redd site_ — these are building blocks for the next module, where we’ll start expressing these ideas formally.
 
-Show how each CQ points toward relationships that need to exist in the ontology (e.g., “hasCondition,” “occursAt,” “belongsToPopulation”).
+::::::::::::::::::::::::::::::::::::::: instructor
 
-2.  Demonstration: Deriving CQs from Data (10 min)
+1. Welcome & Overview (10 min)
+Instructor Talking Points
 
-Instructor uses one term from the data dictionary (e.g., brood_year) and models a possible CQ:
+“We’ve documented and clarified what our terms mean — now we’ll start exploring how they relate to each other.”
 
-“How does brood year relate to adult return abundance?”
+“This process helps identify overlaps, redundancies, and relationships that will make your vocabulary more consistent and integrable.”
 
-“Which brood years correspond to years of low marine survival?”
+“You’ll learn to see terms not just as words, but as concepts in a network of meaning.”
 
-Show how these questions hint at:
+Key Framing Questions
 
-Entities: brood year, adult return, marine survival rate
+- What happens when two teams use different terms for the same thing?
+- How can we make these relationships visible and agreed upon?
+- How might this help us integrate data across programs or agencies?
+- Encourage learners to see this as a detective exercise: uncovering the hidden structure of their vocabulary.
 
-Relationships: occurs_in_year, affects, has_rate
+2. Guided Example: Breaking Down a Concept (10 min)
+Instructor Demo
 
-Explain that this is the first step in translating vocabulary terms into knowledge relationships.
+Use a familiar term, e.g., “juvenile salmon”, and walk through decomposing it into component ideas.
 
-3.  🧠 Challenge / Activity 1: Writing Competency Questions (35 min)
-:::
+Ask aloud:
 
-::: challenge
-## Challenge 1: Identify decision points
+- What is the core idea here?
+- What attributes or qualifiers are implied (e.g., life stage, species, habitat)?
+- Is this term broader or narrower than another concept we’ve seen?
 
-Goal: Draft and refine CQs that reflect the research or management needs represented by your data.
+Discussion Prompt
 
-Steps:
+Ask participants:
 
-1.  Review your vocabulary terms or data dictionary from earlier modules.
+“Can you think of a term in your data that’s used differently by different teams or datasets?”
+Use these examples to highlight why decomposition and mapping relationships improves clarity.
 
-2.  In small groups, brainstorm 3–5 natural-language questions that:
+3. Activity: Decompose and Map Your Own Terms (30 min)
 
--   Are answerable using your data (or could be if integrated).
--   Require multiple terms or relationships to answer.
--   Reflect real research or management scenarios.
+Instructor Tips
 
-3.  Write each question on a sticky note or digital card.
+Encourage them not to overthink — this is exploratory, not final.
 
-4.  Group similar questions and discuss:
+If they get stuck, prompt with:
 
--   Which terms appear most often?
--   What relationships are implied?
-:::
+“What is this a type of?”
 
-::: instructor
-Facilitator Notes:
+“What does this include?”
 
-Encourage specificity. Instead of “What affects salmon survival?”, refine to “Does earlier ocean entry date affect survival of Fraser River Chinook smolts?”
+“What is this related to but not the same as?”
 
-Keep language natural — these aren’t queries yet, just conceptual targets.
+Walk around (or circulate in breakout rooms) and listen for examples that highlight ambiguity or hierarchy.
 
-4.  🧩 Challenge / Activity 2: Extracting Relationships (20 min)
-:::
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
-::: challenge
-## Challenge 2: Write your own competency questions
 
-Goal: Identify which terms and relationships are needed to answer each CQ.
+::::::::::::::::::::::::::::::::::::: challenge 
 
-Instructions:
+## Challenge 1: Build a Mapping Table (40 min)
 
-In small groups or pairs, write 2–3 CQs that your data integration or modeling efforts should be able to answer.
+1. Pick 3–5 documented terms from their Module 2 work.
 
-Focus on specific, realistic, and answerable questions — avoid vague ones like “What is salmon health?”
+2. Break each term down into its essential pieces of meaning.
 
-Check your questions:
+3. Identify any broader/narrower/related concepts.
 
--   Are key concepts clearly defined?
--   Do you know what data source could answer it?
--   What relationships would your ontology need to represent?
+4. Sketch a mini concept map (e.g., on whiteboard, MS Paint, or sticky notes).
 
-🧩 Example Revision:
+:::::::::::::::::::::::::::::::::::::::::::::::
 
-Too broad: “What affects salmon survival?”
+::::::::::::::::::::::::::::::::::::::: instructor
 
-Better: “Does smolt condition at ocean entry affect adult return rates by region?”
-:::
+4. Discussion & Wrap-Up (10 min)
+Group Discussion
 
-::: solution
-You can add a line with at least three colons and a `solution` tag.
-:::
+Invite volunteers to share their concept maps or a tricky example they encountered.
 
-::: challenge
-## Challenge 3: Connect CQs to terms
+Ask:
 
-Using your data dictionary from Modules 1–3:
+“Where did you find terms that overlap or conflict?”
 
--   Highlight which terms appear in your CQs.
--   Identify any missing terms or unclear definitions.
--   Note which terms might need alignment across datasets (e.g., “region,” “population,” “condition”).
-:::
+“How might this process help clarify things for your collaborators?”
 
-::: keypoints
--   Competency Questions express the intended use of an ontology in natural language.
--   They help translate real-world research and management questions into conceptual structures.
--   CQs are iterative, evolving as you refine your vocabulary and build your ontology.
--   Good CQs are specific, testable, and connected to real data needs.
-:::
+“What relationships were hardest to define?”
+
+Encourage connections to real-world integration challenges — e.g., two agencies using different terms for similar stages or metrics.
+
+💡 Instructor Notes & Tips
+Common Challenges
+
+Learners get bogged down in wordsmithing — remind them that this stage is about structure, not final phrasing.
+
+Difficulty identifying relationships — use analogies (e.g., “species is to genus as narrower is to broader”).
+
+Too narrow a focus — encourage learners to zoom out to see relationships across datasets, not just within one.
+
+Optional Extension
+
+If time allows, show a quick example of a simple schema diagram (e.g., a few boxes and arrows).
+Explain that this is where they’re heading: transforming their decomposed concepts into a formal structure that can support data interoperability.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::: keypoints
+
+- Relationships reveal meaning.
+- Decomposing terms uncovers hidden assumptions.
+- Mapping across datasets helps identify where vocabularies can be aligned.
+- Concept decomposition prepares you for formalization in SKOS and ontology modeling (coming next!).
+
+::::::::::::::::::::::::::::::::::::::::::::
