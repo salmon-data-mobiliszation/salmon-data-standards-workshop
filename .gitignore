@@ -49,3 +49,6 @@ docs/
 # translation temp files
 po/*~
 
+MEMORY_POLICY.md
+AGENTS.md
+MCP_POLICY.md
