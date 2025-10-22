@@ -118,11 +118,11 @@
   Salmon Data Terms and Knowledge Modelling
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 83%" class="percentage">
-    83%
+<aside class="col-md-12 lesson-progress"><div style="width: 63%" class="percentage">
+    63%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 83%" aria-valuenow="83" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 63%" aria-valuenow="63" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -206,7 +206,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="introduction.html">1. Introduction to Salmon Knowledge Modelling</a>
+        <a href="session-1.html">1. Introduction to Salmon Knowledge Modelling</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -215,7 +215,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="session-1.html">2. Reusing Terms — Search and Integrate Existing Vocabularies</a>
+        <a href="session-2.html">2. Reusing Terms — Search and Integrate Existing Vocabularies</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -224,7 +224,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-2.html">3. Documenting Terms — Write Clear, Useful Definitions</a>
+        <a href="session-3.html">3. Documenting Terms — Write Clear, Useful Definitions</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -233,16 +233,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="session-3.html">4. Aligning with Others — Create Mapping Tables and Crosswalks</a>
-    </div><!--/div.accordion-header-->
-
-  </div><!--/div.accordion-item-->
-</div><!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush6">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading6">
-        <a href="session-4.html">5. From Terms to Meaning: Framing Knowledge with Competency Questions</a>
+        <a href="session-4.html">4. Concept Decomposition</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -254,7 +245,7 @@
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
-        6. From Concepts to Semantics — Introducing SKOS
+        5. From Concepts to Semantics — Introducing SKOS
         </span>
       </button>
     </div><!--/div.accordion-header-->
@@ -264,6 +255,15 @@
         <ul><li><a href="#introduction">Introduction</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush7">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading7">
+        <a href="session-6.html">6. From Terms to Meaning - Framing Knowledge with Competency Questions</a>
+    </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
@@ -311,22 +311,22 @@
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="session-4.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="session-6.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-4.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: From Terms to
+          Previous: Concept
         </a>
-        <a class="chapter-link float-end" href="index.html" rel="next">
-          Home
+        <a class="chapter-link float-end" href="session-6.html" rel="next">
+          Next: From Terms to...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>From Concepts to Semantics — Introducing SKOS</h1>
-        <p>Last updated on 2025-10-21 |
+        <p>Last updated on 2025-10-22 |
 
         <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-5.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -374,8 +374,15 @@ using SKOS-like semantics.</li>
 </div>
 </div>
 </div>
+
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
-<hr class="half-width"><p>SKOS (Simple Knowledge Organization System) provides a lightweight,
+<hr class="half-width"><p>Learners have already identified and documented terms (Modules 1–3),
+and developed competency questions (Module 4). This module introduces
+semantic structure: how to move from “terms and mappings” to “concepts
+and relationships” that can be shared, reused, and machine-readable.</p>
+<p>This is the first dip into ontology thinking, using SKOS because it’s
+lightweight, visual, and flexible.</p>
+<p>SKOS (Simple Knowledge Organization System) provides a lightweight,
 flexible way to express controlled vocabularies and their relationships
 using the Semantic Web.</p>
 <table class="table"><colgroup><col width="25%"><col width="34%"><col width="40%"></colgroup><thead><tr class="header"><th>SKOS Term</th>
@@ -406,7 +413,6 @@ factor”</td>
 </td>
 </tr></tbody></table><p>SKOS helps structure your data terms before you build an ontology —
 it’s a bridge between documentation and formal reasoning.</p>
-
 <div id="challenge-1-from-data-dictionary-to-skos-25-min" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -425,7 +431,7 @@ SKOS concepts.</p>
 <li>Definition (or short description)</li>
 <li>Broader / narrower / related concepts (if applicable)</li>
 <li>Equivalent or similar terms in another dataset or vocabulary</li>
-</ul><ol start="3" style="list-style-type: decimal"><li><p>Assign a temporary URI (e.g., <a href="http://example.org/salmon/condition_factor" class="external-link uri">http://example.org/salmon/condition_factor</a>).</p></li>
+</ul><ol start="3" style="list-style-type: decimal"><li><p>Assign a temporary URI (e.g., <a href="https://example.org/salmon/condition_factor" class="external-link uri">https://example.org/salmon/condition_factor</a>).</p></li>
 <li><p>Note which relationships are uncertain or need
 discussion.</p></li>
 </ol><p>🧠 Tip: You don’t need RDF syntax yet — the goal is concept
@@ -438,7 +444,7 @@ structure, not code.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <table class="table"><colgroup><col width="20%"><col width="20%"><col width="20%"><col width="20%"><col width="20%"></colgroup><thead><tr class="header"><th>Concept</th>
 <th>PrefLabel</th>
@@ -466,8 +472,8 @@ min)</h3>
 <div class="callout-content">
 <p>Purpose: Visualize how your SKOS concepts relate to one another.</p>
 <p>Instructions:</p>
-<ol style="list-style-type: decimal"><li>On a whiteboard or digital diagram tool (e.g., Miro, draw.io,
-Lucidchart, or paper):</li>
+<ol style="list-style-type: decimal"><li>On a whiteboard or digital diagram tool (e.g., MS PowerPoint, Google
+Slides, MS Paint, paper):</li>
 </ol><ul><li>Draw boxes for each concept.</li>
 <li>Connect them with arrows labeled broader, narrower, or related.</li>
 </ul><ol start="2" style="list-style-type: decimal"><li>Check:</li>
@@ -505,16 +511,16 @@ any links that you are not going to use.
 </section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="session-4.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="session-6.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-4.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: From Terms to
+          Previous: Concept
         </a>
-        <a class="chapter-link float-end" href="index.html" rel="next">
-          Home
+        <a class="chapter-link float-end" href="session-6.html" rel="next">
+          Next: From Terms to...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -560,8 +566,8 @@ any links that you are not going to use.
   "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-5.html",
   "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-5.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2025-10-21",
-  "datePublished": "2025-10-21"
+  "dateModified": "2025-10-22",
+  "datePublished": "2025-10-22"
 }
 
   </script><script>
