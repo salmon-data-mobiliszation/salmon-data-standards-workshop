@@ -65,12 +65,12 @@ contact: 'brett.johnson@dfo-mpo.gc.ca'
 
 # Order of episodes in your lesson
 episodes:
-- introduction.Rmd
 - session-1.Rmd
 - session-2.Rmd
 - session-3.Rmd
 - session-4.Rmd
 - session-5.Rmd
+- session-6.Rmd
 
 # Information for Learners
 learners:

@@ -22,7 +22,65 @@ exercises: 5
 
 ::::::::::::::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::: instructor
+
+Key Takeaways for the Instructor to Reinforce
+
+SKOS is about organizing concepts, not building full ontologies yet.
+
+It’s okay if learners don’t fully “get” RDF — focus on relationships and hierarchy.
+
+Encourage conversation about meaning, consistency, and relationships between concepts.
+
+Diagrams help demystify formal semantics — it’s okay to stay visual!
+
+Facilitator Prompt:
+
+“You’ve all worked on documenting your data terms and even aligning them across datasets. But how do we represent those relationships formally, so others can understand or reuse them — including computers? That’s where SKOS comes in.”
+
+Questions to ask the room:
+
+“What happens if two groups both define ‘condition factor’ slightly differently?”
+
+“How do you think we could show that one term is broader or narrower than another?”
+
+“Why might this matter when sharing data or integrating across studies?”
+
+Instructor Tip:
+
+Keep it conversational — the goal is to surface the problem space that SKOS solves. Don’t introduce jargon yet.
+
+Teaching Flow
+
+1. Define SKOS in plain language:
+
+“SKOS stands for Simple Knowledge Organization System. It’s a way to represent vocabularies — lists of terms and their relationships — in a structured way computers and humans can understand.”
+
+2. Relate it to what they already know:
+
+“You already have terms, definitions, and mappings. SKOS gives those structure — think of it as putting your dictionary into a well-organized tree.”
+
+3. Show an example. 
+
+4. Make the bridge to ontology:
+
+“SKOS is not an ontology — it doesn’t describe processes or logic. But it helps us get there by establishing consistent language.”
+
+Instructor Notes:
+
+If learners seem intimidated, reassure them:
+“You don’t need to write code today — we’re just organizing concepts visually.”
+
+Have a slide or printed SKOS term table for reference:
+Concept, prefLabel, definition, broader, narrower, related, exactMatch, closeMatch.
+
+:::::::::::::::::::::::::::::::::::::::::
+
 ## Introduction
+
+Learners have already identified and documented terms (Modules 1–3), and developed competency questions (Module 4). This module introduces semantic structure: how to move from “terms and mappings” to “concepts and relationships” that can be shared, reused, and machine-readable.
+
+This is the first dip into ontology thinking, using SKOS because it’s lightweight, visual, and flexible.
 
 SKOS (Simple Knowledge Organization System) provides a lightweight, flexible way to express controlled vocabularies and their relationships using the Semantic Web.
 
@@ -38,13 +96,8 @@ SKOS (Simple Knowledge Organization System) provides a lightweight, flexible way
 
 SKOS helps structure your data terms before you build an ontology — it’s a bridge between documentation and formal reasoning.
 
-:::::::::::::::::::::::::::::: instructor
-
-Inline instructor notes can help inform instructors of timing challenges associated with the lessons. They appear in the "Instructor View"
-
-:::::::::::::::::::::::::::::::::::::::::
-
 :::::::::::::::::::::::::::::::::::::: challenge
+
 ## Challenge 1: From Data Dictionary to SKOS (25 min)
 
 Purpose: Practice turning natural-language data terms into formal SKOS concepts.
@@ -59,7 +112,7 @@ Instructions:
 -   Broader / narrower / related concepts (if applicable)
 -   Equivalent or similar terms in another dataset or vocabulary
 
-3.  Assign a temporary URI (e.g., <http://example.org/salmon/condition_factor>).
+3.  Assign a temporary URI (e.g., <https://example.org/salmon/condition_factor>).
 
 4.  Note which relationships are uncertain or need discussion.
 
@@ -83,7 +136,7 @@ Purpose: Visualize how your SKOS concepts relate to one another.
 
 Instructions:
 
-1. On a whiteboard or digital diagram tool (e.g., Miro, draw.io, Lucidchart, or paper):
+1. On a whiteboard or digital diagram tool (e.g., MS PowerPoint, Google Slides, MS Paint, paper):
 
 - Draw boxes for each concept.
 - Connect them with arrows labeled broader, narrower, or related.
@@ -107,6 +160,10 @@ Discuss as a group:
 - What patterns or redundancies did you notice in your terms?
 - Which concepts could be reused from an existing vocabulary?
 - How does formalizing these relationships help you answer your Competency Questions from Module 4?
+
+End by connecting this back to Competency Questions (Module 4):
+
+“Your CQs ask big research questions. The SKOS structure helps ensure your vocabulary supports answering those questions consistently.”
 
 :::::::::::::::::::::::::::::::::::::::::
 

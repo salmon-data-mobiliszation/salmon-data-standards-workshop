@@ -1,94 +1,42 @@
 ---
-title: 'Reusing Terms — Search and Integrate Existing Vocabularies'
-teaching: 90
-exercises: 1
+title: "Introduction to Salmon Knowledge Modelling"
+teaching: 10
+exercises: 2
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions
--   Are the terms I need already defined somewhere else?
--   How can I responsibly reuse existing terms and URIs?
--   What are the benefits of aligning early rather than reinventing?
+:::::::::::::::::::::::::::::::::::::: questions 
+
+-   What are controlled vocabularies and why are they important for data interoperability?
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
--   Learn how to discover and evaluate existing vocabularies relevant to your domain (e.g., Darwin Core, WoRMS, OBO ontologies).
--   Understand how to reuse URIs and integrate external definitions into your own data dictionary.
--   Practice linking your data elements to authoritative terms where appropriate.
+This is a Carpentry-style, hands-on workshop. Each module builds on your own data and progresses from discovering terms you already use → documenting them clearly → aligning them with others.
 
-:::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-::::::::::::::::::::::::::::::::::::::: instructor
-1.  Warm-up Discussion (10 min) Ask:
+This workshop helps participants collaboratively develop, document, and align controlled vocabularies to improve data interoperability in salmon research and management. It emphasizes practical, community-centered steps that support long-term reusability and transparency, while remaining adaptable to other organizations or domains.
 
-“What challenges do you face when merging data from other sources?”
+### Why Controlled Vocabularies Matter
 
-“Has anyone tried to interpret someone else’s dataset and gotten confused by a term?” → Summarize: inconsistent naming blocks reuse and synthesis.
+Inconsistent terminology prevents data integration and makes shared understanding difficult across agencies, researchers, and Indigenous knowledge systems. Controlled vocabularies address this by:
 
-2.  Concept: Why Reuse? (10 min) Explain that reusing existing terms ensures that data “speak the same language.” Example:
+-   Capturing and standardizing the meaning of key terms
 
-Instead of inventing “broodYear”, reuse the URI <http://purl.dataone.org/odo/SALMON_00000520>.
+-   Enabling clear documentation and communication
 
-This URI points to a definition that others already understand.
+-   Forming the foundation for ontologies and semantic integration
 
-3.  Demonstration: Searching Existing Vocabularies (15 min) Instructor shares screen:
 
-Search for “salmon” or “brood year” on BioPortal.bioontology.org or NVS.
+::::::::::::::::::::::::::::::::::::: keypoints 
 
-Show how to view term metadata (label, definition, URI, license).
+By the end of the first three modules, participants will have:  
 
-Demonstrate copying the URI into the Data Dictionary Template.
-::::::::::::::::::::::::::::::::::::::::::::::::::::
+- Discovered and reused existing terms and URIs.
+- Created clear definitions and documentation for local data.
+- Built a mapping table connecting their terms to others’.
 
-::::::::::::::::::::::::::::::::::::: challenge
-## Challenge 1: Find and reuse (30 min)
-
-Goal: Identify existing vocabulary terms that match your own dataset.
-
-Steps:
-
-1.  Select 3–5 column names from your dataset.
-
-2.  Search for equivalent terms in one or more repositories.
-
-3.  Record matches in the Data Dictionary Template:
-
--   Your local term
--   External URI
--   Source vocabulary name
--   Notes on whether it’s an exact or close match
-:::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::: instructor
-Group Debrief (10 min)
-Ask:
-
-Which terms were easy to find?
-
-Which were hard or missing?
-
-When would you decide to reuse vs. define your own?
-
-5. Reflection (10 min)
-Discuss the downstream benefits:
-
-Reusing terms enables automatic linking and machine-readability.
-
-Fewer mapping issues later when integrating salmon datasets.
-:::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-## Expected Outputs
-
-Updated data dictionary with at least three reused terms and their URIs.
-
-Learners understand how to find, evaluate, and record external vocabularies.
-
-::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::: keypoints
--   Controlled vocabularies capture shared meaning of terms.
--   Reusing existing URIs improves interoperability and credibility.
--   Reuse saves time, avoids duplication, and makes future integration easier.
-::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
