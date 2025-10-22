@@ -1,99 +1,133 @@
 ---
-title: 'Documenting Terms — Write Clear, Useful Definitions'
+title: 'Reusing Terms — Search and Integrate Existing Vocabularies'
 teaching: 90
-exercises: 1
+exercises: 5
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
+:::::::::::::::::::::::::::::::::::::: questions
 
-- How can I make sure others understand and correctly use my terms?
-- What makes a good definition or label?
-- How should I record units, examples, and relationships between terms?
+-   Are the terms I need already defined somewhere else?
+-   How can I responsibly reuse existing terms and URIs?
+-   What are the benefits of aligning early rather than reinventing?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Extract and describe terms from their dataset.
-- Write unambiguous, well-structured definitions.
-- Record associated metadata (units, codes, examples).
+-   Learn how to discover and evaluate existing vocabularies relevant to your domain (e.g., Darwin Core, WoRMS, OBO ontologies).
+-   Understand how to reuse URIs and integrate external definitions into your own data dictionary.
+-   Practice linking your data elements to authoritative terms where appropriate.
 
-::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+## Introduction
+
+Every dataset — whether from your lab, your agency, or another research group — uses terms to describe its contents. Column headers, variable names, and codes all hold meaning, but often those meanings are assumed rather than shared.
+
+When everyone invents their own terms for the same concept (e.g., SmoltCond, ConditionFactor, CF), it becomes difficult to integrate or compare data across projects.
+
+Reusing existing terms — with clear definitions and persistent identifiers (URIs) — makes your data:
+
+- Easier to share and integrate
+
+- More interoperable and transparent
+
+- Aligned with others in your community
+
+- Future-proof for modeling and ontology building
+
+This session helps you learn where to find existing vocabularies, how to decide what to reuse, and how to incorporate those terms into your own data dictionary.
+
+::::::::::::::::::::::::::::::: callout
+
+🧩 Core Ideas
+
+Term reuse means adopting existing, well-defined concepts instead of inventing new ones.
+
+Each reused term has a URI (Uniform Resource Identifier) that makes it globally recognizable.
+
+Reusing does not mean losing your local context — you can still describe how your project uses a term, while referencing a shared definition.
+
+This is a key first step in making your data “semantic” — meaning it can be understood by both humans and machines.
+
+:::::::::::::::::::::::::::::::::::::::
+
 
 ::::::::::::::::::::::::::::::::::::::: instructor
-1. Concept: What Makes a Good Definition? (15 min)
-Show two examples:
-❌ “Run timing: when fish come back.”
-✅ “Run timing: The seasonal period during which adult salmon return from the ocean to their natal freshwater spawning areas.”
-Discuss why clarity, precision, and context matter.
 
-2. Demonstration: Documenting a Term (10 min)
-Instructor walks through one dataset column, filling in the template:
+1.  Warm-up Discussion (10 min) Ask:
 
-Label: brood_year
+“What challenges do you face when merging data from other sources?”
 
-Definition: “The calendar year when the majority of parental salmon spawned.”
+“Has anyone tried to interpret someone else’s dataset and gotten confused by a term?” → Summarize: inconsistent naming blocks reuse and synthesis.
 
-Unit: “Year (YYYY)”
+2.  Concept: Why Reuse? (10 min) Explain that reusing existing terms ensures that data “speak the same language.” Example:
 
-Example: “2017”
+- Instead of inventing “broodYear”, reuse the URI <https://purl.dataone.org/odo/SALMON_00000520>.
+- This URI points to a definition that others already understand.
 
-Notes: “Equivalent to term in DFO Salmon Concept Scheme.”
+3.  Demonstration: Searching Existing Vocabularies (15 min) Instructor shares screen:
 
-3. Activity: Extract and define (40 min)
+- Search for “salmon” or “brood year” on BioPortal.bioontology.org or NVS.
+- Show how to view term metadata (label, definition, URI, license).
+- Demonstrate copying the URI into the Data Dictionary Template.
+
+4. 🧠 Challenge / Activity 1: Find and Reuse (30 min)
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: challenge 
+::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Extract and define (40 min)
+## Challenge 1: Find and reuse (30 min)
 
-Goal: Create clear, consistent documentation for your own dataset terms.
+Goal: Identify existing vocabulary terms that match your own dataset.
 
-Review your dataset and list 10–15 column names. Record in a shared data dictionary template (CSV):
+Steps:
 
-- Label (term name)
+1.  Select 3–5 column names from your dataset.
 
-- Definition (clear, context-rich description)
+2.  Search for equivalent terms in one or more repositories.
 
-- Units or codes used
+3.  Record matches in the Data Dictionary Template:
 
-- Example value(s)
+-   Your local term
+-   External URI
+-   Source vocabulary name
+-   Notes on whether it’s an exact or close match
 
-- Notes on ambiguity or uncertainty
-::::::::::::::::::::::::::::::::::::::::::::::: 
+:::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+::::::::::::::::::::::::::::::::::::::: instructor
 
-4. Discussion: Patterns and Pitfalls (15 min)
+Group Debrief (10 min)
+Ask:
 
-Which terms were hardest to define?
-
-Were there local abbreviations or codes that need clarification?
-
-How can we document uncertainty? (e.g., “derived from visual estimate”).
+- Which terms were easy to find?
+- Which were hard or missing?
+- When would you decide to reuse vs. define your own?
 
 5. Reflection (10 min)
-Connect to next steps:
+Discuss the downstream benefits:
 
-A well-documented data dictionary is the foundation for term alignment.
+- Reusing terms enables automatic linking and machine-readability.
+- Fewer mapping issues later when integrating salmon datasets.
 
-Later modules will link these definitions to others via mappings.
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::: solution 
+::::::::::::::::::::::::: solution
 
 ## Expected Outputs
 
-- A draft data dictionary covering at least 10 key terms.
+Updated data dictionary with at least three reused terms and their URIs.
 
-- Peer-reviewed feedback on definition clarity.
+Learners understand how to find, evaluate, and record external vocabularies.
 
-- Improved awareness of semantic gaps in existing data.
-:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::: keypoints
-- A data dictionary is the bridge between raw data and understanding.
-- Good definitions reduce misinterpretation and support machine processing.
-- Documentation is both a social and technical task.
+
+-   Controlled vocabularies capture shared meaning of terms.
+-   Reusing existing URIs improves interoperability and credibility.
+-   Reuse saves time, avoids duplication, and makes future integration easier.
+
 ::::::::::::::::::::::::::::::::::::::::::::
