@@ -62,6 +62,49 @@ Transition:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Introduction
+
+An ontology acts as the database schema or rule book for your knowledge model. It defines:
+
+Types of *nodes (entities)*: "Person," "Film," "Genre."
+
+Types of *edges (relationships)*: A "Person" can "direct" or "star in" a "Film."
+
+*Properties* for entities and relationships: A "Person" has a "name" and "birth year."
+
+Ontologies provide foundational rules and structure, ensuring consistent interpretation by both humans and machines.
+
+## Understanding transitive properties 
+
+A **transitive property** is a relationship where if A relates to B, and B relates to C, then A relates to C.
+
+Here is an example of how different life stages of salmon relate to spawning events, using a few clear classes and one transitive property.
+
+We often record salmon data at different points in their life cycle — for example, a smolt *Migration Event* one year and a *Spawning Event* several years later.
+
+By using a transitive property like _hasLifeStageEvent_, we can reason that the same Stock is connected across all those events.
+
+### Transitive properties help us:
+
+- Represent hierarchies (e.g., Species → Population → Individual).
+
+- Capture temporal or process chains (e.g., Smolt → Adult → Spawner).
+
+- Enable reasoning that connects related concepts without manually writing every link.
+
+::::::::::::::::::::::::::::::::::::: callout
+
+```
+Stock_A hasLifeStageEvent SmoltMigration_2022 .
+
+SmoltMigration_2022 hasLifeStageEvent Spawning_2025 .
+```
+thus 
+```
+Stock_A hasLifeStageEvent Spawning_2025 .
+```
+
+:::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
@@ -85,9 +128,22 @@ Transition:
 
 :::::::::::::::::::::::::::::::::::::::::::::::
 
+## Implicit meanings of compound terms
+
+We often see compound terms within dataset columns, yet compound terms often embed multiple concepts. 
+For example, "smolt-to-adult return rate" includes:
+
+- Entity: smolt, adult
+- Property: return rate
+- Process: migration
+
+We cannot express these implicit meanings inside the table without first decomposing the term. 
+Understanding these components helps clarify meaning and supports data integration.
+
+
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
- Debrief Discussion (10 min)
+Debrief Discussion (10 min)
  
 Prompt questions:
 
@@ -133,6 +189,12 @@ Facilitator takeaway:
 :::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+Miro key: 
+
+Spawner abundance | adult salmon population | abundance | census count at weir
+Capture efficiency | Sampling method event | error | statistical model, such as mark-recapture
+Ocean-age 3 | population demographic | count | age classification, but how?? 
+
 
 Discussion (10 min)
 
