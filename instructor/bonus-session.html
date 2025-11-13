@@ -328,7 +328,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Bonus Session</h1>
-        <p>Last updated on 2025-11-11 |
+        <p>Last updated on 2025-11-13 |
 
         <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/bonus-session.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -416,6 +416,54 @@ of these challenges.”</p>
 </div>
 </div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
+<p>An ontology acts as the database schema or rule book for your
+knowledge model. It defines:</p>
+<p>Types of <em>nodes (entities)</em>: “Person,” “Film,” “Genre.”</p>
+<p>Types of <em>edges (relationships)</em>: A “Person” can “direct” or
+“star in” a “Film.”</p>
+<p><em>Properties</em> for entities and relationships: A “Person” has a
+“name” and “birth year.”</p>
+<p>Ontologies provide foundational rules and structure, ensuring
+consistent interpretation by both humans and machines.</p>
+</div>
+<div class="section level2">
+<h2 id="understanding-transitive-properties">Understanding transitive properties<a class="anchor" aria-label="anchor" href="#understanding-transitive-properties"></a></h2>
+<p>A <strong>transitive property</strong> is a relationship where if A
+relates to B, and B relates to C, then A relates to C.</p>
+<p>Here is an example of how different life stages of salmon relate to
+spawning events, using a few clear classes and one transitive
+property.</p>
+<p>We often record salmon data at different points in their life cycle —
+for example, a smolt <em>Migration Event</em> one year and a
+<em>Spawning Event</em> several years later.</p>
+<p>By using a transitive property like <em>hasLifeStageEvent</em>, we
+can reason that the same Stock is connected across all those events.</p>
+<div class="section level3">
+<h3 id="transitive-properties-help-us">Transitive properties help us:<a class="anchor" aria-label="anchor" href="#transitive-properties-help-us"></a></h3>
+<ul><li><p>Represent hierarchies (e.g., Species → Population →
+Individual).</p></li>
+<li><p>Capture temporal or process chains (e.g., Smolt → Adult →
+Spawner).</p></li>
+<li><p>Enable reasoning that connects related concepts without manually
+writing every link.</p></li>
+</ul><div id="callout1" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div class="callout-inner">
+<div class="callout-content">
+<pre><code>Stock_A hasLifeStageEvent SmoltMigration_2022 .
+
+SmoltMigration_2022 hasLifeStageEvent Spawning_2025 .</code></pre>
+<p>thus</p>
+<pre><code>Stock_A hasLifeStageEvent Spawning_2025 .</code></pre>
+</div>
+</div>
+</div>
 <div id="sorting-the-vocabulary-soup-20-min" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -453,6 +501,19 @@ arrangements.</li>
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="implicit-meanings-of-compound-terms">Implicit meanings of compound terms<a class="anchor" aria-label="anchor" href="#implicit-meanings-of-compound-terms"></a></h2>
+<p>We often see compound terms within dataset columns, yet compound
+terms often embed multiple concepts. For example, “smolt-to-adult return
+rate” includes:</p>
+<ul><li>Entity: smolt, adult</li>
+<li>Property: return rate</li>
+<li>Process: migration</li>
+</ul><p>We cannot express these implicit meanings inside the table without
+first decomposing the term. Understanding these components helps clarify
+meaning and supports data integration.</p>
 <div id="accordionInstructor2" class="accordion instructor-note accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
@@ -524,6 +585,11 @@ sub-concepts in 5 minutes?</em>
 </button>
 <div id="collapseInstructor3" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor3" aria-labelledby="headingInstructor3">
 <div class="accordion-body">
+<p>Miro key:</p>
+<p>Spawner abundance | adult salmon population | abundance | census
+count at weir Capture efficiency | Sampling method event | error |
+statistical model, such as mark-recapture Ocean-age 3 | population
+demographic | count | age classification, but how??</p>
 <p>Discussion (10 min)</p>
 <ul><li>Which terms were most complex or ambiguous?</li>
 <li>How could decomposition help when mapping data between
@@ -702,8 +768,8 @@ any links that you are not going to use.
   "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/bonus-session.html",
   "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/bonus-session.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2025-11-11",
-  "datePublished": "2025-11-11"
+  "dateModified": "2025-11-13",
+  "datePublished": "2025-11-13"
 }
 
   </script><script>
