@@ -66,9 +66,9 @@ Transition:
 
 An ontology acts as the database schema or rule book for your knowledge model. It defines:
 
-Types of *nodes (entities)*: "Person," "Film," "Genre."
+Types of *entities (nodes)*: "Person," "Film," "Genre."
 
-Types of *edges (relationships)*: A "Person" can "direct" or "star in" a "Film."
+Types of *relationships (edges)*: A "Person" can "direct" or "star in" a "Film."
 
 *Properties* for entities and relationships: A "Person" has a "name" and "birth year."
 
@@ -131,11 +131,11 @@ Stock_A hasLifeStageEvent Spawning_2025 .
 ## Implicit meanings of compound terms
 
 We often see compound terms within dataset columns, yet compound terms often embed multiple concepts. 
-For example, "smolt-to-adult return rate" includes:
+For example, "Mark-recapture escapement estimate" includes:
 
-- Entity: smolt, adult
-- Property: return rate
-- Process: migration
+- Entity: population
+- characteristic: escapement
+- Measurement Method: mark-recapture
 
 We cannot express these implicit meanings inside the table without first decomposing the term. 
 Understanding these components helps clarify meaning and supports data integration.
