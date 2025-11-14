@@ -753,7 +753,7 @@ data dictionary template (CSV):</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Expected Outputs </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <ul>
 <li><p>A draft data dictionary covering at least 10 key terms.</p></li>
@@ -1372,7 +1372,7 @@ any links that you are not going to use.
 </div>
 </section></section><section id="aio-bonus-session"><p>Content from <a href="bonus-session.html">Bonus Session</a></p>
 <hr>
-<p>Last updated on 2025-11-13 |
+<p>Last updated on 2025-11-14 |
 
         <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/bonus-session.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1425,8 +1425,8 @@ ontology.</li>
 </h2>
 <p>An ontology acts as the database schema or rule book for your
 knowledge model. It defines:</p>
-<p>Types of <em>nodes (entities)</em>: “Person,” “Film,” “Genre.”</p>
-<p>Types of <em>edges (relationships)</em>: A “Person” can “direct” or
+<p>Types of <em>entities (nodes)</em>: “Person,” “Film,” “Genre.”</p>
+<p>Types of <em>relationships (edges)</em>: A “Person” can “direct” or
 “star in” a “Film.”</p>
 <p><em>Properties</em> for entities and relationships: A “Person” has a
 “name” and “birth year.”</p>
@@ -1521,12 +1521,12 @@ arrangements.</li>
 <h2 id="implicit-meanings-of-compound-terms">Implicit meanings of compound terms<a class="anchor" aria-label="anchor" href="#implicit-meanings-of-compound-terms"></a>
 </h2>
 <p>We often see compound terms within dataset columns, yet compound
-terms often embed multiple concepts. For example, “smolt-to-adult return
-rate” includes:</p>
+terms often embed multiple concepts. For example, “Mark-recapture
+escapement estimate” includes:</p>
 <ul>
-<li>Entity: smolt, adult</li>
-<li>Property: return rate</li>
-<li>Process: migration</li>
+<li>Entity: population</li>
+<li>characteristic: escapement</li>
+<li>Measurement Method: mark-recapture</li>
 </ul>
 <p>We cannot express these implicit meanings inside the table without
 first decomposing the term. Understanding these components helps clarify
@@ -1708,8 +1708,8 @@ any links that you are not going to use.
   "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/aio.html",
   "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/aio.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2025-11-13",
-  "datePublished": "2025-11-13"
+  "dateModified": "2025-11-14",
+  "datePublished": "2025-11-14"
 }
 
   </script><script>
