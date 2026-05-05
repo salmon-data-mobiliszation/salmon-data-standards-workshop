@@ -562,7 +562,7 @@ dataset.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Expected Outputs </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Updated data dictionary with at least three reused terms and their
 URIs.</p>
@@ -682,7 +682,7 @@ and reusable.</p>
 <col width="5%">
 <col width="30%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Term</th>
 <th>Definition</th>
 <th>Units</th>
@@ -690,7 +690,7 @@ and reusable.</p>
 <th>Notes</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Condition factor</strong></td>
 <td>A measure of fish body condition, typically calculated as
 weight/length³.</td>
@@ -698,7 +698,7 @@ weight/length³.</td>
 <td>1.05</td>
 <td>Used as an indicator of energy reserves at smolt stage.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Smolt age</strong></td>
 <td>The age (in years) of a salmon when it migrates from freshwater to
 the ocean.</td>
@@ -706,7 +706,7 @@ the ocean.</td>
 <td>2</td>
 <td>Derived from scale analysis.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Capture date</strong></td>
 <td>The date when a specimen was physically collected in the field.</td>
 <td>ISO 8601 (YYYY-MM-DD)</td>
@@ -747,7 +747,7 @@ data dictionary template (CSV):</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Expected Outputs </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <ul>
 <li><p>A draft data dictionary covering at least 10 key terms.</p></li>
@@ -871,26 +871,26 @@ inconsistencies.</p></li>
 <col width="24%">
 <col width="22%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Term</th>
 <th>Broader Concept</th>
 <th>Narrower Concept</th>
 <th>Related Concept</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Juvenile salmon</strong></td>
 <td>Salmon</td>
 <td>Parr</td>
 <td>Smolt</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Smolt</strong></td>
 <td>Juvenile salmon</td>
 <td>—</td>
 <td>Ocean migrant</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Spawning habitat</strong></td>
 <td>Habitat</td>
 <td>Redd site</td>
@@ -1013,44 +1013,44 @@ using the Semantic Web.</p>
 <col width="34%">
 <col width="40%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>SKOS Term</th>
 <th>Meaning</th>
 <th>Example (Salmon Context)</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>skos:Concept</td>
 <td>A unique concept or term</td>
 <td>“Smolt condition factor”</td>
 </tr>
-<tr class="even">
+<tr>
 <td>skos:prefLabel</td>
 <td>The preferred human-readable label</td>
 <td>“Condition factor”</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>skos:definition</td>
 <td>Text definition of the concept</td>
 <td>“A measure of body condition calculated as weight/length³”</td>
 </tr>
-<tr class="even">
+<tr>
 <td>skos:broader</td>
 <td>More general concept</td>
 <td>“Smolt condition factor” broader: “Condition metric”</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>skos:narrower</td>
 <td>More specific concept</td>
 <td>“Smolt condition factor” narrower: “Fork length condition
 factor”</td>
 </tr>
-<tr class="even">
+<tr>
 <td>skos:related</td>
 <td>Related but not hierarchical concept</td>
 <td>“Condition factor” related to: “Smolt age”</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>skos:exactMatch, skos:closeMatch</td>
 <td>Crosswalk to another vocabulary</td>
 <td>“Condition factor” exactMatch: <a href="https://vocab.nerc.ac.uk/condition_factor/" class="external-link uri">https://vocab.nerc.ac.uk/condition_factor/</a>
@@ -1097,7 +1097,7 @@ structure, not code.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <table class="table">
 <colgroup>
@@ -1107,14 +1107,14 @@ structure, not code.</p>
 <col width="20%">
 <col width="20%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Concept</th>
 <th>PrefLabel</th>
 <th>Definition</th>
 <th>Broader</th>
 <th>Related URI</th>
 </tr></thead>
-<tbody><tr class="odd">
+<tbody><tr>
 <td>Smolt condition factor</td>
 <td>Condition factor</td>
 <td>Weight/length³, used as an indicator of fish health Condition
@@ -1704,8 +1704,8 @@ any links that you are not going to use.
   "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/aio.html",
   "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/aio.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-04-28",
-  "datePublished": "2026-04-28"
+  "dateModified": "2026-05-05",
+  "datePublished": "2026-05-05"
 }
 
   </script><script>
