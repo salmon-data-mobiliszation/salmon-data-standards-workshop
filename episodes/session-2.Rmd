@@ -1,133 +1,136 @@
 ---
-title: 'Reusing Terms — Search and Integrate Existing Vocabularies'
-teaching: 90
-exercises: 5
+title: "Create a Draft Salmon Data Package"
+teaching: 45
+exercises: 35
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
 
--   Are the terms I need already defined somewhere else?
--   How can I responsibly reuse existing terms and URIs?
--   What are the benefits of aligning early rather than reinventing?
+- How do I turn a spreadsheet or CSV into a draft Salmon Data Package?
+- What does `metasalmon::create_sdp()` produce?
+- What should I check before sharing a draft for review?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
--   Learn how to discover and evaluate existing vocabularies relevant to your domain (e.g., Darwin Core, WoRMS, OBO ontologies).
--   Understand how to reuse URIs and integrate external definitions into your own data dictionary.
--   Practice linking your data elements to authoritative terms where appropriate.
+- Create or inspect a draft package using the Excel-first or R/metasalmon path.
+- Identify the required metadata files and their roles.
+- Separate draft review from final publication readiness.
 
-:::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
+## What "draft" means
 
-Every dataset — whether from your lab, your agency, or another research group — uses terms to describe its contents. Column headers, variable names, and codes all hold meaning, but often those meanings are assumed rather than shared.
+A draft package is allowed to contain blanks, placeholders, and review markers. The goal is to create a structured package that a human can improve.
 
-When everyone invents their own terms for the same concept (e.g., SmoltCond, ConditionFactor, CF), it becomes difficult to integrate or compare data across projects.
+Do not treat the first package as final. Treat it as the first shared review surface.
 
-Reusing existing terms — with clear definitions and persistent identifiers (URIs) — makes your data:
+## Excel-first path
 
-- Easier to share and integrate
+Use the Salmon Data Package template as a workbook-shaped review surface.
 
-- More interoperable and transparent
+Minimum steps:
 
-- Aligned with others in your community
+1. Put source data in a `data` sheet or export it as a CSV under `data/`.
+2. Fill one row in `dataset.csv` metadata: title, description, creator, contact, license, and useful coverage notes.
+3. Fill one row in `tables.csv` for each data table.
+4. Fill one row in `column_dictionary.csv` for each data column.
+5. Use `codes.csv` only for categorical columns with controlled values.
+6. Write a short README/context note with caveats, methods, and known limitations.
 
-- Future-proof for modeling and ontology building
+The workbook path is valid when it produces the same core metadata that an R package would write.
 
-This session helps you learn where to find existing vocabularies, how to decide what to reuse, and how to incorporate those terms into your own data dictionary.
+## R/metasalmon path
 
-::::::::::::::::::::::::::::::: callout
+In R, `create_sdp()` creates a package folder and a review checklist.
 
-🧩 Core Ideas
+```r
+library(metasalmon)
 
-Term reuse means adopting existing, well-defined concepts instead of inventing new ones.
+data_path <- system.file(
+  "extdata",
+  "nuseds-fraser-coho-2023-2024.csv",
+  package = "metasalmon"
+)
 
-Each reused term has a URI (Uniform Resource Identifier) that makes it globally recognizable.
+fraser_coho <- readr::read_csv(data_path, show_col_types = FALSE)
 
-Reusing does not mean losing your local context — you can still describe how your project uses a term, while referencing a shared definition.
+pkg_path <- create_sdp(
+  fraser_coho,
+  path = "fraser-coho-2023-2024-sdp",
+  dataset_id = "fraser-coho-2023-2024",
+  table_id = "escapement",
+  seed_semantics = FALSE,
+  check_updates = FALSE,
+  overwrite = TRUE
+)
 
-This is a key first step in making your data “semantic” — meaning it can be understood by both humans and machines.
+list.files(pkg_path, recursive = TRUE)
+```
 
-:::::::::::::::::::::::::::::::::::::::
+`seed_semantics = FALSE` is the fast classroom option. The default semantic seeding path may take several minutes because it searches term sources and writes review suggestions.
 
+Open the package folder and review:
 
-::::::::::::::::::::::::::::::::::::::: instructor
+- `README-review.txt`
+- `metadata/column_dictionary.csv`
+- `metadata/tables.csv`
+- `metadata/dataset.csv`
+- `metadata/codes.csv`, when present
+- `semantic_suggestions.csv`, when present
 
-1.  Warm-up Discussion (10 min) Ask:
+Expected files:
 
-“What challenges do you face when merging data from other sources?”
+```text
+fraser-coho-2023-2024-sdp/
+  README-review.txt
+  datapackage.json
+  metadata/
+    dataset.csv
+    tables.csv
+    column_dictionary.csv
+    codes.csv
+  data/
+    escapement.csv
+```
 
-“Has anyone tried to interpret someone else’s dataset and gotten confused by a term?” → Summarize: inconsistent naming blocks reuse and synthesis.
+If semantic seeding is enabled, the package may also include `semantic_suggestions.csv`, and some metadata fields may contain `REVIEW: <iri>` draft values.
 
-2.  Concept: Why Reuse? (10 min) Explain that reusing existing terms ensures that data “speak the same language.” Example:
+## Review-state validation
 
-- Instead of inventing “broodYear”, reuse the URI <https://purl.dataone.org/odo/SALMON_00000520>.
-- This URI points to a definition that others already understand.
+Early validation should catch structure problems without demanding final semantic coverage.
 
-3.  Demonstration: Searching Existing Vocabularies (15 min) Instructor shares screen:
+```r
+review_check <- validate_salmon_datapackage(pkg_path, require_iris = FALSE)
+review_check$semantic_validation$issues
+review_check$semantic_validation$missing_terms
+```
 
-- Search for “salmon” or “brood year” on BioPortal.bioontology.org or NVS.
-- Show how to view term metadata (label, definition, URI, license).
-- Demonstrate copying the URI into the Data Dictionary Template.
-
-4. 🧠 Challenge / Activity 1: Find and Reuse (30 min)
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
+Warnings about missing measurement semantics, placeholders, or `REVIEW:` markers can be acceptable in review state. Use strict validation only when the package is publication-ready.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Find and reuse (30 min)
+## Challenge 1: Create or inspect a draft package
 
-Goal: Identify existing vocabulary terms that match your own dataset.
+Use one of the paths above.
 
-Steps:
+Check that you can answer:
 
-1.  Select 3–5 column names from your dataset.
+- Where is the data table?
+- Which metadata file describes the dataset?
+- Which metadata file describes each table?
+- Which metadata file describes each column?
+- Which columns, if any, need a code list?
+- Which fields still need human review?
+- Are any `MISSING DESCRIPTION:`, `MISSING METADATA:`, or `REVIEW:` markers still present?
 
-2.  Search for equivalent terms in one or more repositories.
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-3.  Record matches in the Data Dictionary Template:
+::::::::::::::::::::::::::::::::::::: keypoints
 
--   Your local term
--   External URI
--   Source vocabulary name
--   Notes on whether it’s an exact or close match
+- A draft package is a review surface, not a final publication.
+- `metadata/*.csv` files are the canonical human-editable metadata.
+- Non-strict validation belongs early; strict validation belongs near the end.
 
-:::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::::: instructor
-
-Group Debrief (10 min)
-Ask:
-
-- Which terms were easy to find?
-- Which were hard or missing?
-- When would you decide to reuse vs. define your own?
-
-5. Reflection (10 min)
-Discuss the downstream benefits:
-
-- Reusing terms enables automatic linking and machine-readability.
-- Fewer mapping issues later when integrating salmon datasets.
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-
-## Expected Outputs
-
-Updated data dictionary with at least three reused terms and their URIs.
-
-Learners understand how to find, evaluate, and record external vocabularies.
-
-::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::: keypoints
-
--   Controlled vocabularies capture shared meaning of terms.
--   Reusing existing URIs improves interoperability and credibility.
--   Reuse saves time, avoids duplication, and makes future integration easier.
-
-::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::

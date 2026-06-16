@@ -119,7 +119,7 @@ Before making changes, you may want to build and preview the website locally to 
    Rscript -e "sandpaper::serve()"
    ```
 
-   Then open your web browser and go to: **http://localhost:4321**
+   Then open your web browser and go to `http://localhost:4321`.
 
    The website will automatically refresh when you make changes to your source files.
 

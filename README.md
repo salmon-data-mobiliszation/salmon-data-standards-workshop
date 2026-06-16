@@ -1,92 +1,51 @@
 # Salmon Data Standards Workshop
 
-## Overview
+This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The focus is practical: preserve the context behind local data, make the package understandable to colleagues, and add shared semantic links only where they improve reuse.
 
-The **Salmon Data Standards Workshop** repository is part of the larger effort by the Salmon Ontology Development Working Group (WG) to enhance data interoperability and usability in salmon science and management. This repository specifically focuses on developing training materials, tools, and ontology modules for the **Salmon Data Standards Workshop**, targeting both technical and non-technical audiences.
+The material is being refactored for the Salmon Ontology Development Working Group from an ontology-development-first course into an SDP-first learning path. Learners should leave with a package they can review, validate, and improve, not with the impression that every field needs a new ontology term.
 
-## Objectives of the Workshop
+## Learning Path
 
-The workshop aims to address the challenges of integrating and standardizing salmon-related data by providing participants with the skills and resources to:
+1. **Structure first**: create a draft Salmon Data Package from existing data using either the Excel template or `metasalmon::create_sdp()`.
+2. **Context next**: write dataset, table, column, code, caveat, and method notes that travel with the data.
+3. **Meaning where it matters**: review suggested term mappings, focusing first on measurement columns and important code lists.
+4. **Contribution paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology.
 
-1. **Develop Modular Ontologies**  
-   - Learn to create small, focused ontology modules for real-world data challenges in salmon science (e.g., summary population estimates, demographic unit naming).  
-   - Apply semantic mapping techniques across multiple databases for term alignment.
+## Audience
 
-2. **Hands-On Training**  
-   - Engage with tutorials and interactive sessions modeled after **Data Carpentry** workshops.  
-   - Use practical tools like **ROBOT**, **LinkML**, and **WebProtégé** to build and publish controlled vocabularies.
+This workshop is designed for mixed groups:
 
-3. **Enable Broader Community Adoption**  
-   - Contribute to a formalized method for salmon ontology development that aligns with the **NCEAS Salmon Ontology**.  
-   - Foster collaboration across agencies, NGOs, indigenous groups, and researchers.
+- operational salmon biologists who mostly work in Excel;
+- data stewards standardizing datasets for sharing;
+- R or Python users who want a reproducible SDP workflow;
+- ontology maintainers who need better evidence from contributors.
 
-## Who Should Participate?
+No ontology background is assumed. Concepts such as IRI, SKOS, OWL, and I-ADOPT are introduced only when they help with a concrete review decision.
 
-This workshop is designed for a diverse audience, including:
+## Formats
 
-- **Government fisheries scientists and data managers** aiming to improve data interoperability.  
-- **Academic researchers** in salmon ecology and population dynamics.  
-- **Indigenous communities and knowledge holders** involved in monitoring and co-management of salmon habitats.  
-- **NGOs and grassroots organizations** working on salmon conservation and education.  
+The same materials support two delivery modes:
 
-No prior experience with ontology development is required! The workshop includes beginner-friendly sessions and step-by-step guidance.
-
-## Deliverables
-
-By the conclusion of the workshop, participants will:
-
-1. **Learn** how to create modular ontologies that align with existing frameworks like the **NCEAS Salmon Ontology**.  
-2. **Build** prototype ontology modules addressing specific challenges in salmon science.  
-3. **Utilize** tools such as **ROBOT**, **LinkML**, and **WebProtégé** to support vocabulary management and ontology publication.  
-4. **Access** reusable training materials for continued learning and application.
-
-## Value Proposition
-
-The workshop directly supports salmon science and management by enabling:
-
-- **Semantic dataset alignment**: Make salmon datasets machine-readable and interoperable.  
-- **Cross-jurisdictional integration**: Facilitate data sharing across regions and agencies.  
-- **Enhanced decision-making**: Support conservation, stock assessment, and habitat monitoring with better-integrated data.  
-
-These benefits align with the UN Sustainable Development Goals (SDGs), particularly:  
-- **Goal 14**: Life Below Water  
-- **Goal 15**: Life on Land  
-- **Goal 17**: Partnerships for the Goals  
-
-## Workshop Format
-
-### Key Dates and Activities
-- **Pre-Workshop**: Release of training materials and tools for participant review.  
-- **Day 1**:  
-  - Introduction to ontology development.  
-  - Hands-on sessions for building controlled vocabularies.  
-- **Day 2**:  
-  - Advanced ontology module development.  
-  - Publishing and integrating modules into existing frameworks.  
-- **Post-Workshop**: Continued access to resources and community support.
-
-### Tools and Resources
-Participants will work with:
-- **Ontology Development Tools**: ROBOT, LinkML, WebProtégé.  
-- **Supported Ontologies**: NCEAS Salmon Ontology, ENVO, and OBO Foundry ontologies.  
-- **Learning Platforms**: Carpentry-style tutorials and interactive workshops.
+- **One-hour introduction**: system overview, SDP anatomy, a short package demo, one measurement mapping review, and one term-gap routing example.
+- **Full-day workshop**: hands-on package creation, context capture, mapping review, measurement decomposition, code-list review, and term-request planning.
 
 ## Repository Contents
 
-This repository contains:
+- `episodes/`: learner-facing workshop sessions.
+- `learners/setup.md`: setup guidance for Excel-first and R/metasalmon participants.
+- `learners/reference.md`: glossary, decision aids, and core workflow checks.
+- `instructors/instructor-notes.md`: facilitation plans for one-hour and full-day delivery.
+- `profiles/learner-profiles.md`: persona notes for designing and testing the workshop.
+- `docs/entrypoints.md`: short map of the lesson entry points and local checks.
 
-- **Training Materials**: Tutorials, slides, and guides for hands-on sessions.  
-- **Workshop Code**: Examples and templates for ontology module development.  
-- **Issue Tracker**: Open documentation of challenges, proposals, and feedback.  
+## Related Components
 
-## Get Involved!
+- [Salmon Data Package specification](https://github.com/salmon-data-mobilization/smn-data-pkg)
+- [metasalmon R package](https://github.com/salmon-data-mobilization/metasmn)
+- [salmonpy Python package](https://github.com/Br-Johnson/salmonpy)
+- [Salmon Domain Ontology](https://github.com/salmon-data-mobilization/salmon-domain-ontology)
+- [GC DFO Salmon Ontology](https://github.com/dfo-pacific-science/dfo-salmon-ontology)
 
-We encourage community participation! Whether you are a researcher, data steward, or conservation enthusiast, your contributions are valuable.  
+## Development Status
 
-- Explore the **Issues** tab to find ways to contribute.  
-- Join our discussions on the **SDM Discord Server**.  
-- Share your feedback to improve and expand the workshop's impact.
-
----
-
-For more information, visit the [Salmon Data Mobilization GitHub Organization](https://github.com/salmon-data-mobiliszation) or contact us directly.
+This lesson is pre-alpha. The current branch is a refactor branch for the SDP-first workshop flow.
