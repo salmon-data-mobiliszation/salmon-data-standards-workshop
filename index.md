@@ -2,8 +2,4 @@
 site: sandpaper::sandpaper_site
 ---
 
-This is a new lesson built with [The Carpentries Workbench][workbench]. 
-
-
-[workbench]: https://carpentries.github.io/sandpaper-docs
-
+This lesson helps participants create and review Salmon Data Packages from data they already have. It starts with package structure and context, then adds shared vocabulary links where they matter most.

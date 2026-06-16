@@ -1,150 +1,97 @@
 ---
-title: 'Documenting Terms — Write Clear, Useful Definitions'
-teaching: 90
-exercises: 5
+title: "Capture Context That Travels With the Data"
+teaching: 40
+exercises: 35
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
+:::::::::::::::::::::::::::::::::::::: questions
 
-- How can I make sure others understand and correctly use my terms?
-- What makes a good definition or label?
-- How should I record units, examples, and relationships between terms?
+- What context do data holders need to share so others do not misuse the data?
+- What belongs in column metadata versus a README/context note?
+- How can context improve later term mapping?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Extract and describe terms from their dataset.
-- Write unambiguous, well-structured definitions.
-- Record associated metadata (units, codes, examples).
+- Write useful dataset, table, column, and code descriptions.
+- Draft a compact README/context note for reviewers and mapping tools.
+- Identify caveats that should not be hidden in informal comments.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
+## Context is part of the data
 
-You’ve identified the key terms used in your datasets — and maybe even found some existing ones to reuse.
-Now comes the part that makes your work understandable, trustworthy, and reusable: clear documentation.
+Many data holders hesitate to share data because they know the spreadsheet can be misread. A Salmon Data Package should make that local knowledge visible.
 
-Inconsistent or missing definitions are one of the biggest barriers to data reuse. For example:
+Use the metadata tables for structured facts. Use a README/context note for the narrative a reviewer needs before interpreting the package.
 
-What does “sample date” really mean — collection date, processing date, or submission date?
+## What goes where?
 
-Does “juvenile” refer to an age class, a length range, or a life stage?
+| Context | Best place |
+| --- | --- |
+| Dataset purpose, contact, license, coverage | `metadata/dataset.csv` |
+| What each row represents | `metadata/tables.csv` |
+| What each column means | `metadata/column_dictionary.csv` |
+| What stored code values mean | `metadata/codes.csv` |
+| Caveats, known exclusions, methods, unusual values | README/context note |
 
-What are the units? Are they consistent across datasets?
+## Description checks
 
-This session will help you document your terms precisely, so anyone — whether a collaborator, data manager, or future researcher — can understand exactly what you meant.
+A useful column description usually answers:
 
-::::::::::::::::::::: callout
+- What is this field?
+- What does each value represent?
+- What unit or format is expected?
+- How was the value created, observed, or derived?
+- What should a reviewer not assume?
 
-🧩 Core Ideas
+Example:
 
-Documentation is data. It’s the layer that makes data understandable and reusable.
+| Too brief | More useful |
+| --- | --- |
+| `Count` | Estimated count of naturally spawning adult coho salmon for the listed population and return year. |
+| `Date` | Date when the field observation occurred, recorded as `YYYY-MM-DD`. |
+| `Origin` | Stored code describing whether fish were classified as natural-origin, hatchery-origin, mixed, or unknown. |
 
-A well-documented term includes:
+## README/context note
 
-- Preferred label: the human-readable name.
-- Definition: what the term means and how it’s used.
-- Units or scale: how it’s measured.
-- Example values: what typical data look like.
+Keep the note short enough that a contributor will actually write it.
 
-Notes: clarifications, special cases, or links to other terms.
+Suggested sections:
 
-Think of your data dictionary as a user manual for your dataset.
+```text
+# Context for <dataset name>
 
-:::::::::::::::::::::::::::::
+## What this dataset is for
+## What each row represents
+## Methods and source documents
+## Constraints, caveats, and known exclusions
+## Codes, unusual values, and missing values
+## Questions for reviewers
+```
 
-### Example
+This note is useful for people and for optional LLM-assisted review. It gives mapping tools evidence that is not visible from column names alone.
 
-| Term                 | Definition                                                                    | Units                 | Example    | Notes                                                   |
-| -------------------- | ----------------------------------------------------------------------------- | --------------------- | ---------- | ------------------------------------------------------- |
-| **Condition factor** | A measure of fish body condition, typically calculated as weight/length³.     | dimensionless         | 1.05       | Used as an indicator of energy reserves at smolt stage. |
-| **Smolt age**        | The age (in years) of a salmon when it migrates from freshwater to the ocean. | years                 | 2          | Derived from scale analysis.                            |
-| **Capture date**     | The date when a specimen was physically collected in the field.               | ISO 8601 (YYYY-MM-DD) | 2023-05-14 | Not to be confused with processing or tagging date.     |
+::::::::::::::::::::::::::::::::::::: challenge
 
+## Challenge 1: Write the context a reviewer needs
 
-The more clearly you describe your terms now, the easier it becomes to share, integrate, and align your data later — especially when mapping to vocabularies or building ontologies.
+For your draft package, improve:
 
-::::::::::::::::::::::::::::::::::::::: instructor
+1. the dataset description;
+2. one table description;
+3. five column descriptions;
+4. one README/context note section.
 
-1. Concept: What Makes a Good Definition? (15 min)
-Show two examples:
-❌ “Run timing: when fish come back.”
-✅ “Run timing: The seasonal period during which adult salmon return from the ocean to their natal freshwater spawning areas.”
-Discuss why clarity, precision, and context matter.
+Mark anything you are unsure about as a reviewer question rather than hiding it.
 
-2. Demonstration: Documenting a Term (10 min)
-Instructor walks through one dataset column, filling in the template:
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-Label: brood_year
+::::::::::::::::::::::::::::::::::::: keypoints
 
-Definition: “The calendar year when the majority of parental salmon spawned.”
+- Context reduces misuse risk and improves mapping quality.
+- Metadata tables hold structured facts; README/context notes hold narrative caveats.
+- A clear description is more valuable than an uncertain ontology link.
 
-Unit: “Year (YYYY)”
-
-Example: “2017”
-
-Notes: “Equivalent to term in DFO Salmon Concept Scheme.”
-
-3. Activity: Extract and define (40 min)
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: challenge 
-
-## Challenge 1: Extract and define (40 min)
-
-Goal: Create clear, consistent documentation for your own dataset terms.
-
-Review your dataset and list 10–15 column names. Record in a shared data dictionary template (CSV):
-
-- Label (term name)
-
-- Definition (clear, context-rich description)
-
-- Units or codes used
-
-- Example value(s)
-
-- Notes on ambiguity or uncertainty
-
-::::::::::::::::::::::::::::::::::::::::::::::: 
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
-
-4. Discussion: Patterns and Pitfalls (15 min)
-
-Which terms were hardest to define?
-
-Were there local abbreviations or codes that need clarification?
-
-How can we document uncertainty? (e.g., “derived from visual estimate”).
-
-5. Reflection (10 min)
-Connect to next steps:
-
-A well-documented data dictionary is the foundation for term alignment.
-
-Later modules will link these definitions to others via mappings.
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::: solution 
-
-## Expected Outputs
-
-- A draft data dictionary covering at least 10 key terms.
-
-- Peer-reviewed feedback on definition clarity.
-
-- Improved awareness of semantic gaps in existing data.
-
-:::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::: keypoints
-
-- A data dictionary is the bridge between raw data and understanding.
-- Good definitions reduce misinterpretation and support machine processing.
-- Documentation is both a social and technical task.
-
-::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
