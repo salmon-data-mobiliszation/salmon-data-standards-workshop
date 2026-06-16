@@ -2,134 +2,80 @@
 title: Setup
 ---
 
-## Pre-Workshop Reading List
+## What to bring
 
-To get the most out of this workshop, we recommend reviewing the following materials before attending. The readings are organized by priority and will help you understand the foundational concepts we'll be building upon.
+Bring one small salmon-related dataset if you can. A CSV file or Excel workbook is enough. Choose something you are allowed to discuss in the workshop.
 
-### Required Readings (2)
+If you do not have a dataset, use the provided example during the session.
 
-These essential readings provide the core foundation for understanding data mobilization and standards:
+Before the workshop, try to identify:
 
-1. **The FAIR Guiding Principles for scientific data management and stewardship**
+- what each row represents;
+- who created or maintains the data;
+- any codes or abbreviations that need explanation;
+- one caveat that a future user should know.
 
-   - Wilkinson, M.D. et al. (2016). _Scientific Data_ 3, 160018
-   - [https://www.nature.com/articles/sdata201618](https://www.nature.com/articles/sdata201618)
-   - _Why it's important_: This is the foundational paper that introduced FAIR principles (Findable, Accessible, Interoperable, Reusable) - the cornerstone of modern data mobilization
+## Software options
 
-2. **Practical Data Stewardship for Salmon Biologists–A Blueprint for Domain-Specific Best Practices in Fisheries**
-   - Johnson, B. et al. (2024). DRAFT manuscript
-   - [https://br-johnson.github.io/sdm-paper/](https://br-johnson.github.io/sdm-paper/)
-   - _Why it's important_: This pre-print provides seven practical best practices specifically for salmon data stewardship, with real-world examples and case studies from the salmon research community
+You only need one on-ramp.
 
-### Highly Recommended Readings (8)
+### Excel-first path
 
-These readings will deepen your understanding of key concepts:
+Required:
 
-3. **Data Mobilization Through the International Year of the Salmon Ocean Observing System**
+- Microsoft Excel, LibreOffice Calc, or another spreadsheet editor that can save CSV files.
 
-   - Johnson, B.T. and T.C.A. van der Stap (2024). N. Pac. Anadr. Fish Comm. Bull. 7: 51–60
-   - [https://doi.org/10.23849/npafcb7/6a4ddpde4](https://doi.org/10.23849/npafcb7/6a4ddpde4)
-   - _Why it's important_: Demonstrates large-scale, cross-jurisdictional data integration efforts in salmon science through the International Year of the Salmon program
+Recommended:
 
-4. **Salmon Data Mobilization**
+- A folder where you can save a package with `metadata/` and `data/` subfolders.
 
-   - Diack, G., T. Bird, S.A. Akenhead, J. Bayer, D. Brophy, C. Bull, E. de Eyto, B.T. Johnson, M.B. Jones, A. Knight, M. Nevoux, T. van der Stap, and A. Walker (2024). N. Pac. Anadr. Fish Comm. Bull. 7: 61–76
-   - [https://doi.org/10.23849/npafcb7/x3rlpo23a](https://doi.org/10.23849/npafcb7/x3rlpo23a)
-   - _Why it's important_: Provides a comprehensive strategy for salmon data mobilization across three spheres of agencies and practitioners, with practical guidance for the salmon research community
+### R/metasalmon path
 
-5. **Darwin Core: A Biodiversity Data Standard**
+Required:
 
-   - TDWG (Biodiversity Information Standards)
-   - [https://dwc.tdwg.org/](https://dwc.tdwg.org/)
-   - _Why it's important_: Darwin Core is one of the most widely-used biological data standards and provides a concrete example of how controlled vocabularies work in practice
+- R 4.3 or newer.
+- RStudio, Positron, or another R editor.
+- The `remotes`, `readr`, and `metasalmon` packages.
 
-6. **Climate and Forecast (CF) Metadata Conventions**
+Install with:
 
-   - CF Conventions Committee
-   - [http://cfconventions.org/](http://cfconventions.org/)
-   - _Why it's important_: Shows how climate data is standardized, which is crucial for understanding environmental drivers of salmon populations
+```r
+install.packages(c("remotes", "readr", "dplyr"))
+remotes::install_github("salmon-data-mobilization/metasmn")
+```
 
-7. **Controlled Vocabularies: A Guide to Terminology and Usage**
+Optional:
 
-   - National Information Standards Organization (NISO)
-   - [https://www.niso.org/publications/controlled-vocabularies-guide](https://www.niso.org/publications/controlled-vocabularies-guide)
-   - _Why it's important_: Provides practical guidance on creating and using controlled vocabularies
+- An LLM provider key only if you want to try optional LLM-assisted semantic review. The basic quickstart does not require an API key.
 
-8. **Data Standards: A Crash Course**
+### Python path
 
-   - Journal of eScience Librarianship
-   - [https://publishing.escholarship.umassmed.edu/jeslib/article/id/758/print/](https://publishing.escholarship.umassmed.edu/jeslib/article/id/758/print/)
-   - _Why it's important_: Accessible introduction to data standards and their importance for data sharing
+The main workshop uses Excel and R examples. Python users can follow the same package structure with `salmonpy`.
 
-9. **Linked Data Vocabulary Management**
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install git+https://github.com/Br-Johnson/salmonpy.git
+```
 
-   - National Information Standards Organization (NISO)
-   - [https://www.niso.org/niso-io/2012/06/linked-data-vocabulary-management](https://www.niso.org/niso-io/2012/06/linked-data-vocabulary-management)
-   - _Why it's important_: Explains how vocabularies are managed and versioned in practice
+## Pre-workshop reading
 
-10. **Towards a Shared Framework: A Classificatory Matrix for Teaching Data Standards**
-    - Journal of eScience Librarianship
-    - [https://publishing.escholarship.umassmed.edu/jeslib/article/id/758/print/](https://publishing.escholarship.umassmed.edu/jeslib/article/id/758/print/)
-    - _Why it's important_: Provides a framework for understanding different types of data standards
+Read these only if you have time:
 
-### Optional Readings (7)
+1. Salmon Data Package specification: <https://github.com/salmon-data-mobilization/smn-data-pkg>
+2. metasalmon quickstart: <https://salmon-data-mobilization.github.io/metasmn/articles/metasalmon.html>
+3. Salmon Domain Ontology conventions: <https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md>
 
-For those who want to dive deeper into specific topics:
+You do not need to read ontology documentation before attending. The workshop introduces the needed terms during the exercises.
 
-11. **Making Metadata Machine-Readable as the First Step to Providing Findable, Accessible, Interoperable, and Reusable Population Health Data**
+## Folder check
 
-    - PMC (2024)
-    - [https://pmc.ncbi.nlm.nih.gov/articles/PMC11327634/](https://pmc.ncbi.nlm.nih.gov/articles/PMC11327634/)
-    - _Focus_: Machine-readable metadata and FAIR implementation
+During the workshop you should be able to create a folder like this:
 
-12. **A Guide to Developing Harmonized Research Workflows in a Team Science Context**
+```text
+my-salmon-data-package/
+  metadata/
+  data/
+```
 
-    - PMC (2024)
-    - [https://pmc.ncbi.nlm.nih.gov/articles/PMC12233188/](https://pmc.ncbi.nlm.nih.gov/articles/PMC12233188/)
-    - _Focus_: Team science and metadata standards
-
-13. **Building a Unified Medical Vocabulary Framework Aligned with OMOP CDM**
-
-    - Medium/SciForce (2024)
-    - [https://medium.com/sciforce/building-a-unified-medical-vocabulary-framework-aligned-with-omop-cdm-b7a577b2316c](https://medium.com/sciforce/building-a-unified-medical-vocabulary-framework-aligned-with-omop-cdm-b7a577b2316c)
-    - _Focus_: Vocabulary frameworks and data models
-
-14. **Ontology-Enriched Specifications Enabling Findable, Accessible, Interoperable, and Reusable Marine Metagenomic Datasets**
-
-    - Frontiers in Marine Science (2021)
-    - [https://www.frontiersin.org/articles/10.3389/fmars.2021.769629/full](https://www.frontiersin.org/articles/10.3389/fmars.2021.769629/full)
-    - _Focus_: Marine data and ontologies
-
-15. **What is an Ontology?**
-
-    - Stanford Encyclopedia of Philosophy
-    - [https://plato.stanford.edu/entries/ontology/](https://plato.stanford.edu/entries/ontology/)
-    - _Focus_: Philosophical foundations of ontologies
-
-16. **Principles of Data Interoperability**
-
-    - Research Data Alliance
-    - [https://www.rd-alliance.org/group/data-interoperability-principles-wg/outcomes/principles-data-interoperability](https://www.rd-alliance.org/group/data-interoperability-principles-wg/outcomes/principles-data-interoperability)
-    - _Focus_: Data interoperability principles
-
-17. **The Environment Ontology: Contextualising Biological and Biomedical Entities**
-
-    - Journal of Biomedical Semantics (2013)
-    - [https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-4-43](https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-4-43)
-    - _Focus_: ENVO development and applications
-
-## Data Sets
-
-<!--
-FIXME: place any data you want learners to use in `episodes/data` and then use
-       a relative link ( [data zip file](data/lesson-data.zip) ) to provide a
-       link to it, replacing the example.com link.
--->
-
-Download the [data zip file](https://example.com/FIXME) and unzip it to your Desktop
-
-## Software Setup
-
-This workshop will use several tools for data mobilization, controlled vocabularies, and knowledge modeling. Please install the following software before attending:
-
-### Required Software
+If your organization restricts software installation, use the Excel-first path and pair with someone who can run validation later.

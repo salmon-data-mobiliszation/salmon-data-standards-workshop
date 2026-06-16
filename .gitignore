@@ -45,6 +45,9 @@ vignettes/*.pdf
 
 # pkgdown site
 docs/
+!/docs/
+/docs/*
+!/docs/entrypoints.md
 
 # translation temp files
 po/*~

@@ -1,42 +1,94 @@
 ---
-title: "Introduction to Salmon Knowledge Modelling"
-teaching: 10
-exercises: 2
+title: "Why Start With a Salmon Data Package?"
+teaching: 25
+exercises: 10
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
+:::::::::::::::::::::::::::::::::::::: questions
 
--   What are controlled vocabularies and why are they important for data interoperability?
+- Why is it hard for other people to reuse salmon datasets?
+- What does a Salmon Data Package add to an ordinary spreadsheet or CSV?
+- What should we finish before worrying about ontology coverage?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-This is a Carpentry-style, hands-on workshop. Each module builds on your own data and progresses from discovering terms you already use → documenting them clearly → aligning them with others.
+- Describe the workshop ladder: structure, context, meaning, contribution.
+- Recognize the core files in a Salmon Data Package.
+- Choose an Excel-first or R/metasalmon on-ramp for the hands-on work.
 
-:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
+## The problem this workshop solves
 
-This workshop helps participants collaboratively develop, document, and align controlled vocabularies to improve data interoperability in salmon research and management. It emphasizes practical, community-centered steps that support long-term reusability and transparency, while remaining adaptable to other organizations or domains.
+Salmon data are often understandable to the person or team that collected them, but hard for someone else to reuse. Column names may be short, code values may be local, methods may be buried in reports, and important caveats may live only in people's heads.
 
-### Why Controlled Vocabularies Matter
+This workshop starts with a practical rule:
 
-Inconsistent terminology prevents data integration and makes shared understanding difficult across agencies, researchers, and Indigenous knowledge systems. Controlled vocabularies address this by:
+> Package and explain the data first. Add shared semantic links after the package is reviewable.
 
--   Capturing and standardizing the meaning of key terms
+That keeps the first goal concrete. A useful draft Salmon Data Package is a successful first outcome even when some ontology mappings are still blank or marked for review.
 
--   Enabling clear documentation and communication
+## The workshop ladder
 
--   Forming the foundation for ontologies and semantic integration
+| Stage | Main question | Output |
+| --- | --- | --- |
+| Structure | What files, tables, columns, and codes are in this dataset? | Draft Salmon Data Package |
+| Context | What does a reviewer need to know to avoid misuse? | Metadata and README/context note |
+| Meaning | Which fields should link to shared definitions? | Reviewed mappings for measurements and key code lists |
+| Contribution | What term gaps remain, and where should they go? | Term-request or profile-vocabulary plan |
 
+## What is in a Salmon Data Package?
 
-::::::::::::::::::::::::::::::::::::: keypoints 
+A package is a folder that keeps data and metadata together:
 
-By the end of the first three modules, participants will have:  
+```text
+my-salmon-data-package/
+  metadata/
+    dataset.csv
+    tables.csv
+    column_dictionary.csv
+    codes.csv
+  data/
+    my_table.csv
+  datapackage.json
+  README.md or README-review.txt
+```
 
-- Discovered and reused existing terms and URIs.
-- Created clear definitions and documentation for local data.
-- Built a mapping table connecting their terms to others’.
+The CSV files under `metadata/` are the human-reviewable core. The generated `datapackage.json` makes the package easier for software to read, but the metadata CSVs are the place most learners will edit first.
+
+## Two on-ramps, one review task
+
+Use whichever path matches your current comfort level.
+
+| If you usually work in... | Start with... | You still review... |
+| --- | --- | --- |
+| Excel | Salmon Data Package workbook/template | dataset, table, column, and code metadata |
+| R | `metasalmon::create_sdp()` | the same metadata CSVs plus suggestions |
+| Python | `salmonpy` or exported CSVs | the same package structure |
+
+No path requires you to understand OWL, SKOS, I-ADOPT, or IRIs before you have a draft package.
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## Challenge 1: Pick your package
+
+Choose one dataset or example table for the workshop.
+
+Write down:
+
+- a short dataset name;
+- who would be the best contact for questions;
+- what each row represents;
+- one thing that could be misunderstood if the data were shared without context.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: keypoints
+
+- Start by making the dataset reviewable, not by forcing every field into an ontology.
+- A Salmon Data Package keeps data, metadata, code lists, and context together.
+- Excel and R paths converge on the same review task.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
