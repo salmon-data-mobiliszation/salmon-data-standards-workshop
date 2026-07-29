@@ -7,14 +7,14 @@ exercises: 35
 :::::::::::::::::::::::::::::::::::::: questions
 
 - How do I turn a spreadsheet or CSV into a draft Salmon Data Package?
-- What does `metasalmon::create_sdp()` produce?
+- What do the R and Python `create_sdp()` functions produce?
 - What should I check before sharing a draft for review?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Create or inspect a draft package using the Excel-first or R/metasalmon path.
+- Create or inspect a draft package using the primary R/metasalmon path, a paired Python/salmonpy path, or the spreadsheet template.
 - Identify the required metadata files and their roles.
 - Separate draft review from final publication readiness.
 
@@ -25,22 +25,6 @@ exercises: 35
 A draft package is allowed to contain blanks, placeholders, and review markers. The goal is to create a structured package that a human can improve.
 
 Do not treat the first package as final. Treat it as the first shared review surface.
-
-## Spreadsheet/CSV-template path
-
-Download or clone the `smn-data-pkg` repository and copy the [blank SDP CSV template][sdp-template], then open its metadata CSV files in Excel, LibreOffice Calc, or another spreadsheet editor. There is no standalone workbook or template ZIP. Keep the folder structure and header rows exactly as provided.
-
-Minimum steps:
-
-1. Export each source table as a CSV under `data/`.
-2. Fill one row in `metadata/dataset.csv`. The required fields are `dataset_id`, `title`, `description`, `creator`, `contact_name`, `contact_email`, and `license`; add coverage and provenance fields when they are useful.
-3. Fill one row in `tables.csv` for each data table.
-4. Fill one row in `column_dictionary.csv` for each data column.
-5. When any column has `column_role = categorical`, use `codes.csv`. Each observed non-empty value must have exactly one matching row for its `dataset_id` + `table_id` + `column_name` + `code_value` key.
-6. Optionally write a short README/context note with caveats, methods, and known limitations.
-7. Before publication, generate `datapackage.json` with `metasalmon` or another SDP-compatible tool and confirm that it agrees with the canonical metadata CSVs and referenced data files.
-
-The spreadsheet path is valid when it produces the same canonical CSV metadata that an R package would write. The blank template intentionally omits `datapackage.json`; a complete or published package needs the generated descriptor as well.
 
 ## R/metasalmon path
 
@@ -70,7 +54,45 @@ pkg_path <- create_sdp(
 list.files(pkg_path, recursive = TRUE)
 ```
 
-`seed_semantics = FALSE` is the fast classroom option. The default semantic seeding path may take several minutes because it searches term sources and writes review suggestions.
+`seed_semantics` controls whether `metasalmon` searches for possible links between local fields and shared definitions. `FALSE` is the fast classroom option; enabling the search can take several minutes and produces suggestions for human review.
+
+::::::::::::::::::::::::::::::::::::: callout
+
+## Python equivalent
+
+Run this block instead of the R block if you are following the Python path. The installed package is named `salmonpy`, even though its repository is named `metaSmnPy`.
+
+```python
+from importlib.resources import files
+
+import pandas as pd
+from salmonpy import create_sdp
+
+data_path = files("salmonpy.data").joinpath(
+    "nuseds-fraser-coho-sample.csv"
+)
+
+fraser_coho = pd.read_csv(data_path)
+
+pkg_path = create_sdp(
+    fraser_coho,
+    path="fraser-coho-sample-sdp",
+    dataset_id="fraser-coho-sample",
+    table_id="escapement",
+    seed_semantics=False,
+    check_updates=False,
+    overwrite=True,
+)
+
+for path in sorted(
+    path for path in pkg_path.rglob("*") if path.is_file()
+):
+    print(path.relative_to(pkg_path))
+```
+
+`salmonpy` bundles its own small NuSEDS fixture under the filename shown above. It is not row-for-row identical to the larger 2023–2024 fixture bundled with `metasalmon`, so its package and dataset IDs use `fraser-coho-sample`. The fixtures demonstrate the same workflow and package structure; do not compare their row or column counts. `seed_semantics=False` has the same classroom purpose in Python: make the first package locally and defer searches for shared definitions. Python also writes a hidden `.salmonpy-package` bookkeeping file; the visible standard files below remain the shared review surface.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 Open the package folder and review:
 
@@ -84,7 +106,7 @@ Open the package folder and review:
 Expected files:
 
 ```text
-fraser-coho-2023-2024-sdp/
+<package-folder>/
   README-review.txt
   datapackage.json             # generated descriptor
   metadata/
@@ -96,11 +118,27 @@ fraser-coho-2023-2024-sdp/
     escapement.csv
 ```
 
-If semantic seeding is enabled, the package may also include `semantic_suggestions.csv`, and some metadata fields may contain `REVIEW: <iri>` draft values.
+If semantic seeding is enabled, the package may also include `semantic_suggestions.csv`, and some metadata fields may contain `REVIEW: <iri>` draft values. An **IRI** is a stable web identifier for a shared term. The `REVIEW:` prefix means that the proposed match has not been accepted.
+
+## Spreadsheet/CSV-template path
+
+Download or clone the `smn-data-pkg` repository and copy the [blank SDP CSV template][sdp-template], then open its metadata CSV files in Excel, LibreOffice Calc, or another spreadsheet editor. There is no standalone workbook or template ZIP. Keep the folder structure and header rows exactly as provided.
+
+Minimum steps:
+
+1. Export each source table as a CSV under `data/`.
+2. Fill one row in `metadata/dataset.csv`. The required fields are `dataset_id`, `title`, `description`, `creator`, `contact_name`, `contact_email`, and `license`; add coverage and provenance fields when they are useful.
+3. Fill one row in `tables.csv` for each data table.
+4. Fill one row in `column_dictionary.csv` for each data column.
+5. When any column has `column_role = categorical`, use `codes.csv`. Each observed non-empty value must have exactly one matching row for its `dataset_id` + `table_id` + `column_name` + `code_value` key.
+6. Optionally write a short README/context note with caveats, methods, and known limitations.
+7. Before publication, generate `datapackage.json` with `metasalmon`, `salmonpy`, or another SDP-compatible tool and confirm that it agrees with the canonical metadata CSVs and referenced data files.
+
+The spreadsheet path is valid when it produces the same canonical CSV metadata that either code package writes. The blank template intentionally omits `datapackage.json`; a complete or published package needs the generated descriptor as well.
 
 ## Review-state validation
 
-Early validation should catch structure problems without demanding final semantic coverage.
+Early validation should catch structure problems without requiring all links to shared definitions to be complete.
 
 ```r
 review_check <- validate_salmon_datapackage(pkg_path, require_iris = FALSE)
@@ -108,7 +146,25 @@ review_check$semantic_validation$issues
 review_check$semantic_validation$missing_terms
 ```
 
-Warnings about missing measurement semantics, placeholders, or `REVIEW:` markers can be acceptable in review state. Use strict validation only when the package is publication-ready.
+::::::::::::::::::::::::::::::::::::: callout
+
+## Python equivalent
+
+```python
+from salmonpy import validate_salmon_datapackage
+
+review_check = validate_salmon_datapackage(
+    pkg_path,
+    require_iris=False,
+)
+
+print(review_check["semantic_validation"]["issues"])
+print(review_check["semantic_validation"]["missing_terms"])
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+`require_iris = FALSE` in R and `require_iris=False` in Python allow links to shared definitions to remain unfinished during draft review. Warnings about missing links from measurement fields to shared definitions, placeholders, or `REVIEW:` markers can be acceptable in review state. Use strict validation only when the package is publication-ready, and use the normative R `metasalmon` validator for that final publication gate.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 

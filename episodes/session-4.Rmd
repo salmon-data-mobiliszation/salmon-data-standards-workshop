@@ -61,7 +61,48 @@ suggestions |>
   )
 ```
 
-Vocabulary lookup can take a few minutes. For a live workshop, instructors can prepare this output in advance. Omitting `sources` uses role-aware defaults. If you supply `sources` explicitly, current `metasalmon` treats the vector as a strict allowlist for the initial search and any LLM-requested bounded retry.
+::::::::::::::::::::::::::::::::::::: callout
+
+## Python equivalent
+
+```python
+from salmonpy import (
+    read_salmon_datapackage,
+    suggest_semantics,
+)
+
+pkg = read_salmon_datapackage(pkg_path)
+
+reviewed_dict = suggest_semantics(
+    df=pkg["resources"],
+    dict_df=pkg["dictionary"],
+    codes=pkg["codes"],
+    table_meta=pkg["tables"],
+    dataset_meta=pkg["dataset"],
+)
+
+suggestions = reviewed_dict.attrs["semantic_suggestions"]
+
+column_suggestions = suggestions.loc[
+    suggestions["target_scope"].eq("column"),
+    [
+        "column_name",
+        "dictionary_role",
+        "label",
+        "iri",
+        "source",
+        "definition",
+    ],
+]
+
+print(column_suggestions)
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Vocabulary lookup can take a few minutes. For a live workshop, instructors can prepare this output in advance. Omitting `sources` uses role-aware defaults. If you supply `sources` explicitly, current `metasalmon` and `salmonpy` treat the vector as a strict allowlist for the initial search and any LLM-requested bounded retry.
+
+For the Python exercise, omit `sources` as shown. `salmonpy` 0.1.6 does not bundle populated SMN or GCDFO indexes, so use instructor-prepared R results when the lesson specifically reviews those two sources.
 
 ## Treat suggestions as drafts
 
@@ -96,7 +137,7 @@ Important boundary: `property_iri`, `entity_iri`, and `constraint_iri` are I-ADO
 
 ## Optional LLM-assisted bundle review
 
-Adding `llm_assess = TRUE` plus an approved provider and model to `suggest_semantics()` asks the LLM to judge the retrieved candidates; it does not let the model invent IRIs. Current `metasalmon` reviews a measurement's variable, property, entity, unit, constraint, and method candidates together as one six-slot bundle.
+Adding `llm_assess = TRUE` in R or `llm_assess=True` in Python, plus an approved provider and model, asks the LLM to judge the retrieved candidates; it does not let the model invent IRIs. Current `metasalmon` and `salmonpy` review a measurement's variable, property, entity, unit, constraint, and method candidates together as one six-slot bundle.
 
 Deterministic validators can downgrade an unsupported `accept` decision to `review`, but they never substitute or invent a term. Variable, property, entity, and unit candidates may become `REVIEW:` drafts on the `create_sdp()` path. Constraint and method candidates always remain manual-review suggestions.
 

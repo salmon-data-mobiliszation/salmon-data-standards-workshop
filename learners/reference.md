@@ -11,6 +11,31 @@ title: Reference
 5. Render and review unresolved-term routes: `smn`, `gcdfo`, `profile`, or `skip`.
 6. Run strict validation only when the package is final enough for publication.
 
+## R-first and Python companion functions
+
+| Workflow | R primary | Python companion |
+| --- | --- | --- |
+| Create a package | `metasalmon::create_sdp()` | `salmonpy.create_sdp()` |
+| Read a package | `read_salmon_datapackage()` | `read_salmon_datapackage()` |
+| Suggest shared definitions | `suggest_semantics()` | `suggest_semantics()` |
+| Detect unresolved gaps | `detect_semantic_term_gaps()` | `detect_semantic_term_gaps()` |
+| Render request drafts | `render_ontology_term_request()` | `render_ontology_term_request()` |
+| Validate during review | `validate_salmon_datapackage(..., require_iris = FALSE)` | `validate_salmon_datapackage(..., require_iris=False)` |
+
+The workshop examples pair `metasalmon` 0.1.6 and `salmonpy` 0.1.6. They are parity-tested when packages move between languages, but they are not identical. Run the R `metasalmon` strict validator for the final publication gate.
+
+## Recommended project layout
+
+```text
+salmon-data-workshop/
+  salmon-data-workshop.Rproj
+  data-raw/       # unchanged source data
+  context/        # codebooks, methods, caveats, provenance
+  output/         # generated Salmon Data Packages
+```
+
+Open the `.Rproj` file before working and use paths relative to the project root. Python users can start from the same root folder and use the same layout.
+
 ## Salmon Data Package files
 
 | File | Purpose |
@@ -57,7 +82,7 @@ Do not use `property_iri`, `entity_iri`, `constraint_iri`, or `method_iri` as ge
 - Measurement rows have final `term_iri`, `property_iri`, `entity_iri`, and `unit_iri` values.
 - No placeholder text or `REVIEW:` prefixes remain.
 - `datapackage.json` exists, declares the SDP profile and resources, and agrees with the canonical CSV metadata and referenced data files.
-- Strict validation passes.
+- Strict validation passes in the normative R `metasalmon` implementation.
 
 ## Routing unresolved terms
 
@@ -86,14 +111,22 @@ Include:
 
 ## Glossary
 
+**Code list**: The allowed stored values for one data column, with labels and definitions for those values.
+
 **I-ADOPT**: A framework for describing what a measurement variable means using property, entity, and optional constraints. It does not model units, methods, time, or location by itself.
 
 **IRI**: A web identifier that points to a term or definition.
+
+**Ontology**: A maintained set of concepts and definitions that also records how the concepts relate.
 
 **OWL**: A language for formal ontology classes and relationships.
 
 **Salmon Data Package**: A folder of data and metadata CSV files that makes a dataset easier to review, validate, and share.
 
+**Semantic link or mapping**: A connection from a local column or code value to a shared definition; semantic simply means "about meaning."
+
 **SKOS**: A model for controlled vocabularies, concept schemes, labels, definitions, and mappings.
+
+**Vocabulary**: A maintained list of reusable terms and definitions.
 
 **`REVIEW: <iri>`**: A draft semantic suggestion that must be checked before publication.
