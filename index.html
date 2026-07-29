@@ -347,9 +347,8 @@ that can save CSV files.</li>
 and <code>data/</code> subfolders.</li>
 <li>A copy of the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
 SDP CSV template</a>, which you can open and edit with your spreadsheet
-software. Download the <code>smn-data-pkg</code> repository as a ZIP
-from GitHub or clone it, then copy that folder; there is no standalone
-workbook or template ZIP.</li>
+software. Download or clone the <code>smn-data-pkg</code> repository and
+copy that folder; there is no standalone workbook or template ZIP.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="rmetasalmon-path">R/metasalmon path<a class="anchor" aria-label="anchor" href="#rmetasalmon-path"></a></h3>
@@ -366,21 +365,9 @@ workbook or template ZIP.</li>
 <code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"remotes"</span>, <span class="st">"readr"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"salmon-data-mobilization/metasalmon"</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Installing <code>metasalmon</code> from this public repository does
-<strong>not</strong> require Git, a GitHub account, a personal access
-token, or a connection between RStudio and GitHub.
-<code>remotes::install_github()</code> downloads public packages through
-the GitHub API. See the <a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link"><code>remotes</code>
-installation documentation</a> for details; authentication is needed for
-private repositories and can also help if you reach GitHub’s anonymous
-API rate limit.</p>
 <p>Optional:</p>
 <ul><li>An LLM provider key only if you want to try optional LLM-assisted
 semantic review. The basic quickstart does not require an API key.</li>
-<li>Git and GitHub setup if you plan to clone repositories, contribute
-changes, or use RStudio’s Git pane. Follow Jenny Bryan and
-collaborators’ <a href="https://happygitwithr.com/" class="external-link">Happy Git and GitHub
-for the useR</a> before the workshop.</li>
 </ul><p>LLM review is strictly opt-in. Context supplied through
 <code>llm_context_files</code> must be a character vector of existing
 local file paths, and it does not trigger an LLM call unless
