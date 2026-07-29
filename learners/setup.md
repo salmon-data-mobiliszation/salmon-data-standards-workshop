@@ -28,7 +28,7 @@ Required:
 Recommended:
 
 - A folder where you can save a package with `metadata/` and `data/` subfolders.
-- A copy of the [blank SDP CSV template][sdp-template], which you can open and edit with your spreadsheet software. Download or clone the `smn-data-pkg` repository and copy that folder; there is no standalone workbook or template ZIP.
+- A copy of the [blank SDP CSV template][sdp-template], which you can open and edit with your spreadsheet software. Download the `smn-data-pkg` repository as a ZIP from GitHub or clone it, then copy that folder; there is no standalone workbook or template ZIP.
 
 ### R/metasalmon path
 
@@ -45,9 +45,12 @@ install.packages(c("remotes", "readr", "dplyr"))
 remotes::install_github("salmon-data-mobilization/metasalmon")
 ```
 
+Installing `metasalmon` from this public repository does **not** require Git, a GitHub account, a personal access token, or a connection between RStudio and GitHub. `remotes::install_github()` downloads public packages through the GitHub API. See the [`remotes` installation documentation][remotes-install-github] for details; authentication is needed for private repositories and can also help if you reach GitHub's anonymous API rate limit.
+
 Optional:
 
 - An LLM provider key only if you want to try optional LLM-assisted semantic review. The basic quickstart does not require an API key.
+- Git and GitHub setup if you plan to clone repositories, contribute changes, or use RStudio's Git pane. Follow Jenny Bryan and collaborators' [Happy Git and GitHub for the useR][happy-git] before the workshop.
 
 LLM review is strictly opt-in. Context supplied through `llm_context_files` must be a character vector of existing local file paths, and it does not trigger an LLM call unless `llm_assess = TRUE`. Use only an approved provider and do not send sensitive or restricted material outside an authorized environment.
 

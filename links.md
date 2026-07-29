@@ -1,6 +1,8 @@
 [carpentries-workbench]: https://carpentries.github.io/sandpaper-docs/
+[happy-git]: https://happygitwithr.com/
 [metasalmon]: https://github.com/salmon-data-mobilization/metasalmon
 [metasalmon-quickstart]: https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html
+[remotes-install-github]: https://remotes.r-lib.org/reference/install_github.html
 [salmonpy]: https://github.com/Br-Johnson/salmonpy
 [sdp-spec]: https://github.com/salmon-data-mobilization/smn-data-pkg
 [sdp-specification]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md
