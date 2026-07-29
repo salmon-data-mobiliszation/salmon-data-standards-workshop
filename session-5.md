@@ -28,6 +28,8 @@ Use `metadata/codes.csv` when a column has controlled values. It is required whe
 
 `code_value` is required unless `vocabulary_iri` is supplied. A vocabulary-only row with a blank `code_value` documents an external vocabulary but does not cover any value observed in the data.
 
+This work is language-independent: `metasalmon` and `salmonpy` read and write the same `metadata/codes.csv` structure.
+
 | Field | Purpose |
 | --- | --- |
 | `column_name` | Which column uses this code |
@@ -38,6 +40,12 @@ Use `metadata/codes.csv` when a column has controlled values. It is required whe
 | `term_iri` | Recommended IRI for the specific code concept |
 
 ## SKOS in plain language
+
+Keep three related ideas separate:
+
+- a **code list** records the allowed stored values for one data column;
+- a **vocabulary** is a maintained list of reusable terms and definitions;
+- an **ontology** is a maintained set of concepts and definitions that also records relationships among them.
 
 SKOS is a way to publish controlled vocabularies: lists of concepts, labels, definitions, and relationships. It is usually the right pattern for:
 

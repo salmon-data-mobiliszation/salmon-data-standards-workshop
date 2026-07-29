@@ -23,7 +23,7 @@ title: 'Creating Salmon Data Packages With Shared Standards'
 created: '2025-01-22'
 
 # Comma-separated list of keywords for the lesson
-keywords: 'salmon, data package, metadata, metasalmon, SKOS, I-ADOPT'
+keywords: 'salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT'
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable

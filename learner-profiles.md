@@ -2,7 +2,7 @@
 title: Learner Profiles
 ---
 
-## Excel-first operational biologist
+## Spreadsheet-based operational biologist
 
 Needs:
 
@@ -36,6 +36,23 @@ Success:
 
 - can generate a package, guide Excel review, rerun checks, and produce a term-request plan.
 
+## Python-capable data steward
+
+Needs:
+
+- a reproducible `salmonpy.create_sdp()` path;
+- the same project layout and package files used in the R walkthrough;
+- accurate Python calling conventions for review and gap-detection functions;
+- a clear handoff to the normative R publication validator.
+
+Risk:
+
+- assumes matching package versions imply that every validator and term source is identical.
+
+Success:
+
+- can create and review a compatible package in Python, then arrange the authoritative R publication check.
+
 ## Ontology or vocabulary maintainer
 
 Needs:
@@ -57,7 +74,7 @@ Success:
 
 Needs:
 
-- a workshop that scales across Excel and R users;
+- a workshop that scales across spreadsheet, R, and Python users;
 - low maintenance burden;
 - clear handoff from package drafting to governance;
 - a one-hour format for outreach and a full-day format for practice.

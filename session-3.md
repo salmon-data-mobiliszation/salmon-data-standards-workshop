@@ -8,15 +8,164 @@ exercises: 35
 
 - What context do data holders need to share so others do not misuse the data?
 - What belongs in column metadata versus a README/context note?
+- How should I organize and read my own data and context files?
 - How can context improve later term mapping?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
+- Create an RStudio Project with separate locations for original data, context, and generated output.
+- Read either the bundled NuSEDS example or a learner-owned CSV using a reproducible relative path.
 - Write useful dataset, table, column, and code descriptions.
 - Draft a compact README/context note for reviewers and mapping tools.
 - Identify caveats that should not be hidden in informal comments.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Create a project home for your own files
+
+Use an RStudio Project so that every relative path starts from one predictable folder.
+
+1. In RStudio, choose **File > New Project**.
+2. Choose **New Directory > New Project**, give it a name such as `salmon-data-workshop`, and choose where to create it. If you already made the folder, choose **Existing Directory** instead.
+3. Reopen the project later by opening its `.Rproj` file. Do not use `setwd()` to point at folders elsewhere on your computer.
+
+From the R console, create three working folders:
+
+```r
+dir.create("data-raw", showWarnings = FALSE)
+dir.create("context", showWarnings = FALSE)
+dir.create("output", showWarnings = FALSE)
+```
+
+Use them like this:
+
+```text
+salmon-data-workshop/
+  salmon-data-workshop.Rproj
+  data-raw/
+    my-salmon-data.csv        # unchanged source data
+  context/
+    source-data-dictionary.csv # codebook or field definitions
+    methods-and-caveats.md     # methods, caveats, or provenance
+  output/
+    my-salmon-sdp/            # generated package goes here
+```
+
+Copy source files into `data-raw/` and leave those copies unchanged. Put codebooks, methods, and other explanatory files in `context/`. Write generated packages only under `output/`. Use only files you are allowed to bring to the workshop, and do not send context files to an external service unless that use is approved.
+
+## Read the bundled example or your own data
+
+The bundled NuSEDS example comes from the installed R package:
+
+```r
+library(metasalmon)
+
+example_data_path <- system.file(
+  "extdata",
+  "nuseds-fraser-coho-2023-2024.csv",
+  package = "metasalmon"
+)
+
+fraser_coho <- readr::read_csv(
+  example_data_path,
+  show_col_types = FALSE
+)
+```
+
+Your own file uses a path relative to the RStudio Project:
+
+```r
+own_data_path <- file.path(
+  "data-raw",
+  "my-salmon-data.csv"
+)
+
+own_data <- readr::read_csv(
+  own_data_path,
+  show_col_types = FALSE
+)
+
+source_dictionary <- readr::read_csv(
+  file.path("context", "source-data-dictionary.csv"),
+  show_col_types = FALSE
+)
+
+context_note <- readr::read_file(
+  file.path("context", "methods-and-caveats.md")
+)
+
+context_paths <- list.files(
+  "context",
+  full.names = TRUE,
+  recursive = TRUE
+)
+
+pkg_path <- create_sdp(
+  own_data,
+  path = file.path("output", "my-salmon-sdp"),
+  dataset_id = "my-salmon-data",
+  table_id = "observations",
+  seed_semantics = FALSE,
+  check_updates = FALSE,
+  overwrite = TRUE
+)
+```
+
+Change only the file names, dataset ID, table ID, and output folder to match your material. `source_dictionary` and `context_note` show how to read two common context formats. For a PDF or Excel workbook, use an appropriate reader rather than changing the folder layout. `context_paths` keeps the locations of every context file; people can review them directly, and optional approved LLM review can use those paths later.
+
+::::::::::::::::::::::::::::::::::::: callout
+
+## Python equivalent
+
+Start Python from the same project folder and use the same `data-raw/`, `context/`, and `output/` layout.
+
+```python
+from importlib.resources import files
+from pathlib import Path
+
+import pandas as pd
+from salmonpy import create_sdp
+
+project_root = Path.cwd()
+
+for folder in ("data-raw", "context", "output"):
+    (project_root / folder).mkdir(exist_ok=True)
+
+example_data_path = files("salmonpy.data").joinpath(
+    "nuseds-fraser-coho-sample.csv"
+)
+fraser_coho = pd.read_csv(example_data_path)
+
+own_data_path = project_root / "data-raw" / "my-salmon-data.csv"
+own_data = pd.read_csv(own_data_path)
+
+source_dictionary = pd.read_csv(
+    project_root / "context" / "source-data-dictionary.csv"
+)
+context_note = (
+    project_root / "context" / "methods-and-caveats.md"
+).read_text(encoding="utf-8")
+
+context_paths = [
+    str(path)
+    for path in sorted((project_root / "context").rglob("*"))
+    if path.is_file()
+]
+
+pkg_path = create_sdp(
+    own_data,
+    path=project_root / "output" / "my-salmon-sdp",
+    dataset_id="my-salmon-data",
+    table_id="observations",
+    seed_semantics=False,
+    check_updates=False,
+    overwrite=True,
+)
+```
+
+The Python package bundles a smaller NuSEDS teaching fixture than the R package. Both are only practice inputs for the same package workflow; use `own_data` when the exercise moves to your files.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -92,6 +241,6 @@ Mark anything you are unsure about as a reviewer question rather than hiding it.
 
 - Context reduces misuse risk and improves mapping quality.
 - Metadata tables hold structured facts; README/context notes hold narrative caveats.
-- A clear description is more valuable than an uncertain ontology link.
+- A clear description is more valuable than an uncertain link to a shared definition.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
