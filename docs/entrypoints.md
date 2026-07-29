@@ -32,7 +32,6 @@ This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards 
 - `metasalmon`: <https://github.com/salmon-data-mobilization/metasalmon>
 - Salmon Data Package specification: <https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md>
 - Blank SDP CSV template: <https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template>
-- Optional Git/GitHub/RStudio setup: <https://happygitwithr.com/>
 
 ## Local checks
 
