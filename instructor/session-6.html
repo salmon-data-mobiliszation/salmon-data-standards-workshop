@@ -332,9 +332,9 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Route Term Gaps and Plan Publication</h1>
-        <p>Last updated on 2026-07-14 |
+        <p>Last updated on 2026-07-29 |
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
 
 
@@ -402,38 +402,108 @@ package state.</p>
 <span></span>
 <span><span class="va">gaps</span> <span class="op">&lt;-</span> <span class="fu">detect_semantic_term_gaps</span><span class="op">(</span><span class="va">reviewed_dict</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">request_plan</span> <span class="op">&lt;-</span> <span class="va">gaps</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span></span>
-<span>    <span class="va">dataset_id</span>,</span>
-<span>    <span class="va">table_id</span>,</span>
-<span>    <span class="va">target_scope</span>,</span>
-<span>    <span class="va">target_row_key</span>,</span>
-<span>    <span class="va">target_sdp_field</span>,</span>
-<span>    <span class="va">dictionary_role</span>,</span>
-<span>    <span class="va">search_query</span>,</span>
-<span>    <span class="va">top_non_smn_label</span>,</span>
-<span>    <span class="va">top_non_smn_source</span>,</span>
-<span>    <span class="va">placement_recommendation</span>,</span>
-<span>    <span class="va">placement_confidence</span></span>
-<span>  <span class="op">)</span></span></code></pre>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu">nrow</span><span class="op">(</span><span class="va">gaps</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">message</span><span class="op">(</span><span class="st">"No unresolved term gaps; there is no request plan to render."</span><span class="op">)</span></span>
+<span>  <span class="va">requests</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu">tibble</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">request_plan</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu">tibble</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">requests</span> <span class="op">&lt;-</span> <span class="fu">render_ontology_term_request</span><span class="op">(</span></span>
+<span>    <span class="va">gaps</span>,</span>
+<span>    scope <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>    ask <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    profile_name <span class="op">=</span> <span class="st">"local-program"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">reviewed_scopes</span> <span class="op">&lt;-</span> <span class="va">requests</span><span class="op">$</span><span class="va">request_scope</span></span>
+<span>  <span class="co"># Review every value. For example, route a DFO-specific row explicitly:</span></span>
+<span>  <span class="co"># reviewed_scopes[2] &lt;- "gcdfo"</span></span>
+<span></span>
+<span>  <span class="va">requests</span> <span class="op">&lt;-</span> <span class="fu">render_ontology_term_request</span><span class="op">(</span></span>
+<span>    <span class="va">gaps</span>,</span>
+<span>    scope <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>    ask <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    profile_name <span class="op">=</span> <span class="st">"local-program"</span>,</span>
+<span>    scope_overrides <span class="op">=</span> <span class="va">reviewed_scopes</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span></span>
+<span>      ontology_repo <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">if_else</span><span class="op">(</span></span>
+<span>        <span class="va">request_scope</span> <span class="op">%in%</span> <span class="fu">c</span><span class="op">(</span><span class="st">"smn"</span>, <span class="st">"gcdfo"</span><span class="op">)</span>,</span>
+<span>        <span class="va">ontology_repo</span>,</span>
+<span>        <span class="cn">NA_character_</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">request_plan</span> <span class="op">&lt;-</span> <span class="va">requests</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span></span>
+<span>      <span class="va">dataset_id</span>,</span>
+<span>      <span class="va">table_id</span>,</span>
+<span>      <span class="va">target_scope</span>,</span>
+<span>      <span class="va">target_row_key</span>,</span>
+<span>      <span class="va">target_sdp_field</span>,</span>
+<span>      <span class="va">dictionary_role</span>,</span>
+<span>      <span class="va">search_query</span>,</span>
+<span>      <span class="va">top_non_smn_label</span>,</span>
+<span>      <span class="va">top_non_smn_source</span>,</span>
+<span>      <span class="va">gap_detection_basis</span>,</span>
+<span>      <span class="va">llm_new_term_namespace</span>,</span>
+<span>      <span class="va">llm_escalated_from</span>,</span>
+<span>      <span class="va">placement_recommendation</span>,</span>
+<span>      <span class="va">placement_confidence</span>,</span>
+<span>      <span class="va">request_scope</span>,</span>
+<span>      <span class="va">ontology_repo</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">request_plan</span></span>
+<span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu">write_csv</span><span class="op">(</span><span class="va">request_plan</span>, <span class="fu">file.path</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="st">"term-request-plan.csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
 </div>
-<p>The output is a working list, not an automatic governance
+<p><code>detect_semantic_term_gaps()</code> combines deterministic
+candidate gaps with final LLM <code>request_new_term</code> decisions
+when LLM assessment was enabled. <code>gap_detection_basis</code>
+records which evidence created the gap, and
+<code>llm_escalated_from</code> preserves an unresolved
+<code>reject_shortlist</code> escalation. The deterministic
+<code>suggest_semantics()</code> call shown above leaves those LLM
+fields blank.</p>
+<p><code>render_ontology_term_request()</code> converts the gaps into
+reviewable draft payloads and proposed routes. It never submits an
+issue. The output is a working list, not an automatic governance
 decision.</p>
+<p>To preview the SMN and GCDFO issue bodies without posting
+anything:</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">issue_preview</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="fu">nrow</span><span class="op">(</span><span class="va">requests</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu">tibble</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">requests</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">request_scope</span> <span class="op">%in%</span> <span class="fu">c</span><span class="op">(</span><span class="st">"smn"</span>, <span class="st">"gcdfo"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">submit_term_request_issues</span><span class="op">(</span>dry_run <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">issue_preview</span></span></code></pre>
+</div>
 </section><section><h2 class="section-heading" id="routing-decision">Routing decision<a class="anchor" aria-label="anchor" href="#routing-decision"></a></h2>
 <hr class="half-width"><p>Use this plain-language triage:</p>
 <table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Route</th>
 <th>Use when</th>
-</tr></thead><tbody><tr><td>Shared <code>smn:</code> request</td>
+</tr></thead><tbody><tr><td><code>smn</code></td>
 <td>reusable salmon science concept, stable across organizations</td>
-</tr><tr><td>GCDFO or DFO-specific request</td>
-<td>DFO policy, operations, data stewardship, or program-specific
+</tr><tr><td><code>gcdfo</code></td>
+<td>DFO policy, operations, data stewardship, or DFO-specific
 concept</td>
-</tr><tr><td>Local/profile vocabulary or ontology</td>
+</tr><tr><td><code>profile</code></td>
 <td>local code list, project method bin, status category, formal local
 structure, or uncertain reuse</td>
-</tr><tr><td>Defer</td>
+</tr><tr><td>
+<code>skip</code> or defer</td>
 <td>description is enough for now, or evidence is too weak</td>
-</tr></tbody></table></section><section><h2 class="section-heading" id="useful-term-request-ingredients">Useful term-request ingredients<a class="anchor" aria-label="anchor" href="#useful-term-request-ingredients"></a></h2>
+</tr></tbody></table><p>Treat any LLM namespace suggestion as evidence, not authority. Review
+<code>request_scope</code> row by row before filing or publishing
+anything.</p>
+</section><section><h2 class="section-heading" id="useful-term-request-ingredients">Useful term-request ingredients<a class="anchor" aria-label="anchor" href="#useful-term-request-ingredients"></a></h2>
 <hr class="half-width"><p>A useful request includes:</p>
 <ul><li>proposed label;</li>
 <li>one or two sentence definition;</li>
@@ -445,7 +515,7 @@ structure, or uncertain reuse</td>
 <li>any mapping strength you believe is appropriate.</li>
 </ul></section><section><h2 class="section-heading" id="final-validation-is-later">Final validation is later<a class="anchor" aria-label="anchor" href="#final-validation-is-later"></a></h2>
 <hr class="half-width"><p>Strict validation is the final gate.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -454,10 +524,22 @@ structure, or uncertain reuse</td>
 <p>Run it only when:</p>
 <ul><li>review markers such as <code>REVIEW:</code> have been resolved;</li>
 <li>required metadata placeholders are gone;</li>
-<li>canonical metadata headers have no extra columns;</li>
+<li>canonical metadata headers exactly match the schema fields, in
+schema order, with no missing or extra columns;</li>
+<li>every <code>tables.csv$file_name</code> is a safe relative path to
+an existing data file;</li>
+<li>
+<code>column_dictionary.csv</code> rows and column names match the
+headers of the referenced data files;</li>
+<li>every observed non-empty categorical value has exactly one matching
+<code>codes.csv</code> row for its dataset/table/column/value key;</li>
 <li>measurement rows have final <code>term_iri</code>,
 <code>property_iri</code>, <code>entity_iri</code>, and
 <code>unit_iri</code>;</li>
+<li>
+<code>datapackage.json</code> exists, declares the SDP profile and
+resources, and agrees with the canonical metadata CSVs and referenced
+data files;</li>
 <li>term requests or local/profile decisions are documented.</li>
 </ul><p>Deferred measurement gaps are valid in draft or review state. They
 will not pass strict publication validation until the required
@@ -472,8 +554,8 @@ measurement semantic fields are resolved.</p>
 <div class="callout-content">
 <p>Choose one unresolved field or code value.</p>
 <p>Decide:</p>
-<ul><li>route: shared <code>smn:</code>, GCDFO/DFO-specific, local/profile,
-or defer;</li>
+<ul><li>route: <code>smn</code>, <code>gcdfo</code>, <code>profile</code>,
+or <code>skip</code>/defer;</li>
 <li>proposed label and definition;</li>
 <li>evidence source;</li>
 <li>why existing terms do not fit;</li>
@@ -492,6 +574,8 @@ or defer;</li>
 mappings.</li>
 <li>High-quality requests carry definitions, sources, examples, and
 routing rationale.</li>
+<li>Rendering produces reviewable SMN, GCDFO, or profile request drafts;
+it does not submit them.</li>
 <li>Strict validation is a publication-readiness check, not the first
 review step.</li>
 </ul></div>
@@ -521,13 +605,13 @@ review step.</li>
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/" class="external-link">Source</a></p>
         <p>
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
         | <a href="mailto:brett.johnson@dfo-mpo.gc.ca">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 		</div>
 		<div class="col-md-6">
@@ -547,18 +631,18 @@ review step.</li>
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/session-6.html",
+  "@id": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-6.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
   "name": "Route Term Gaps and Plan Publication",
   "creativeWorkStatus": "active",
-  "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/session-6.html",
-  "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/session-6.html",
+  "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-6.html",
+  "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-6.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-14",
-  "datePublished": "2026-07-28"
+  "dateModified": "2026-07-29",
+  "datePublished": "2026-07-29"
 }
 
   </script><script>

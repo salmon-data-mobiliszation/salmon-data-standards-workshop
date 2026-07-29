@@ -237,6 +237,7 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#do-not-map-everything-first">Do not map everything first</a></li>
+<li><a href="#generate-suggestions-for-the-current-package">Generate suggestions for the current package</a></li>
 <li><a href="#treat-suggestions-as-drafts">Treat suggestions as drafts</a></li>
 <li><a href="#measurement-semantics">Measurement semantics</a></li>
 <li><a href="#example-review">Example review</a></li>
@@ -331,9 +332,9 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Review Terms and Measurement Meanings</h1>
-        <p>Last updated on 2026-07-14 |
+        <p>Last updated on 2026-07-29 |
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
 
 
@@ -382,6 +383,46 @@ where shared meaning changes whether data can be compared:</p>
 method, or inclusion rules.</li>
 </ul><p>Administrative IDs, file names, local notes, and one-off workflow
 fields can often rely on clear descriptions.</p>
+</section><section><h2 class="section-heading" id="generate-suggestions-for-the-current-package">Generate suggestions for the current package<a class="anchor" aria-label="anchor" href="#generate-suggestions-for-the-current-package"></a></h2>
+<hr class="half-width"><p>If you used the fast <code>seed_semantics = FALSE</code> classroom
+path, generate candidates now from the package you reviewed. If semantic
+seeding was enabled during <code>create_sdp()</code>, the package-root
+<code>semantic_suggestions.csv</code> contains the original evidence;
+rerunning after your metadata edits searches only from the current
+package state.</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="fu">read_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">reviewed_dict</span> <span class="op">&lt;-</span> <span class="fu">suggest_semantics</span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">resources</span>,</span>
+<span>  dict <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">dictionary</span>,</span>
+<span>  codes <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">codes</span>,</span>
+<span>  table_meta <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">tables</span>,</span>
+<span>  dataset_meta <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">dataset</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">suggestions</span> <span class="op">&lt;-</span> <span class="fu">attr</span><span class="op">(</span><span class="va">reviewed_dict</span>, <span class="st">"semantic_suggestions"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">suggestions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">target_scope</span> <span class="op">==</span> <span class="st">"column"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span></span>
+<span>    <span class="va">column_name</span>,</span>
+<span>    <span class="va">dictionary_role</span>,</span>
+<span>    <span class="va">label</span>,</span>
+<span>    <span class="va">iri</span>,</span>
+<span>    <span class="va">source</span>,</span>
+<span>    <span class="va">definition</span></span>
+<span>  <span class="op">)</span></span></code></pre>
+</div>
+<p>Vocabulary lookup can take a few minutes. For a live workshop,
+instructors can prepare this output in advance. Omitting
+<code>sources</code> uses role-aware defaults. If you supply
+<code>sources</code> explicitly, current <code>metasalmon</code> treats
+the vector as a strict allowlist for the initial search and any
+LLM-requested bounded retry.</p>
 </section><section><h2 class="section-heading" id="treat-suggestions-as-drafts">Treat suggestions as drafts<a class="anchor" aria-label="anchor" href="#treat-suggestions-as-drafts"></a></h2>
 <hr class="half-width"><p>Some tools write semantic suggestions directly into metadata as
 <code>REVIEW: &lt;iri&gt;</code>. That prefix is a warning, not
@@ -422,6 +463,33 @@ I-ADOPT-style measurement-variable components. <code>unit_iri</code> and
 methods are not I-ADOPT roles. Do not use these fields as
 general-purpose relationship fields for identifiers, attributes, or
 categorical columns.</p>
+<div id="optional-llm-assisted-bundle-review" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="optional-llm-assisted-bundle-review" class="callout-inner">
+<h3 class="callout-title">Optional LLM-assisted bundle review</h3>
+<div class="callout-content">
+<p>Adding <code>llm_assess = TRUE</code> plus an approved provider and
+model to <code>suggest_semantics()</code> asks the LLM to judge the
+retrieved candidates; it does not let the model invent IRIs. Current
+<code>metasalmon</code> reviews a measurement’s variable, property,
+entity, unit, constraint, and method candidates together as one six-slot
+bundle.</p>
+<p>Deterministic validators can downgrade an unsupported
+<code>accept</code> decision to <code>review</code>, but they never
+substitute or invent a term. Variable, property, entity, and unit
+candidates may become <code>REVIEW:</code> drafts on the
+<code>create_sdp()</code> path. Constraint and method candidates always
+remain manual-review suggestions.</p>
+<p>Context files must be passed as existing local file paths through
+<code>llm_context_files</code>, and context alone does not enable an LLM
+call. Use only an approved provider and appropriate non-sensitive
+context.</p>
+</div>
+</div>
+</div>
 </section><section><h2 class="section-heading" id="example-review">Example review<a class="anchor" aria-label="anchor" href="#example-review"></a></h2>
 <hr class="half-width"><p>Column: <code>natural_spawner_count</code></p>
 <table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Question</th>
@@ -471,6 +539,8 @@ or reuse.</li>
 <li>
 <code>REVIEW:</code> suggestions are evidence to inspect, not final
 answers.</li>
+<li>Optional LLM review selects from deterministic candidates and
+remains subject to deterministic checks.</li>
 <li>SDP measurement semantic fields are measurement-only in the column
 dictionary, and I-ADOPT itself does not model units or methods.</li>
 </ul></div>
@@ -500,13 +570,13 @@ dictionary, and I-ADOPT itself does not model units or methods.</li>
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/" class="external-link">Source</a></p>
         <p>
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
         | <a href="mailto:brett.johnson@dfo-mpo.gc.ca">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 		</div>
 		<div class="col-md-6">
@@ -526,18 +596,18 @@ dictionary, and I-ADOPT itself does not model units or methods.</li>
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-4.html",
+  "@id": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-4.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
   "name": "Review Terms and Measurement Meanings",
   "creativeWorkStatus": "active",
-  "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-4.html",
-  "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-4.html",
+  "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-4.html",
+  "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-4.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-14",
-  "datePublished": "2026-07-28"
+  "dateModified": "2026-07-29",
+  "datePublished": "2026-07-29"
 }
 
   </script><script>

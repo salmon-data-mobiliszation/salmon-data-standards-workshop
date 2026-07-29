@@ -309,9 +309,9 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Reference</h1>
-        <p>Last updated on 2026-07-14 |
+        <p>Last updated on 2026-07-29 |
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
 
 
@@ -330,8 +330,8 @@ descriptions.</li>
 <li>Review suggested semantic links.</li>
 <li>Focus first on measurements, units, observation units, and important
 code lists.</li>
-<li>Route unresolved terms to shared, DFO-specific, local/profile, or
-defer.</li>
+<li>Render and review unresolved-term routes: <code>smn</code>,
+<code>gcdfo</code>, <code>profile</code>, or <code>skip</code>.</li>
 <li>Run strict validation only when the package is final enough for
 publication.</li>
 </ol></section><section><h2 class="section-heading" id="salmon-data-package-files">Salmon Data Package files<a class="anchor" aria-label="anchor" href="#salmon-data-package-files"></a></h2>
@@ -346,15 +346,17 @@ provenance</td>
 <td>Column labels, descriptions, roles, types, units, semantic
 fields</td>
 </tr><tr><td><code>metadata/codes.csv</code></td>
-<td>Code values and labels for categorical columns</td>
+<td>Required when categorical columns exist; one row per observed
+non-empty dataset/table/column/value key</td>
 </tr><tr><td><code>data/*.csv</code></td>
 <td>Data tables</td>
 </tr><tr><td><code>datapackage.json</code></td>
-<td>Generated machine-readable descriptor</td>
+<td>Generated descriptor required for complete/published packages; must
+agree with the CSV metadata and referenced data files</td>
 </tr><tr><td>
 <code>README.md</code> or <code>README-review.txt</code>
 </td>
-<td>Human context, caveats, and review checklist</td>
+<td>Optional human context, caveats, or review checklist</td>
 </tr></tbody></table></section><section><h2 class="section-heading" id="column-roles">Column roles<a class="anchor" aria-label="anchor" href="#column-roles"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Role</th>
 <th>Use for</th>
@@ -365,43 +367,72 @@ fields</td>
 </tr><tr><td><code>temporal</code></td>
 <td>Dates, datetimes, years, or time periods</td>
 </tr><tr><td><code>categorical</code></td>
-<td>Values from a defined set, usually documented in
-<code>codes.csv</code>
-</td>
+<td>Values from a defined set; requires <code>codes.csv</code>
+coverage</td>
 </tr><tr><td><code>measurement</code></td>
 <td>Observed or computed quantities</td>
 </tr></tbody></table></section><section><h2 class="section-heading" id="measurement-semantic-fields">Measurement semantic fields<a class="anchor" aria-label="anchor" href="#measurement-semantic-fields"></a></h2>
-<hr class="half-width"><p>For measurement rows, SDP semantics may include:</p>
-<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Field</th>
+<hr class="half-width"><p>For publication-ready measurement rows, SDP requires
+<code>term_iri</code>, <code>property_iri</code>,
+<code>entity_iri</code>, and <code>unit_iri</code>. Constraint and
+method IRIs remain optional.</p>
+<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Field</th>
+<th>Publication requirement</th>
 <th>Meaning</th>
 </tr></thead><tbody><tr><td><code>term_iri</code></td>
+<td>Required</td>
 <td>IRI for the whole measurement variable</td>
 </tr><tr><td><code>property_iri</code></td>
+<td>Required</td>
 <td>I-ADOPT property: the characteristic measured</td>
 </tr><tr><td><code>entity_iri</code></td>
+<td>Required</td>
 <td>I-ADOPT entity/object of interest</td>
 </tr><tr><td><code>constraint_iri</code></td>
-<td>Optional I-ADOPT constraint that narrows the meaning</td>
+<td>Optional</td>
+<td>I-ADOPT constraint that narrows the meaning</td>
 </tr><tr><td><code>unit_iri</code></td>
+<td>Required</td>
 <td>Unit IRI, usually from a unit vocabulary such as QUDT</td>
 </tr><tr><td><code>method_iri</code></td>
-<td>Optional procedure or method IRI, aligned outside I-ADOPT</td>
+<td>Optional</td>
+<td>Procedure or method IRI, aligned outside I-ADOPT</td>
 </tr></tbody></table><p>Do not use <code>property_iri</code>, <code>entity_iri</code>,
 <code>constraint_iri</code>, or <code>method_iri</code> as general
 relationship fields for identifiers, attributes, or categorical
 columns.</p>
-</section><section><h2 class="section-heading" id="routing-unresolved-terms">Routing unresolved terms<a class="anchor" aria-label="anchor" href="#routing-unresolved-terms"></a></h2>
+</section><section><h2 class="section-heading" id="publication-checks">Publication checks<a class="anchor" aria-label="anchor" href="#publication-checks"></a></h2>
+<hr class="half-width"><ul><li>Required metadata fields are complete and canonical metadata headers
+exactly match the schema fields, in schema order, with no missing or
+extra columns.</li>
+<li>Every <code>tables.csv$file_name</code> is a safe relative path to
+an existing data file.</li>
+<li>
+<code>column_dictionary.csv</code> rows and column names match the
+headers of the referenced data files.</li>
+<li>Every observed non-empty categorical value has exactly one matching
+<code>codes.csv</code> row for its dataset/table/column/value key.</li>
+<li>Measurement rows have final <code>term_iri</code>,
+<code>property_iri</code>, <code>entity_iri</code>, and
+<code>unit_iri</code> values.</li>
+<li>No placeholder text or <code>REVIEW:</code> prefixes remain.</li>
+<li>
+<code>datapackage.json</code> exists, declares the SDP profile and
+resources, and agrees with the canonical CSV metadata and referenced
+data files.</li>
+<li>Strict validation passes.</li>
+</ul></section><section><h2 class="section-heading" id="routing-unresolved-terms">Routing unresolved terms<a class="anchor" aria-label="anchor" href="#routing-unresolved-terms"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Route</th>
 <th>Use when</th>
-</tr></thead><tbody><tr><td>Shared Salmon Domain Ontology (<code>smn:</code>)</td>
+</tr></thead><tbody><tr><td>Shared Salmon Domain Ontology (<code>smn</code>)</td>
 <td>Stable, policy-neutral, reusable across multiple organizations</td>
-</tr><tr><td>GC DFO Salmon Ontology</td>
+</tr><tr><td>GC DFO Salmon Ontology (<code>gcdfo</code>)</td>
 <td>DFO Pacific operational, process, data stewardship, or policy
 terms</td>
-</tr><tr><td>Local/profile vocabulary or ontology</td>
+</tr><tr><td>Local/profile vocabulary or ontology (<code>profile</code>)</td>
 <td>Project-specific terms, local codelists, method bins, status
 categories, or uncertain reuse</td>
-</tr><tr><td>Defer</td>
+</tr><tr><td>Skip/defer (<code>skip</code>)</td>
 <td>Description is enough for now, or evidence is too weak</td>
 </tr></tbody></table><p>SKOS is usually best for codelists, status categories, and method
 bins. OWL is for durable domain structure and formal relationships.</p>
@@ -451,13 +482,13 @@ suggestion that must be checked before publication.</p>
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/" class="external-link">Source</a></p>
         <p>
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
         | <a href="mailto:brett.johnson@dfo-mpo.gc.ca">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 		</div>
 		<div class="col-md-6">
@@ -477,18 +508,18 @@ suggestion that must be checked before publication.</p>
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/reference.html",
+  "@id": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
   "name": "Reference",
   "creativeWorkStatus": "active",
-  "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/reference.html",
-  "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/reference.html",
+  "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",
+  "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-14",
-  "datePublished": "2026-07-28"
+  "dateModified": "2026-07-29",
+  "datePublished": "2026-07-29"
 }
 
   </script><script>

@@ -331,9 +331,9 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Why Start With a Salmon Data Package?</h1>
-        <p>Last updated on 2026-07-14 |
+        <p>Last updated on 2026-07-29 |
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
 
 
@@ -407,26 +407,29 @@ are still blank or marked for review.</p>
     dataset.csv
     tables.csv
     column_dictionary.csv
-    codes.csv
+    codes.csv                  # required when categorical columns exist
   data/
     my_table.csv
-  datapackage.json
-  README.md or README-review.txt</code></pre>
+  datapackage.json             # generated; required for complete/published packages
+  README.md or README-review.txt  # optional sidecar or review checklist</code></pre>
 <p>The CSV files under <code>metadata/</code> are the human-reviewable
-core. The generated <code>datapackage.json</code> makes the package
-easier for software to read, but the metadata CSVs are the place most
+core. <code>codes.csv</code> is conditional: include it when the package
+has categorical columns. The generated <code>datapackage.json</code>
+makes the package easier for software to read and is required for a
+complete or published package, but the metadata CSVs are the place most
 learners will edit first.</p>
 </section><section><h2 class="section-heading" id="two-on-ramps-one-review-task">Two on-ramps, one review task<a class="anchor" aria-label="anchor" href="#two-on-ramps-one-review-task"></a></h2>
 <hr class="half-width"><p>Use whichever path matches your current comfort level.</p>
 <table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>If you usually work in…</th>
 <th>Start with…</th>
 <th>You still review…</th>
-</tr></thead><tbody><tr><td>Excel</td>
-<td>Salmon Data Package workbook/template</td>
-<td>dataset, table, column, and code metadata</td>
+</tr></thead><tbody><tr><td>Excel or Calc</td>
+<td>Blank SDP CSV template folder</td>
+<td>dataset, table, column, and conditional code metadata</td>
 </tr><tr><td>R</td>
 <td><code>metasalmon::create_sdp()</code></td>
-<td>the same metadata CSVs plus suggestions</td>
+<td>the same metadata CSVs, a generated descriptor, and optional
+suggestions</td>
 </tr><tr><td>Python</td>
 <td>
 <code>salmonpy</code> or exported CSVs</td>
@@ -490,13 +493,13 @@ together.</li>
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/" class="external-link">Source</a></p>
         <p>
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
         | <a href="mailto:brett.johnson@dfo-mpo.gc.ca">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 		</div>
 		<div class="col-md-6">
@@ -516,18 +519,18 @@ together.</li>
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-1.html",
+  "@id": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-1.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
   "name": "Why Start With a Salmon Data Package?",
   "creativeWorkStatus": "active",
-  "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-1.html",
-  "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/session-1.html",
+  "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-1.html",
+  "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-1.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-14",
-  "datePublished": "2026-07-28"
+  "dateModified": "2026-07-29",
+  "datePublished": "2026-07-29"
 }
 
   </script><script>

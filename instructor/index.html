@@ -426,6 +426,10 @@ that can save CSV files.</li>
 </ul><p>Recommended:</p>
 <ul><li>A folder where you can save a package with <code>metadata/</code>
 and <code>data/</code> subfolders.</li>
+<li>A copy of the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a>, which you can open and edit with your spreadsheet
+software. Download or clone the <code>smn-data-pkg</code> repository and
+copy that folder; there is no standalone workbook or template ZIP.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="rmetasalmon-path">R/metasalmon path<a class="anchor" aria-label="anchor" href="#rmetasalmon-path"></a></h3>
@@ -440,12 +444,18 @@ and <code>data/</code> subfolders.</li>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"remotes"</span>, <span class="st">"readr"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"salmon-data-mobilization/metasmn"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"salmon-data-mobilization/metasalmon"</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Optional:</p>
 <ul><li>An LLM provider key only if you want to try optional LLM-assisted
 semantic review. The basic quickstart does not require an API key.</li>
-</ul></div>
+</ul><p>LLM review is strictly opt-in. Context supplied through
+<code>llm_context_files</code> must be a character vector of existing
+local file paths, and it does not trigger an LLM call unless
+<code>llm_assess = TRUE</code>. Use only an approved provider and do not
+send sensitive or restricted material outside an authorized
+environment.</p>
+</div>
 <div class="section level3">
 <h3 id="python-path">Python path<a class="anchor" aria-label="anchor" href="#python-path"></a></h3>
 <p>The main workshop uses Excel and R examples. Python users can follow
@@ -460,9 +470,16 @@ the same package structure with <code>salmonpy</code>.</p>
 </div>
 </section><section><h2 class="section-heading" id="pre-workshop-reading">Pre-workshop reading<a class="anchor" aria-label="anchor" href="#pre-workshop-reading"></a></h2>
 <hr class="half-width"><p>Read these only if you have time:</p>
-<ol style="list-style-type: decimal"><li>Salmon Data Package specification: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg" class="external-link uri">https://github.com/salmon-data-mobilization/smn-data-pkg</a>
+<ol style="list-style-type: decimal"><li>Salmon Data Package specification: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md" class="external-link">normative
+rules</a> and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">field
+reference</a>
 </li>
-<li>metasalmon quickstart: <a href="https://salmon-data-mobilization.github.io/metasmn/articles/metasalmon.html" class="external-link uri">https://salmon-data-mobilization.github.io/metasmn/articles/metasalmon.html</a>
+<li>Salmon Data Package examples: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+CSV template</a> and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/examples/minimal-example" class="external-link">minimal
+example</a>
+</li>
+<li>metasalmon quickstart: <a href="https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html" class="external-link">create
+and review a package</a>
 </li>
 <li>Salmon Domain Ontology conventions: <a href="https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md" class="external-link uri">https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md</a>
 </li>
@@ -491,13 +508,13 @@ Excel-first path and pair with someone who can run validation later.</p>
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/index.md" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/index.md" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/" class="external-link">Source</a></p>
         <p>
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
         | <a href="mailto:brett.johnson@dfo-mpo.gc.ca">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 		</div>
 		<div class="col-md-6">
@@ -517,18 +534,18 @@ Excel-first path and pair with someone who can run validation later.</p>
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/index.html",
+  "@id": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/index.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
   "name": "Creating Salmon Data Packages With Shared Standards",
   "creativeWorkStatus": "active",
-  "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/index.html",
-  "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/index.html",
+  "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/index.html",
+  "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/index.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-28",
-  "datePublished": "2026-07-28"
+  "dateModified": "2026-07-29",
+  "datePublished": "2026-07-29"
 }
 
   </script><script>

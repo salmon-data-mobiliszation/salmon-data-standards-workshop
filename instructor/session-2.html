@@ -219,7 +219,7 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#what-draft-means">What “draft” means</a></li>
-<li><a href="#excel-first-path">Excel-first path</a></li>
+<li><a href="#spreadsheetcsv-template-path">Spreadsheet/CSV-template path</a></li>
 <li><a href="#rmetasalmon-path">R/metasalmon path</a></li>
 <li><a href="#review-state-validation">Review-state validation</a></li>
         </ul></div><!--/div.accordion-body-->
@@ -331,9 +331,9 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Create a Draft Salmon Data Package</h1>
-        <p>Last updated on 2026-07-14 |
+        <p>Last updated on 2026-07-29 |
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
 
 
@@ -378,23 +378,38 @@ review markers. The goal is to create a structured package that a human
 can improve.</p>
 <p>Do not treat the first package as final. Treat it as the first shared
 review surface.</p>
-</section><section><h2 class="section-heading" id="excel-first-path">Excel-first path<a class="anchor" aria-label="anchor" href="#excel-first-path"></a></h2>
-<hr class="half-width"><p>Use the Salmon Data Package template as a workbook-shaped review
-surface.</p>
+</section><section><h2 class="section-heading" id="spreadsheetcsv-template-path">Spreadsheet/CSV-template path<a class="anchor" aria-label="anchor" href="#spreadsheetcsv-template-path"></a></h2>
+<hr class="half-width"><p>Download or clone the <code>smn-data-pkg</code> repository and copy
+the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a>, then open its metadata CSV files in Excel,
+LibreOffice Calc, or another spreadsheet editor. There is no standalone
+workbook or template ZIP. Keep the folder structure and header rows
+exactly as provided.</p>
 <p>Minimum steps:</p>
-<ol style="list-style-type: decimal"><li>Put source data in a <code>data</code> sheet or export it as a CSV
-under <code>data/</code>.</li>
-<li>Fill one row in <code>dataset.csv</code> metadata: title,
-description, creator, contact, license, and useful coverage notes.</li>
+<ol style="list-style-type: decimal"><li>Export each source table as a CSV under <code>data/</code>.</li>
+<li>Fill one row in <code>metadata/dataset.csv</code>. The required
+fields are <code>dataset_id</code>, <code>title</code>,
+<code>description</code>, <code>creator</code>,
+<code>contact_name</code>, <code>contact_email</code>, and
+<code>license</code>; add coverage and provenance fields when they are
+useful.</li>
 <li>Fill one row in <code>tables.csv</code> for each data table.</li>
 <li>Fill one row in <code>column_dictionary.csv</code> for each data
 column.</li>
-<li>Use <code>codes.csv</code> only for categorical columns with
-controlled values.</li>
-<li>Write a short README/context note with caveats, methods, and known
-limitations.</li>
-</ol><p>The workbook path is valid when it produces the same core metadata
-that an R package would write.</p>
+<li>When any column has <code>column_role = categorical</code>, use
+<code>codes.csv</code>. Each observed non-empty value must have exactly
+one matching row for its <code>dataset_id</code> + <code>table_id</code>
++ <code>column_name</code> + <code>code_value</code> key.</li>
+<li>Optionally write a short README/context note with caveats, methods,
+and known limitations.</li>
+<li>Before publication, generate <code>datapackage.json</code> with
+<code>metasalmon</code> or another SDP-compatible tool and confirm that
+it agrees with the canonical metadata CSVs and referenced data
+files.</li>
+</ol><p>The spreadsheet path is valid when it produces the same canonical CSV
+metadata that an R package would write. The blank template intentionally
+omits <code>datapackage.json</code>; a complete or published package
+needs the generated descriptor as well.</p>
 </section><section><h2 class="section-heading" id="rmetasalmon-path">R/metasalmon path<a class="anchor" aria-label="anchor" href="#rmetasalmon-path"></a></h2>
 <hr class="half-width"><p>In R, <code>create_sdp()</code> creates a package folder and a review
 checklist.</p>
@@ -439,12 +454,12 @@ searches term sources and writes review suggestions.</p>
 </ul><p>Expected files:</p>
 <pre class="text"><code><span><span class="va">fraser</span><span class="op">-</span><span class="va">coho</span><span class="op">-</span><span class="fl">2023</span><span class="op">-</span><span class="fl">2024</span><span class="op">-</span><span class="va">sdp</span><span class="op">/</span></span>
 <span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span></span>
-<span>  <span class="va">datapackage.json</span></span>
+<span>  <span class="va">datapackage.json</span>             <span class="co"># generated descriptor</span></span>
 <span>  <span class="va">metadata</span><span class="op">/</span></span>
 <span>    <span class="va">dataset.csv</span></span>
 <span>    <span class="va">tables.csv</span></span>
 <span>    <span class="va">column_dictionary.csv</span></span>
-<span>    <span class="va">codes.csv</span></span>
+<span>    <span class="va">codes.csv</span>                  <span class="co"># when categorical columns exist</span></span>
 <span>  <span class="va">data</span><span class="op">/</span></span>
 <span>    <span class="va">escapement.csv</span></span></code></pre>
 <p>If semantic seeding is enabled, the package may also include
@@ -527,13 +542,13 @@ the end.</li>
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
 
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit on GitHub</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit on GitHub</a>
 
 	
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
-        | <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/" class="external-link">Source</a></p>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
+        | <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/" class="external-link">Source</a></p>
         <p>
-        <a href="https://github.com/dfo-pacific-science/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
+        <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/" class="external-link">Cite</a>
         | <a href="mailto:brett.johnson@dfo-mpo.gc.ca">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 		</div>
 		<div class="col-md-6">
@@ -553,18 +568,18 @@ the end.</li>
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/session-2.html",
+  "@id": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-2.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
   "name": "Create a Draft Salmon Data Package",
   "creativeWorkStatus": "active",
-  "url": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/session-2.html",
-  "identifier": "https://dfo-pacific-science.github.io/salmon-data-standards-workshop/instructor/session-2.html",
+  "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-2.html",
+  "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-2.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-14",
-  "datePublished": "2026-07-28"
+  "dateModified": "2026-07-29",
+  "datePublished": "2026-07-29"
 }
 
   </script><script>

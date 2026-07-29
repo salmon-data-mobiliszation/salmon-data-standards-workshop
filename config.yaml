@@ -33,7 +33,7 @@ life_cycle: 'pre-alpha'
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/dfo-pacific-science/salmon-data-standards-workshop/'
+source: 'https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/'
 
 # Default branch of your lesson
 branch: 'main'
