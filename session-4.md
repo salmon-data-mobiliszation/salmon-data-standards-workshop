@@ -32,6 +32,37 @@ The package does not need an IRI for every field. Start with fields where shared
 
 Administrative IDs, file names, local notes, and one-off workflow fields can often rely on clear descriptions.
 
+## Generate suggestions for the current package
+
+If you used the fast `seed_semantics = FALSE` classroom path, generate candidates now from the package you reviewed. If semantic seeding was enabled during `create_sdp()`, the package-root `semantic_suggestions.csv` contains the original evidence; rerunning after your metadata edits searches only from the current package state.
+
+```r
+pkg <- read_salmon_datapackage(pkg_path)
+
+reviewed_dict <- suggest_semantics(
+  df = pkg$resources,
+  dict = pkg$dictionary,
+  codes = pkg$codes,
+  table_meta = pkg$tables,
+  dataset_meta = pkg$dataset
+)
+
+suggestions <- attr(reviewed_dict, "semantic_suggestions")
+
+suggestions |>
+  dplyr::filter(target_scope == "column") |>
+  dplyr::select(
+    column_name,
+    dictionary_role,
+    label,
+    iri,
+    source,
+    definition
+  )
+```
+
+Vocabulary lookup can take a few minutes. For a live workshop, instructors can prepare this output in advance. Omitting `sources` uses role-aware defaults. If you supply `sources` explicitly, current `metasalmon` treats the vector as a strict allowlist for the initial search and any LLM-requested bounded retry.
+
 ## Treat suggestions as drafts
 
 Some tools write semantic suggestions directly into metadata as `REVIEW: <iri>`. That prefix is a warning, not approval.
@@ -60,6 +91,18 @@ For `column_role = measurement`, SDP combines a variable link, I-ADOPT-style mea
 | `method_iri` | What method or procedure matters for interpretation, modeled outside I-ADOPT? |
 
 Important boundary: `property_iri`, `entity_iri`, and `constraint_iri` are I-ADOPT-style measurement-variable components. `unit_iri` and `method_iri` are also measurement semantics, but units and methods are not I-ADOPT roles. Do not use these fields as general-purpose relationship fields for identifiers, attributes, or categorical columns.
+
+::::::::::::::::::::::::::::::::::::: callout
+
+## Optional LLM-assisted bundle review
+
+Adding `llm_assess = TRUE` plus an approved provider and model to `suggest_semantics()` asks the LLM to judge the retrieved candidates; it does not let the model invent IRIs. Current `metasalmon` reviews a measurement's variable, property, entity, unit, constraint, and method candidates together as one six-slot bundle.
+
+Deterministic validators can downgrade an unsupported `accept` decision to `review`, but they never substitute or invent a term. Variable, property, entity, and unit candidates may become `REVIEW:` drafts on the `create_sdp()` path. Constraint and method candidates always remain manual-review suggestions.
+
+Context files must be passed as existing local file paths through `llm_context_files`, and context alone does not enable an LLM call. Use only an approved provider and appropriate non-sensitive context.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Example review
 
@@ -95,6 +138,7 @@ For the measurement column, also fill or review the property, entity, unit, and 
 
 - Prioritize semantic review where shared meaning affects comparison or reuse.
 - `REVIEW:` suggestions are evidence to inspect, not final answers.
+- Optional LLM review selects from deterministic candidates and remains subject to deterministic checks.
 - SDP measurement semantic fields are measurement-only in the column dictionary, and I-ADOPT itself does not model units or methods.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

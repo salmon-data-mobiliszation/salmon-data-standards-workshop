@@ -22,7 +22,7 @@ Use this when the goal is awareness and recruitment.
 | --- | --- |
 | 0:00-0:05 | Why salmon data sharing fails when context is implicit |
 | 0:05-0:15 | Show SDP folder anatomy and metadata files |
-| 0:15-0:30 | Demo Excel template or `metasalmon::create_sdp()` |
+| 0:15-0:30 | Demo the blank SDP CSV template in Excel/Calc or `metasalmon::create_sdp()` |
 | 0:30-0:45 | Review one measurement mapping and one code list |
 | 0:45-0:55 | Show one unresolved term and route it |
 | 0:55-1:00 | Stop points and next steps |
@@ -51,7 +51,7 @@ Pair Excel-first participants with R-capable participants for validation steps, 
 Recommended table roles:
 
 - data owner: explains what the data mean;
-- package editor: edits metadata or workbook cells;
+- package editor: edits the metadata CSV cells;
 - reviewer: asks what could be misunderstood;
 - mapper: checks suggestions and records gaps.
 
@@ -91,6 +91,8 @@ Before delivery:
 - choose a small example dataset;
 - prepare one already-created SDP folder for demonstration;
 - prepare one measurement mapping example;
+- prepare semantic suggestion output in advance if live vocabulary lookup would interrupt the schedule;
 - prepare one categorical code-list example;
 - prepare one unresolved term with routing rationale;
+- if demonstrating optional LLM review, use an approved provider and non-sensitive context, and show how bundle decisions can be downgraded to manual review;
 - decide whether R validation will be live or instructor-only.

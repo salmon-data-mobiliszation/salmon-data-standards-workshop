@@ -1,7 +1,12 @@
 [carpentries-workbench]: https://carpentries.github.io/sandpaper-docs/
-[metasalmon]: https://github.com/salmon-data-mobilization/metasmn
+[metasalmon]: https://github.com/salmon-data-mobilization/metasalmon
+[metasalmon-quickstart]: https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html
 [salmonpy]: https://github.com/Br-Johnson/salmonpy
 [sdp-spec]: https://github.com/salmon-data-mobilization/smn-data-pkg
+[sdp-specification]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md
+[sdp-template]: https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template
+[sdp-example]: https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/examples/minimal-example
+[sdp-field-reference]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md
 [sdo]: https://github.com/salmon-data-mobilization/salmon-domain-ontology
 [gcdfo]: https://github.com/dfo-pacific-science/dfo-salmon-ontology
 [smn-issues]: https://github.com/salmon-data-mobilization/salmon-domain-ontology/issues/new/choose

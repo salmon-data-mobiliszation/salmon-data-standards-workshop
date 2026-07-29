@@ -28,6 +28,7 @@ Required:
 Recommended:
 
 - A folder where you can save a package with `metadata/` and `data/` subfolders.
+- A copy of the [blank SDP CSV template][sdp-template], which you can open and edit with your spreadsheet software. Download or clone the `smn-data-pkg` repository and copy that folder; there is no standalone workbook or template ZIP.
 
 ### R/metasalmon path
 
@@ -41,12 +42,14 @@ Install with:
 
 ```r
 install.packages(c("remotes", "readr", "dplyr"))
-remotes::install_github("salmon-data-mobilization/metasmn")
+remotes::install_github("salmon-data-mobilization/metasalmon")
 ```
 
 Optional:
 
 - An LLM provider key only if you want to try optional LLM-assisted semantic review. The basic quickstart does not require an API key.
+
+LLM review is strictly opt-in. Context supplied through `llm_context_files` must be a character vector of existing local file paths, and it does not trigger an LLM call unless `llm_assess = TRUE`. Use only an approved provider and do not send sensitive or restricted material outside an authorized environment.
 
 ### Python path
 
@@ -62,9 +65,10 @@ pip install git+https://github.com/Br-Johnson/salmonpy.git
 
 Read these only if you have time:
 
-1. Salmon Data Package specification: <https://github.com/salmon-data-mobilization/smn-data-pkg>
-2. metasalmon quickstart: <https://salmon-data-mobilization.github.io/metasmn/articles/metasalmon.html>
-3. Salmon Domain Ontology conventions: <https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md>
+1. Salmon Data Package specification: [normative rules][sdp-specification] and [field reference][sdp-field-reference]
+2. Salmon Data Package examples: [blank CSV template][sdp-template] and [minimal example][sdp-example]
+3. metasalmon quickstart: [create and review a package][metasalmon-quickstart]
+4. Salmon Domain Ontology conventions: <https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md>
 
 You do not need to read ontology documentation before attending. The workshop introduces the needed terms during the exercises.
 
