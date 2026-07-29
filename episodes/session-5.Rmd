@@ -24,7 +24,9 @@ exercises: 35
 
 A categorical column stores values from a known set, such as species codes, origin categories, run timing, method bins, or status values. The data table may store compact values, but reviewers need the meaning.
 
-Use `metadata/codes.csv` when a column has controlled values.
+Use `metadata/codes.csv` when a column has controlled values. It is required when any `column_dictionary.csv` row has `column_role = categorical`. Each observed non-empty value must have exactly one matching row for its `dataset_id` + `table_id` + `column_name` + `code_value` key; do not leave observed values undocumented or duplicate that key.
+
+`code_value` is required unless `vocabulary_iri` is supplied. A vocabulary-only row with a blank `code_value` documents an external vocabulary but does not cover any value observed in the data.
 
 | Field | Purpose |
 | --- | --- |
@@ -32,8 +34,8 @@ Use `metadata/codes.csv` when a column has controlled values.
 | `code_value` | Stored value in the data |
 | `code_label` | Human-readable label |
 | `code_description` | Meaning, scope, or caveat |
-| `vocabulary_iri` | Optional IRI for the whole vocabulary |
-| `term_iri` | Optional IRI for the specific code concept |
+| `vocabulary_iri` | Recommended IRI for the whole vocabulary |
+| `term_iri` | Recommended IRI for the specific code concept |
 
 ## SKOS in plain language
 
@@ -75,11 +77,14 @@ Create or improve rows for each code value:
 - whether a shared term already exists;
 - whether the value should stay local for now.
 
+Then compare the table with the data: every observed non-empty value should have one matching row for that dataset, table, column, and value, and that key should not be duplicated.
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
 - `codes.csv` is the review surface for controlled categorical values.
+- Each observed non-empty categorical value needs exactly one matching row for its dataset/table/column/value key.
 - SKOS is usually the right model for code lists and status/method categories, but local/profile work is not always SKOS-only.
 - Do not promote local vocabulary to shared `smn:` without evidence of broad reuse.
 

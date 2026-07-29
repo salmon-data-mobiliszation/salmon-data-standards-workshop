@@ -26,20 +26,21 @@ A draft package is allowed to contain blanks, placeholders, and review markers. 
 
 Do not treat the first package as final. Treat it as the first shared review surface.
 
-## Excel-first path
+## Spreadsheet/CSV-template path
 
-Use the Salmon Data Package template as a workbook-shaped review surface.
+Download or clone the `smn-data-pkg` repository and copy the [blank SDP CSV template][sdp-template], then open its metadata CSV files in Excel, LibreOffice Calc, or another spreadsheet editor. There is no standalone workbook or template ZIP. Keep the folder structure and header rows exactly as provided.
 
 Minimum steps:
 
-1. Put source data in a `data` sheet or export it as a CSV under `data/`.
-2. Fill one row in `dataset.csv` metadata: title, description, creator, contact, license, and useful coverage notes.
+1. Export each source table as a CSV under `data/`.
+2. Fill one row in `metadata/dataset.csv`. The required fields are `dataset_id`, `title`, `description`, `creator`, `contact_name`, `contact_email`, and `license`; add coverage and provenance fields when they are useful.
 3. Fill one row in `tables.csv` for each data table.
 4. Fill one row in `column_dictionary.csv` for each data column.
-5. Use `codes.csv` only for categorical columns with controlled values.
-6. Write a short README/context note with caveats, methods, and known limitations.
+5. When any column has `column_role = categorical`, use `codes.csv`. Each observed non-empty value must have exactly one matching row for its `dataset_id` + `table_id` + `column_name` + `code_value` key.
+6. Optionally write a short README/context note with caveats, methods, and known limitations.
+7. Before publication, generate `datapackage.json` with `metasalmon` or another SDP-compatible tool and confirm that it agrees with the canonical metadata CSVs and referenced data files.
 
-The workbook path is valid when it produces the same core metadata that an R package would write.
+The spreadsheet path is valid when it produces the same canonical CSV metadata that an R package would write. The blank template intentionally omits `datapackage.json`; a complete or published package needs the generated descriptor as well.
 
 ## R/metasalmon path
 
@@ -85,12 +86,12 @@ Expected files:
 ```text
 fraser-coho-2023-2024-sdp/
   README-review.txt
-  datapackage.json
+  datapackage.json             # generated descriptor
   metadata/
     dataset.csv
     tables.csv
     column_dictionary.csv
-    codes.csv
+    codes.csv                  # when categorical columns exist
   data/
     escapement.csv
 ```

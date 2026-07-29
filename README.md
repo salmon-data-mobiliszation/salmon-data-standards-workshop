@@ -6,7 +6,7 @@ The material is being refactored for the Salmon Ontology Development Working Gro
 
 ## Learning Path
 
-1. **Structure first**: create a draft Salmon Data Package from existing data using either the Excel template or `metasalmon::create_sdp()`.
+1. **Structure first**: create a draft Salmon Data Package from existing data using either the blank SDP CSV template in Excel/Calc or `metasalmon::create_sdp()`.
 2. **Context next**: write dataset, table, column, code, caveat, and method notes that travel with the data.
 3. **Meaning where it matters**: review suggested term mappings, focusing first on measurement columns and important code lists.
 4. **Contribution paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology.
@@ -41,7 +41,7 @@ The same materials support two delivery modes:
 ## Related Components
 
 - [Salmon Data Package specification](https://github.com/salmon-data-mobilization/smn-data-pkg)
-- [metasalmon R package](https://github.com/salmon-data-mobilization/metasmn)
+- [metasalmon R package](https://github.com/salmon-data-mobilization/metasalmon)
 - [salmonpy Python package](https://github.com/Br-Johnson/salmonpy)
 - [Salmon Domain Ontology](https://github.com/salmon-data-mobilization/salmon-domain-ontology)
 - [GC DFO Salmon Ontology](https://github.com/dfo-pacific-science/dfo-salmon-ontology)

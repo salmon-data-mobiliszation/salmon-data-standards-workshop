@@ -49,14 +49,14 @@ my-salmon-data-package/
     dataset.csv
     tables.csv
     column_dictionary.csv
-    codes.csv
+    codes.csv                  # required when categorical columns exist
   data/
     my_table.csv
-  datapackage.json
-  README.md or README-review.txt
+  datapackage.json             # generated; required for complete/published packages
+  README.md or README-review.txt  # optional sidecar or review checklist
 ```
 
-The CSV files under `metadata/` are the human-reviewable core. The generated `datapackage.json` makes the package easier for software to read, but the metadata CSVs are the place most learners will edit first.
+The CSV files under `metadata/` are the human-reviewable core. `codes.csv` is conditional: include it when the package has categorical columns. The generated `datapackage.json` makes the package easier for software to read and is required for a complete or published package, but the metadata CSVs are the place most learners will edit first.
 
 ## Two on-ramps, one review task
 
@@ -64,8 +64,8 @@ Use whichever path matches your current comfort level.
 
 | If you usually work in... | Start with... | You still review... |
 | --- | --- | --- |
-| Excel | Salmon Data Package workbook/template | dataset, table, column, and code metadata |
-| R | `metasalmon::create_sdp()` | the same metadata CSVs plus suggestions |
+| Excel or Calc | Blank SDP CSV template folder | dataset, table, column, and conditional code metadata |
+| R | `metasalmon::create_sdp()` | the same metadata CSVs, a generated descriptor, and optional suggestions |
 | Python | `salmonpy` or exported CSVs | the same package structure |
 
 No path requires you to understand OWL, SKOS, I-ADOPT, or IRIs before you have a draft package.
