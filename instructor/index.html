@@ -310,9 +310,15 @@
       </div>
     </nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Schedule</h1>
       
+
 <p>This lesson helps participants create and review Salmon Data Packages
 from data they already have. It starts with package structure and
-context, then adds shared vocabulary links where they matter most.</p>
+context, then adds links to shared definitions where they matter
+most.</p>
+<p>The coded walkthrough is R-first. Verified Python companion blocks
+follow the same core creation and review steps, and spreadsheet
+participants work with the same standard package files.</p>
+
 
       <section id="schedule"><table class="table table schedule table-striped" role="presentation"><tbody><tr><td></td><td><a href="#setup">Setup Instructions</a></td><td> Download files required for the lesson</td>
           </tr><tr><td>
@@ -324,7 +330,7 @@ context, then adds shared vocabulary links where they matter most.</p>
 <td>
 Why is it hard for other people to reuse salmon datasets?<br>What does
 a Salmon Data Package add to an ordinary spreadsheet or CSV?<br>What
-should we finish before worrying about ontology coverage?
+should we finish before linking fields to shared definitions?
 </td>
 </tr><tr><td>
 <span class="visually-hidden">Duration: </span>00h 35m
@@ -334,8 +340,9 @@ should we finish before worrying about ontology coverage?
 </td>
 <td>
 How do I turn a spreadsheet or CSV into a draft Salmon Data
-Package?<br>What does <code>metasalmon::create_sdp()</code>
-produce?<br>What should I check before sharing a draft for review?
+Package?<br>What do the R and Python <code>create_sdp()</code>
+functions produce?<br>What should I check before sharing a draft for
+review?
 </td>
 </tr><tr><td>
 <span class="visually-hidden">Duration: </span>01h 55m
@@ -347,7 +354,8 @@ Data</a>
 <td>
 What context do data holders need to share so others do not misuse the
 data?<br>What belongs in column metadata versus a README/context
-note?<br>How can context improve later term mapping?
+note?<br>How should I organize and read my own data and context
+files?<br>How can context improve later term mapping?
 </td>
 </tr><tr><td>
 <span class="visually-hidden">Duration: </span>03h 10m
@@ -419,25 +427,12 @@ session.</p>
 </ul></section><section><h2 class="section-heading" id="software-options">Software options<a class="anchor" aria-label="anchor" href="#software-options"></a></h2>
 <hr class="half-width"><p>You only need one on-ramp.</p>
 <div class="section level3">
-<h3 id="excel-first-path">Excel-first path<a class="anchor" aria-label="anchor" href="#excel-first-path"></a></h3>
-<p>Required:</p>
-<ul><li>Microsoft Excel, LibreOffice Calc, or another spreadsheet editor
-that can save CSV files.</li>
-</ul><p>Recommended:</p>
-<ul><li>A folder where you can save a package with <code>metadata/</code>
-and <code>data/</code> subfolders.</li>
-<li>A copy of the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-SDP CSV template</a>, which you can open and edit with your spreadsheet
-software. Download or clone the <code>smn-data-pkg</code> repository and
-copy that folder; there is no standalone workbook or template ZIP.</li>
-</ul></div>
-<div class="section level3">
 <h3 id="rmetasalmon-path">R/metasalmon path<a class="anchor" aria-label="anchor" href="#rmetasalmon-path"></a></h3>
 <p>Required:</p>
 <ul><li>R 4.3 or newer.</li>
 <li>RStudio, Positron, or another R editor.</li>
-<li>The <code>remotes</code>, <code>readr</code>, and
-<code>metasalmon</code> packages.</li>
+<li>The <code>remotes</code>, <code>readr</code>, <code>dplyr</code>,
+and <code>metasalmon</code> packages.</li>
 </ul><p>Install with:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -457,17 +452,44 @@ send sensitive or restricted material outside an authorized
 environment.</p>
 </div>
 <div class="section level3">
-<h3 id="python-path">Python path<a class="anchor" aria-label="anchor" href="#python-path"></a></h3>
-<p>The main workshop uses Excel and R examples. Python users can follow
-the same package structure with <code>salmonpy</code>.</p>
+<h3 id="pythonsalmonpy-companion-path">Python/salmonpy companion path<a class="anchor" aria-label="anchor" href="#pythonsalmonpy-companion-path"></a></h3>
+<p>The workshop teaches each coded workflow in R first and then provides
+a Python equivalent. Both packages target version 0.1.6 and are
+parity-tested when packages move between languages. The R package
+remains the normative contract and should run the final publication
+check.</p>
+<p>Required:</p>
+<ul><li>Python 3.9 or newer.</li>
+<li>A terminal, notebook, or Python editor.</li>
+</ul><p>Create an environment and install the released Python wheel:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a><span class="bu">.</span> .venv/bin/activate</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="ex">pip</span> install git+https://github.com/Br-Johnson/salmonpy.git</span></code></pre>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="ex">python</span> <span class="at">-m</span> pip install <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>  <span class="st">"salmonpy @ https://github.com/salmon-data-mobilization/metaSmnPy/releases/download/v0.1.6/salmonpy-0.1.6-py3-none-any.whl"</span></span></code></pre>
 </div>
+<p>The repository is named <code>metaSmnPy</code>, while the installed
+package and Python import are named <code>salmonpy</code>. See the <a href="https://salmon-data-mobilization.github.io/metaSmnPy/" class="external-link">salmonpy
+documentation</a> and <a href="https://salmon-data-mobilization.github.io/metaSmnPy/guides/parity.html" class="external-link">R/Python
+parity guide</a>. Python supports the paired creation and review
+activities; use <code>metasalmon</code> for the authoritative final
+publication validation.</p>
 </div>
+<div class="section level3">
+<h3 id="spreadsheet-path">Spreadsheet path<a class="anchor" aria-label="anchor" href="#spreadsheet-path"></a></h3>
+<p>Required:</p>
+<ul><li>Microsoft Excel, LibreOffice Calc, or another spreadsheet editor
+that can save CSV files.</li>
+</ul><p>Recommended:</p>
+<ul><li>A folder where you can save a package with <code>metadata/</code>
+and <code>data/</code> subfolders.</li>
+<li>A copy of the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a>, which you can open and edit with your spreadsheet
+software. Download or clone the <code>smn-data-pkg</code> repository and
+copy that folder; there is no standalone workbook or template ZIP.</li>
+</ul></div>
 </section><section><h2 class="section-heading" id="pre-workshop-reading">Pre-workshop reading<a class="anchor" aria-label="anchor" href="#pre-workshop-reading"></a></h2>
 <hr class="half-width"><p>Read these only if you have time:</p>
 <ol style="list-style-type: decimal"><li>Salmon Data Package specification: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md" class="external-link">normative
@@ -481,10 +503,15 @@ example</a>
 <li>metasalmon quickstart: <a href="https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html" class="external-link">create
 and review a package</a>
 </li>
-<li>Salmon Domain Ontology conventions: <a href="https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md" class="external-link uri">https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md</a>
+<li>salmonpy quickstart: <a href="https://salmon-data-mobilization.github.io/metaSmnPy/" class="external-link">create and
+review the same package structure in Python</a>
 </li>
-</ol><p>You do not need to read ontology documentation before attending. The
-workshop introduces the needed terms during the exercises.</p>
+<li>Optional for ontology maintainers: <a href="https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md" class="external-link">Salmon
+Domain Ontology conventions</a>
+</li>
+</ol><p>You do not need to read ontology documentation before attending.
+Session 1 explains the term in plain language before the workshop uses
+it.</p>
 </section><section><h2 class="section-heading" id="folder-check">Folder check<a class="anchor" aria-label="anchor" href="#folder-check"></a></h2>
 <hr class="half-width"><p>During the workshop you should be able to create a folder like
 this:</p>
@@ -492,7 +519,7 @@ this:</p>
   metadata/
   data/</code></pre>
 <p>If your organization restricts software installation, use the
-Excel-first path and pair with someone who can run validation later.</p>
+spreadsheet path and pair with someone who can run validation later.</p>
 </section></section></main><nav class="bottom-pagination mx-md-4" aria-label="Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link float-end" href="../instructor/session-1.html" rel="next">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
@@ -538,7 +565,7 @@ Excel-first path and pair with someone who can run validation later.</p>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Creating Salmon Data Packages With Shared Standards",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/index.html",

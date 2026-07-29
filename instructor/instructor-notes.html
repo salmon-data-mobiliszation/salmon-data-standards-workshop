@@ -379,6 +379,16 @@
 <hr class="half-width">
 <p>Start with the learner’s data, not ontology theory. The first win is
 a package that someone else can review.</p>
+<p>Before using specialized language, say:</p>
+<blockquote>
+<p>An ontology is a maintained set of concepts and definitions that also
+records how the concepts relate. In this workshop, learners use shared
+definitions; they do not build an ontology.</p>
+</blockquote>
+<p>Say “link to a shared definition” before introducing “semantic link”
+or “semantic mapping.” Teach the code in R first, then point Python
+participants to the companion block rather than presenting two separate
+lectures.</p>
 <p>Repeat these messages throughout:</p>
 <ul>
 <li>A clear description is better than a forced IRI.</li>
@@ -410,9 +420,8 @@ a package that someone else can review.</p>
 </tr>
 <tr>
 <td>0:15-0:30</td>
-<td>Demo the blank SDP CSV template in Excel/Calc or
-<code>metasalmon::create_sdp()</code>
-</td>
+<td>Demo <code>metasalmon::create_sdp()</code>; point out the paired
+Python block and blank CSV template</td>
 </tr>
 <tr>
 <td>0:30-0:45</td>
@@ -476,9 +485,12 @@ a package that someone else can review.</p>
 </section><section><h2 class="section-heading" id="mixed-audience-facilitation">Mixed-audience facilitation<a class="anchor" aria-label="anchor" href="#mixed-audience-facilitation"></a>
 </h2>
 <hr class="half-width">
-<p>Pair Excel-first participants with R-capable participants for
-validation steps, but do not make Excel-first learners wait for code
-before they can reason about metadata.</p>
+<p>Pair spreadsheet participants with R-capable participants for
+validation steps, but do not make them wait for code before they can
+reason about metadata. Python participants should run the paired
+<code>salmonpy</code> blocks; they still need the R
+<code>metasalmon</code> final publication check until validator parity
+is complete.</p>
 <p>Recommended table roles:</p>
 <ul>
 <li>data owner: explains what the data mean;</li>
@@ -488,20 +500,38 @@ before they can reason about metadata.</p>
 </ul></section><section><h2 class="section-heading" id="checkpoint-prompts">Checkpoint prompts<a class="anchor" aria-label="anchor" href="#checkpoint-prompts"></a>
 </h2>
 <hr class="half-width">
-<p>After Chapter 1:</p>
+<p>After Session 1:</p>
 <ul>
 <li>Can another person find the data table?</li>
 <li>Can they tell what each row represents?</li>
 <li>Are required metadata blanks visible?</li>
+<li>Can learners explain an ontology as shared concepts, definitions,
+and relationships?</li>
 </ul>
-<p>After Chapter 2:</p>
+<p>After Session 2:</p>
+<ul>
+<li>Did the chosen R, Python, or spreadsheet path create the standard
+package files?</li>
+<li>Which fields still contain placeholders or <code>REVIEW:</code>
+suggestions?</li>
+</ul>
+<p>After Session 3:</p>
+<ul>
+<li>Are source data under <code>data-raw/</code>, context under
+<code>context/</code>, and generated packages under
+<code>output/</code>?</li>
+<li>Can learners read their own file using a path relative to the
+project root?</li>
+<li>Is enough context present to prevent obvious misuse?</li>
+</ul>
+<p>After Session 4:</p>
 <ul>
 <li>Which measurement mappings are accepted?</li>
 <li>Which are removed or deferred?</li>
 <li>Are units and methods treated separately from I-ADOPT
 property/entity/constraint?</li>
 </ul>
-<p>After Chapter 3:</p>
+<p>After Sessions 5 and 6:</p>
 <ul>
 <li>Which terms are shared candidates?</li>
 <li>Which are DFO-specific?</li>
@@ -527,7 +557,11 @@ context in the README or sidecar notes instead.</li>
 <p>Before delivery:</p>
 <ul>
 <li>choose a small example dataset;</li>
+<li>prepare an RStudio Project containing <code>data-raw/</code>,
+<code>context/</code>, and <code>output/</code>;</li>
 <li>prepare one already-created SDP folder for demonstration;</li>
+<li>verify the R 0.1.6 examples and, when Python participants are
+expected, the <code>salmonpy</code> 0.1.6 companion environment;</li>
 <li>prepare one measurement mapping example;</li>
 <li>prepare semantic suggestion output in advance if live vocabulary
 lookup would interrupt the schedule;</li>
@@ -536,7 +570,8 @@ lookup would interrupt the schedule;</li>
 <li>if demonstrating optional LLM review, use an approved provider and
 non-sensitive context, and show how bundle decisions can be downgraded
 to manual review;</li>
-<li>decide whether R validation will be live or instructor-only.</li>
+<li>decide whether the authoritative R publication validation will be
+live or instructor-only.</li>
 </ul></section><section id="aggregate-instructor-notes"><section id="session-1"><h2 class="section-heading"><a href="session-1.html">Why Start With a Salmon Data Package?</a></h2>
 <hr class="half-width"></section><section id="session-2"><h2 class="section-heading"><a href="session-2.html">Create a Draft Salmon Data Package</a></h2>
 <hr class="half-width"></section><section id="session-3"><h2 class="section-heading"><a href="session-3.html">Capture Context That Travels With the Data</a></h2>
@@ -588,7 +623,7 @@ to manual review;</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Instructor Notes",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/instructor-notes.html",

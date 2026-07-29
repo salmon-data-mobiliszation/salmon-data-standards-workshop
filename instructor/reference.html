@@ -334,7 +334,43 @@ code lists.</li>
 <code>gcdfo</code>, <code>profile</code>, or <code>skip</code>.</li>
 <li>Run strict validation only when the package is final enough for
 publication.</li>
-</ol></section><section><h2 class="section-heading" id="salmon-data-package-files">Salmon Data Package files<a class="anchor" aria-label="anchor" href="#salmon-data-package-files"></a></h2>
+</ol></section><section><h2 class="section-heading" id="r-first-and-python-companion-functions">R-first and Python companion functions<a class="anchor" aria-label="anchor" href="#r-first-and-python-companion-functions"></a></h2>
+<hr class="half-width"><table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Workflow</th>
+<th>R primary</th>
+<th>Python companion</th>
+</tr></thead><tbody><tr><td>Create a package</td>
+<td><code>metasalmon::create_sdp()</code></td>
+<td><code>salmonpy.create_sdp()</code></td>
+</tr><tr><td>Read a package</td>
+<td><code>read_salmon_datapackage()</code></td>
+<td><code>read_salmon_datapackage()</code></td>
+</tr><tr><td>Suggest shared definitions</td>
+<td><code>suggest_semantics()</code></td>
+<td><code>suggest_semantics()</code></td>
+</tr><tr><td>Detect unresolved gaps</td>
+<td><code>detect_semantic_term_gaps()</code></td>
+<td><code>detect_semantic_term_gaps()</code></td>
+</tr><tr><td>Render request drafts</td>
+<td><code>render_ontology_term_request()</code></td>
+<td><code>render_ontology_term_request()</code></td>
+</tr><tr><td>Validate during review</td>
+<td><code>validate_salmon_datapackage(..., require_iris = FALSE)</code></td>
+<td><code>validate_salmon_datapackage(..., require_iris=False)</code></td>
+</tr></tbody></table><p>The workshop examples pair <code>metasalmon</code> 0.1.6 and
+<code>salmonpy</code> 0.1.6. They are parity-tested when packages move
+between languages, but they are not identical. Run the R
+<code>metasalmon</code> strict validator for the final publication
+gate.</p>
+</section><section><h2 class="section-heading" id="recommended-project-layout">Recommended project layout<a class="anchor" aria-label="anchor" href="#recommended-project-layout"></a></h2>
+<hr class="half-width"><pre class="text"><code>salmon-data-workshop/
+  salmon-data-workshop.Rproj
+  data-raw/       # unchanged source data
+  context/        # codebooks, methods, caveats, provenance
+  output/         # generated Salmon Data Packages</code></pre>
+<p>Open the <code>.Rproj</code> file before working and use paths
+relative to the project root. Python users can start from the same root
+folder and use the same layout.</p>
+</section><section><h2 class="section-heading" id="salmon-data-package-files">Salmon Data Package files<a class="anchor" aria-label="anchor" href="#salmon-data-package-files"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>File</th>
 <th>Purpose</th>
 </tr></thead><tbody><tr><td><code>metadata/dataset.csv</code></td>
@@ -420,7 +456,8 @@ headers of the referenced data files.</li>
 <code>datapackage.json</code> exists, declares the SDP profile and
 resources, and agrees with the canonical CSV metadata and referenced
 data files.</li>
-<li>Strict validation passes.</li>
+<li>Strict validation passes in the normative R <code>metasalmon</code>
+implementation.</li>
 </ul></section><section><h2 class="section-heading" id="routing-unresolved-terms">Routing unresolved terms<a class="anchor" aria-label="anchor" href="#routing-unresolved-terms"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Route</th>
 <th>Use when</th>
@@ -448,19 +485,28 @@ bins. OWL is for durable domain structure and formal relationships.</p>
 <li>mapping strength and confidence when relevant;</li>
 <li>reviewer action: accept, review, defer, or request new term.</li>
 </ul></section><section><h2 class="section-heading" id="glossary">Glossary<a class="anchor" aria-label="anchor" href="#glossary"></a></h2>
-<hr class="half-width"><p><strong>I-ADOPT</strong>: A framework for describing what a
+<hr class="half-width"><p><strong>Code list</strong>: The allowed stored values for one data
+column, with labels and definitions for those values.</p>
+<p><strong>I-ADOPT</strong>: A framework for describing what a
 measurement variable means using property, entity, and optional
 constraints. It does not model units, methods, time, or location by
 itself.</p>
 <p><strong>IRI</strong>: A web identifier that points to a term or
 definition.</p>
+<p><strong>Ontology</strong>: A maintained set of concepts and
+definitions that also records how the concepts relate.</p>
 <p><strong>OWL</strong>: A language for formal ontology classes and
 relationships.</p>
 <p><strong>Salmon Data Package</strong>: A folder of data and metadata
 CSV files that makes a dataset easier to review, validate, and
 share.</p>
+<p><strong>Semantic link or mapping</strong>: A connection from a local
+column or code value to a shared definition; semantic simply means
+“about meaning.”</p>
 <p><strong>SKOS</strong>: A model for controlled vocabularies, concept
 schemes, labels, definitions, and mappings.</p>
+<p><strong>Vocabulary</strong>: A maintained list of reusable terms and
+definitions.</p>
 <p><strong><code>REVIEW: &lt;iri&gt;</code></strong>: A draft semantic
 suggestion that must be checked before publication.</p>
 </section></div> <!-- / div.lesson-content -->
@@ -512,7 +558,7 @@ suggestion that must be checked before publication.</p>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Reference",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",

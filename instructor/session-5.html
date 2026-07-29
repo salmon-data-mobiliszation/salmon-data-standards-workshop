@@ -388,6 +388,9 @@ or duplicate that key.</p>
 <code>vocabulary_iri</code> is supplied. A vocabulary-only row with a
 blank <code>code_value</code> documents an external vocabulary but does
 not cover any value observed in the data.</p>
+<p>This work is language-independent: <code>metasalmon</code> and
+<code>salmonpy</code> read and write the same
+<code>metadata/codes.csv</code> structure.</p>
 <table class="table"><thead><tr><th>Field</th>
 <th>Purpose</th>
 </tr></thead><tbody><tr><td><code>column_name</code></td>
@@ -403,7 +406,14 @@ not cover any value observed in the data.</p>
 </tr><tr><td><code>term_iri</code></td>
 <td>Recommended IRI for the specific code concept</td>
 </tr></tbody></table></section><section><h2 class="section-heading" id="skos-in-plain-language">SKOS in plain language<a class="anchor" aria-label="anchor" href="#skos-in-plain-language"></a></h2>
-<hr class="half-width"><p>SKOS is a way to publish controlled vocabularies: lists of concepts,
+<hr class="half-width"><p>Keep three related ideas separate:</p>
+<ul><li>a <strong>code list</strong> records the allowed stored values for
+one data column;</li>
+<li>a <strong>vocabulary</strong> is a maintained list of reusable terms
+and definitions;</li>
+<li>an <strong>ontology</strong> is a maintained set of concepts and
+definitions that also records relationships among them.</li>
+</ul><p>SKOS is a way to publish controlled vocabularies: lists of concepts,
 labels, definitions, and relationships. It is usually the right pattern
 for:</p>
 <ul><li>code values;</li>
@@ -525,7 +535,7 @@ evidence of broad reuse.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Code Lists, SKOS, and Local Vocabulary",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-5.html",
