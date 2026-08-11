@@ -1,6 +1,10 @@
 [carpentries-workbench]: https://carpentries.github.io/sandpaper-docs/
 [metasalmon]: https://github.com/salmon-data-mobilization/metasalmon
 [metasalmon-quickstart]: https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html
+[metasalmon-changelog]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md
+[metasalmon-eml-workflow]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd
+[metasalmon-eml-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/write_eml_from_sdp.Rd
+[metasalmon-knb-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/publish_sdp_to_knb.Rd
 [salmonpy]: https://github.com/salmon-data-mobilization/metaSmnPy
 [salmonpy-docs]: https://salmon-data-mobilization.github.io/metaSmnPy/
 [salmonpy-parity]: https://salmon-data-mobilization.github.io/metaSmnPy/guides/parity.html
@@ -9,7 +13,14 @@
 [sdp-specification]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md
 [sdp-template]: https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template
 [sdp-example]: https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/examples/minimal-example
+[sdp-example-dataset]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/dataset.csv
+[sdp-example-tables]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/tables.csv
+[sdp-example-dictionary]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/column_dictionary.csv
+[sdp-example-codes]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/codes.csv
 [sdp-field-reference]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md
+[frictionless-table-schema]: https://specs.frictionlessdata.io/table-schema/
+[eml-specification]: https://eml.ecoinformatics.org/
+[knb]: https://knb.ecoinformatics.org/
 [sdo]: https://github.com/salmon-data-mobilization/salmon-domain-ontology
 [sdo-conventions]: https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md
 [gcdfo]: https://github.com/dfo-pacific-science/dfo-salmon-ontology

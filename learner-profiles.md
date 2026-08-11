@@ -34,7 +34,7 @@ Risk:
 
 Success:
 
-- can generate a package, guide Excel review, rerun checks, and produce a term-request plan.
+- can generate a package, guide Excel review, rerun checks without discarding reviewed metadata, produce a term-request plan, and export validated EML from a finalized package.
 
 ## Python-capable data steward
 
@@ -51,7 +51,7 @@ Risk:
 
 Success:
 
-- can create and review a compatible package in Python, then arrange the authoritative R publication check.
+- can create and review a compatible package in Python, then hand it off for authoritative R validation, EML export, and catalog publication.
 
 ## Ontology or vocabulary maintainer
 
@@ -76,7 +76,7 @@ Needs:
 
 - a workshop that scales across spreadsheet, R, and Python users;
 - low maintenance burden;
-- clear handoff from package drafting to governance;
+- clear handoff from package drafting to governance and catalog publication;
 - a one-hour format for outreach and a full-day format for practice.
 
 Risk:
@@ -85,4 +85,4 @@ Risk:
 
 Success:
 
-- participants leave with reusable packages, clear next actions, and fewer avoidable term requests.
+- participants leave with reusable packages, a visible SDP-to-EML path, clear next actions, and fewer avoidable term requests.

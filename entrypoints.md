@@ -19,12 +19,12 @@ This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards 
 
 ## Current episode ladder
 
-1. `episodes/session-1.Rmd`: why start with an SDP and what ontology/vocabulary language means in plain terms.
-2. `episodes/session-2.Rmd`: create a draft package with the primary R workflow, a Python companion, or the blank CSV template.
-3. `episodes/session-3.Rmd`: create an RStudio Project, use shared R/Python relative paths for learner-owned files, and capture context.
+1. `episodes/session-1.Rmd`: frame the EML/catalog end goal, define dataset/table/flat file, preview the metadata CSVs, and explain the Frictionless/SDP/EML layers.
+2. `episodes/session-2.Rmd`: prepare the project before the demo, generate a simple draft template, distinguish example and personal-data paths, and explain reruns.
+3. `episodes/session-3.Rmd`: use shared R/Python relative paths for learner-owned single-table, multi-CSV, or multi-sheet Excel inputs and capture context.
 4. `episodes/session-4.Rmd`: generate and review deterministic suggestions in R or Python, with optional bundle-aware LLM review.
 5. `episodes/session-5.Rmd`: code lists, SKOS, and local vocabulary.
-6. `episodes/session-6.Rmd`: render SMN, GCDFO, profile, or skip routes and plan publication.
+6. `episodes/session-6.Rmd`: render SMN, GCDFO, profile, or skip routes; write validated EML; preview KNB publication; and create a later version without discarding reviewed metadata.
 7. `episodes/bonus-session.Rmd`: optional concept mapping extension.
 
 ## Upstream workflow sources
@@ -34,6 +34,8 @@ This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards 
 - R/Python parity contract: <https://salmon-data-mobilization.github.io/metaSmnPy/guides/parity.html>
 - Salmon Data Package specification: <https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md>
 - Blank SDP CSV template: <https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template>
+- SDP field reference: <https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md>
+- metasalmon post-review, EML, and KNB workflow: <https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd>
 
 ## Local checks
 
