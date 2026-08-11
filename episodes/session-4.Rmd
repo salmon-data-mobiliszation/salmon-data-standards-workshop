@@ -102,6 +102,19 @@ print(column_suggestions)
 
 Vocabulary lookup can take a few minutes. For a live workshop, instructors can prepare this output in advance. Omitting `sources` uses role-aware defaults. If you supply `sources` explicitly, current `metasalmon` and `salmonpy` treat the vector as a strict allowlist for the initial search and any LLM-requested bounded retry.
 
+Current R/`metasalmon` resolves its SMN and GCDFO indexes once per R session, so repeated searches use one consistent ontology snapshot and avoid repeated downloads. Version 0.2.2 also distinguishes a failed source lookup from a successful search with zero matches. If a result is unexpectedly empty, inspect a focused search before declaring a vocabulary gap:
+
+```r
+probe <- find_terms(
+  "spawner count",
+  role = "property"
+)
+
+attr(probe, "diagnostics")
+```
+
+A warning or non-success diagnostic is evidence of a lookup problem, not evidence that no appropriate term exists. Do not turn a temporary service outage into a new-term request.
+
 For the Python exercise, omit `sources` as shown. `salmonpy` 0.1.6 does not bundle populated SMN or GCDFO indexes, so use instructor-prepared R results when the lesson specifically reviews those two sources.
 
 ## Treat suggestions as drafts
@@ -138,6 +151,8 @@ Important boundary: `property_iri`, `entity_iri`, and `constraint_iri` are I-ADO
 ## Optional LLM-assisted bundle review
 
 Adding `llm_assess = TRUE` in R or `llm_assess=True` in Python, plus an approved provider and model, asks the LLM to judge the retrieved candidates; it does not let the model invent IRIs. Current `metasalmon` and `salmonpy` review a measurement's variable, property, entity, unit, constraint, and method candidates together as one six-slot bundle.
+
+R/`metasalmon` 0.2.3 retries retryable provider failures such as rate limits and temporary service errors, honoring `Retry-After` when present. It also sends the BioPortal key in an authorization header and redacts credentials from reported URLs. These safeguards reduce avoidable failures; they do not authorize unbounded retries, sensitive context, or unattended acceptance of LLM decisions.
 
 Deterministic validators can downgrade an unsupported `accept` decision to `review`, but they never substitute or invent a term. Variable, property, entity, and unit candidates may become `REVIEW:` drafts on the `create_sdp()` path. Constraint and method candidates always remain manual-review suggestions.
 

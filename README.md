@@ -1,6 +1,6 @@
 # Salmon Data Standards Workshop
 
-This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The focus is practical: preserve the context behind local data, make the package understandable to colleagues, and add links to shared definitions only where they improve reuse. Code examples are R-first, with verified Python companion blocks for the same core workflow.
+This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The end goal is practical publication: preserve the context behind local data, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Code examples are R-first, with Python companion blocks for the core package-creation and review workflow.
 
 The material is being refactored for the Salmon Ontology Development Working Group from an ontology-development-first course into an SDP-first learning path. An ontology is a maintained set of concepts and definitions that also records how the concepts relate. Learners use shared definitions where they help; they are not expected to build an ontology or give every field an ontology term.
 
@@ -10,6 +10,7 @@ The material is being refactored for the Salmon Ontology Development Working Gro
 2. **Context next**: write dataset, table, column, code, caveat, and method notes that travel with the data.
 3. **Meaning where it matters**: review suggested term mappings, focusing first on measurement columns and important code lists.
 4. **Contribution paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology.
+5. **Publication**: map SDP fields into EML, validate the export, preview the exact catalog deposit, and upload only with appropriate credentials and redistribution authority.
 
 ## Audience
 
@@ -24,14 +25,14 @@ No terminology-standards background is assumed. Session 1 defines semantic links
 
 ## R and Python compatibility
 
-The workshop pairs `metasalmon` 0.1.6 with `salmonpy` 0.1.6. They are version-aligned and parity-tested when packages move between R and Python, but they are not identical implementations. `metasalmon` remains the normative contract and should run the final publication validation.
+The R examples target `metasalmon` 0.2.3 or later from the canonical GitHub `main` branch; the latest tagged R release at the time of this update is 0.1.8. The Python companion remains `salmonpy` 0.1.6. These implementations share the core SDP structure but are no longer version-aligned: use R/`metasalmon` for strict final validation, EML export, and KNB/DataONE publication.
 
 ## Formats
 
 The same materials support two delivery modes:
 
-- **One-hour introduction**: system overview, SDP anatomy, a short package demo, one measurement mapping review, and one term-gap routing example.
-- **Full-day workshop**: hands-on package creation, context capture, mapping review, measurement decomposition, code-list review, and term-request planning.
+- **One-hour introduction**: end-goal framing, SDP anatomy and example CSVs, a short package demo, one measurement mapping review, and an SDP-to-EML/catalog preview.
+- **Full-day workshop**: hands-on package creation, context capture, mapping review, measurement decomposition, code-list review, term-request planning, EML export, and a credential-free KNB publication dry run.
 
 ## Repository Contents
 
