@@ -209,9 +209,14 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#the-problem-this-workshop-solves">The problem this workshop solves</a></li>
+        <ul><li><a href="#start-with-the-end-goal">Start with the end goal</a></li>
+<li><a href="#the-problem-this-workshop-solves">The problem this workshop solves</a></li>
+<li><a href="#dataset-table-and-flat-file">Dataset, table, and flat file</a></li>
 <li><a href="#the-workshop-ladder">The workshop ladder</a></li>
 <li><a href="#what-is-in-a-salmon-data-package">What is in a Salmon Data Package?</a></li>
+<li><a href="#see-the-metadata-csvs-before-writing-code">See the metadata CSVs before writing code</a></li>
+<li><a href="#where-the-fields-come-from">Where the fields come from</a></li>
+<li><a href="#how-sdp-becomes-eml">How SDP becomes EML</a></li>
 <li><a href="#r-first-examples-three-ways-to-participate">R-first examples, three ways to participate</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -231,7 +236,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Capture Context That Travels With the Data</a>
+        <a href="session-3.html">3. Use Your Data and Capture Context</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -258,7 +263,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="session-6.html">6. Route Term Gaps and Plan Publication</a>
+        <a href="session-6.html">6. Route Term Gaps, Export EML, and Plan Catalog Publication</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -331,7 +336,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Why Start With a Salmon Data Package?</h1>
-        <p>Last updated on 2026-07-29 |
+        <p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -350,11 +355,13 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>Why is it hard for other people to reuse salmon datasets?</li>
+<ul><li>What will I be able to publish by the end of the workshop?</li>
+<li>What is the difference between a dataset, a table, and a flat
+file?</li>
 <li>What does a Salmon Data Package add to an ordinary spreadsheet or
 CSV?</li>
-<li>What should we finish before linking fields to shared
-definitions?</li>
+<li>Where do the SDP fields come from, and how do they map into
+EML?</li>
 </ul></div>
 </div>
 </div>
@@ -362,17 +369,33 @@ definitions?</li>
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Describe the workshop ladder: structure, context, meaning,
-contribution.</li>
-<li>Recognize the core files in a Salmon Data Package.</li>
-<li>Choose the primary R/metasalmon path, a paired Python/salmonpy path,
-or the spreadsheet path for the hands-on work.</li>
+<ul><li>State the end goal: a reviewed SDP, a validated EML file, and a
+guarded catalog-publication plan.</li>
+<li>Distinguish a dataset from its one or more tables and recognize
+supported tabular inputs.</li>
+<li>Recognize the core metadata CSVs before running any package
+code.</li>
+<li>Separate the Frictionless structure, external-standard alignments,
+and salmon-specific SDP conventions.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="the-problem-this-workshop-solves">The problem this workshop solves<a class="anchor" aria-label="anchor" href="#the-problem-this-workshop-solves"></a></h2>
+<section><h2 class="section-heading" id="start-with-the-end-goal">Start with the end goal<a class="anchor" aria-label="anchor" href="#start-with-the-end-goal"></a></h2>
+<hr class="half-width"><p>By the end of the workshop, participants should be able to:</p>
+<ol style="list-style-type: decimal"><li>create and review a Salmon Data Package (SDP);</li>
+<li>run the strict R/<code>metasalmon</code> publication check;</li>
+<li>export the reviewed metadata as schema-valid EML 2.2; and</li>
+<li>preview an exact KNB/DataONE catalog deposit, then perform the
+upload when they have credentials and redistribution authority.</li>
+</ol><p>An EML file is structured XML, not an arbitrary XML file with a
+different name. <code>metasalmon</code> maps reviewed SDP facts into the
+EML model and validates the result against EML 2.2. A live KNB call
+creates persistent production objects, so the workshop uses a
+credential-free dry run unless an authorized publication exercise has
+been arranged.</p>
+</section><section><h2 class="section-heading" id="the-problem-this-workshop-solves">The problem this workshop solves<a class="anchor" aria-label="anchor" href="#the-problem-this-workshop-solves"></a></h2>
 <hr class="half-width"><p>Salmon data are often understandable to the person or team that
 collected them, but hard for someone else to reuse. Column names may be
 short, code values may be local, methods may be buried in reports, and
@@ -391,9 +414,35 @@ coho salmon is a kind of salmon. A <strong>vocabulary</strong> is a
 maintained list of terms and definitions, while a <strong>code
 list</strong> records the allowed values for one data column. You will
 use these resources; you do not need to build or edit an ontology.</p>
-<p>That keeps the first goal concrete. A useful draft Salmon Data
-Package is a successful first outcome even when some links to shared
-definitions are still blank or marked for review.</p>
+</section><section><h2 class="section-heading" id="dataset-table-and-flat-file">Dataset, table, and flat file<a class="anchor" aria-label="anchor" href="#dataset-table-and-flat-file"></a></h2>
+<hr class="half-width"><p>These terms describe different levels:</p>
+<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Term</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr></thead><tbody><tr><td>Dataset</td>
+<td>The complete collection being documented; it can contain one or many
+related tables.</td>
+<td>A coho escapement dataset containing observations, sites, and
+methods tables.</td>
+</tr><tr><td>Table</td>
+<td>A rectangular set of rows and columns with one consistent row
+meaning.</td>
+<td>One row per population and return year.</td>
+</tr><tr><td>Flat file</td>
+<td>A file that stores one two-dimensional table, normally with one
+header row and no nested structure.</td>
+<td>A CSV file.</td>
+</tr><tr><td>Workbook</td>
+<td>A container that can hold several sheets/tables; the workbook itself
+is not one flat file.</td>
+<td>An <code>.xlsx</code> file with <code>Escapement</code> and
+<code>Sites</code> sheets.</td>
+</tr></tbody></table><p>The workshop supports one flat table, multiple CSV tables, or
+multiple rectangular Excel sheets. R reads each source table into a data
+frame and passes either one data frame or a <strong>named list</strong>
+of data frames to <code>create_sdp()</code>. The workflow does not
+directly preserve multidimensional NetCDF, raster, or nested-array
+structures.</p>
 </section><section><h2 class="section-heading" id="the-workshop-ladder">The workshop ladder<a class="anchor" aria-label="anchor" href="#the-workshop-ladder"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Stage</th>
 <th>Main question</th>
@@ -411,6 +460,9 @@ definitions are still blank or marked for review.</p>
 <td>Which shared definitions are missing, and who should maintain
 them?</td>
 <td>Plan to request a shared term or keep a local definition</td>
+</tr><tr><td>Publication</td>
+<td>How do reviewed SDP facts become portable catalog metadata?</td>
+<td>Valid EML plus a reviewed KNB/DataONE publication plan</td>
 </tr></tbody></table></section><section><h2 class="section-heading" id="what-is-in-a-salmon-data-package">What is in a Salmon Data Package?<a class="anchor" aria-label="anchor" href="#what-is-in-a-salmon-data-package"></a></h2>
 <hr class="half-width"><p>A package is a folder that keeps data and metadata together:</p>
 <pre class="text"><code>my-salmon-data-package/
@@ -422,41 +474,126 @@ them?</td>
   data/
     my_table.csv
   datapackage.json             # generated; required for complete/published packages
-  README.md or README-review.txt  # optional sidecar or review checklist</code></pre>
-<p>The CSV files under <code>metadata/</code> are the human-reviewable
-core. <code>codes.csv</code> is conditional: include it when the package
-has categorical columns. The generated <code>datapackage.json</code>
-makes the package easier for software to read and is required for a
-complete or published package, but the metadata CSVs are the place most
-learners will edit first.</p>
+  README.md or README-review.txt</code></pre>
+<p>The CSV files under <code>metadata/</code> are the canonical,
+human-reviewable core. <code>codes.csv</code> is conditional: include it
+when the package has categorical columns. The generated
+<code>datapackage.json</code> is the Frictionless descriptor used by
+software; it must agree with the metadata CSVs and data resources.</p>
+</section><section><h2 class="section-heading" id="see-the-metadata-csvs-before-writing-code">See the metadata CSVs before writing code<a class="anchor" aria-label="anchor" href="#see-the-metadata-csvs-before-writing-code"></a></h2>
+<hr class="half-width"><p>The previews below are deliberately shortened so they fit on screen.
+Open the complete example files to see every canonical header: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/dataset.csv" class="external-link">dataset.csv</a>,
+<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/tables.csv" class="external-link">tables.csv</a>,
+<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/column_dictionary.csv" class="external-link">column_dictionary.csv</a>,
+and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/codes.csv" class="external-link">codes.csv</a>.</p>
+<p><code>metadata/dataset.csv</code> has one row for the dataset:</p>
+<pre class="csv"><code>dataset_id,title,description,creator,contact_name,contact_email,license,...
+demo-coho,Coho escapement demo,Practice escapement records,Demo team,Data office,data@example.org,CC-BY-4.0,...</code></pre>
+<p><code>metadata/tables.csv</code> has one row for each table:</p>
+<pre class="csv"><code>dataset_id,table_id,file_name,table_label,description,observation_unit,...
+demo-coho,escapement,data/escapement.csv,Escapement estimates,One row per population and return year,Population-year,...</code></pre>
+<p><code>metadata/column_dictionary.csv</code> is the main review
+surface. It has one row for every column in every table:</p>
+<pre class="csv"><code>dataset_id,table_id,column_name,column_label,column_description,column_role,value_type,required,unit_label,...
+demo-coho,escapement,population_id,Population ID,Stable identifier for the population,identifier,string,TRUE,,...
+demo-coho,escapement,return_year,Return year,Calendar year of adult return,temporal,integer,TRUE,,...
+demo-coho,escapement,spawner_count,Spawner count,Estimated natural-origin adult spawners,measurement,integer,FALSE,fish,...</code></pre>
+<p><code>metadata/codes.csv</code> explains stored values in categorical
+columns:</p>
+<pre class="csv"><code>dataset_id,table_id,column_name,code_value,code_label,code_description,...
+demo-coho,escapement,species_code,CO,Coho salmon,Stored species code for coho salmon,...</code></pre>
+<p>The <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
+field reference</a> gives the definition, requirement, accepted type or
+allowed values, and notes for every field. Do not guess a header or add
+a convenient extra column to a canonical metadata CSV.</p>
+</section><section><h2 class="section-heading" id="where-the-fields-come-from">Where the fields come from<a class="anchor" aria-label="anchor" href="#where-the-fields-come-from"></a></h2>
+<hr class="half-width"><p>SDP combines several layers; they should not be described as one
+universal standard:</p>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Layer</th>
+<th>What it contributes</th>
+</tr></thead><tbody><tr><td>Frictionless Data Package and Table Schema</td>
+<td>The package/resource structure, table fields, value types,
+constraints, and machine-readable schemas used to validate each metadata
+CSV and <code>datapackage.json</code>.</td>
+</tr><tr><td>Common discovery/catalog concepts</td>
+<td>Titles, descriptions, contacts, licences, temporal coverage,
+keywords, and provenance that can map into EML, HNAP/ISO, or another
+catalog profile.</td>
+</tr><tr><td>I-ADOPT, SOSA, SKOS/OWL, and unit vocabularies</td>
+<td>External semantic roles for measurement property/entity/constraint,
+methods, reusable concepts, code lists, and units.</td>
+</tr><tr><td>Salmon Data Package profile</td>
+<td>The exact CSV filenames and columns, joins through
+<code>dataset_id</code>/<code>table_id</code>/<code>column_name</code>,
+<code>column_role</code>, observation-unit conventions, categorical-code
+coverage, and salmon publication rules.</td>
+</tr></tbody></table><p>In other words, every metadata CSV is described with a
+<strong>Frictionless Table Schema</strong>, but not every SDP column
+name comes from Frictionless itself. SDP defines a custom Frictionless
+profile and aligns selected fields with other standards where the
+alignment is warranted.</p>
+</section><section><h2 class="section-heading" id="how-sdp-becomes-eml">How SDP becomes EML<a class="anchor" aria-label="anchor" href="#how-sdp-becomes-eml"></a></h2>
+<hr class="half-width"><p>The export is a governed transformation, not a claim that the two
+formats are identical:</p>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>SDP source</th>
+<th>EML destination</th>
+</tr></thead><tbody><tr><td>
+<code>dataset.csv$title</code>, <code>description</code>,
+<code>keywords</code>
+</td>
+<td>Dataset title, abstract, and keyword set</td>
+</tr><tr><td>
+<code>dataset.csv$temporal_start</code> and
+<code>temporal_end</code>
+</td>
+<td>Temporal coverage</td>
+</tr><tr><td>Each <code>tables.csv</code> row</td>
+<td>One EML <code>dataTable</code>, including its name, description,
+physical CSV object, and key information</td>
+</tr><tr><td>
+<code>column_dictionary.csv</code> names, labels, descriptions, and
+<code>value_type</code>
+</td>
+<td>EML attributes, definitions, and storage types</td>
+</tr><tr><td><code>column_dictionary.csv$required</code></td>
+<td>EML not-null constraints</td>
+</tr><tr><td><code>codes.csv</code></td>
+<td>EML enumerated domains for categorical attributes</td>
+</tr><tr><td>Reviewed measurement <code>term_iri</code> and
+<code>unit_iri</code>
+</td>
+<td>Conservative EML semantic annotations</td>
+</tr><tr><td>Reviewed <code>metadata/eml-mapping.yml</code> sidecar</td>
+<td>Structured parties, rights, methods, measurement scales,
+missing-value meanings, geographic/taxonomic coverage, and publication
+intent that SDP cannot infer safely</td>
+</tr></tbody></table><p>The sidecar is important: a title or column type can map directly,
+but an ORCID-authenticated metadata provider, a measurement scale, or
+permission to publish cannot be inferred from a source spreadsheet.</p>
 </section><section><h2 class="section-heading" id="r-first-examples-three-ways-to-participate">R-first examples, three ways to participate<a class="anchor" aria-label="anchor" href="#r-first-examples-three-ways-to-participate"></a></h2>
-<hr class="half-width"><p>The worked code uses R first. Verified Python equivalents appear
-immediately afterward as companion blocks, while spreadsheet users edit
+<hr class="half-width"><p>The worked code uses R first. Python equivalents appear immediately
+afterward for the core package workflow, while spreadsheet users edit
 the same standard package files. Use the path that matches your current
 comfort level; you do not need to run both code blocks.</p>
 <table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>If you usually work in…</th>
 <th>Start with…</th>
-<th>You still review…</th>
+<th>Publication handoff</th>
 </tr></thead><tbody><tr><td>R</td>
 <td><code>metasalmon::create_sdp()</code></td>
-<td>the same metadata CSVs, a generated descriptor, and optional
-suggestions</td>
+<td>R also provides strict validation, EML export, and KNB
+publication.</td>
 </tr><tr><td>Python</td>
 <td><code>salmonpy.create_sdp()</code></td>
-<td>the same package structure, review workflow, and optional
-suggestions</td>
+<td>Hand the compatible SDP to current R/<code>metasalmon</code> for the
+final gate.</td>
 </tr><tr><td>Excel or Calc</td>
 <td>Blank SDP CSV template folder</td>
-<td>dataset, table, column, and conditional code metadata</td>
-</tr></tbody></table><p><code>metasalmon</code> 0.1.6 and <code>salmonpy</code> 0.1.6 are
-maintained as version-aligned implementations of the same core workflows
-and are parity-tested when packages move between R and Python. They are
-not identical: the R implementation remains the normative contract and
-currently provides the stronger final publication validator. See the <a href="https://salmon-data-mobilization.github.io/metaSmnPy/guides/parity.html" class="external-link">R
-and Python parity guide</a>.</p>
-<p>You do not need prior knowledge of terminology standards to make a
-draft package. Later sessions introduce each specialized standard when
-it is needed.</p>
+<td>Hand the reviewed CSV package to R/<code>metasalmon</code> for
+validation and export.</td>
+</tr></tbody></table><p>The revised R examples target <code>metasalmon</code> 0.2.3 or later
+from GitHub <code>main</code>. The Python companion remains
+<code>salmonpy</code> 0.1.6, so do not claim complete version or feature
+parity.</p>
 <div id="challenge-1-pick-your-package" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -467,9 +604,11 @@ it is needed.</p>
 <div class="callout-content">
 <p>Choose one dataset or example table for the workshop.</p>
 <p>Write down:</p>
-<ul><li>a short dataset name;</li>
-<li>who would be the best contact for questions;</li>
-<li>what each row represents;</li>
+<ul><li>whether it is one flat table, several files, or a multi-sheet
+workbook;</li>
+<li>a short dataset name;</li>
+<li>the tables it contains and what one row means in each;</li>
+<li>who would be the best contact for questions; and</li>
 <li>one thing that could be misunderstood if the data were shared
 without context.</li>
 </ul></div>
@@ -482,12 +621,16 @@ without context.</li>
 <span class="callout-header">Key Points</span>
 <div class="callout-inner">
 <div class="callout-content">
-<ul><li>Start by making the dataset reviewable, not by forcing every field
-to match a shared definition.</li>
-<li>A Salmon Data Package keeps data, metadata, code lists, and context
-together.</li>
-<li>R, Python, and spreadsheet paths converge on the same review
-task.</li>
+<ul><li>The end-to-end target is reviewed SDP metadata, valid EML, and a
+guarded catalog-publication plan.</li>
+<li>A dataset can contain multiple tables; a flat file contains one
+rectangular table.</li>
+<li>The metadata CSVs are visible review surfaces, not hidden software
+internals.</li>
+<li>SDP is a custom Frictionless profile with explicit external-standard
+alignments and salmon-specific rules.</li>
+<li>EML export needs reviewed facts that cannot be inferred from the
+source table alone.</li>
 </ul></div>
 </div>
 </div>
@@ -545,13 +688,13 @@ task.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Why Start With a Salmon Data Package?",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-1.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-1.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-29",
+  "dateModified": "2026-08-11",
   "datePublished": "2026-08-11"
 }
 

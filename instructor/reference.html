@@ -214,7 +214,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Capture Context That Travels With the Data</a>
+        <a href="session-3.html">3. Use Your Data and Capture Context</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -241,7 +241,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="session-6.html">6. Route Term Gaps and Plan Publication</a>
+        <a href="session-6.html">6. Route Term Gaps, Export EML, and Plan Catalog Publication</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -309,7 +309,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Reference</h1>
-        <p>Last updated on 2026-07-29 |
+        <p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -324,7 +324,8 @@
         
 
 <section><h2 class="section-heading" id="core-workflow">Core workflow<a class="anchor" aria-label="anchor" href="#core-workflow"></a></h2>
-<hr class="half-width"><ol style="list-style-type: decimal"><li>Create a draft package.</li>
+<hr class="half-width"><ol style="list-style-type: decimal"><li>Create a draft package from one table or a named list of
+tables.</li>
 <li>Improve dataset, table, column, code, and README/context
 descriptions.</li>
 <li>Review suggested semantic links.</li>
@@ -332,8 +333,12 @@ descriptions.</li>
 code lists.</li>
 <li>Render and review unresolved-term routes: <code>smn</code>,
 <code>gcdfo</code>, <code>profile</code>, or <code>skip</code>.</li>
-<li>Run strict validation only when the package is final enough for
+<li>Run strict R validation only when the SDP is final enough for
 publication.</li>
+<li>Complete the reviewed EML sidecar and export schema-valid EML
+2.2.</li>
+<li>Preview the KNB/DataONE object plan with a credential-free dry run;
+upload only with explicit authority and credentials.</li>
 </ol></section><section><h2 class="section-heading" id="r-first-and-python-companion-functions">R-first and Python companion functions<a class="anchor" aria-label="anchor" href="#r-first-and-python-companion-functions"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Workflow</th>
 <th>R primary</th>
@@ -356,50 +361,214 @@ publication.</li>
 </tr><tr><td>Validate during review</td>
 <td><code>validate_salmon_datapackage(..., require_iris = FALSE)</code></td>
 <td><code>validate_salmon_datapackage(..., require_iris=False)</code></td>
-</tr></tbody></table><p>The workshop examples pair <code>metasalmon</code> 0.1.6 and
-<code>salmonpy</code> 0.1.6. They are parity-tested when packages move
-between languages, but they are not identical. Run the R
-<code>metasalmon</code> strict validator for the final publication
-gate.</p>
+</tr><tr><td>Run the final publication gate</td>
+<td><code>validate_salmon_datapackage(..., require_iris = TRUE)</code></td>
+<td>Hand off to current R/<code>metasalmon</code>
+</td>
+</tr><tr><td>Export validated EML</td>
+<td><code>write_eml_from_sdp()</code></td>
+<td>Not available in <code>salmonpy</code> 0.1.6</td>
+</tr><tr><td>Plan or run a KNB deposit</td>
+<td><code>publish_sdp_to_knb()</code></td>
+<td>Not available in <code>salmonpy</code> 0.1.6</td>
+</tr></tbody></table><p>The revised lesson targets R/<code>metasalmon</code> 0.2.3 or later
+from the canonical GitHub <code>main</code> branch. The latest tagged R
+release at the time of revision was 0.1.8, and the Python companion
+remains <code>salmonpy</code> 0.1.6. Do not describe the implementations
+as fully version- or feature-aligned.</p>
+</section><section><h2 class="section-heading" id="recent-metasalmon-updates-reflected-here">Recent metasalmon updates reflected here<a class="anchor" aria-label="anchor" href="#recent-metasalmon-updates-reflected-here"></a></h2>
+<hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Version</th>
+<th>Workshop-relevant change</th>
+</tr></thead><tbody><tr><td>0.1.7–0.1.8</td>
+<td>Added reviewed EML 2.2 export, guarded KNB/DataONE
+planning/publication, expanded package representation, and immutable
+revision handling.</td>
+</tr><tr><td>0.2.0</td>
+<td>Made dictionary <code>value_type</code> the read authority, fixed
+multi-table handling, preserved reviewed sidecars during ordinary
+rewrites, and added <code>prune</code> as the explicit destructive
+reset.</td>
+</tr><tr><td>0.2.1</td>
+<td>Made semantic ranking locale-independent and derived descriptor
+schema URLs from the validated SDP bundle.</td>
+</tr><tr><td>0.2.2</td>
+<td>Cached term indexes for consistent, faster sessions and made failed
+vocabulary lookups distinguishable from successful zero-match
+searches.</td>
+</tr><tr><td>0.2.3</td>
+<td>Allowed corrected unpublished KNB dry runs to be replanned with
+<code>overwrite = TRUE</code>, added bounded provider retries, and
+moved/redacted the BioPortal credential.</td>
+</tr></tbody></table><p>See the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">metasalmon
+changelog</a> for the full implementation record. These changes do not
+turn a draft package, failed lookup, private deposit, or Member Node
+write into publication evidence.</p>
 </section><section><h2 class="section-heading" id="recommended-project-layout">Recommended project layout<a class="anchor" aria-label="anchor" href="#recommended-project-layout"></a></h2>
 <hr class="half-width"><pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj
-  data-raw/       # unchanged source data
+  raw_data/       # unchanged source CSVs or workbooks
   context/        # codebooks, methods, caveats, provenance
   output/         # generated Salmon Data Packages</code></pre>
 <p>Open the <code>.Rproj</code> file before working and use paths
-relative to the project root. Python users can start from the same root
-folder and use the same layout.</p>
+relative to the project root. Python and spreadsheet users can start
+from the same root folder and use the same layout.</p>
+</section><section><h2 class="section-heading" id="dataset-table-and-supported-inputs">Dataset, table, and supported inputs<a class="anchor" aria-label="anchor" href="#dataset-table-and-supported-inputs"></a></h2>
+<hr class="half-width"><p><strong>Dataset</strong> means the complete collection being
+documented. It can contain one or many related tables.</p>
+<p><strong>Table</strong> means one rectangular set of rows and columns
+with a consistent row meaning.</p>
+<p><strong>Flat file</strong> means a file containing one
+two-dimensional table, normally with one header row; CSV is the usual
+example. An Excel workbook can contain several sheets/tables and is not
+itself one flat file.</p>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Input structure</th>
+<th>Workshop support</th>
+</tr></thead><tbody><tr><td>One CSV or rectangular data frame</td>
+<td>Pass one data frame and a <code>table_id</code> to
+<code>create_sdp()</code>.</td>
+</tr><tr><td>Several CSVs</td>
+<td>Read them separately and pass a named list of data frames.</td>
+</tr><tr><td>Excel with one or several rectangular sheets</td>
+<td>Read each sheet with <code>readxl::read_excel()</code> and pass a
+named list.</td>
+</tr><tr><td>NetCDF, raster, multidimensional array, nested data</td>
+<td>Not directly supported; use a format-specific workflow or an
+explicitly reviewed tabular derivative.</td>
+</tr></tbody></table><p>The output SDP data resources are CSV files.</p>
 </section><section><h2 class="section-heading" id="salmon-data-package-files">Salmon Data Package files<a class="anchor" aria-label="anchor" href="#salmon-data-package-files"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>File</th>
 <th>Purpose</th>
 </tr></thead><tbody><tr><td><code>metadata/dataset.csv</code></td>
 <td>Dataset-level title, description, contact, license, coverage,
-provenance</td>
+discovery, and provenance fields</td>
 </tr><tr><td><code>metadata/tables.csv</code></td>
-<td>Table-level labels, row meaning, file paths, observation units</td>
+<td>One row per table: file path, label, row meaning, observation unit,
+and primary key</td>
 </tr><tr><td><code>metadata/column_dictionary.csv</code></td>
-<td>Column labels, descriptions, roles, types, units, semantic
-fields</td>
+<td>One row per data column: labels, definitions, roles, types, units,
+and semantic fields</td>
 </tr><tr><td><code>metadata/codes.csv</code></td>
 <td>Required when categorical columns exist; one row per observed
 non-empty dataset/table/column/value key</td>
 </tr><tr><td><code>data/*.csv</code></td>
-<td>Data tables</td>
+<td>One or more tabular data resources</td>
 </tr><tr><td><code>datapackage.json</code></td>
-<td>Generated descriptor required for complete/published packages; must
-agree with the CSV metadata and referenced data files</td>
+<td>Generated Frictionless descriptor required for complete/published
+packages; it must agree with the CSV metadata and data files</td>
 </tr><tr><td>
 <code>README.md</code> or <code>README-review.txt</code>
 </td>
-<td>Optional human context, caveats, or review checklist</td>
-</tr></tbody></table></section><section><h2 class="section-heading" id="column-roles">Column roles<a class="anchor" aria-label="anchor" href="#column-roles"></a></h2>
+<td>Human context, caveats, or review checklist</td>
+</tr><tr><td><code>metadata/eml-mapping.yml</code></td>
+<td>Reviewed facts needed for EML and KNB that cannot be inferred safely
+from SDP alone</td>
+</tr><tr><td><code>metadata/eml.xml</code></td>
+<td>Validated EML 2.2 export created near the end, not a hand-edited
+source file</td>
+</tr><tr><td><code>publication/knb-manifest.json</code></td>
+<td>Exact-object KNB/DataONE dry-run or recovery manifest</td>
+</tr></tbody></table><p>Complete filled examples are linked from Session 1: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/dataset.csv" class="external-link">dataset.csv</a>,
+<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/tables.csv" class="external-link">tables.csv</a>,
+<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/column_dictionary.csv" class="external-link">column_dictionary.csv</a>,
+and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/codes.csv" class="external-link">codes.csv</a>.</p>
+</section><section><h2 class="section-heading" id="standards-and-conventions-behind-the-fields">Standards and conventions behind the fields<a class="anchor" aria-label="anchor" href="#standards-and-conventions-behind-the-fields"></a></h2>
+<hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Source</th>
+<th>Scope in SDP</th>
+</tr></thead><tbody><tr><td>Frictionless Data Package/Table Schema</td>
+<td>Package/resource descriptors, field types and constraints, and the
+schemas used to validate canonical CSVs</td>
+</tr><tr><td>SDP custom profile</td>
+<td>Exact files, columns, joins, <code>column_role</code>, cross-table
+rules, and publication requirements</td>
+</tr><tr><td>I-ADOPT</td>
+<td>Measurement property, entity, and optional constraint roles</td>
+</tr><tr><td>SOSA</td>
+<td>Procedure/method alignment for <code>method_iri</code>
+</td>
+</tr><tr><td>SKOS/OWL and published vocabularies</td>
+<td>Reusable terms and code meanings</td>
+</tr><tr><td>QUDT or another reviewed unit vocabulary</td>
+<td>Unit IRIs</td>
+</tr><tr><td>EML</td>
+<td>A downstream ecological metadata export and catalog representation,
+not the authoring source of every SDP field</td>
+</tr></tbody></table><p>Every canonical metadata CSV is defined with Frictionless Table
+Schema, but the SDP profile defines the field names and salmon-specific
+rules. A field that can map to EML is not automatically an EML-native
+field.</p>
+</section><section><h2 class="section-heading" id="field-definitions-and-accepted-values">Field definitions and accepted values<a class="anchor" aria-label="anchor" href="#field-definitions-and-accepted-values"></a></h2>
+<hr class="half-width"><p>The complete, current source is the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
+field reference</a>. These are the fields learners most often need to
+interpret:</p>
+<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Field</th>
+<th>Meaning</th>
+<th>Accepted values or rule</th>
+</tr></thead><tbody><tr><td><code>column_role</code></td>
+<td>Function of the column in its table</td>
+<td>
+<code>identifier</code>, <code>attribute</code>,
+<code>temporal</code>, <code>categorical</code>,
+<code>measurement</code>
+</td>
+</tr><tr><td><code>value_type</code></td>
+<td>Basic type of values stored in the column</td>
+<td>
+<code>integer</code>, <code>number</code>, <code>string</code>,
+<code>boolean</code>, <code>date</code>, <code>datetime</code>
+</td>
+</tr><tr><td><code>required</code></td>
+<td>Whether each data row must contain a value in that source
+column</td>
+<td>
+<code>TRUE</code>, <code>FALSE</code>, or blank. It does not mean
+“this metadata header is required.”</td>
+</tr><tr><td><code>unit_label</code></td>
+<td>Human-readable unit</td>
+<td>Free text; blank when a unit is not applicable.</td>
+</tr><tr><td><code>unit_iri</code></td>
+<td>Stable identifier for the unit</td>
+<td>A valid absolute IRI; conditionally required when
+<code>column_role = measurement</code>.</td>
+</tr><tr><td><code>term_type</code></td>
+<td>Kind of linked term</td>
+<td>
+<code>owl_class</code>, <code>owl_object_property</code>, or
+<code>skos_concept</code> in the column dictionary</td>
+</tr><tr><td><code>update_frequency</code></td>
+<td>Planned dataset update cadence</td>
+<td>
+<code>daily</code>, <code>weekly</code>, <code>monthly</code>,
+<code>annually</code>, <code>asNeeded</code>, or
+<code>unknown</code>
+</td>
+</tr><tr><td>
+<code>temporal_start</code>, <code>temporal_end</code>
+</td>
+<td>Dataset coverage boundary</td>
+<td>A year (<code>YYYY</code>) or full date (<code>YYYY-MM-DD</code>);
+not a partial <code>YYYY-MM</code> date</td>
+</tr></tbody></table><p>Value types mean:</p>
+<ul><li>
+<code>integer</code>: whole numbers only;</li>
+<li>
+<code>number</code>: numeric values that may include decimals;</li>
+<li>
+<code>string</code>: text;</li>
+<li>
+<code>boolean</code>: logical true/false values;</li>
+<li>
+<code>date</code>: ISO date <code>YYYY-MM-DD</code>; and</li>
+<li>
+<code>datetime</code>: ISO datetime with a timezone, such as
+<code>YYYY-MM-DDTHH:MM:SSZ</code>.</li>
+</ul></section><section><h2 class="section-heading" id="column-roles">Column roles<a class="anchor" aria-label="anchor" href="#column-roles"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Role</th>
 <th>Use for</th>
 </tr></thead><tbody><tr><td><code>identifier</code></td>
 <td>Keys, IDs, or fields used to identify rows or related records</td>
 </tr><tr><td><code>attribute</code></td>
-<td>Descriptive fields that are not measurements or categories</td>
+<td>Descriptive fields that are not measurements or controlled
+categories</td>
 </tr><tr><td><code>temporal</code></td>
 <td>Dates, datetimes, years, or time periods</td>
 </tr><tr><td><code>categorical</code></td>
@@ -426,38 +595,109 @@ method IRIs remain optional.</p>
 <td>I-ADOPT entity/object of interest</td>
 </tr><tr><td><code>constraint_iri</code></td>
 <td>Optional</td>
-<td>I-ADOPT constraint that narrows the meaning</td>
+<td>I-ADOPT constraint that narrows the meaning; multiple IRIs are
+semicolon-separated</td>
 </tr><tr><td><code>unit_iri</code></td>
 <td>Required</td>
 <td>Unit IRI, usually from a unit vocabulary such as QUDT</td>
 </tr><tr><td><code>method_iri</code></td>
 <td>Optional</td>
-<td>Procedure or method IRI, aligned outside I-ADOPT</td>
+<td>Procedure or method IRI, aligned to SOSA and outside the I-ADOPT
+core roles</td>
 </tr></tbody></table><p>Do not use <code>property_iri</code>, <code>entity_iri</code>,
 <code>constraint_iri</code>, or <code>method_iri</code> as general
 relationship fields for identifiers, attributes, or categorical
 columns.</p>
+</section><section><h2 class="section-heading" id="sdp-to-eml-crosswalk">SDP-to-EML crosswalk<a class="anchor" aria-label="anchor" href="#sdp-to-eml-crosswalk"></a></h2>
+<hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>SDP source</th>
+<th>EML result</th>
+</tr></thead><tbody><tr><td><code>dataset_id</code></td>
+<td>Alternate identifier and deterministic EML identifier input</td>
+</tr><tr><td>Dataset title and description</td>
+<td>EML title and abstract</td>
+</tr><tr><td>Dataset keywords</td>
+<td>EML keyword set</td>
+</tr><tr><td>Dataset temporal start/end</td>
+<td>EML temporal coverage</td>
+</tr><tr><td>Each tables row</td>
+<td>EML <code>dataTable</code> and physical CSV object</td>
+</tr><tr><td>Table label and description</td>
+<td>EML entity name and description</td>
+</tr><tr><td>Table primary key</td>
+<td>EML primary-key constraint</td>
+</tr><tr><td>Column name, label, description</td>
+<td>EML attribute name, label, definition</td>
+</tr><tr><td><code>value_type</code></td>
+<td>EML storage type</td>
+</tr><tr><td><code>required = TRUE</code></td>
+<td>EML not-null constraint</td>
+</tr><tr><td>
+<code>codes.csv</code> rows</td>
+<td>EML enumerated domain</td>
+</tr><tr><td>Measurement <code>term_iri</code> and <code>unit_iri</code>
+</td>
+<td>Conservative semantic annotations</td>
+</tr><tr><td><code>eml-mapping.yml</code></td>
+<td>Structured creators/providers/contacts, rights, methods,
+scale/domain details, missing values, geographic/taxonomic coverage, and
+access decision</td>
+</tr></tbody></table><p>Not every semantic component is projected into EML. Current
+<code>metasalmon</code> conservatively annotates the whole measurement
+term and unit; it does not pretend that every I-ADOPT or method
+relationship has a direct EML equivalent.</p>
+</section><section><h2 class="section-heading" id="rerun-safety">Rerun safety<a class="anchor" aria-label="anchor" href="#rerun-safety"></a></h2>
+<hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Command or state</th>
+<th>Effect</th>
+</tr></thead><tbody><tr><td><code>create_sdp(..., overwrite = FALSE)</code></td>
+<td>Fails if the output directory already exists; safest default.</td>
+</tr><tr><td><code>create_sdp(..., overwrite = TRUE)</code></td>
+<td>Re-infers and rewrites writer-owned package files. Manual edits to
+canonical metadata can be lost.</td>
+</tr><tr><td>
+<code>create_sdp(..., overwrite = TRUE, prune = FALSE)</code> in R
+0.2.0+</td>
+<td>Preserves non-owned sidecars, but still replaces owned
+metadata/data/descriptor outputs.</td>
+</tr><tr><td><code>create_sdp(..., overwrite = TRUE, prune = TRUE)</code></td>
+<td>Empties the package first; use only for a deliberately disposable
+package.</td>
+</tr><tr><td><code>read_salmon_datapackage()</code></td>
+<td>Loads the manually reviewed package as the current source
+state.</td>
+</tr><tr><td><code>write_salmon_datapackage(..., path = &lt;new-version&gt;, overwrite = FALSE)</code></td>
+<td>Writes an intentional new version without overwriting the reviewed
+folder.</td>
+</tr><tr><td><code>publish_sdp_to_knb(..., overwrite = TRUE)</code></td>
+<td>Rebuilds conflicting artifacts from an unpublished dry run only; it
+never overwrites live immutable DataONE objects.</td>
+</tr></tbody></table><p>After manual edits, continue with read/validate helpers or write a
+new versioned package. Do not casually rerun <code>create_sdp()</code>
+on the same folder.</p>
 </section><section><h2 class="section-heading" id="publication-checks">Publication checks<a class="anchor" aria-label="anchor" href="#publication-checks"></a></h2>
-<hr class="half-width"><ul><li>Required metadata fields are complete and canonical metadata headers
-exactly match the schema fields, in schema order, with no missing or
-extra columns.</li>
+<hr class="half-width"><ul><li>Required metadata values are complete, and canonical headers exactly
+match the schemas in order with no extras.</li>
 <li>Every <code>tables.csv$file_name</code> is a safe relative path to
 an existing data file.</li>
-<li>
-<code>column_dictionary.csv</code> rows and column names match the
-headers of the referenced data files.</li>
+<li>Dictionary rows and column names exactly match the referenced data
+headers.</li>
 <li>Every observed non-empty categorical value has exactly one matching
-<code>codes.csv</code> row for its dataset/table/column/value key.</li>
+<code>codes.csv</code> row.</li>
 <li>Measurement rows have final <code>term_iri</code>,
 <code>property_iri</code>, <code>entity_iri</code>, and
 <code>unit_iri</code> values.</li>
 <li>No placeholder text or <code>REVIEW:</code> prefixes remain.</li>
 <li>
-<code>datapackage.json</code> exists, declares the SDP profile and
-resources, and agrees with the canonical CSV metadata and referenced
-data files.</li>
-<li>Strict validation passes in the normative R <code>metasalmon</code>
-implementation.</li>
+<code>datapackage.json</code> declares the current SDP
+profile/resources and agrees with the canonical CSVs.</li>
+<li>Strict R validation passes.</li>
+<li>The EML sidecar has reviewed parties, rights authorization, methods,
+scales/domains, missing values, provenance, and bound semantic-review
+checksums.</li>
+<li>
+<code>write_eml_from_sdp()</code> returns a valid EML 2.2
+result.</li>
+<li>A KNB dry-run manifest is reviewed before any credentialed live
+call.</li>
 </ul></section><section><h2 class="section-heading" id="routing-unresolved-terms">Routing unresolved terms<a class="anchor" aria-label="anchor" href="#routing-unresolved-terms"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Route</th>
 <th>Use when</th>
@@ -467,26 +707,34 @@ implementation.</li>
 <td>DFO Pacific operational, process, data stewardship, or policy
 terms</td>
 </tr><tr><td>Local/profile vocabulary or ontology (<code>profile</code>)</td>
-<td>Project-specific terms, local codelists, method bins, status
+<td>Project-specific terms, local code lists, method bins, status
 categories, or uncertain reuse</td>
 </tr><tr><td>Skip/defer (<code>skip</code>)</td>
 <td>Description is enough for now, or evidence is too weak</td>
-</tr></tbody></table><p>SKOS is usually best for codelists, status categories, and method
+</tr></tbody></table><p>SKOS is usually best for code lists, status categories, and method
 bins. OWL is for durable domain structure and formal relationships.</p>
 </section><section><h2 class="section-heading" id="new-term-request-checklist">New-term request checklist<a class="anchor" aria-label="anchor" href="#new-term-request-checklist"></a></h2>
 <hr class="half-width"><p>Include:</p>
-<ul><li>proposed label;</li>
-<li>definition;</li>
+<ul><li>proposed label and definition;</li>
 <li>source for the definition;</li>
 <li>example rows or values;</li>
 <li>suggested parent, scheme, or nearby term;</li>
 <li>existing terms that were close but not exact;</li>
 <li>route: shared, GCDFO/DFO-specific, local/profile, or defer;</li>
-<li>mapping strength and confidence when relevant;</li>
+<li>mapping strength and confidence when relevant; and</li>
 <li>reviewer action: accept, review, defer, or request new term.</li>
 </ul></section><section><h2 class="section-heading" id="glossary">Glossary<a class="anchor" aria-label="anchor" href="#glossary"></a></h2>
-<hr class="half-width"><p><strong>Code list</strong>: The allowed stored values for one data
+<hr class="half-width"><p><strong>Catalog</strong>: A system that indexes metadata so people
+and software can discover datasets. KNB is the catalog/deposit target
+currently supported by <code>publish_sdp_to_knb()</code>.</p>
+<p><strong>Code list</strong>: The allowed stored values for one data
 column, with labels and definitions for those values.</p>
+<p><strong>Dataset</strong>: The complete collection being documented;
+it can contain one or many tables.</p>
+<p><strong>EML</strong>: Ecological Metadata Language, an XML metadata
+standard used by ecological data repositories and catalogs.</p>
+<p><strong>Flat file</strong>: A file that stores one rectangular table,
+such as CSV.</p>
 <p><strong>I-ADOPT</strong>: A framework for describing what a
 measurement variable means using property, entity, and optional
 constraints. It does not model units, methods, time, or location by
@@ -495,16 +743,14 @@ itself.</p>
 definition.</p>
 <p><strong>Ontology</strong>: A maintained set of concepts and
 definitions that also records how the concepts relate.</p>
-<p><strong>OWL</strong>: A language for formal ontology classes and
-relationships.</p>
-<p><strong>Salmon Data Package</strong>: A folder of data and metadata
-CSV files that makes a dataset easier to review, validate, and
-share.</p>
+<p><strong>Salmon Data Package</strong>: A folder of one or more data
+tables and canonical metadata CSVs that makes a dataset easier to
+review, validate, transform, and share.</p>
 <p><strong>Semantic link or mapping</strong>: A connection from a local
 column or code value to a shared definition; semantic simply means
 “about meaning.”</p>
-<p><strong>SKOS</strong>: A model for controlled vocabularies, concept
-schemes, labels, definitions, and mappings.</p>
+<p><strong>Table</strong>: A rectangular set of rows and columns with
+one consistent row meaning.</p>
 <p><strong>Vocabulary</strong>: A maintained list of reusable terms and
 definitions.</p>
 <p><strong><code>REVIEW: &lt;iri&gt;</code></strong>: A draft semantic
@@ -558,13 +804,13 @@ suggestion that must be checked before publication.</p>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Reference",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-29",
+  "dateModified": "2026-08-11",
   "datePublished": "2026-08-11"
 }
 

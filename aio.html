@@ -260,7 +260,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Capture Context That Travels With the Data</a>
+        <a href="session-3.html">3. Use Your Data and Capture Context</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -296,7 +296,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="session-6.html">6. Route Term Gaps and Plan Publication</a>
+        <a href="session-6.html">6. Route Term Gaps, Export EML, and Plan Catalog Publication</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -373,7 +373,7 @@
         
 <section id="aio-session-1"><p>Content from <a href="session-1.html">Why Start With a Salmon Data Package?</a></p>
 <hr>
-<p>Last updated on 2026-07-29 |
+<p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -387,11 +387,13 @@
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>Why is it hard for other people to reuse salmon datasets?</li>
+<li>What will I be able to publish by the end of the workshop?</li>
+<li>What is the difference between a dataset, a table, and a flat
+file?</li>
 <li>What does a Salmon Data Package add to an ordinary spreadsheet or
 CSV?</li>
-<li>What should we finish before linking fields to shared
-definitions?</li>
+<li>Where do the SDP fields come from, and how do they map into
+EML?</li>
 </ul>
 </div>
 </div>
@@ -401,18 +403,38 @@ definitions?</li>
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Describe the workshop ladder: structure, context, meaning,
-contribution.</li>
-<li>Recognize the core files in a Salmon Data Package.</li>
-<li>Choose the primary R/metasalmon path, a paired Python/salmonpy path,
-or the spreadsheet path for the hands-on work.</li>
+<li>State the end goal: a reviewed SDP, a validated EML file, and a
+guarded catalog-publication plan.</li>
+<li>Distinguish a dataset from its one or more tables and recognize
+supported tabular inputs.</li>
+<li>Recognize the core metadata CSVs before running any package
+code.</li>
+<li>Separate the Frictionless structure, external-standard alignments,
+and salmon-specific SDP conventions.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="the-problem-this-workshop-solves">The problem this workshop solves<a class="anchor" aria-label="anchor" href="#the-problem-this-workshop-solves"></a>
+<section><h2 class="section-heading" id="start-with-the-end-goal">Start with the end goal<a class="anchor" aria-label="anchor" href="#start-with-the-end-goal"></a>
+</h2>
+<hr class="half-width">
+<p>By the end of the workshop, participants should be able to:</p>
+<ol style="list-style-type: decimal">
+<li>create and review a Salmon Data Package (SDP);</li>
+<li>run the strict R/<code>metasalmon</code> publication check;</li>
+<li>export the reviewed metadata as schema-valid EML 2.2; and</li>
+<li>preview an exact KNB/DataONE catalog deposit, then perform the
+upload when they have credentials and redistribution authority.</li>
+</ol>
+<p>An EML file is structured XML, not an arbitrary XML file with a
+different name. <code>metasalmon</code> maps reviewed SDP facts into the
+EML model and validates the result against EML 2.2. A live KNB call
+creates persistent production objects, so the workshop uses a
+credential-free dry run unless an authorized publication exercise has
+been arranged.</p>
+</section><section><h2 class="section-heading" id="the-problem-this-workshop-solves">The problem this workshop solves<a class="anchor" aria-label="anchor" href="#the-problem-this-workshop-solves"></a>
 </h2>
 <hr class="half-width">
 <p>Salmon data are often understandable to the person or team that
@@ -433,9 +455,56 @@ coho salmon is a kind of salmon. A <strong>vocabulary</strong> is a
 maintained list of terms and definitions, while a <strong>code
 list</strong> records the allowed values for one data column. You will
 use these resources; you do not need to build or edit an ontology.</p>
-<p>That keeps the first goal concrete. A useful draft Salmon Data
-Package is a successful first outcome even when some links to shared
-definitions are still blank or marked for review.</p>
+</section><section><h2 class="section-heading" id="dataset-table-and-flat-file">Dataset, table, and flat file<a class="anchor" aria-label="anchor" href="#dataset-table-and-flat-file"></a>
+</h2>
+<hr class="half-width">
+<p>These terms describe different levels:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Term</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Dataset</td>
+<td>The complete collection being documented; it can contain one or many
+related tables.</td>
+<td>A coho escapement dataset containing observations, sites, and
+methods tables.</td>
+</tr>
+<tr>
+<td>Table</td>
+<td>A rectangular set of rows and columns with one consistent row
+meaning.</td>
+<td>One row per population and return year.</td>
+</tr>
+<tr>
+<td>Flat file</td>
+<td>A file that stores one two-dimensional table, normally with one
+header row and no nested structure.</td>
+<td>A CSV file.</td>
+</tr>
+<tr>
+<td>Workbook</td>
+<td>A container that can hold several sheets/tables; the workbook itself
+is not one flat file.</td>
+<td>An <code>.xlsx</code> file with <code>Escapement</code> and
+<code>Sites</code> sheets.</td>
+</tr>
+</tbody>
+</table>
+<p>The workshop supports one flat table, multiple CSV tables, or
+multiple rectangular Excel sheets. R reads each source table into a data
+frame and passes either one data frame or a <strong>named list</strong>
+of data frames to <code>create_sdp()</code>. The workflow does not
+directly preserve multidimensional NetCDF, raster, or nested-array
+structures.</p>
 </section><section><h2 class="section-heading" id="the-workshop-ladder">The workshop ladder<a class="anchor" aria-label="anchor" href="#the-workshop-ladder"></a>
 </h2>
 <hr class="half-width">
@@ -472,6 +541,11 @@ definitions are still blank or marked for review.</p>
 them?</td>
 <td>Plan to request a shared term or keep a local definition</td>
 </tr>
+<tr>
+<td>Publication</td>
+<td>How do reviewed SDP facts become portable catalog metadata?</td>
+<td>Valid EML plus a reviewed KNB/DataONE publication plan</td>
+</tr>
 </tbody>
 </table></section><section><h2 class="section-heading" id="what-is-in-a-salmon-data-package">What is in a Salmon Data Package?<a class="anchor" aria-label="anchor" href="#what-is-in-a-salmon-data-package"></a>
 </h2>
@@ -486,18 +560,157 @@ them?</td>
   data/
     my_table.csv
   datapackage.json             # generated; required for complete/published packages
-  README.md or README-review.txt  # optional sidecar or review checklist</code></pre>
-<p>The CSV files under <code>metadata/</code> are the human-reviewable
-core. <code>codes.csv</code> is conditional: include it when the package
-has categorical columns. The generated <code>datapackage.json</code>
-makes the package easier for software to read and is required for a
-complete or published package, but the metadata CSVs are the place most
-learners will edit first.</p>
+  README.md or README-review.txt</code></pre>
+<p>The CSV files under <code>metadata/</code> are the canonical,
+human-reviewable core. <code>codes.csv</code> is conditional: include it
+when the package has categorical columns. The generated
+<code>datapackage.json</code> is the Frictionless descriptor used by
+software; it must agree with the metadata CSVs and data resources.</p>
+</section><section><h2 class="section-heading" id="see-the-metadata-csvs-before-writing-code">See the metadata CSVs before writing code<a class="anchor" aria-label="anchor" href="#see-the-metadata-csvs-before-writing-code"></a>
+</h2>
+<hr class="half-width">
+<p>The previews below are deliberately shortened so they fit on screen.
+Open the complete example files to see every canonical header: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/dataset.csv" class="external-link">dataset.csv</a>,
+<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/tables.csv" class="external-link">tables.csv</a>,
+<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/column_dictionary.csv" class="external-link">column_dictionary.csv</a>,
+and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/codes.csv" class="external-link">codes.csv</a>.</p>
+<p><code>metadata/dataset.csv</code> has one row for the dataset:</p>
+<pre class="csv"><code>dataset_id,title,description,creator,contact_name,contact_email,license,...
+demo-coho,Coho escapement demo,Practice escapement records,Demo team,Data office,data@example.org,CC-BY-4.0,...</code></pre>
+<p><code>metadata/tables.csv</code> has one row for each table:</p>
+<pre class="csv"><code>dataset_id,table_id,file_name,table_label,description,observation_unit,...
+demo-coho,escapement,data/escapement.csv,Escapement estimates,One row per population and return year,Population-year,...</code></pre>
+<p><code>metadata/column_dictionary.csv</code> is the main review
+surface. It has one row for every column in every table:</p>
+<pre class="csv"><code>dataset_id,table_id,column_name,column_label,column_description,column_role,value_type,required,unit_label,...
+demo-coho,escapement,population_id,Population ID,Stable identifier for the population,identifier,string,TRUE,,...
+demo-coho,escapement,return_year,Return year,Calendar year of adult return,temporal,integer,TRUE,,...
+demo-coho,escapement,spawner_count,Spawner count,Estimated natural-origin adult spawners,measurement,integer,FALSE,fish,...</code></pre>
+<p><code>metadata/codes.csv</code> explains stored values in categorical
+columns:</p>
+<pre class="csv"><code>dataset_id,table_id,column_name,code_value,code_label,code_description,...
+demo-coho,escapement,species_code,CO,Coho salmon,Stored species code for coho salmon,...</code></pre>
+<p>The <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
+field reference</a> gives the definition, requirement, accepted type or
+allowed values, and notes for every field. Do not guess a header or add
+a convenient extra column to a canonical metadata CSV.</p>
+</section><section><h2 class="section-heading" id="where-the-fields-come-from">Where the fields come from<a class="anchor" aria-label="anchor" href="#where-the-fields-come-from"></a>
+</h2>
+<hr class="half-width">
+<p>SDP combines several layers; they should not be described as one
+universal standard:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Layer</th>
+<th>What it contributes</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Frictionless Data Package and Table Schema</td>
+<td>The package/resource structure, table fields, value types,
+constraints, and machine-readable schemas used to validate each metadata
+CSV and <code>datapackage.json</code>.</td>
+</tr>
+<tr>
+<td>Common discovery/catalog concepts</td>
+<td>Titles, descriptions, contacts, licences, temporal coverage,
+keywords, and provenance that can map into EML, HNAP/ISO, or another
+catalog profile.</td>
+</tr>
+<tr>
+<td>I-ADOPT, SOSA, SKOS/OWL, and unit vocabularies</td>
+<td>External semantic roles for measurement property/entity/constraint,
+methods, reusable concepts, code lists, and units.</td>
+</tr>
+<tr>
+<td>Salmon Data Package profile</td>
+<td>The exact CSV filenames and columns, joins through
+<code>dataset_id</code>/<code>table_id</code>/<code>column_name</code>,
+<code>column_role</code>, observation-unit conventions, categorical-code
+coverage, and salmon publication rules.</td>
+</tr>
+</tbody>
+</table>
+<p>In other words, every metadata CSV is described with a
+<strong>Frictionless Table Schema</strong>, but not every SDP column
+name comes from Frictionless itself. SDP defines a custom Frictionless
+profile and aligns selected fields with other standards where the
+alignment is warranted.</p>
+</section><section><h2 class="section-heading" id="how-sdp-becomes-eml">How SDP becomes EML<a class="anchor" aria-label="anchor" href="#how-sdp-becomes-eml"></a>
+</h2>
+<hr class="half-width">
+<p>The export is a governed transformation, not a claim that the two
+formats are identical:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>SDP source</th>
+<th>EML destination</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+<code>dataset.csv$title</code>, <code>description</code>,
+<code>keywords</code>
+</td>
+<td>Dataset title, abstract, and keyword set</td>
+</tr>
+<tr>
+<td>
+<code>dataset.csv$temporal_start</code> and
+<code>temporal_end</code>
+</td>
+<td>Temporal coverage</td>
+</tr>
+<tr>
+<td>Each <code>tables.csv</code> row</td>
+<td>One EML <code>dataTable</code>, including its name, description,
+physical CSV object, and key information</td>
+</tr>
+<tr>
+<td>
+<code>column_dictionary.csv</code> names, labels, descriptions, and
+<code>value_type</code>
+</td>
+<td>EML attributes, definitions, and storage types</td>
+</tr>
+<tr>
+<td><code>column_dictionary.csv$required</code></td>
+<td>EML not-null constraints</td>
+</tr>
+<tr>
+<td><code>codes.csv</code></td>
+<td>EML enumerated domains for categorical attributes</td>
+</tr>
+<tr>
+<td>Reviewed measurement <code>term_iri</code> and
+<code>unit_iri</code>
+</td>
+<td>Conservative EML semantic annotations</td>
+</tr>
+<tr>
+<td>Reviewed <code>metadata/eml-mapping.yml</code> sidecar</td>
+<td>Structured parties, rights, methods, measurement scales,
+missing-value meanings, geographic/taxonomic coverage, and publication
+intent that SDP cannot infer safely</td>
+</tr>
+</tbody>
+</table>
+<p>The sidecar is important: a title or column type can map directly,
+but an ORCID-authenticated metadata provider, a measurement scale, or
+permission to publish cannot be inferred from a source spreadsheet.</p>
 </section><section><h2 class="section-heading" id="r-first-examples-three-ways-to-participate">R-first examples, three ways to participate<a class="anchor" aria-label="anchor" href="#r-first-examples-three-ways-to-participate"></a>
 </h2>
 <hr class="half-width">
-<p>The worked code uses R first. Verified Python equivalents appear
-immediately afterward as companion blocks, while spreadsheet users edit
+<p>The worked code uses R first. Python equivalents appear immediately
+afterward for the core package workflow, while spreadsheet users edit
 the same standard package files. Use the path that matches your current
 comfort level; you do not need to run both code blocks.</p>
 <table class="table">
@@ -509,37 +722,33 @@ comfort level; you do not need to run both code blocks.</p>
 <thead><tr>
 <th>If you usually work in…</th>
 <th>Start with…</th>
-<th>You still review…</th>
+<th>Publication handoff</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>R</td>
 <td><code>metasalmon::create_sdp()</code></td>
-<td>the same metadata CSVs, a generated descriptor, and optional
-suggestions</td>
+<td>R also provides strict validation, EML export, and KNB
+publication.</td>
 </tr>
 <tr>
 <td>Python</td>
 <td><code>salmonpy.create_sdp()</code></td>
-<td>the same package structure, review workflow, and optional
-suggestions</td>
+<td>Hand the compatible SDP to current R/<code>metasalmon</code> for the
+final gate.</td>
 </tr>
 <tr>
 <td>Excel or Calc</td>
 <td>Blank SDP CSV template folder</td>
-<td>dataset, table, column, and conditional code metadata</td>
+<td>Hand the reviewed CSV package to R/<code>metasalmon</code> for
+validation and export.</td>
 </tr>
 </tbody>
 </table>
-<p><code>metasalmon</code> 0.1.6 and <code>salmonpy</code> 0.1.6 are
-maintained as version-aligned implementations of the same core workflows
-and are parity-tested when packages move between R and Python. They are
-not identical: the R implementation remains the normative contract and
-currently provides the stronger final publication validator. See the <a href="https://salmon-data-mobilization.github.io/metaSmnPy/guides/parity.html" class="external-link">R
-and Python parity guide</a>.</p>
-<p>You do not need prior knowledge of terminology standards to make a
-draft package. Later sessions introduce each specialized standard when
-it is needed.</p>
+<p>The revised R examples target <code>metasalmon</code> 0.2.3 or later
+from GitHub <code>main</code>. The Python companion remains
+<code>salmonpy</code> 0.1.6, so do not claim complete version or feature
+parity.</p>
 <div id="challenge-1-pick-your-package" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -551,9 +760,11 @@ it is needed.</p>
 <p>Choose one dataset or example table for the workshop.</p>
 <p>Write down:</p>
 <ul>
+<li>whether it is one flat table, several files, or a multi-sheet
+workbook;</li>
 <li>a short dataset name;</li>
-<li>who would be the best contact for questions;</li>
-<li>what each row represents;</li>
+<li>the tables it contains and what one row means in each;</li>
+<li>who would be the best contact for questions; and</li>
 <li>one thing that could be misunderstood if the data were shared
 without context.</li>
 </ul>
@@ -568,19 +779,23 @@ without context.</li>
 <div class="callout-inner">
 <div class="callout-content">
 <ul>
-<li>Start by making the dataset reviewable, not by forcing every field
-to match a shared definition.</li>
-<li>A Salmon Data Package keeps data, metadata, code lists, and context
-together.</li>
-<li>R, Python, and spreadsheet paths converge on the same review
-task.</li>
+<li>The end-to-end target is reviewed SDP metadata, valid EML, and a
+guarded catalog-publication plan.</li>
+<li>A dataset can contain multiple tables; a flat file contains one
+rectangular table.</li>
+<li>The metadata CSVs are visible review surfaces, not hidden software
+internals.</li>
+<li>SDP is a custom Frictionless profile with explicit external-standard
+alignments and salmon-specific rules.</li>
+<li>EML export needs reviewed facts that cannot be inferred from the
+source table alone.</li>
 </ul>
 </div>
 </div>
 </div>
 </section></section><section id="aio-session-2"><p>Content from <a href="session-2.html">Create a Draft Salmon Data Package</a></p>
 <hr>
-<p>Last updated on 2026-07-29 |
+<p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -594,11 +809,10 @@ task.</li>
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>How do I turn a spreadsheet or CSV into a draft Salmon Data
-Package?</li>
-<li>What do the R and Python <code>create_sdp()</code> functions
-produce?</li>
-<li>What should I check before sharing a draft for review?</li>
+<li>What must I set up before running the demo?</li>
+<li>Should I run the included example or substitute my own files?</li>
+<li>What input structures does <code>create_sdp()</code> support?</li>
+<li>What happens if I rerun package generation after manual edits?</li>
 </ul>
 </div>
 </div>
@@ -608,114 +822,185 @@ produce?</li>
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Create or inspect a draft package using the primary R/metasalmon
-path, a paired Python/salmonpy path, or the spreadsheet template.</li>
-<li>Identify the required metadata files and their roles.</li>
-<li>Separate draft review from final publication readiness.</li>
+<li>Confirm the project, <code>raw_data/</code>, <code>context/</code>,
+and <code>output/</code> layout before the demo.</li>
+<li>Run the included example unchanged, using it only to generate and
+inspect templates.</li>
+<li>Distinguish the example path from the learner-owned data path.</li>
+<li>Identify supported single-table, multi-table, and workbook
+inputs.</li>
+<li>Protect reviewed metadata by choosing deliberate rerun
+behavior.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="what-draft-means">What “draft” means<a class="anchor" aria-label="anchor" href="#what-draft-means"></a>
+<section><h2 class="section-heading" id="before-the-demo-open-the-project-and-create-folders">Before the demo: open the project and create folders<a class="anchor" aria-label="anchor" href="#before-the-demo-open-the-project-and-create-folders"></a>
+</h2>
+<hr class="half-width">
+<p>Work from one project root so every path in the lesson is relative
+and reproducible.</p>
+<ol style="list-style-type: decimal">
+<li>R users: in RStudio choose <strong>File &gt; New Project</strong>,
+then create a new project or open the folder you prepared during
+setup.</li>
+<li>Confirm that the working project is
+<code>salmon-data-workshop/</code>; do not call <code>setwd()</code> to
+jump elsewhere.</li>
+<li>Create the input, context, and output folders before calling
+<code>create_sdp()</code>.</li>
+</ol>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Run from the open RStudio Project root.</span></span>
+<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"raw_data"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"context"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"output"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
+</div>
+<pre class="text"><code>salmon-data-workshop/
+  salmon-data-workshop.Rproj
+  raw_data/                   # unchanged source files
+  context/                    # codebooks, methods, and caveats
+  output/                     # generated package folders</code></pre>
+</section><section><h2 class="section-heading" id="choose-one-of-two-paths">Choose one of two paths<a class="anchor" aria-label="anchor" href="#choose-one-of-two-paths"></a>
+</h2>
+<hr class="half-width">
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Path</th>
+<th>What to do now</th>
+<th>What to change</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>A: included example</td>
+<td>Run the first code block exactly as written.</td>
+<td>Change nothing. This is the fastest way to see the generated
+metadata templates.</td>
+</tr>
+<tr>
+<td>B: personal data</td>
+<td>First read Path A, then move to Session 3. Put your source files in
+<code>raw_data/</code>.</td>
+<td>Replace the input path, object name, dataset/table IDs, and output
+folder with values for your files.</td>
+</tr>
+</tbody>
+</table>
+<p>Do not partly combine the two paths by reading the example but
+assigning your real dataset ID, or by reading your own data and leaving
+the example output folder. That makes review and reruns difficult to
+interpret.</p>
+</section><section><h2 class="section-heading" id="what-draft-means">What “draft” means<a class="anchor" aria-label="anchor" href="#what-draft-means"></a>
 </h2>
 <hr class="half-width">
 <p>A draft package is allowed to contain blanks, placeholders, and
-review markers. The goal is to create a structured package that a human
-can improve.</p>
-<p>Do not treat the first package as final. Treat it as the first shared
-review surface.</p>
-</section><section><h2 class="section-heading" id="rmetasalmon-path">R/metasalmon path<a class="anchor" aria-label="anchor" href="#rmetasalmon-path"></a>
+review markers. The first example has one purpose: generate the package
+structure and starter metadata so you can inspect it. It is not a
+finished description of the source dataset and it does not export EML
+yet.</p>
+</section><section><h2 class="section-heading" id="path-a-generate-the-simple-r-example">Path A: generate the simple R example<a class="anchor" aria-label="anchor" href="#path-a-generate-the-simple-r-example"></a>
 </h2>
 <hr class="half-width">
-<p>In R, <code>create_sdp()</code> creates a package folder and a review
-checklist.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<p><code>metasalmon</code> includes a small NuSEDS-derived practice
+table. Generate its templates with semantic searching turned off so the
+first result is fast and local.</p>
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">metasalmon</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Locate and read the small example bundled with metasalmon.</span></span>
 <span><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="fu">system.file</span><span class="op">(</span></span>
 <span>  <span class="st">"extdata"</span>,</span>
-<span>  <span class="st">"nuseds-fraser-coho-2023-2024.csv"</span>,</span>
+<span>  <span class="st">"nuseds-fraser-coho-sample.csv"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"metasalmon"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fraser_coho</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="va">data_path</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">fraser_coho</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
+<span>  <span class="va">data_path</span>,</span>
+<span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Generate a new package once. overwrite = FALSE protects an existing folder.</span></span>
 <span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
 <span>  <span class="va">fraser_coho</span>,</span>
-<span>  path <span class="op">=</span> <span class="st">"fraser-coho-2023-2024-sdp"</span>,</span>
-<span>  dataset_id <span class="op">=</span> <span class="st">"fraser-coho-2023-2024"</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"fraser-coho-example-sdp"</span><span class="op">)</span>,</span>
+<span>  dataset_id <span class="op">=</span> <span class="st">"fraser-coho-example"</span>,</span>
 <span>  table_id <span class="op">=</span> <span class="st">"escapement"</span>,</span>
 <span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">list.files</span><span class="op">(</span><span class="va">pkg_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
-<p><code>seed_semantics</code> controls whether <code>metasalmon</code>
-searches for possible links between local fields and shared definitions.
-<code>FALSE</code> is the fast classroom option; enabling the search can
-take several minutes and produces suggestions for human review.</p>
-<div id="python-equivalent" class="callout">
+<p><code>seed_semantics = FALSE</code> is the fast classroom option. It
+skips live searches for links to shared definitions. Session 4 shows how
+to run those searches after the starter metadata has been reviewed.</p>
+<div id="python-equivalent-for-path-a" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
+<div id="python-equivalent-for-path-a" class="callout-inner">
+<h3 class="callout-title">Python equivalent for Path A</h3>
 <div class="callout-content">
 <p>Run this block instead of the R block if you are following the Python
-path. The installed package is named <code>salmonpy</code>, even though
-its repository is named <code>metaSmnPy</code>.</p>
-<div class="codewrapper sourceCode" id="cb2">
+companion path.</p>
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> importlib.resources <span class="im">import</span> files</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a><span class="im">from</span> salmonpy <span class="im">import</span> create_sdp</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>data_path <span class="op">=</span> files(<span class="st">"salmonpy.data"</span>).joinpath(</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a>    <span class="st">"nuseds-fraser-coho-sample.csv"</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>)</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>fraser_coho <span class="op">=</span> pd.read_csv(data_path)</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>pkg_path <span class="op">=</span> create_sdp(</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1" aria-label="code-block-2-13"></a>    fraser_coho,</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1" aria-label="code-block-2-14"></a>    path<span class="op">=</span><span class="st">"fraser-coho-sample-sdp"</span>,</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1" aria-label="code-block-2-15"></a>    dataset_id<span class="op">=</span><span class="st">"fraser-coho-sample"</span>,</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1" aria-label="code-block-2-16"></a>    table_id<span class="op">=</span><span class="st">"escapement"</span>,</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1" aria-label="code-block-2-17"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1" aria-label="code-block-2-18"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1" aria-label="code-block-2-19"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1" aria-label="code-block-2-20"></a>)</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1" aria-label="code-block-2-21"></a></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1" aria-label="code-block-2-22"></a><span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1" aria-label="code-block-2-23"></a>    path <span class="cf">for</span> path <span class="kw">in</span> pkg_path.rglob(<span class="st">"*"</span>) <span class="cf">if</span> path.is_file()</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1" aria-label="code-block-2-24"></a>):</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1" aria-label="code-block-2-25"></a>    <span class="bu">print</span>(path.relative_to(pkg_path))</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="im">from</span> importlib.resources <span class="im">import</span> files</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a><span class="im">from</span> salmonpy <span class="im">import</span> create_sdp</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>data_path <span class="op">=</span> files(<span class="st">"salmonpy.data"</span>).joinpath(</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a>    <span class="st">"nuseds-fraser-coho-sample.csv"</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1" aria-label="code-block-4-9"></a>)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1" aria-label="code-block-4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1" aria-label="code-block-4-11"></a>fraser_coho <span class="op">=</span> pd.read_csv(data_path)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1" aria-label="code-block-4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1" aria-label="code-block-4-13"></a>pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1" aria-label="code-block-4-14"></a>    fraser_coho,</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1" aria-label="code-block-4-15"></a>    path<span class="op">=</span>Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"fraser-coho-example-sdp"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1" aria-label="code-block-4-16"></a>    dataset_id<span class="op">=</span><span class="st">"fraser-coho-example"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1" aria-label="code-block-4-17"></a>    table_id<span class="op">=</span><span class="st">"escapement"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1" aria-label="code-block-4-18"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1" aria-label="code-block-4-20"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1" aria-label="code-block-4-21"></a>)</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1" aria-label="code-block-4-22"></a></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1" aria-label="code-block-4-23"></a><span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1" aria-label="code-block-4-24"></a>    path <span class="cf">for</span> path <span class="kw">in</span> pkg_path.rglob(<span class="st">"*"</span>) <span class="cf">if</span> path.is_file()</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1" aria-label="code-block-4-25"></a>):</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1" aria-label="code-block-4-26"></a>    <span class="bu">print</span>(path.relative_to(pkg_path))</span></code></pre>
 </div>
-<p><code>salmonpy</code> bundles its own small NuSEDS fixture under the
-filename shown above. It is not row-for-row identical to the larger
-2023–2024 fixture bundled with <code>metasalmon</code>, so its package
-and dataset IDs use <code>fraser-coho-sample</code>. The fixtures
-demonstrate the same workflow and package structure; do not compare
-their row or column counts. <code>seed_semantics=False</code> has the
-same classroom purpose in Python: make the first package locally and
-defer searches for shared definitions. Python also writes a hidden
-<code>.salmonpy-package</code> bookkeeping file; the visible standard
-files below remain the shared review surface.</p>
+<p>The R and Python packages bundle separate practice fixtures. They
+demonstrate the same core package structure, but do not use their row
+counts to test cross-language parity. Python may also write a hidden
+<code>.salmonpy-package</code> bookkeeping file. The final EML and KNB
+workflow is R-only in the versions used here.</p>
 </div>
 </div>
 </div>
-<p>Open the package folder and review:</p>
-<ul>
+</section><section><h2 class="section-heading" id="inspect-the-generated-templates">Inspect the generated templates<a class="anchor" aria-label="anchor" href="#inspect-the-generated-templates"></a>
+</h2>
+<hr class="half-width">
+<p>Open these files in this order:</p>
+<ol style="list-style-type: decimal">
 <li><code>README-review.txt</code></li>
 <li><code>metadata/column_dictionary.csv</code></li>
 <li><code>metadata/tables.csv</code></li>
@@ -724,24 +1009,180 @@ files below remain the shared review surface.</p>
 <code>metadata/codes.csv</code>, when present</li>
 <li>
 <code>semantic_suggestions.csv</code>, when present</li>
-</ul>
-<p>Expected files:</p>
-<pre class="text"><code>&lt;package-folder&gt;/
-  README-review.txt
-  datapackage.json             # generated descriptor
-  metadata/
-    dataset.csv
-    tables.csv
-    column_dictionary.csv
-    codes.csv                  # when categorical columns exist
-  data/
-    escapement.csv</code></pre>
-<p>If semantic seeding is enabled, the package may also include
-<code>semantic_suggestions.csv</code>, and some metadata fields may
-contain <code>REVIEW: &lt;iri&gt;</code> draft values. An
-<strong>IRI</strong> is a stable web identifier for a shared term. The
-<code>REVIEW:</code> prefix means that the proposed match has not been
-accepted.</p>
+</ol>
+<p>Expected structure:</p>
+<pre class="text"><code><span><span class="va">output</span><span class="op">/</span><span class="va">fraser</span><span class="op">-</span><span class="va">coho</span><span class="op">-</span><span class="va">example</span><span class="op">-</span><span class="va">sdp</span><span class="op">/</span></span>
+<span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span></span>
+<span>  <span class="va">datapackage.json</span></span>
+<span>  <span class="va">metadata</span><span class="op">/</span></span>
+<span>    <span class="va">dataset.csv</span></span>
+<span>    <span class="va">tables.csv</span></span>
+<span>    <span class="va">column_dictionary.csv</span></span>
+<span>    <span class="va">codes.csv</span>                  <span class="co"># present when categorical columns exist</span></span>
+<span>  <span class="va">data</span><span class="op">/</span></span>
+<span>    <span class="va">escapement.csv</span></span></code></pre>
+<p>If semantic seeding is enabled later, the package may also include
+<code>semantic_suggestions.csv</code>, and metadata fields may contain
+<code>REVIEW: &lt;iri&gt;</code> draft values. An <strong>IRI</strong>
+is a stable web identifier for a shared term. The <code>REVIEW:</code>
+prefix means that the proposed match has not been accepted.</p>
+</section><section><h2 class="section-heading" id="what-input-structures-are-supported">What input structures are supported?<a class="anchor" aria-label="anchor" href="#what-input-structures-are-supported"></a>
+</h2>
+<hr class="half-width">
+<p><code>create_sdp()</code> does not open an arbitrary source file by
+itself. First use an appropriate reader to create R data frames; then
+pass one data frame or a named list of data frames.</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Source</th>
+<th>Preparation</th>
+<th>
+<code>create_sdp()</code> input</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>One CSV or flat table</td>
+<td><code>readr::read_csv()</code></td>
+<td>One data frame; <code>table_id</code> supplies its table name.</td>
+</tr>
+<tr>
+<td>Multiple CSVs</td>
+<td>Read each CSV separately.</td>
+<td>A named list such as
+<code>list(escapement = ..., sites = ...)</code>.</td>
+</tr>
+<tr>
+<td>Excel workbook with several sheets</td>
+<td>Use <code>readxl::read_excel()</code> once per rectangular
+sheet/table.</td>
+<td>A named list, with safe unique table IDs as names.</td>
+</tr>
+<tr>
+<td>NetCDF, raster, nested arrays</td>
+<td>Not directly supported by this tabular workflow.</td>
+<td>Use a format-specific packaging workflow, or a reviewed tabular
+derivative that does not misrepresent the source.</td>
+</tr>
+</tbody>
+</table>
+<p>The output data resources are CSV. Keep merged headings,
+presentation-only rows, subtotals, and multiple tables on one sheet out
+of the rectangular data frames passed to <code>create_sdp()</code>.</p>
+</section><section><h2 class="section-heading" id="reruns-and-manual-edits">Reruns and manual edits<a class="anchor" aria-label="anchor" href="#reruns-and-manual-edits"></a>
+</h2>
+<hr class="half-width">
+<p>The safest rule is: <strong>generate once, then review the package
+you generated</strong>.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Situation</th>
+<th>Safe action</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>The output folder does not exist</td>
+<td>Run with <code>overwrite = FALSE</code>.</td>
+</tr>
+<tr>
+<td>The example folder already exists and you have not edited it</td>
+<td>Use a new output name, or deliberately remove the disposable example
+outside the lesson before recreating it.</td>
+</tr>
+<tr>
+<td>You manually edited <code>metadata/*.csv</code>
+</td>
+<td>Do not rerun <code>create_sdp()</code> on the same path. Continue
+with <code>read_salmon_datapackage()</code> and validation.</td>
+</tr>
+<tr>
+<td>You need a new version after review</td>
+<td>Read the reviewed package and write a new versioned folder; Session
+6 shows this later workflow.</td>
+</tr>
+</tbody>
+</table>
+<p>In current R/<code>metasalmon</code>, <code>overwrite = TRUE</code>
+re-infers and replaces package files owned by the writer, including
+canonical metadata and declared data resources. Manual edits to those
+files can therefore be lost. Version 0.2.0 and later preserve non-owned
+sidecars by default, but <code>prune = TRUE</code> empties the package
+first and can remove them. Neither option is a substitute for a
+versioned backup or Git history.</p>
+<p>Python participants should use the same conservative rule: after
+manual review, choose a new output path instead of assuming that R and
+Python overwrite behavior is identical.</p>
+</section><section><h2 class="section-heading" id="field-definitions-and-accepted-values">Field definitions and accepted values<a class="anchor" aria-label="anchor" href="#field-definitions-and-accepted-values"></a>
+</h2>
+<hr class="half-width">
+<p>Use the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
+field reference</a> while editing. Four fields that commonly cause
+confusion are:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Field</th>
+<th>Meaning</th>
+<th>Accepted values or rule</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>column_role</code></td>
+<td>What the column does in the table</td>
+<td>
+<code>identifier</code>, <code>attribute</code>,
+<code>temporal</code>, <code>categorical</code>, or
+<code>measurement</code>
+</td>
+</tr>
+<tr>
+<td><code>value_type</code></td>
+<td>The basic type of values in the source column</td>
+<td>
+<code>integer</code>, <code>number</code>, <code>string</code>,
+<code>boolean</code>, <code>date</code>, or <code>datetime</code>
+</td>
+</tr>
+<tr>
+<td><code>required</code></td>
+<td>Whether every data row must contain a value in this source
+column</td>
+<td>
+<code>TRUE</code>, <code>FALSE</code>, or blank; this is different
+from whether an SDP metadata field itself is required.</td>
+</tr>
+<tr>
+<td>
+<code>unit_label</code> / <code>unit_iri</code>
+</td>
+<td>A readable unit and its stable identifier</td>
+<td>
+<code>unit_label</code> is text; <code>unit_iri</code> is required
+for measurement rows and must be a valid absolute IRI.</td>
+</tr>
+</tbody>
+</table>
+<p>Validation messages identify the file, field, and row context when
+possible. Fix the source metadata rather than suppressing the error or
+adding a non-standard header.</p>
+<p>In R/<code>metasalmon</code> 0.2.0 and later, the column dictionary’s
+<code>value_type</code> is the type authority when a package is read. A
+token that does not satisfy the declared type is retained for diagnosis
+instead of being silently converted to <code>NA</code>; validation
+reports the mismatch. This makes accurate <code>value_type</code> review
+part of data preservation, not cosmetic documentation.</p>
 </section><section><h2 class="section-heading" id="spreadsheetcsv-template-path">Spreadsheet/CSV-template path<a class="anchor" aria-label="anchor" href="#spreadsheetcsv-template-path"></a>
 </h2>
 <hr class="half-width">
@@ -754,96 +1195,87 @@ exactly as provided.</p>
 <p>Minimum steps:</p>
 <ol style="list-style-type: decimal">
 <li>Export each source table as a CSV under <code>data/</code>.</li>
-<li>Fill one row in <code>metadata/dataset.csv</code>. The required
-fields are <code>dataset_id</code>, <code>title</code>,
-<code>description</code>, <code>creator</code>,
-<code>contact_name</code>, <code>contact_email</code>, and
-<code>license</code>; add coverage and provenance fields when they are
-useful.</li>
-<li>Fill one row in <code>tables.csv</code> for each data table.</li>
-<li>Fill one row in <code>column_dictionary.csv</code> for each data
-column.</li>
-<li>When any column has <code>column_role = categorical</code>, use
-<code>codes.csv</code>. Each observed non-empty value must have exactly
-one matching row for its <code>dataset_id</code> + <code>table_id</code>
-+ <code>column_name</code> + <code>code_value</code> key.</li>
+<li>Fill one row in <code>metadata/dataset.csv</code>.</li>
+<li>Fill one row in <code>metadata/tables.csv</code> for each data
+table.</li>
+<li>Fill one row in <code>metadata/column_dictionary.csv</code> for each
+data column.</li>
+<li>When any column has <code>column_role = categorical</code>, document
+every observed non-empty value in <code>metadata/codes.csv</code>.</li>
 <li>Optionally write a short README/context note with caveats, methods,
 and known limitations.</li>
-<li>Before publication, generate <code>datapackage.json</code> with
-<code>metasalmon</code>, <code>salmonpy</code>, or another
-SDP-compatible tool and confirm that it agrees with the canonical
-metadata CSVs and referenced data files.</li>
+<li>Hand the package to <code>metasalmon</code> to generate and check
+<code>datapackage.json</code>, run strict validation, and later export
+EML.</li>
 </ol>
 <p>The spreadsheet path is valid when it produces the same canonical CSV
-metadata that either code package writes. The blank template
-intentionally omits <code>datapackage.json</code>; a complete or
-published package needs the generated descriptor as well.</p>
+metadata that the code packages use. The blank template intentionally
+omits <code>datapackage.json</code>; a complete or published package
+needs the generated descriptor as well.</p>
 </section><section><h2 class="section-heading" id="review-state-validation">Review-state validation<a class="anchor" aria-label="anchor" href="#review-state-validation"></a>
 </h2>
 <hr class="half-width">
 <p>Early validation should catch structure problems without requiring
 all links to shared definitions to be complete.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">review_check</span> <span class="op">&lt;-</span> <span class="fu">validate_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span>, require_iris <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">review_check</span> <span class="op">&lt;-</span> <span class="fu">validate_salmon_datapackage</span><span class="op">(</span></span>
+<span>  <span class="va">pkg_path</span>,</span>
+<span>  require_iris <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">issues</span></span>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">missing_terms</span></span></code></pre>
 </div>
-<div id="python-equivalent-1" class="callout">
+<div id="python-equivalent" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <span class="callout-header">Callout</span>
-<div id="python-equivalent-1" class="callout-inner">
+<div id="python-equivalent" class="callout-inner">
 <h3 class="callout-title">Python equivalent</h3>
 <div class="callout-content">
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> validate_salmon_datapackage</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1" aria-label="code-block-5-3"></a>review_check <span class="op">=</span> validate_salmon_datapackage(</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a>    pkg_path,</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1" aria-label="code-block-5-5"></a>    require_iris<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1" aria-label="code-block-5-6"></a>)</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1" aria-label="code-block-5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1" aria-label="code-block-5-8"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"issues"</span>])</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1" aria-label="code-block-5-9"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"missing_terms"</span>])</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> validate_salmon_datapackage</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a>review_check <span class="op">=</span> validate_salmon_datapackage(</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a>    pkg_path,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1" aria-label="code-block-7-5"></a>    require_iris<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1" aria-label="code-block-7-6"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1" aria-label="code-block-7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1" aria-label="code-block-7-8"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"issues"</span>])</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"missing_terms"</span>])</span></code></pre>
 </div>
 </div>
 </div>
 </div>
-<p><code>require_iris = FALSE</code> in R and
-<code>require_iris=False</code> in Python allow links to shared
-definitions to remain unfinished during draft review. Warnings about
-missing links from measurement fields to shared definitions,
-placeholders, or <code>REVIEW:</code> markers can be acceptable in
-review state. Use strict validation only when the package is
-publication-ready, and use the normative R <code>metasalmon</code>
-validator for that final publication gate.</p>
-<div id="challenge-1-create-or-inspect-a-draft-package" class="callout discussion">
+<p><code>require_iris = FALSE</code> allows links to shared definitions
+to remain unfinished during draft review. Warnings about missing
+measurement links, placeholders, or <code>REVIEW:</code> markers can be
+acceptable in review state. Use strict R validation only when the
+package is publication-ready.</p>
+<div id="challenge-1-generate-and-inspect-the-example-templates" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-1-create-or-inspect-a-draft-package" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Create or inspect a draft
-package</h3>
+<div id="challenge-1-generate-and-inspect-the-example-templates" class="callout-inner">
+<h3 class="callout-title">Challenge 1: Generate and inspect the example
+templates</h3>
 <div class="callout-content">
-<p>Use one of the paths above.</p>
-<p>Check that you can answer:</p>
+<p>Run Path A unchanged, then answer:</p>
 <ul>
 <li>Where is the data table?</li>
-<li>Which metadata file describes the dataset?</li>
-<li>Which metadata file describes each table?</li>
-<li>Which metadata file describes each column?</li>
-<li>Which columns, if any, need a code list?</li>
+<li>Which metadata file describes the dataset, each table, each column,
+and categorical codes?</li>
 <li>Which fields still need human review?</li>
-<li>Are any <code>MISSING DESCRIPTION:</code>,
-<code>MISSING METADATA:</code>, or <code>REVIEW:</code> markers still
-present?</li>
+<li>What would you replace when moving to your own data?</li>
+<li>Why would <code>overwrite = TRUE</code> be risky after manual
+edits?</li>
 </ul>
 </div>
 </div>
@@ -856,19 +1288,24 @@ present?</li>
 <div class="callout-inner">
 <div class="callout-content">
 <ul>
-<li>A draft package is a review surface, not a final publication.</li>
+<li>Prepare the project and folders before the demo.</li>
+<li>Run the included example unchanged to learn the generated package
+shape.</li>
 <li>
-<code>metadata/*.csv</code> files are the canonical human-editable
-metadata.</li>
-<li>Non-strict validation belongs early; strict validation belongs near
-the end.</li>
+<code>create_sdp()</code> accepts one data frame or a named list of
+tabular data frames, not arbitrary scientific file structures.</li>
+<li>The field reference is the source for definitions and allowed
+values.</li>
+<li>Protect manual edits: do not casually rerun
+<code>create_sdp(..., overwrite = TRUE)</code> on a reviewed
+package.</li>
 </ul>
 </div>
 </div>
 </div>
-</section></section><section id="aio-session-3"><p>Content from <a href="session-3.html">Capture Context That Travels With the Data</a></p>
+</section></section><section id="aio-session-3"><p>Content from <a href="session-3.html">Use Your Data and Capture Context</a></p>
 <hr>
-<p>Last updated on 2026-07-29 |
+<p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -882,11 +1319,13 @@ the end.</li>
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>What context do data holders need to share so others do not misuse
-the data?</li>
-<li>What belongs in column metadata versus a README/context note?</li>
-<li>How should I organize and read my own data and context files?</li>
-<li>How can context improve later term mapping?</li>
+<li>How do I replace the included example with my own source files?</li>
+<li>How do I represent one dataset that contains several CSVs or
+workbook sheets?</li>
+<li>What belongs in structured metadata versus a README/context
+note?</li>
+<li>How can context improve later term mapping without being sent to an
+unapproved service?</li>
 </ul>
 </div>
 </div>
@@ -896,89 +1335,87 @@ the data?</li>
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>Create an RStudio Project with separate locations for original data,
-context, and generated output.</li>
-<li>Read either the bundled NuSEDS example or a learner-owned CSV using
-a reproducible relative path.</li>
+<li>Read learner-owned source files from <code>raw_data/</code> using
+reproducible relative paths.</li>
+<li>Pass either one table or a named list of tables to
+<code>create_sdp()</code>.</li>
+<li>Keep a multi-table dataset distinct from its individual tables.</li>
 <li>Write useful dataset, table, column, and code descriptions.</li>
 <li>Draft a compact README/context note for reviewers and mapping
 tools.</li>
-<li>Identify caveats that should not be hidden in informal
-comments.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="create-a-project-home-for-your-own-files">Create a project home for your own files<a class="anchor" aria-label="anchor" href="#create-a-project-home-for-your-own-files"></a>
+<section><h2 class="section-heading" id="path-b-replace-the-example-deliberately">Path B: replace the example deliberately<a class="anchor" aria-label="anchor" href="#path-b-replace-the-example-deliberately"></a>
 </h2>
 <hr class="half-width">
-<p>Use an RStudio Project so that every relative path starts from one
-predictable folder.</p>
-<ol style="list-style-type: decimal">
-<li>In RStudio, choose <strong>File &gt; New Project</strong>.</li>
-<li>Choose <strong>New Directory &gt; New Project</strong>, give it a
-name such as <code>salmon-data-workshop</code>, and choose where to
-create it. If you already made the folder, choose <strong>Existing
-Directory</strong> instead.</li>
-<li>Reopen the project later by opening its <code>.Rproj</code> file. Do
-not use <code>setwd()</code> to point at folders elsewhere on your
-computer.</li>
-</ol>
-<p>From the R console, create three working folders:</p>
-<div class="codewrapper sourceCode" id="cb1">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"data-raw"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"context"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"output"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
-</div>
-<p>Use them like this:</p>
+<p>Session 2 used an included dataset, ID, table name, and output
+folder. For personal data, replace all four together:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Example element</th>
+<th>Replace with</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Bundled <code>system.file()</code> path</td>
+<td>A relative path under <code>raw_data/</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>fraser_coho</code> object</td>
+<td>An object name that describes your table</td>
+</tr>
+<tr>
+<td>
+<code>fraser-coho-example</code> and <code>escapement</code>
+IDs</td>
+<td>Stable IDs for your dataset and table</td>
+</tr>
+<tr>
+<td><code>output/fraser-coho-example-sdp</code></td>
+<td>A new output folder for your package</td>
+</tr>
+</tbody>
+</table>
+<p>Keep source files unchanged under <code>raw_data/</code>, explanatory
+files under <code>context/</code>, and generated packages under
+<code>output/</code>.</p>
 <pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj
-  data-raw/
-    my-salmon-data.csv        # unchanged source data
+  raw_data/
+    my-salmon-data.csv
+    related-sites.csv
+    my-salmon-workbook.xlsx
   context/
-    source-data-dictionary.csv # codebook or field definitions
-    methods-and-caveats.md     # methods, caveats, or provenance
+    source-data-dictionary.csv
+    methods-and-caveats.md
   output/
-    my-salmon-sdp/            # generated package goes here</code></pre>
-<p>Copy source files into <code>data-raw/</code> and leave those copies
-unchanged. Put codebooks, methods, and other explanatory files in
-<code>context/</code>. Write generated packages only under
-<code>output/</code>. Use only files you are allowed to bring to the
-workshop, and do not send context files to an external service unless
-that use is approved.</p>
-</section><section><h2 class="section-heading" id="read-the-bundled-example-or-your-own-data">Read the bundled example or your own data<a class="anchor" aria-label="anchor" href="#read-the-bundled-example-or-your-own-data"></a>
+    my-salmon-sdp/</code></pre>
+<p>Use only files you are allowed to bring to the workshop. Do not send
+source or context files to an external service unless that use is
+approved.</p>
+</section><section><h2 class="section-heading" id="one-flat-csv">One flat CSV<a class="anchor" aria-label="anchor" href="#one-flat-csv"></a>
 </h2>
 <hr class="half-width">
-<p>The bundled NuSEDS example comes from the installed R package:</p>
-<div class="codewrapper sourceCode" id="cb3">
+<p>This is the direct replacement for the simple example:</p>
+<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">metasalmon</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">example_data_path</span> <span class="op">&lt;-</span> <span class="fu">system.file</span><span class="op">(</span></span>
-<span>  <span class="st">"extdata"</span>,</span>
-<span>  <span class="st">"nuseds-fraser-coho-2023-2024.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"metasalmon"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fraser_coho</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
-<span>  <span class="va">example_data_path</span>,</span>
-<span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<p>Your own file uses a path relative to the RStudio Project:</p>
-<div class="codewrapper sourceCode" id="cb4">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">own_data_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
-<span>  <span class="st">"data-raw"</span>,</span>
+<span><span class="co"># Read one rectangular source table from the project folder.</span></span>
+<span><span class="va">own_data_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
+<span>  <span class="st">"raw_data"</span>,</span>
 <span>  <span class="st">"my-salmon-data.csv"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -987,7 +1424,156 @@ that use is approved.</p>
 <span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">source_dictionary</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
+<span><span class="co"># Use a new output path. Do not overwrite the reviewed example or an older package.</span></span>
+<span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
+<span>  <span class="va">own_data</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-salmon-sdp"</span><span class="op">)</span>,</span>
+<span>  dataset_id <span class="op">=</span> <span class="st">"my-salmon-data"</span>,</span>
+<span>  table_id <span class="op">=</span> <span class="st">"observations"</span>,</span>
+<span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+</section><section><h2 class="section-heading" id="several-csv-tables-in-one-dataset">Several CSV tables in one dataset<a class="anchor" aria-label="anchor" href="#several-csv-tables-in-one-dataset"></a>
+</h2>
+<hr class="half-width">
+<p>A dataset can contain several related tables. Read each one, give
+each a safe unique <code>table_id</code>, and pass a <strong>named
+list</strong>. The list names become table IDs, so use letters, numbers,
+and underscores rather than workbook display labels with spaces.</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Each list element is one rectangular table in the same dataset.</span></span>
+<span><span class="va">tables</span> <span class="op">&lt;-</span> <span class="fu">list</span><span class="op">(</span></span>
+<span>  escapement <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
+<span>    <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"escapement.csv"</span><span class="op">)</span>,</span>
+<span>    show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  sites <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
+<span>    <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"sites.csv"</span><span class="op">)</span>,</span>
+<span>    show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">multi_pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
+<span>  <span class="va">tables</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-multi-table-sdp"</span><span class="op">)</span>,</span>
+<span>  dataset_id <span class="op">=</span> <span class="st">"my-multi-table-dataset"</span>,</span>
+<span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>The package gets one <code>dataset.csv</code> row, two
+<code>tables.csv</code> rows, one data CSV per table, and one
+<code>column_dictionary.csv</code> row for every column in both
+tables.</p>
+</section><section><h2 class="section-heading" id="excel-workbook-with-several-sheets">Excel workbook with several sheets<a class="anchor" aria-label="anchor" href="#excel-workbook-with-several-sheets"></a>
+</h2>
+<hr class="half-width">
+<p>An Excel workbook is a container. Read each rectangular sheet
+separately and pass the resulting named list just as you did for several
+CSVs.</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">workbook_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
+<span>  <span class="st">"raw_data"</span>,</span>
+<span>  <span class="st">"my-salmon-workbook.xlsx"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Use explicit sheet names so the import is reviewable and reproducible.</span></span>
+<span><span class="va">workbook_tables</span> <span class="op">&lt;-</span> <span class="fu">list</span><span class="op">(</span></span>
+<span>  escapement <span class="op">=</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu">read_excel</span><span class="op">(</span></span>
+<span>    <span class="va">workbook_path</span>,</span>
+<span>    sheet <span class="op">=</span> <span class="st">"Escapement"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  sites <span class="op">=</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu">read_excel</span><span class="op">(</span></span>
+<span>    <span class="va">workbook_path</span>,</span>
+<span>    sheet <span class="op">=</span> <span class="st">"Sites"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">workbook_pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
+<span>  <span class="va">workbook_tables</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-workbook-sdp"</span><span class="op">)</span>,</span>
+<span>  dataset_id <span class="op">=</span> <span class="st">"my-workbook-dataset"</span>,</span>
+<span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>Clean presentation artifacts before packaging: repeated headings,
+merged cells, notes above the header, subtotals, and two unrelated
+tables on one sheet are not one flat table. Keep the original workbook
+unchanged in <code>raw_data/</code> and document any transformation.</p>
+<p>NetCDF is not an Excel-like multi-table container. Its dimensions,
+coordinates, arrays, and attributes are not preserved by this workflow,
+so do not present a flattened extract as the complete source unless that
+derivative has been explicitly reviewed and described.</p>
+<div id="python-companion-for-personal-data" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="python-companion-for-personal-data" class="callout-inner">
+<h3 class="callout-title">Python companion for personal data</h3>
+<div class="callout-content">
+<p>Start Python from the same project root and use the same folder
+layout. This example shows one CSV; for multiple tables, build a
+dictionary whose keys are safe table IDs and whose values are pandas
+DataFrames.</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1" aria-label="code-block-5-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a><span class="im">from</span> salmonpy <span class="im">import</span> create_sdp</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1" aria-label="code-block-5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1" aria-label="code-block-5-6"></a>project_root <span class="op">=</span> Path.cwd()</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1" aria-label="code-block-5-7"></a>own_data_path <span class="op">=</span> project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"my-salmon-data.csv"</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1" aria-label="code-block-5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1" aria-label="code-block-5-9"></a>own_data <span class="op">=</span> pd.read_csv(own_data_path)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1" aria-label="code-block-5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1" aria-label="code-block-5-11"></a>pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1" aria-label="code-block-5-12"></a>    own_data,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1" aria-label="code-block-5-13"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-salmon-sdp"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a>    dataset_id<span class="op">=</span><span class="st">"my-salmon-data"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a>    table_id<span class="op">=</span><span class="st">"observations"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1" aria-label="code-block-5-16"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1" aria-label="code-block-5-17"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1" aria-label="code-block-5-18"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1" aria-label="code-block-5-19"></a>)</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1" aria-label="code-block-5-20"></a></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1" aria-label="code-block-5-21"></a><span class="co"># Multi-table shape when needed:</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1" aria-label="code-block-5-22"></a><span class="co"># tables = {</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1" aria-label="code-block-5-23"></a><span class="co">#     "escapement": pd.read_csv(project_root / "raw_data" / "escapement.csv"),</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1" aria-label="code-block-5-24"></a><span class="co">#     "sites": pd.read_csv(project_root / "raw_data" / "sites.csv"),</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1" aria-label="code-block-5-25"></a><span class="co"># }</span></span></code></pre>
+</div>
+<p>The Python companion creates the core SDP package. Use current
+R/<code>metasalmon</code> for strict final validation and EML/KNB
+publication.</p>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="read-supporting-context-separately">Read supporting context separately<a class="anchor" aria-label="anchor" href="#read-supporting-context-separately"></a>
+</h2>
+<hr class="half-width">
+<p>Source dictionaries, methods notes, and provenance documents help
+people review the inferred templates. Reading these files does not
+automatically merge them into <code>column_dictionary.csv</code>; you
+still decide which statements belong in canonical metadata.</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">source_dictionary</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
 <span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"context"</span>, <span class="st">"source-data-dictionary.csv"</span><span class="op">)</span>,</span>
 <span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -1000,96 +1586,19 @@ that use is approved.</p>
 <span>  <span class="st">"context"</span>,</span>
 <span>  full.names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  recursive <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
-<span>  <span class="va">own_data</span>,</span>
-<span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-salmon-sdp"</span><span class="op">)</span>,</span>
-<span>  dataset_id <span class="op">=</span> <span class="st">"my-salmon-data"</span>,</span>
-<span>  table_id <span class="op">=</span> <span class="st">"observations"</span>,</span>
-<span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p>Change only the file names, dataset ID, table ID, and output folder
-to match your material. <code>source_dictionary</code> and
-<code>context_note</code> show how to read two common context formats.
-For a PDF or Excel workbook, use an appropriate reader rather than
-changing the folder layout. <code>context_paths</code> keeps the
-locations of every context file; people can review them directly, and
-optional approved LLM review can use those paths later.</p>
-<div id="python-equivalent" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
-<p>Start Python from the same project folder and use the same
-<code>data-raw/</code>, <code>context/</code>, and <code>output/</code>
-layout.</p>
-<div class="codewrapper sourceCode" id="cb5">
-<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> importlib.resources <span class="im">import</span> files</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1" aria-label="code-block-5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1" aria-label="code-block-5-5"></a><span class="im">from</span> salmonpy <span class="im">import</span> create_sdp</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1" aria-label="code-block-5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1" aria-label="code-block-5-7"></a>project_root <span class="op">=</span> Path.cwd()</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1" aria-label="code-block-5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1" aria-label="code-block-5-9"></a><span class="cf">for</span> folder <span class="kw">in</span> (<span class="st">"data-raw"</span>, <span class="st">"context"</span>, <span class="st">"output"</span>):</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1" aria-label="code-block-5-10"></a>    (project_root <span class="op">/</span> folder).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1" aria-label="code-block-5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1" aria-label="code-block-5-12"></a>example_data_path <span class="op">=</span> files(<span class="st">"salmonpy.data"</span>).joinpath(</span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1" aria-label="code-block-5-13"></a>    <span class="st">"nuseds-fraser-coho-sample.csv"</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a>)</span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a>fraser_coho <span class="op">=</span> pd.read_csv(example_data_path)</span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1" aria-label="code-block-5-16"></a></span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1" aria-label="code-block-5-17"></a>own_data_path <span class="op">=</span> project_root <span class="op">/</span> <span class="st">"data-raw"</span> <span class="op">/</span> <span class="st">"my-salmon-data.csv"</span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1" aria-label="code-block-5-18"></a>own_data <span class="op">=</span> pd.read_csv(own_data_path)</span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1" aria-label="code-block-5-19"></a></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1" aria-label="code-block-5-20"></a>source_dictionary <span class="op">=</span> pd.read_csv(</span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1" aria-label="code-block-5-21"></a>    project_root <span class="op">/</span> <span class="st">"context"</span> <span class="op">/</span> <span class="st">"source-data-dictionary.csv"</span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1" aria-label="code-block-5-22"></a>)</span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1" aria-label="code-block-5-23"></a>context_note <span class="op">=</span> (</span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1" aria-label="code-block-5-24"></a>    project_root <span class="op">/</span> <span class="st">"context"</span> <span class="op">/</span> <span class="st">"methods-and-caveats.md"</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1" aria-label="code-block-5-25"></a>).read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1" aria-label="code-block-5-26"></a></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1" aria-label="code-block-5-27"></a>context_paths <span class="op">=</span> [</span>
-<span id="cb5-28"><a href="#cb5-28" tabindex="-1" aria-label="code-block-5-28"></a>    <span class="bu">str</span>(path)</span>
-<span id="cb5-29"><a href="#cb5-29" tabindex="-1" aria-label="code-block-5-29"></a>    <span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>((project_root <span class="op">/</span> <span class="st">"context"</span>).rglob(<span class="st">"*"</span>))</span>
-<span id="cb5-30"><a href="#cb5-30" tabindex="-1" aria-label="code-block-5-30"></a>    <span class="cf">if</span> path.is_file()</span>
-<span id="cb5-31"><a href="#cb5-31" tabindex="-1" aria-label="code-block-5-31"></a>]</span>
-<span id="cb5-32"><a href="#cb5-32" tabindex="-1" aria-label="code-block-5-32"></a></span>
-<span id="cb5-33"><a href="#cb5-33" tabindex="-1" aria-label="code-block-5-33"></a>pkg_path <span class="op">=</span> create_sdp(</span>
-<span id="cb5-34"><a href="#cb5-34" tabindex="-1" aria-label="code-block-5-34"></a>    own_data,</span>
-<span id="cb5-35"><a href="#cb5-35" tabindex="-1" aria-label="code-block-5-35"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-salmon-sdp"</span>,</span>
-<span id="cb5-36"><a href="#cb5-36" tabindex="-1" aria-label="code-block-5-36"></a>    dataset_id<span class="op">=</span><span class="st">"my-salmon-data"</span>,</span>
-<span id="cb5-37"><a href="#cb5-37" tabindex="-1" aria-label="code-block-5-37"></a>    table_id<span class="op">=</span><span class="st">"observations"</span>,</span>
-<span id="cb5-38"><a href="#cb5-38" tabindex="-1" aria-label="code-block-5-38"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-39"><a href="#cb5-39" tabindex="-1" aria-label="code-block-5-39"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-40"><a href="#cb5-40" tabindex="-1" aria-label="code-block-5-40"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb5-41"><a href="#cb5-41" tabindex="-1" aria-label="code-block-5-41"></a>)</span></code></pre>
-</div>
-<p>The Python package bundles a smaller NuSEDS teaching fixture than the
-R package. Both are only practice inputs for the same package workflow;
-use <code>own_data</code> when the exercise moves to your files.</p>
-</div>
-</div>
-</div>
+<p><code>context_paths</code> can be reviewed directly and can later be
+supplied to optional, approved LLM-assisted review. Merely creating the
+vector does not send the files anywhere.</p>
 </section><section><h2 class="section-heading" id="context-is-part-of-the-data">Context is part of the data<a class="anchor" aria-label="anchor" href="#context-is-part-of-the-data"></a>
 </h2>
 <hr class="half-width">
 <p>Many data holders hesitate to share data because they know the
 spreadsheet can be misread. A Salmon Data Package should make that local
 knowledge visible.</p>
-<p>Use the metadata tables for structured facts. Use a README/context
-note for the narrative a reviewer needs before interpreting the
-package.</p>
+<p>Use metadata tables for structured facts. Use a README/context note
+for the narrative a reviewer needs before interpreting the package.</p>
 </section><section><h2 class="section-heading" id="what-goes-where">What goes where?<a class="anchor" aria-label="anchor" href="#what-goes-where"></a>
 </h2>
 <hr class="half-width">
@@ -1179,21 +1688,25 @@ it.</p>
 <p>This note is useful for people and for optional LLM-assisted review.
 It gives mapping tools evidence that is not visible from column names
 alone.</p>
-<div id="challenge-1-write-the-context-a-reviewer-needs" class="callout discussion">
+<div id="challenge-1-move-from-the-example-to-your-data" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-1-write-the-context-a-reviewer-needs" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Write the context a reviewer
-needs</h3>
+<div id="challenge-1-move-from-the-example-to-your-data" class="callout-inner">
+<h3 class="callout-title">Challenge 1: Move from the example to your
+data</h3>
 <div class="callout-content">
-<p>For your draft package, improve:</p>
+<p>Choose the single-CSV, multi-CSV, or workbook pattern that matches
+your source.</p>
+<p>Then:</p>
 <ol style="list-style-type: decimal">
-<li>the dataset description;</li>
-<li>one table description;</li>
-<li>five column descriptions;</li>
-<li>one README/context note section.</li>
+<li>confirm the dataset ID and every table ID;</li>
+<li>generate a package at a new path with
+<code>overwrite = FALSE</code>;</li>
+<li>improve the dataset description, one table description, and five
+column descriptions; and</li>
+<li>write one README/context-note section.</li>
 </ol>
 <p>Mark anything you are unsure about as a reviewer question rather than
 hiding it.</p>
@@ -1208,7 +1721,12 @@ hiding it.</p>
 <div class="callout-inner">
 <div class="callout-content">
 <ul>
-<li>Context reduces misuse risk and improves mapping quality.</li>
+<li>Replace the example input, IDs, object name, and output path
+together.</li>
+<li>One dataset may contain one or many tables; pass multiple tables as
+a named list.</li>
+<li>CSV and rectangular Excel sheets are supported after import to data
+frames; NetCDF is not directly supported.</li>
 <li>Metadata tables hold structured facts; README/context notes hold
 narrative caveats.</li>
 <li>A clear description is more valuable than an uncertain link to a
@@ -1219,7 +1737,7 @@ shared definition.</li>
 </div>
 </section></section><section id="aio-session-4"><p>Content from <a href="session-4.html">Review Terms and Measurement Meanings</a></p>
 <hr>
-<p>Last updated on 2026-07-29 |
+<p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1359,6 +1877,26 @@ instructors can prepare this output in advance. Omitting
 <code>sources</code> explicitly, current <code>metasalmon</code> and
 <code>salmonpy</code> treat the vector as a strict allowlist for the
 initial search and any LLM-requested bounded retry.</p>
+<p>Current R/<code>metasalmon</code> resolves its SMN and GCDFO indexes
+once per R session, so repeated searches use one consistent ontology
+snapshot and avoid repeated downloads. Version 0.2.2 also distinguishes
+a failed source lookup from a successful search with zero matches. If a
+result is unexpectedly empty, inspect a focused search before declaring
+a vocabulary gap:</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">probe</span> <span class="op">&lt;-</span> <span class="fu">find_terms</span><span class="op">(</span></span>
+<span>  <span class="st">"spawner count"</span>,</span>
+<span>  role <span class="op">=</span> <span class="st">"property"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">attr</span><span class="op">(</span><span class="va">probe</span>, <span class="st">"diagnostics"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>A warning or non-success diagnostic is evidence of a lookup problem,
+not evidence that no appropriate term exists. Do not turn a temporary
+service outage into a new-term request.</p>
 <p>For the Python exercise, omit <code>sources</code> as shown.
 <code>salmonpy</code> 0.1.6 does not bundle populated SMN or GCDFO
 indexes, so use instructor-prepared R results when the lesson
@@ -1446,6 +1984,13 @@ the model invent IRIs. Current <code>metasalmon</code> and
 <code>salmonpy</code> review a measurement’s variable, property, entity,
 unit, constraint, and method candidates together as one six-slot
 bundle.</p>
+<p>R/<code>metasalmon</code> 0.2.3 retries retryable provider failures
+such as rate limits and temporary service errors, honoring
+<code>Retry-After</code> when present. It also sends the BioPortal key
+in an authorization header and redacts credentials from reported URLs.
+These safeguards reduce avoidable failures; they do not authorize
+unbounded retries, sensitive context, or unattended acceptance of LLM
+decisions.</p>
 <p>Deterministic validators can downgrade an unsupported
 <code>accept</code> decision to <code>review</code>, but they never
 substitute or invent a term. Variable, property, entity, and unit
@@ -1545,7 +2090,7 @@ dictionary, and I-ADOPT itself does not model units or methods.</li>
 </div>
 </section></section><section id="aio-session-5"><p>Content from <a href="session-5.html">Code Lists, SKOS, and Local Vocabulary</a></p>
 <hr>
-<p>Last updated on 2026-07-29 |
+<p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-5.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1741,9 +2286,9 @@ evidence of broad reuse.</li>
 </div>
 </div>
 </div>
-</section></section><section id="aio-session-6"><p>Content from <a href="session-6.html">Route Term Gaps and Plan Publication</a></p>
+</section></section><section id="aio-session-6"><p>Content from <a href="session-6.html">Route Term Gaps, Export EML, and Plan Catalog Publication</a></p>
 <hr>
-<p>Last updated on 2026-07-29 |
+<p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1760,6 +2305,10 @@ evidence of broad reuse.</li>
 <li>What should I do when no existing term fits?</li>
 <li>What information makes a new-term request useful?</li>
 <li>How do review-state and publication-state validation differ?</li>
+<li>How do reviewed SDP fields become a valid EML file?</li>
+<li>How can I preview or perform a guarded KNB catalog upload?</li>
+<li>How should I create a later package version without discarding
+reviewed metadata?</li>
 </ul>
 </div>
 </div>
@@ -1772,7 +2321,12 @@ evidence of broad reuse.</li>
 <li>Turn unresolved mappings into a term-gap plan.</li>
 <li>Route candidate terms to shared, DFO-specific, or local/profile
 governance.</li>
-<li>Describe the final validation and publication-readiness checks.</li>
+<li>Run the strict SDP validation gate before export.</li>
+<li>Complete the SDP-to-EML handoff and write validated EML 2.2.</li>
+<li>Preview an exact KNB/DataONE deposit and distinguish a dry run from
+a persistent live upload.</li>
+<li>Write an intentional new package version from reviewed
+metadata.</li>
 </ul>
 </div>
 </div>
@@ -2086,10 +2640,11 @@ anything.</p>
 </h3>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>validate_salmon_datapackage(pkg_path, require_iris<span class="op">=</span><span class="va">True</span>)</span></code></pre>
 </div>
-<p>For publication, run the R <code>metasalmon</code> strict validator
-shown first. The packages are version-aligned and round-trip tested, but
-Python does not yet enforce every structural publication rule that the
-normative R validator enforces.</p>
+<p>For publication, run the current R <code>metasalmon</code> strict
+validator shown first. <code>salmonpy</code> 0.1.6 provides a useful
+companion check for the core package, but it is not version-aligned with
+R/<code>metasalmon</code> 0.2.3 and does not enforce the full EML/KNB
+publication contract.</p>
 <p>Run it only when:</p>
 <ul>
 <li>review markers such as <code>REVIEW:</code> have been resolved;</li>
@@ -2115,6 +2670,339 @@ data files;</li>
 <p>Deferred measurement gaps are valid in draft or review state. They
 will not pass strict publication validation until the required
 measurement semantic fields are resolved.</p>
+</section><section><h2 class="section-heading" id="map-the-reviewed-sdp-into-eml">Map the reviewed SDP into EML<a class="anchor" aria-label="anchor" href="#map-the-reviewed-sdp-into-eml"></a>
+</h2>
+<hr class="half-width">
+<p><code>metasalmon</code> does not simply rename SDP fields. It builds
+a new EML document and validates the result:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Reviewed SDP source</th>
+<th>EML output</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Dataset ID, title, description, keywords, temporal coverage</td>
+<td>Alternate identifier, title, abstract, keyword set, and temporal
+coverage</td>
+</tr>
+<tr>
+<td>Each table row and referenced data CSV</td>
+<td>One EML <code>dataTable</code> with an identified physical
+object</td>
+</tr>
+<tr>
+<td>Column name, label, description, and <code>value_type</code>
+</td>
+<td>Attribute name, label, definition, and storage type</td>
+</tr>
+<tr>
+<td>
+<code>required = TRUE</code> and table primary keys</td>
+<td>Not-null and primary-key constraints</td>
+</tr>
+<tr>
+<td>Categorical <code>codes.csv</code> rows</td>
+<td>Enumerated-domain code definitions</td>
+</tr>
+<tr>
+<td>Reviewed measurement term and unit IRIs</td>
+<td>Conservative semantic annotations</td>
+</tr>
+<tr>
+<td>Reviewed EML sidecar</td>
+<td>Parties, rights, methods, measurement scales, missing values,
+geographic/taxonomic coverage, provenance, and access intent</td>
+</tr>
+</tbody>
+</table>
+<p>The canonical SDP does not contain every fact EML requires. For
+example, a free-text <code>creator</code> cell cannot safely be guessed
+into structured people, organizations, ORCIDs, and metadata-provider
+roles. Measurement scale and the meanings of missing-value tokens also
+need explicit review.</p>
+</section><section><h2 class="section-heading" id="export-validated-eml-2-2">Export validated EML 2.2<a class="anchor" aria-label="anchor" href="#export-validated-eml-2-2"></a>
+</h2>
+<hr class="half-width">
+<p>Install <code>emld</code> and <code>jsonvalidate</code>, then copy
+the package’s sidecar template once:</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eml_mapping_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
+<span>  <span class="va">pkg_path</span>,</span>
+<span>  <span class="st">"metadata"</span>,</span>
+<span>  <span class="st">"eml-mapping.yml"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 'pkg_path' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">file.exists</span><span class="op">(</span><span class="va">eml_mapping_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">file.copy</span><span class="op">(</span></span>
+<span>    <span class="fu">system.file</span><span class="op">(</span></span>
+<span>      <span class="st">"extdata"</span>,</span>
+<span>      <span class="st">"eml-mapping-template.yml"</span>,</span>
+<span>      package <span class="op">=</span> <span class="st">"metasalmon"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="va">eml_mapping_path</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 'eml_mapping_path' not found</code></pre>
+</div>
+<p>Stop and review the copied YAML. Replace every example value. The
+sidecar must bind the final semantic vocabulary and reviewed-selection
+ledger with their SHA-256 checksums; it must also record reviewed
+parties, rights authorization, source provenance, methods, and one
+measurement-scale/domain entry for every column. Set
+<code>status: final</code> only after that review.</p>
+<p>The detailed, current checklist is in the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd" class="external-link">metasalmon
+post-review and publication workflow</a>. Do not invent dummy parties,
+checksums, rights evidence, measurement scales, or missing-value
+meanings merely to make validation pass.</p>
+<p>When the SDP, its semantic-review evidence, and the sidecar are
+final:</p>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eml_result</span> <span class="op">&lt;-</span> <span class="fu">write_eml_from_sdp</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in `write_eml_from_sdp()`:
+! could not find function "write_eml_from_sdp"</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">path</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 'eml_result' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb16">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">eml_version</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 'eml_result' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb18">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">validation</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 'eml_result' not found</code></pre>
+</div>
+<p>The default output is <code>metadata/eml.xml</code>. An identical
+existing file is an idempotent success. A different existing file is
+protected unless you deliberately pass <code>overwrite = TRUE</code>
+after reviewing why the bytes changed.</p>
+</section><section><h2 class="section-heading" id="preview-the-knbdataone-catalog-deposit">Preview the KNB/DataONE catalog deposit<a class="anchor" aria-label="anchor" href="#preview-the-knbdataone-catalog-deposit"></a>
+</h2>
+<hr class="half-width">
+<p>Use a dry run first. It creates local EML, OAI-ORE, and manifest
+artifacts, but it does not read credentials or make a network
+request:</p>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">knb_plan</span> <span class="op">&lt;-</span> <span class="fu">publish_sdp_to_knb</span><span class="op">(</span></span>
+<span>  <span class="va">pkg_path</span>,</span>
+<span>  public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dry_run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in `publish_sdp_to_knb()`:
+! could not find function "publish_sdp_to_knb"</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb22">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">knb_plan</span><span class="op">$</span><span class="va">status</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 'knb_plan' not found</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb24">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">knb_plan</span><span class="op">$</span><span class="va">manifest_path</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! object 'knb_plan' not found</code></pre>
+</div>
+<p>Review <code>publication/knb-manifest.json</code>. The expanded plan
+lists the original data resources, allowlisted canonical SDP artifacts,
+validated EML science metadata, and the OAI-ORE resource map with exact
+identifiers and checksums. It does not scan and upload arbitrary files
+from the package folder.</p>
+<p>In <code>metasalmon</code> 0.2.3 or later,
+<code>overwrite = TRUE</code> can rebuild conflicting artifacts left by
+an <strong>unpublished dry run</strong> after you correct an input. It
+cannot overwrite anything that reached DataONE; published PIDs are
+immutable and require a reviewed revision.</p>
+</section><section><h2 class="section-heading" id="live-upload-is-a-separate-authorized-action">Live upload is a separate authorized action<a class="anchor" aria-label="anchor" href="#live-upload-is-a-separate-authorized-action"></a>
+</h2>
+<hr class="half-width">
+<p>A live call creates persistent production KNB objects even when
+<code>public = FALSE</code>. Private access is a review posture, not a
+server-side draft. The call requires:</p>
+<ul>
+<li>the exact pre-existing dry-run plan;</li>
+<li>a short-lived DataONE JWT entered only into the current R
+process;</li>
+<li>an authenticated subject matching the reviewed EML metadata
+provider;</li>
+<li>
+<code>confirm = TRUE</code>; and</li>
+<li>authority for the chosen access and redistribution decision.</li>
+</ul>
+<div class="codewrapper sourceCode" id="cb26">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">previous_token</span> <span class="op">&lt;-</span> <span class="fu">getOption</span><span class="op">(</span><span class="st">"dataone_token"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">options</span><span class="op">(</span></span>
+<span>  dataone_token <span class="op">=</span> <span class="fu">rstudioapi</span><span class="fu">::</span><span class="fu">askForPassword</span><span class="op">(</span></span>
+<span>    <span class="st">"Short-lived DataONE JWT"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error:
+! RStudio not running</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb28">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">tryCatch</span><span class="op">(</span></span>
+<span>  <span class="fu">publish_sdp_to_knb</span><span class="op">(</span></span>
+<span>    <span class="va">pkg_path</span>,</span>
+<span>    public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    dry_run <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    representation <span class="op">=</span> <span class="st">"expanded"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  finally <span class="op">=</span> <span class="fu">options</span><span class="op">(</span>dataone_token <span class="op">=</span> <span class="va">previous_token</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in `publish_sdp_to_knb()`:
+! could not find function "publish_sdp_to_knb"</code></pre>
+</div>
+<p>Do not place the token in a script, <code>.Renviron</code>, YAML,
+manifest, command argument, or shell history. Do not switch to
+<code>public = TRUE</code> merely for convenience: public access is a
+separate redistribution decision and requests DataONE preservation
+replicas.</p>
+<p>Publication is complete only when the intended catalog state is
+verified, not merely when KNB stores the objects. If the returned
+manifest says <code>published_pending_catalog</code>, preserve that
+exact status and recheck rather than creating replacement identifiers or
+claiming completion.</p>
+</section><section><h2 class="section-heading" id="later-example-make-a-new-version-after-review">Later example: make a new version after review<a class="anchor" aria-label="anchor" href="#later-example-make-a-new-version-after-review"></a>
+</h2>
+<hr class="half-width">
+<p>After people have edited package metadata over time, do not
+regenerate the same folder from raw data and hope the edits survive.
+Read the reviewed state, make deliberate changes in memory, and write a
+new versioned folder:</p>
+<div class="codewrapper sourceCode" id="cb30">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reviewed_pkg</span> <span class="op">&lt;-</span> <span class="fu">read_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Example of an intentional metadata update. Replace with the real reviewed text.</span></span>
+<span><span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dataset</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span></span>
+<span>    description <span class="op">=</span> <span class="fu">paste</span><span class="op">(</span></span>
+<span>      <span class="va">description</span>,</span>
+<span>      <span class="st">"This version adds the reviewed 2026 return-year records."</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">v2_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-salmon-sdp-v2"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">write_salmon_datapackage</span><span class="op">(</span></span>
+<span>  resources <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">resources</span>,</span>
+<span>  dataset_meta <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dataset</span>,</span>
+<span>  table_meta <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">tables</span>,</span>
+<span>  dict <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dictionary</span>,</span>
+<span>  codes <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">codes</span>,</span>
+<span>  path <span class="op">=</span> <span class="va">v2_path</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">validate_salmon_datapackage</span><span class="op">(</span></span>
+<span>  <span class="va">v2_path</span>,</span>
+<span>  require_iris <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>If data columns changed, update the dictionary. If new categorical
+values appeared, update <code>codes.csv</code>. Rebuild and review
+version-specific semantic, EML, and publication artifacts; do not
+blindly copy old checksum-bound sidecars.</p>
+<p>For a later KNB version, keep the earlier package and verified
+manifest unchanged, add a new reviewed
+<code>publication.revision_key</code> to the new version’s EML sidecar,
+and plan against the preceding <code>revision_manifest</code>. This
+creates an immutable revision rather than overwriting published
+bytes.</p>
 <div id="challenge-1-draft-a-term-gap-plan" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -2136,6 +3024,30 @@ or <code>skip</code>/defer;</li>
 </div>
 </div>
 </div>
+<div id="challenge-2-trace-the-publication-handoff" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<span class="callout-header">Discussion</span>
+<div id="challenge-2-trace-the-publication-handoff" class="callout-inner">
+<h3 class="callout-title">Challenge 2: Trace the publication
+handoff</h3>
+<div class="callout-content">
+<p>Using a finalized instructor-provided package or your own package
+when it is ready:</p>
+<ol style="list-style-type: decimal">
+<li>identify three SDP fields and their EML destinations;</li>
+<li>identify two facts that must come from <code>eml-mapping.yml</code>
+rather than inference;</li>
+<li>run or inspect the result of <code>write_eml_from_sdp()</code>;</li>
+<li>run or inspect a credential-free KNB dry-run manifest; and</li>
+<li>state who would need to authorize a live upload and whether the
+intended access is private or public.</li>
+</ol>
+<p>Do not run a live upload as a classroom experiment.</p>
+</div>
+</div>
+</div>
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -2152,13 +3064,19 @@ routing rationale.</li>
 it does not submit them.</li>
 <li>Strict validation is a publication-readiness check, not the first
 review step.</li>
+<li>EML export is a validated transformation that also requires reviewed
+sidecar facts.</li>
+<li>A KNB dry run is local and reversible; a live call creates
+persistent production objects.</li>
+<li>Later package and catalog versions should be explicit immutable
+revisions, not overwrite attempts.</li>
 </ul>
 </div>
 </div>
 </div>
 </section></section><section id="aio-bonus-session"><p>Content from <a href="bonus-session.html">Optional Extension: Concept Mapping Game</a></p>
 <hr>
-<p>Last updated on 2026-07-14 |
+<p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/bonus-session.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2310,7 +3228,7 @@ requests.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "All in One View",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/aio.html",

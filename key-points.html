@@ -260,7 +260,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Capture Context That Travels With the Data</a>
+        <a href="session-3.html">3. Use Your Data and Capture Context</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -296,7 +296,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="session-6.html">6. Route Term Gaps and Plan Publication</a>
+        <a href="session-6.html">6. Route Term Gaps, Export EML, and Plan Catalog Publication</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -374,25 +374,39 @@
 <section id="session-1"><h2 class="section-heading"><a href="session-1.html">Why Start With a Salmon Data Package?</a></h2>
 <hr class="half-width">
 <ul>
-<li>Start by making the dataset reviewable, not by forcing every field
-to match a shared definition.</li>
-<li>A Salmon Data Package keeps data, metadata, code lists, and context
-together.</li>
-<li>R, Python, and spreadsheet paths converge on the same review
-task.</li>
+<li>The end-to-end target is reviewed SDP metadata, valid EML, and a
+guarded catalog-publication plan.</li>
+<li>A dataset can contain multiple tables; a flat file contains one
+rectangular table.</li>
+<li>The metadata CSVs are visible review surfaces, not hidden software
+internals.</li>
+<li>SDP is a custom Frictionless profile with explicit external-standard
+alignments and salmon-specific rules.</li>
+<li>EML export needs reviewed facts that cannot be inferred from the
+source table alone.</li>
 </ul></section><section id="session-2"><h2 class="section-heading"><a href="session-2.html">Create a Draft Salmon Data Package</a></h2>
 <hr class="half-width">
 <ul>
-<li>A draft package is a review surface, not a final publication.</li>
+<li>Prepare the project and folders before the demo.</li>
+<li>Run the included example unchanged to learn the generated package
+shape.</li>
 <li>
-<code>metadata/*.csv</code> files are the canonical human-editable
-metadata.</li>
-<li>Non-strict validation belongs early; strict validation belongs near
-the end.</li>
-</ul></section><section id="session-3"><h2 class="section-heading"><a href="session-3.html">Capture Context That Travels With the Data</a></h2>
+<code>create_sdp()</code> accepts one data frame or a named list of
+tabular data frames, not arbitrary scientific file structures.</li>
+<li>The field reference is the source for definitions and allowed
+values.</li>
+<li>Protect manual edits: do not casually rerun
+<code>create_sdp(..., overwrite = TRUE)</code> on a reviewed
+package.</li>
+</ul></section><section id="session-3"><h2 class="section-heading"><a href="session-3.html">Use Your Data and Capture Context</a></h2>
 <hr class="half-width">
 <ul>
-<li>Context reduces misuse risk and improves mapping quality.</li>
+<li>Replace the example input, IDs, object name, and output path
+together.</li>
+<li>One dataset may contain one or many tables; pass multiple tables as
+a named list.</li>
+<li>CSV and rectangular Excel sheets are supported after import to data
+frames; NetCDF is not directly supported.</li>
 <li>Metadata tables hold structured facts; README/context notes hold
 narrative caveats.</li>
 <li>A clear description is more valuable than an uncertain link to a
@@ -421,7 +435,7 @@ row for its dataset/table/column/value key.</li>
 categories, but local/profile work is not always SKOS-only.</li>
 <li>Do not promote local vocabulary to shared <code>smn:</code> without
 evidence of broad reuse.</li>
-</ul></section><section id="session-6"><h2 class="section-heading"><a href="session-6.html">Route Term Gaps and Plan Publication</a></h2>
+</ul></section><section id="session-6"><h2 class="section-heading"><a href="session-6.html">Route Term Gaps, Export EML, and Plan Catalog Publication</a></h2>
 <hr class="half-width">
 <ul>
 <li>Missing terms are governance work, not a reason to force bad
@@ -432,6 +446,12 @@ routing rationale.</li>
 it does not submit them.</li>
 <li>Strict validation is a publication-readiness check, not the first
 review step.</li>
+<li>EML export is a validated transformation that also requires reviewed
+sidecar facts.</li>
+<li>A KNB dry run is local and reversible; a live call creates
+persistent production objects.</li>
+<li>Later package and catalog versions should be explicit immutable
+revisions, not overwrite attempts.</li>
 </ul></section><section id="bonus-session"><h2 class="section-heading"><a href="bonus-session.html">Optional Extension: Concept Mapping Game</a></h2>
 <hr class="half-width">
 <ul>
@@ -484,7 +504,7 @@ requests.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Key Points",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/key-points.html",

@@ -260,7 +260,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Capture Context That Travels With the Data</a>
+        <a href="session-3.html">3. Use Your Data and Capture Context</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -296,7 +296,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="session-6.html">6. Route Term Gaps and Plan Publication</a>
+        <a href="session-6.html">6. Route Term Gaps, Export EML, and Plan Catalog Publication</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -375,8 +375,16 @@
 <section><h2 class="section-heading" id="teaching-stance">Teaching stance<a class="anchor" aria-label="anchor" href="#teaching-stance"></a>
 </h2>
 <hr class="half-width">
-<p>Start with the learner’s data, not ontology theory. The first win is
-a package that someone else can review.</p>
+<p>Start with the end goal, then the learner’s data—not ontology theory.
+In the first five minutes, say:</p>
+<blockquote>
+<p>By the end, you will know how a reviewed Salmon Data Package becomes
+a validated EML file and how to preview an upload to a catalog such as
+KNB. A live upload is a separate, authorized publication action.</p>
+</blockquote>
+<p>The first hands-on win is still a package that someone else can
+review. The first code example should only generate templates; do not
+turn it into a full semantic or publication demonstration.</p>
 <p>Before using specialized language, say:</p>
 <blockquote>
 <p>An ontology is a maintained set of concepts and definitions that also
@@ -394,6 +402,12 @@ lectures.</p>
 <li>Measurement columns deserve the most careful semantic review.</li>
 <li>Local context should be preserved and mapped, not renamed away.</li>
 <li>New-term requests are evidence packages for maintainers.</li>
+<li>A dataset may contain several tables; a flat file contains one
+rectangular table.</li>
+<li>The EML sidecar records facts and authority that cannot be inferred
+safely.</li>
+<li>A credential-free KNB dry run is different from a persistent live
+upload.</li>
 </ul></section><section><h2 class="section-heading" id="one-hour-introduction">One-hour introduction<a class="anchor" aria-label="anchor" href="#one-hour-introduction"></a>
 </h2>
 <hr class="half-width">
@@ -410,28 +424,39 @@ lectures.</p>
 <tbody>
 <tr>
 <td>0:00-0:05</td>
-<td>Why salmon data sharing fails when context is implicit</td>
+<td>State the reviewed SDP -&gt; valid EML -&gt; guarded catalog end
+goal</td>
 </tr>
 <tr>
 <td>0:05-0:15</td>
-<td>Show SDP folder anatomy and metadata files</td>
+<td>Define dataset/table/flat file; show filled
+<code>dataset.csv</code>, <code>tables.csv</code>,
+<code>column_dictionary.csv</code>, and <code>codes.csv</code>
+</td>
 </tr>
 <tr>
-<td>0:15-0:30</td>
-<td>Demo <code>metasalmon::create_sdp()</code>; point out the paired
-Python block and blank CSV template</td>
+<td>0:15-0:20</td>
+<td>Confirm the project plus <code>raw_data/</code>,
+<code>context/</code>, and <code>output/</code> before code</td>
 </tr>
 <tr>
-<td>0:30-0:45</td>
-<td>Review one measurement mapping and one code list</td>
+<td>0:20-0:32</td>
+<td>Run the simple <code>create_sdp()</code> template-generation
+example; point out the Python and spreadsheet paths</td>
+</tr>
+<tr>
+<td>0:32-0:45</td>
+<td>Review key field definitions, one measurement row, and one code
+row</td>
 </tr>
 <tr>
 <td>0:45-0:55</td>
-<td>Show one unresolved term and route it</td>
+<td>Trace SDP fields into EML and inspect a credential-free KNB dry-run
+manifest</td>
 </tr>
 <tr>
 <td>0:55-1:00</td>
-<td>Stop points and next steps</td>
+<td>Explain rerun safety, authorization boundaries, and next steps</td>
 </tr>
 </tbody>
 </table>
@@ -440,6 +465,10 @@ Python block and blank CSV template</td>
 </h2>
 <hr class="half-width">
 <table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <thead><tr>
 <th>Time</th>
 <th>Activity</th>
@@ -447,11 +476,19 @@ Python block and blank CSV template</td>
 <tbody>
 <tr>
 <td>0:00-0:30</td>
-<td>Intro and package anatomy</td>
+<td>End goal, dataset/table/flat-file definitions, filled metadata
+examples, and package anatomy</td>
 </tr>
 <tr>
-<td>0:30-1:45</td>
-<td>Create or inspect draft packages</td>
+<td>0:30-0:45</td>
+<td>Create/open project and confirm <code>raw_data/</code>,
+<code>context/</code>, and <code>output/</code>
+</td>
+</tr>
+<tr>
+<td>0:45-1:45</td>
+<td>Generate the simple example, then create or inspect learner-owned
+draft packages</td>
 </tr>
 <tr>
 <td>1:45-2:15</td>
@@ -470,12 +507,13 @@ Python block and blank CSV template</td>
 <td>Review code lists and SKOS/profile choices</td>
 </tr>
 <tr>
-<td>5:00-6:00</td>
+<td>5:00-5:45</td>
 <td>Route term gaps and draft requests</td>
 </tr>
 <tr>
-<td>6:00-6:30</td>
-<td>Publication readiness and next steps</td>
+<td>5:45-6:30</td>
+<td>Strict validation, EML export, KNB dry run, and later-version
+workflow</td>
 </tr>
 </tbody>
 </table>
@@ -484,11 +522,11 @@ Python block and blank CSV template</td>
 </h2>
 <hr class="half-width">
 <p>Pair spreadsheet participants with R-capable participants for
-validation steps, but do not make them wait for code before they can
-reason about metadata. Python participants should run the paired
-<code>salmonpy</code> blocks; they still need the R
-<code>metasalmon</code> final publication check until validator parity
-is complete.</p>
+validation and export steps, but do not make them wait for code before
+they can reason about metadata. Python participants can run the paired
+<code>salmonpy</code> 0.1.6 blocks for the core workflow; current
+R/<code>metasalmon</code> performs the strict final check, EML export,
+and KNB publication.</p>
 <p>Recommended table roles:</p>
 <ul>
 <li>data owner: explains what the data mean;</li>
@@ -502,24 +540,34 @@ is complete.</p>
 <ul>
 <li>Can another person find the data table?</li>
 <li>Can they tell what each row represents?</li>
+<li>Can learners distinguish a dataset, table, flat file, and
+workbook?</li>
 <li>Are required metadata blanks visible?</li>
 <li>Can learners explain an ontology as shared concepts, definitions,
 and relationships?</li>
+<li>Can learners name the end product and explain why EML needs an
+explicit mapping sidecar?</li>
 </ul>
 <p>After Session 2:</p>
 <ul>
+<li>Was the project and folder layout ready before the demo?</li>
 <li>Did the chosen R, Python, or spreadsheet path create the standard
 package files?</li>
+<li>Can learners state whether they are following the unchanged example
+or personal-data path?</li>
 <li>Which fields still contain placeholders or <code>REVIEW:</code>
 suggestions?</li>
+<li>Can they explain what an unsafe rerun could overwrite?</li>
 </ul>
 <p>After Session 3:</p>
 <ul>
-<li>Are source data under <code>data-raw/</code>, context under
+<li>Are source data under <code>raw_data/</code>, context under
 <code>context/</code>, and generated packages under
 <code>output/</code>?</li>
 <li>Can learners read their own file using a path relative to the
 project root?</li>
+<li>If the dataset has several tables, did they pass a named list and
+preserve each table’s row meaning?</li>
 <li>Is enough context present to prevent obvious misuse?</li>
 </ul>
 <p>After Session 4:</p>
@@ -535,6 +583,12 @@ property/entity/constraint?</li>
 <li>Which are DFO-specific?</li>
 <li>Which should stay local/profile?</li>
 <li>Is there enough evidence to make a useful request?</li>
+<li>Did strict R validation pass before EML export?</li>
+<li>Which facts came directly from SDP, and which required
+<code>eml-mapping.yml</code>?</li>
+<li>Was catalog work a dry run or an authorized live upload?</li>
+<li>If updating an older package, was a new version written instead of
+overwriting reviewed or published state?</li>
 </ul></section><section><h2 class="section-heading" id="common-pitfalls">Common pitfalls<a class="anchor" aria-label="anchor" href="#common-pitfalls"></a>
 </h2>
 <hr class="half-width">
@@ -549,17 +603,33 @@ package row, column, code value, or caveat.</li>
 organization would use the same definition.</li>
 <li>Participants add extra columns to canonical metadata CSVs. Put extra
 context in the README or sidecar notes instead.</li>
+<li>Participants call a workbook, sheet, dataset, and table the same
+thing. Ask what the whole collection is, how many rectangular tables it
+contains, and what one row means in each.</li>
+<li>Participants expect NetCDF to work because Excel workbooks do.
+Explain that multi-sheet tabular input is different from
+multidimensional scientific arrays.</li>
+<li>Participants rerun <code>create_sdp(..., overwrite = TRUE)</code>
+after manual edits. Stop and read the reviewed package or write a new
+versioned folder.</li>
+<li>Participants assume an EML file can be made by renaming another XML
+file. Show schema validation and the sidecar requirements.</li>
+<li>Participants treat <code>public = FALSE</code> as a disposable
+server-side draft. A live KNB call still creates persistent production
+objects; use a local dry run for teaching.</li>
 </ul></section><section><h2 class="section-heading" id="facilitator-preparation">Facilitator preparation<a class="anchor" aria-label="anchor" href="#facilitator-preparation"></a>
 </h2>
 <hr class="half-width">
 <p>Before delivery:</p>
 <ul>
 <li>choose a small example dataset;</li>
-<li>prepare an RStudio Project containing <code>data-raw/</code>,
+<li>prepare an RStudio Project containing <code>raw_data/</code>,
 <code>context/</code>, and <code>output/</code>;</li>
-<li>prepare one already-created SDP folder for demonstration;</li>
-<li>verify the R 0.1.6 examples and, when Python participants are
-expected, the <code>salmonpy</code> 0.1.6 companion environment;</li>
+<li>prepare one already-created SDP folder and open the four filled
+metadata CSVs before any code;</li>
+<li>verify current R/<code>metasalmon</code> 0.2.3-or-later examples
+and, when Python participants are expected, the separate
+<code>salmonpy</code> 0.1.6 companion environment;</li>
 <li>prepare one measurement mapping example;</li>
 <li>prepare semantic suggestion output in advance if live vocabulary
 lookup would interrupt the schedule;</li>
@@ -568,8 +638,17 @@ lookup would interrupt the schedule;</li>
 <li>if demonstrating optional LLM review, use an approved provider and
 non-sensitive context, and show how bundle decisions can be downgraded
 to manual review;</li>
-<li>decide whether the authoritative R publication validation will be
-live or instructor-only.</li>
+<li>prepare a strictly valid, fully reviewed package with real
+checksum-bound EML sidecars for the final export exercise; do not
+fabricate these facts during delivery;</li>
+<li>generate and review its credential-free KNB dry-run manifest before
+teaching;</li>
+<li>decide whether strict R validation and EML export will be
+learner-run or instructor-led; and</li>
+<li>default to no live catalog upload. If a live demonstration is
+explicitly authorized, pre-confirm credentials, redistribution
+authority, intended access, rollback/recovery expectations, and how
+<code>published_pending_catalog</code> will be reported.</li>
 </ul></section><section id="aggregate-instructor-notes"></section>
 </div>
     </main>
@@ -614,7 +693,7 @@ live or instructor-only.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Instructor Notes",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor-notes.html",

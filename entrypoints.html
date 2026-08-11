@@ -214,7 +214,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Capture Context That Travels With the Data</a>
+        <a href="session-3.html">3. Use Your Data and Capture Context</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -241,7 +241,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="session-6.html">6. Route Term Gaps and Plan Publication</a>
+        <a href="session-6.html">6. Route Term Gaps, Export EML, and Plan Catalog Publication</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -309,7 +309,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Entrypoints</h1>
-        <p>Last updated on 2026-07-29 |
+        <p>Last updated on 2026-08-11 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/docs/entrypoints.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -351,15 +351,17 @@ personas.</li>
 <div class="section level2">
 <h2 id="current-episode-ladder">Current episode ladder<a class="anchor" aria-label="anchor" href="#current-episode-ladder"></a></h2>
 <ol style="list-style-type: decimal"><li>
-<code>episodes/session-1.Rmd</code>: why start with an SDP and what
-ontology/vocabulary language means in plain terms.</li>
+<code>episodes/session-1.Rmd</code>: frame the EML/catalog end goal,
+define dataset/table/flat file, preview the metadata CSVs, and explain
+the Frictionless/SDP/EML layers.</li>
 <li>
-<code>episodes/session-2.Rmd</code>: create a draft package with the
-primary R workflow, a Python companion, or the blank CSV template.</li>
+<code>episodes/session-2.Rmd</code>: prepare the project before the
+demo, generate a simple draft template, distinguish example and
+personal-data paths, and explain reruns.</li>
 <li>
-<code>episodes/session-3.Rmd</code>: create an RStudio Project, use
-shared R/Python relative paths for learner-owned files, and capture
-context.</li>
+<code>episodes/session-3.Rmd</code>: use shared R/Python relative
+paths for learner-owned single-table, multi-CSV, or multi-sheet Excel
+inputs and capture context.</li>
 <li>
 <code>episodes/session-4.Rmd</code>: generate and review
 deterministic suggestions in R or Python, with optional bundle-aware LLM
@@ -369,7 +371,8 @@ review.</li>
 vocabulary.</li>
 <li>
 <code>episodes/session-6.Rmd</code>: render SMN, GCDFO, profile, or
-skip routes and plan publication.</li>
+skip routes; write validated EML; preview KNB publication; and create a
+later version without discarding reviewed metadata.</li>
 <li>
 <code>episodes/bonus-session.Rmd</code>: optional concept mapping
 extension.</li>
@@ -387,6 +390,10 @@ extension.</li>
 <li>Salmon Data Package specification: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md" class="external-link uri">https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md</a>
 </li>
 <li>Blank SDP CSV template: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link uri">https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template</a>
+</li>
+<li>SDP field reference: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link uri">https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md</a>
+</li>
+<li>metasalmon post-review, EML, and KNB workflow: <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd" class="external-link uri">https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd</a>
 </li>
 </ul></div>
 <div class="section level2">
@@ -455,13 +462,13 @@ server.</p>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Entrypoints",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/entrypoints.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/entrypoints.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-07-29",
+  "dateModified": "2026-08-11",
   "datePublished": "2026-08-11"
 }
 
