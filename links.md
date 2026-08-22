@@ -3,12 +3,13 @@
 [metasalmon-quickstart]: https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html
 [metasalmon-changelog]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md
 [metasalmon-eml-workflow]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd
+[metasalmon-migration]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd
 [metasalmon-eml-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/write_eml_from_sdp.Rd
 [metasalmon-knb-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/publish_sdp_to_knb.Rd
-[salmonpy]: https://github.com/salmon-data-mobilization/metaSmnPy
-[salmonpy-docs]: https://salmon-data-mobilization.github.io/metaSmnPy/
-[salmonpy-parity]: https://salmon-data-mobilization.github.io/metaSmnPy/guides/parity.html
-[salmonpy-release]: https://github.com/salmon-data-mobilization/metaSmnPy/releases/tag/v0.1.6
+[metasalmonpy]: https://github.com/salmon-data-mobilization/metasalmonpy
+[metasalmonpy-docs]: https://salmon-data-mobilization.github.io/metasalmonpy/
+[metasalmonpy-parity]: https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html
+[metasalmonpy-release]: https://github.com/salmon-data-mobilization/metasalmonpy/releases/tag/v0.2.1
 [sdp-spec]: https://github.com/salmon-data-mobilization/smn-data-pkg
 [sdp-specification]: https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md
 [sdp-template]: https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template

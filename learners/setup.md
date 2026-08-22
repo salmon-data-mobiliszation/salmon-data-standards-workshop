@@ -64,17 +64,17 @@ Required:
 - RStudio, Positron, or another R editor; and
 - the `remotes`, `readr`, `dplyr`, `purrr`, `readxl`, and `metasalmon` packages.
 
-Install the current GitHub version used by the workshop:
+Install the released version used by the workshop:
 
 ```r
 install.packages(c("remotes", "readr", "dplyr", "purrr", "readxl"))
-remotes::install_github("salmon-data-mobilization/metasalmon")
+remotes::install_github("salmon-data-mobilization/metasalmon@v0.3.0")
 
-# The revised lesson targets metasalmon 0.2.3 or later.
+# The revised lesson targets the metasalmon 0.3.0 release.
 packageVersion("metasalmon")
 ```
 
-The canonical GitHub `main` branch was version 0.2.3 when this lesson was updated; the latest tagged R release was still 0.1.8. Check the [metasalmon changelog][metasalmon-changelog] before teaching if the version has moved.
+The lesson targets the tagged **metasalmon 0.3.0** release, which implements version `sdp-0.3.0` of the Salmon Data Package specification. Check the [metasalmon changelog][metasalmon-changelog] before teaching if a newer release has shipped. If you have packages built with metasalmon 0.2.x, the [migration guide][metasalmon-migration] explains what changed and how `migrate_sdp_methods()` updates them.
 
 For validated EML export, also install:
 
@@ -96,25 +96,25 @@ Optional:
 
 LLM review is strictly opt-in. Context supplied through `llm_context_files` must be a character vector of existing local file paths, and it does not trigger an LLM call unless `llm_assess = TRUE`. Use only an approved provider and do not send sensitive or restricted material outside an authorized environment.
 
-### Python/salmonpy companion path
+### Python/metasalmonpy companion path
 
-The workshop teaches the core creation and review workflow in R first and then provides a Python equivalent. `salmonpy` 0.1.6 still supports those companion activities, but it is no longer version-aligned with the current R package and does not provide the final EML/KNB workflow taught here.
+The workshop teaches the core creation and review workflow in R first and then provides a Python equivalent. The Python package is **`metasalmonpy` 0.2.1** (the repository was renamed from `metaSmnPy`, and the old `salmonpy` package name is retired). Its version is a parity claim: 0.2.1 mirrors metasalmon 0.2.1 behaviour, so it writes the earlier `sdp-0.2.0` package shape and is not yet aligned with metasalmon 0.3.0. Use it for the companion creation and review activities; run the final publication gate in R.
 
 Required:
 
 - Python 3.9 or newer; and
 - a terminal, notebook, or Python editor.
 
-Create an environment and install the released Python wheel:
+Create an environment and install the tagged release directly from GitHub (no Git installation required):
 
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install \
-  "salmonpy @ https://github.com/salmon-data-mobilization/metaSmnPy/releases/download/v0.1.6/salmonpy-0.1.6-py3-none-any.whl"
+  "metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/tags/v0.2.1.tar.gz"
 ```
 
-The repository is named `metaSmnPy`, while the installed package and Python import are named `salmonpy`. See the [salmonpy documentation][salmonpy-docs]. Python packages can be handed to R/`metasalmon` for final validation, EML export, and catalog publication.
+The installed package and Python import are both named `metasalmonpy`. See the [metasalmonpy documentation][metasalmonpy-docs]. Optional EML/KNB extras exist (`metasalmonpy[eml]`, `[knb]`), but this lesson runs EML export and KNB publication in R. A package created with `metasalmonpy` 0.2.1 follows `sdp-0.2.0`; migrate it with R's `migrate_sdp_methods()` before the strict R validation, EML export, and catalog publication taught in Session 6.
 
 ### Spreadsheet path
 
@@ -137,7 +137,7 @@ Read these only if you have time:
 2. Salmon Data Package examples: [blank CSV template][sdp-template] and [filled minimal example][sdp-example]
 3. metasalmon quickstart: [create and review a package][metasalmon-quickstart]
 4. metasalmon post-review workflow: [validate, export EML, and preview KNB publication][metasalmon-eml-workflow]
-5. salmonpy quickstart: [create and review the same core package structure in Python][salmonpy-docs]
+5. metasalmonpy quickstart: [create and review the same core package structure in Python][metasalmonpy-docs]
 6. Optional for ontology maintainers: [Salmon Domain Ontology conventions][sdo-conventions]
 
 You do not need to read ontology documentation before attending. Session 1 explains the term in plain language before the workshop uses it.

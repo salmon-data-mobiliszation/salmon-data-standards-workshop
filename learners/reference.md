@@ -17,17 +17,18 @@ title: Reference
 
 | Workflow | R primary | Python companion |
 | --- | --- | --- |
-| Create a package | `metasalmon::create_sdp()` | `salmonpy.create_sdp()` |
+| Create a package | `metasalmon::create_sdp()` | `metasalmonpy.create_sdp()` |
 | Read a package | `read_salmon_datapackage()` | `read_salmon_datapackage()` |
 | Suggest shared definitions | `suggest_semantics()` | `suggest_semantics()` |
 | Detect unresolved gaps | `detect_semantic_term_gaps()` | `detect_semantic_term_gaps()` |
 | Render request drafts | `render_ontology_term_request()` | `render_ontology_term_request()` |
 | Validate during review | `validate_salmon_datapackage(..., require_iris = FALSE)` | `validate_salmon_datapackage(..., require_iris=False)` |
-| Run the final publication gate | `validate_salmon_datapackage(..., require_iris = TRUE)` | Hand off to current R/`metasalmon` |
-| Export validated EML | `write_eml_from_sdp()` | Not available in `salmonpy` 0.1.6 |
-| Plan or run a KNB deposit | `publish_sdp_to_knb()` | Not available in `salmonpy` 0.1.6 |
+| Run the final publication gate | `validate_salmon_datapackage(..., require_iris = TRUE)` | Hand off to current R/`metasalmon` for the `sdp-0.3.0` gate |
+| Migrate an `sdp-0.2.0` package | `migrate_sdp_methods()` | Hand off to current R/`metasalmon` |
+| Export validated EML | `write_eml_from_sdp()` | `write_eml_from_sdp()` (at 0.2.1 parity; this lesson runs it in R) |
+| Plan or run a KNB deposit | `publish_sdp_to_knb()` | `publish_sdp_to_knb()` (at 0.2.1 parity; this lesson runs it in R) |
 
-The revised lesson targets R/`metasalmon` 0.2.3 or later from the canonical GitHub `main` branch. The latest tagged R release at the time of revision was 0.1.8, and the Python companion remains `salmonpy` 0.1.6. Do not describe the implementations as fully version- or feature-aligned.
+The lesson targets the tagged **R/`metasalmon` 0.3.0 release** (specification `sdp-0.3.0`). The Python companion is **`metasalmonpy` 0.2.1**, whose version is a parity claim: it mirrors metasalmon 0.2.1 behaviour and writes the earlier `sdp-0.2.0` package shape. Do not describe the implementations as fully version- or feature-aligned, and migrate Python-created packages with `migrate_sdp_methods()` before the R publication gate.
 
 ## Recent metasalmon updates reflected here
 
@@ -38,6 +39,10 @@ The revised lesson targets R/`metasalmon` 0.2.3 or later from the canonical GitH
 | 0.2.1 | Made semantic ranking locale-independent and derived descriptor schema URLs from the validated SDP bundle. |
 | 0.2.2 | Cached term indexes for consistent, faster sessions and made failed vocabulary lookups distinguishable from successful zero-match searches. |
 | 0.2.3 | Allowed corrected unpublished KNB dry runs to be replanned with `overwrite = TRUE`, added bounded provider retries, and moved/redacted the BioPortal credential. |
+| 0.2.4 | Made the empty field the single canonical missing-value token: a literal `"NA"` in data now round-trips as the string it is (it is a real fisheries gear code), so hand-authored packages using `NA` to mean missing must rewrite those cells as empty fields. |
+| 0.2.5 | Extended credential redaction to all qualified `*_token` names in captured errors and reports. |
+| 0.2.6 | Enforced declared `primary_key` uniqueness as a validation error, warned on value-like column names (pointing at `tidyr::pivot_longer()`), and surfaced unresolved `MISSING METADATA:` placeholders in default validation. |
+| 0.3.0 | Implemented `sdp-0.3.0`: removed the dictionary `method_iri` and the `metadata/methods.csv` registry, added `statistical_modifier_iri`, moved methods to `tables.csv`/`protocol_iri`/`codes.csv`, and added `migrate_sdp_methods()` for 0.2.x packages. |
 
 See the [metasalmon changelog][metasalmon-changelog] for the full implementation record. These changes do not turn a draft package, failed lookup, private deposit, or Member Node write into publication evidence.
 
@@ -75,7 +80,7 @@ The output SDP data resources are CSV files.
 | File | Purpose |
 | --- | --- |
 | `metadata/dataset.csv` | Dataset-level title, description, contact, license, coverage, discovery, and provenance fields |
-| `metadata/tables.csv` | One row per table: file path, label, row meaning, observation unit, and primary key |
+| `metadata/tables.csv` | One row per table: file path, label, row meaning, observation unit, primary key, and table-level `method_iri`/`protocol_iri`/`protocol_citation` |
 | `metadata/column_dictionary.csv` | One row per data column: labels, definitions, roles, types, units, and semantic fields |
 | `metadata/codes.csv` | Required when categorical columns exist; one row per observed non-empty dataset/table/column/value key |
 | `data/*.csv` | One or more tabular data resources |
@@ -94,7 +99,7 @@ Complete filled examples are linked from Session 1: [dataset.csv][sdp-example-da
 | Frictionless Data Package/Table Schema | Package/resource descriptors, field types and constraints, and the schemas used to validate canonical CSVs |
 | SDP custom profile | Exact files, columns, joins, `column_role`, cross-table rules, and publication requirements |
 | I-ADOPT | Measurement property, entity, and optional constraint roles |
-| SOSA | Procedure/method alignment for `method_iri` |
+| SOSA | Procedure alignment for table-level `method_iri` and method code values (`term_type = sosa:Procedure` in `codes.csv`) |
 | SKOS/OWL and published vocabularies | Reusable terms and code meanings |
 | QUDT or another reviewed unit vocabulary | Unit IRIs |
 | EML | A downstream ecological metadata export and catalog representation, not the authoring source of every SDP field |
@@ -137,7 +142,7 @@ Value types mean:
 
 ## Measurement semantic fields
 
-For publication-ready measurement rows, SDP requires `term_iri`, `property_iri`, `entity_iri`, and `unit_iri`. Constraint and method IRIs remain optional.
+For publication-ready measurement rows, SDP requires `term_iri`, `property_iri`, `entity_iri`, and `unit_iri`. Constraint and statistical-modifier IRIs remain optional.
 
 | Field | Publication requirement | Meaning |
 | --- | --- | --- |
@@ -146,9 +151,11 @@ For publication-ready measurement rows, SDP requires `term_iri`, `property_iri`,
 | `entity_iri` | Required | I-ADOPT entity/object of interest |
 | `constraint_iri` | Optional | I-ADOPT constraint that narrows the meaning; multiple IRIs are semicolon-separated |
 | `unit_iri` | Required | Unit IRI, usually from a unit vocabulary such as QUDT |
-| `method_iri` | Optional | Procedure or method IRI, aligned to SOSA and outside the I-ADOPT core roles |
+| `statistical_modifier_iri` | Optional | I-ADOPT statistical modifier: fill it only when the column is an aggregation or summary (mean, maximum, minimum, total, peak), because the summary is part of the variable's identity |
 
-Do not use `property_iri`, `entity_iri`, `constraint_iri`, or `method_iri` as general relationship fields for identifiers, attributes, or categorical columns.
+Since `sdp-0.3.0`, the dictionary has no `method_iri` column and the `metadata/methods.csv` registry is gone. A method lives where it is constant: `tables.csv$method_iri` for a whole-table procedure, `protocol_iri`/`protocol_citation` on `tables.csv` or `dataset.csv` for a citable document, or a code column resolving through `codes.csv$term_iri` when the method varies by row.
+
+Do not use `property_iri`, `entity_iri`, `constraint_iri`, or `statistical_modifier_iri` as general relationship fields for identifiers, attributes, or categorical columns.
 
 ## SDP-to-EML crosswalk
 
@@ -243,6 +250,8 @@ Include:
 **Salmon Data Package**: A folder of one or more data tables and canonical metadata CSVs that makes a dataset easier to review, validate, transform, and share.
 
 **Semantic link or mapping**: A connection from a local column or code value to a shared definition; semantic simply means "about meaning."
+
+**Statistical modifier**: The aggregation or summary that is part of a measurement variable's identity — a mean, maximum, minimum, total, or peak. Recorded in `statistical_modifier_iri`; left blank for plain measurements.
 
 **Table**: A rectangular set of rows and columns with one consistent row meaning.
 

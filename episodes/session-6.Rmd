@@ -26,6 +26,16 @@ exercises: 55
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+```{r metasalmon-available, include = FALSE}
+# This chunk runs when the lesson is built. It proves the pinned metasalmon
+# release from the lesson-requirements lockfile loads, and it is what keeps
+# {metasalmon} registered as a lesson dependency for sandpaper's renv
+# machinery. The workflow chunks below are display-only (eval = FALSE): they
+# need a fully reviewed package, a completed EML sidecar, and - for the live
+# call - credentials, none of which exist at build time.
+library(metasalmon)
+```
+
 ## A gap is not a failure
 
 When no candidate term fits, do not force the closest match. Record the gap and decide where it belongs.
@@ -118,7 +128,7 @@ if (nrow(gaps) == 0) {
 from pathlib import Path
 
 import pandas as pd
-from salmonpy import (
+from metasalmonpy import (
     detect_semantic_term_gaps,
     read_salmon_datapackage,
     render_ontology_term_request,
@@ -220,7 +230,7 @@ issue_preview
 ## Python equivalent
 
 ```python
-from salmonpy import submit_term_request_issues
+from metasalmonpy import submit_term_request_issues
 
 if requests.empty:
     issue_preview = pd.DataFrame()
@@ -279,7 +289,7 @@ Python can run a useful companion check:
 validate_salmon_datapackage(pkg_path, require_iris=True)
 ```
 
-For publication, run the current R `metasalmon` strict validator shown first. `salmonpy` 0.1.6 provides a useful companion check for the core package, but it is not version-aligned with R/`metasalmon` 0.2.3 and does not enforce the full EML/KNB publication contract.
+For publication, run the current R `metasalmon` strict validator shown first. `metasalmonpy` 0.2.1 provides a useful companion check for the core package, but its version is a parity claim against metasalmon 0.2.1: it validates the earlier `sdp-0.2.0` shape and is not aligned with metasalmon 0.3.0. The R validator is the gate against the current specification.
 
 Run it only when:
 
@@ -313,9 +323,11 @@ The canonical SDP does not contain every fact EML requires. For example, a free-
 
 ## Export validated EML 2.2
 
+The code blocks from here to the end of this section operate on `pkg_path`, the reviewed package you have been building through the workshop; they are shown for you to run in your own session and are not executed when the lesson website is built.
+
 Install `emld` and `jsonvalidate`, then copy the package's sidecar template once:
 
-```{r, purl = FALSE}
+```{r, eval = FALSE, purl = FALSE}
 eml_mapping_path <- file.path(
   pkg_path,
   "metadata",
@@ -340,7 +352,7 @@ The detailed, current checklist is in the [metasalmon post-review and publicatio
 
 When the SDP, its semantic-review evidence, and the sidecar are final:
 
-```{r, purl = FALSE}
+```{r, eval = FALSE, purl = FALSE}
 eml_result <- write_eml_from_sdp(pkg_path)
 
 eml_result$path
@@ -354,7 +366,7 @@ The default output is `metadata/eml.xml`. An identical existing file is an idemp
 
 Use a dry run first. It creates local EML, OAI-ORE, and manifest artifacts, but it does not read credentials or make a network request:
 
-```{r, purl = FALSE}
+```{r, eval = FALSE, purl = FALSE}
 knb_plan <- publish_sdp_to_knb(
   pkg_path,
   public = FALSE,
@@ -381,7 +393,7 @@ A live call creates persistent production KNB objects even when `public = FALSE`
 - `confirm = TRUE`; and
 - authority for the chosen access and redistribution decision.
 
-```{r, purl = FALSE}
+```{r, eval = FALSE, purl = FALSE}
 previous_token <- getOption("dataone_token")
 
 options(
