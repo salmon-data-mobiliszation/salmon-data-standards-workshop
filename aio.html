@@ -373,7 +373,7 @@
         
 <section id="aio-session-1"><p>Content from <a href="session-1.html">Why Start With a Salmon Data Package?</a></p>
 <hr>
-<p>Last updated on 2026-08-11 |
+<p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -623,8 +623,9 @@ catalog profile.</td>
 </tr>
 <tr>
 <td>I-ADOPT, SOSA, SKOS/OWL, and unit vocabularies</td>
-<td>External semantic roles for measurement property/entity/constraint,
-methods, reusable concepts, code lists, and units.</td>
+<td>External semantic roles for measurement
+property/entity/constraint/statistical modifier, table- and code-level
+procedures, reusable concepts, code lists, and units.</td>
 </tr>
 <tr>
 <td>Salmon Data Package profile</td>
@@ -733,7 +734,7 @@ publication.</td>
 </tr>
 <tr>
 <td>Python</td>
-<td><code>salmonpy.create_sdp()</code></td>
+<td><code>metasalmonpy.create_sdp()</code></td>
 <td>Hand the compatible SDP to current R/<code>metasalmon</code> for the
 final gate.</td>
 </tr>
@@ -745,10 +746,12 @@ validation and export.</td>
 </tr>
 </tbody>
 </table>
-<p>The revised R examples target <code>metasalmon</code> 0.2.3 or later
-from GitHub <code>main</code>. The Python companion remains
-<code>salmonpy</code> 0.1.6, so do not claim complete version or feature
-parity.</p>
+<p>The R examples target the tagged <code>metasalmon</code> 0.3.0
+release, which implements <code>sdp-0.3.0</code>. The Python companion
+is <code>metasalmonpy</code> 0.2.1, whose version is a parity claim
+against metasalmon 0.2.1 — it writes the earlier <code>sdp-0.2.0</code>
+shape — so do not claim complete version or feature parity, and expect
+R’s <code>migrate_sdp_methods()</code> in the handoff.</p>
 <div id="challenge-1-pick-your-package" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -795,7 +798,7 @@ source table alone.</li>
 </div>
 </section></section><section id="aio-session-2"><p>Content from <a href="session-2.html">Create a Draft Salmon Data Package</a></p>
 <hr>
-<p>Last updated on 2026-08-11 |
+<p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -965,9 +968,9 @@ companion path.</p>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a><span class="im">from</span> salmonpy <span class="im">import</span> create_sdp</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> create_sdp</span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>data_path <span class="op">=</span> files(<span class="st">"salmonpy.data"</span>).joinpath(</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>data_path <span class="op">=</span> files(<span class="st">"metasalmonpy.data"</span>).joinpath(</span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a>    <span class="st">"nuseds-fraser-coho-sample.csv"</span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1" aria-label="code-block-4-9"></a>)</span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1" aria-label="code-block-4-10"></a></span>
@@ -990,9 +993,13 @@ companion path.</p>
 </div>
 <p>The R and Python packages bundle separate practice fixtures. They
 demonstrate the same core package structure, but do not use their row
-counts to test cross-language parity. Python may also write a hidden
-<code>.salmonpy-package</code> bookkeeping file. The final EML and KNB
-workflow is R-only in the versions used here.</p>
+counts to test cross-language parity. Each writer also leaves a hidden
+bookkeeping file (<code>.metasalmon-package</code> in R,
+<code>.metasalmonpy-package</code> in Python). Note that
+<code>metasalmonpy</code> 0.2.1 writes the earlier
+<code>sdp-0.2.0</code> package shape; the final EML and KNB workflow
+taught here runs in R against the current <code>sdp-0.3.0</code>
+specification.</p>
 </div>
 </div>
 </div>
@@ -1014,6 +1021,7 @@ workflow is R-only in the versions used here.</p>
 <pre class="text"><code><span><span class="va">output</span><span class="op">/</span><span class="va">fraser</span><span class="op">-</span><span class="va">coho</span><span class="op">-</span><span class="va">example</span><span class="op">-</span><span class="va">sdp</span><span class="op">/</span></span>
 <span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span></span>
 <span>  <span class="va">datapackage.json</span></span>
+<span>  <span class="va">.metasalmon</span><span class="op">-</span><span class="va">package</span>          <span class="co"># hidden writer bookkeeping file; leave it alone</span></span>
 <span>  <span class="va">metadata</span><span class="op">/</span></span>
 <span>    <span class="va">dataset.csv</span></span>
 <span>    <span class="va">tables.csv</span></span>
@@ -1240,7 +1248,7 @@ all links to shared definitions to be complete.</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> validate_salmon_datapackage</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> validate_salmon_datapackage</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a>review_check <span class="op">=</span> validate_salmon_datapackage(</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a>    pkg_path,</span>
@@ -1305,7 +1313,7 @@ package.</li>
 </div>
 </section></section><section id="aio-session-3"><p>Content from <a href="session-3.html">Use Your Data and Capture Context</a></p>
 <hr>
-<p>Last updated on 2026-08-11 |
+<p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1533,7 +1541,7 @@ DataFrames.</p>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1" aria-label="code-block-5-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a><span class="im">from</span> salmonpy <span class="im">import</span> create_sdp</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> create_sdp</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1" aria-label="code-block-5-5"></a></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1" aria-label="code-block-5-6"></a>project_root <span class="op">=</span> Path.cwd()</span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1" aria-label="code-block-5-7"></a>own_data_path <span class="op">=</span> project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"my-salmon-data.csv"</span></span>
@@ -1556,9 +1564,12 @@ DataFrames.</p>
 <span id="cb5-24"><a href="#cb5-24" tabindex="-1" aria-label="code-block-5-24"></a><span class="co">#     "sites": pd.read_csv(project_root / "raw_data" / "sites.csv"),</span></span>
 <span id="cb5-25"><a href="#cb5-25" tabindex="-1" aria-label="code-block-5-25"></a><span class="co"># }</span></span></code></pre>
 </div>
-<p>The Python companion creates the core SDP package. Use current
-R/<code>metasalmon</code> for strict final validation and EML/KNB
-publication.</p>
+<p>The Python companion creates the core SDP package in the
+<code>sdp-0.2.0</code> shape (<code>metasalmonpy</code> 0.2.1 mirrors
+metasalmon 0.2.1). Use current R/<code>metasalmon</code> — migrating
+first with <code>migrate_sdp_methods()</code> — for strict final
+validation and EML/KNB publication against the current
+specification.</p>
 </div>
 </div>
 </div>
@@ -1737,7 +1748,7 @@ shared definition.</li>
 </div>
 </section></section><section id="aio-session-4"><p>Content from <a href="session-4.html">Review Terms and Measurement Meanings</a></p>
 <hr>
-<p>Last updated on 2026-08-11 |
+<p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1837,7 +1848,7 @@ package state.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> (</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a>    read_salmon_datapackage,</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a>    suggest_semantics,</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>)</span>
@@ -1875,14 +1886,14 @@ package state.</p>
 instructors can prepare this output in advance. Omitting
 <code>sources</code> uses role-aware defaults. If you supply
 <code>sources</code> explicitly, current <code>metasalmon</code> and
-<code>salmonpy</code> treat the vector as a strict allowlist for the
+<code>metasalmonpy</code> treat the vector as a strict allowlist for the
 initial search and any LLM-requested bounded retry.</p>
 <p>Current R/<code>metasalmon</code> resolves its SMN and GCDFO indexes
 once per R session, so repeated searches use one consistent ontology
-snapshot and avoid repeated downloads. Version 0.2.2 also distinguishes
-a failed source lookup from a successful search with zero matches. If a
-result is unexpectedly empty, inspect a focused search before declaring
-a vocabulary gap:</p>
+snapshot and avoid repeated downloads. It also distinguishes a failed
+source lookup from a successful search with zero matches (since 0.2.2).
+If a result is unexpectedly empty, inspect a focused search before
+declaring a vocabulary gap:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1898,9 +1909,10 @@ a vocabulary gap:</p>
 not evidence that no appropriate term exists. Do not turn a temporary
 service outage into a new-term request.</p>
 <p>For the Python exercise, omit <code>sources</code> as shown.
-<code>salmonpy</code> 0.1.6 does not bundle populated SMN or GCDFO
-indexes, so use instructor-prepared R results when the lesson
-specifically reviews those two sources.</p>
+<code>metasalmonpy</code> 0.2.1 searches the same SMN and GCDFO sources;
+a failed or empty ontology fetch raises an error rather than returning
+an empty index, so treat that error as a lookup problem, not a missing
+term.</p>
 </section><section><h2 class="section-heading" id="treat-suggestions-as-drafts">Treat suggestions as drafts<a class="anchor" aria-label="anchor" href="#treat-suggestions-as-drafts"></a>
 </h2>
 <hr class="half-width">
@@ -1922,7 +1934,7 @@ plan.</p>
 <hr class="half-width">
 <p>For <code>column_role = measurement</code>, SDP combines a variable
 link, I-ADOPT-style meaning components, a unit link, and an optional
-method/procedure link.</p>
+statistical-modifier link.</p>
 <table class="table">
 <colgroup>
 <col width="50%">
@@ -1956,17 +1968,31 @@ meaning?</td>
 <td>What unit are the values in?</td>
 </tr>
 <tr>
-<td><code>method_iri</code></td>
-<td>What method or procedure matters for interpretation, modeled outside
-I-ADOPT?</td>
+<td><code>statistical_modifier_iri</code></td>
+<td>Optional: is the column an aggregation or summary — a mean, maximum,
+minimum, total, or peak — rather than a single observation?</td>
 </tr>
 </tbody>
 </table>
+<p>Since <code>sdp-0.3.0</code> (metasalmon 0.3.0), <strong>methods do
+not live in the column dictionary</strong>. A method describes how a
+value was produced, not what the column is, so it is recorded where it
+is actually constant: a procedure shared by a whole table goes in
+<code>tables.csv$method_iri</code>, a citable protocol document goes in
+<code>protocol_iri</code>/<code>protocol_citation</code> on
+<code>tables.csv</code> or <code>dataset.csv</code>, and a method that
+varies row by row becomes a code column in the data whose values resolve
+through <code>codes.csv$term_iri</code> to shared-vocabulary procedures.
+A statistical modifier is the one kind of “how” that stays in the
+dictionary, because a <em>mean</em> weight and a <em>maximum</em> weight
+are different variables. The <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd" class="external-link">metasalmon
+migration guide</a> explains the change and migrates 0.2.x packages.</p>
 <p>Important boundary: <code>property_iri</code>,
-<code>entity_iri</code>, and <code>constraint_iri</code> are
-I-ADOPT-style measurement-variable components. <code>unit_iri</code> and
-<code>method_iri</code> are also measurement semantics, but units and
-methods are not I-ADOPT roles. Do not use these fields as
+<code>entity_iri</code>, <code>constraint_iri</code>, and
+<code>statistical_modifier_iri</code> are I-ADOPT-style
+measurement-variable components. <code>unit_iri</code> is also
+measurement semantics, but units are not an I-ADOPT role, and methods
+are not part of the variable at all. Do not use these fields as
 general-purpose relationship fields for identifiers, attributes, or
 categorical columns.</p>
 <div id="optional-llm-assisted-bundle-review" class="callout">
@@ -1980,12 +2006,17 @@ categorical columns.</p>
 <p>Adding <code>llm_assess = TRUE</code> in R or
 <code>llm_assess=True</code> in Python, plus an approved provider and
 model, asks the LLM to judge the retrieved candidates; it does not let
-the model invent IRIs. Current <code>metasalmon</code> and
-<code>salmonpy</code> review a measurement’s variable, property, entity,
-unit, constraint, and method candidates together as one six-slot
-bundle.</p>
-<p>R/<code>metasalmon</code> 0.2.3 retries retryable provider failures
-such as rate limits and temporary service errors, honoring
+the model invent IRIs. In metasalmon 0.3.0, a measurement’s variable,
+property, entity, unit, constraint, and statistical-modifier candidates
+are reviewed together as one bundle; a statistical-modifier candidate is
+proposed only when the column’s name, label, or description names an
+aggregation (total, mean, maximum, minimum, peak). Method candidates
+survive only for code values, where codes resolve to shared
+<code>sosa:Procedure</code> concepts. <code>metasalmonpy</code> 0.2.1
+still reviews the earlier bundle shape, which included a dictionary
+method slot.</p>
+<p>R/<code>metasalmon</code> retries retryable provider failures such as
+rate limits and temporary service errors, honoring
 <code>Retry-After</code> when present. It also sends the BioPortal key
 in an authorization header and redacts credentials from reported URLs.
 These safeguards reduce avoidable failures; they do not authorize
@@ -1993,10 +2024,9 @@ unbounded retries, sensitive context, or unattended acceptance of LLM
 decisions.</p>
 <p>Deterministic validators can downgrade an unsupported
 <code>accept</code> decision to <code>review</code>, but they never
-substitute or invent a term. Variable, property, entity, and unit
-candidates may become <code>REVIEW:</code> drafts on the
-<code>create_sdp()</code> path. Constraint and method candidates always
-remain manual-review suggestions.</p>
+substitute or invent a term. Suggested candidates written into the
+dictionary carry the <code>REVIEW:</code> prefix until a person confirms
+them.</p>
 <p>Context files must be passed as existing local file paths through
 <code>llm_context_files</code>, and context alone does not enable an LLM
 call. Use only an approved provider and appropriate non-sensitive
@@ -2040,9 +2070,15 @@ definition</td>
 <td>Fish or individuals</td>
 </tr>
 <tr>
+<td>Statistical modifier</td>
+<td>Blank here; fill it only when the column is an aggregation, such as
+a <em>peak</em> or <em>mean</em> count</td>
+</tr>
+<tr>
 <td>Method</td>
-<td>Use only if the survey or estimator is part of the variable
-meaning</td>
+<td>Not a dictionary field: record the survey or estimator on
+<code>tables.csv</code> when it is constant for the table, or as a code
+column when it varies by row</td>
 </tr>
 </tbody>
 </table>
@@ -2063,7 +2099,9 @@ meaning</td>
 <li>write one sentence explaining the decision.</li>
 </ul>
 <p>For the measurement column, also fill or review the property, entity,
-unit, and optional constraint/method fields.</p>
+unit, and optional constraint and statistical-modifier fields, and
+decide where any method information belongs (table level, protocol
+citation, or code column).</p>
 </div>
 </div>
 </div>
@@ -2083,14 +2121,16 @@ answers.</li>
 <li>Optional LLM review selects from deterministic candidates and
 remains subject to deterministic checks.</li>
 <li>SDP measurement semantic fields are measurement-only in the column
-dictionary, and I-ADOPT itself does not model units or methods.</li>
+dictionary; methods live at the table, protocol, or code level rather
+than in the dictionary, and I-ADOPT itself does not model units or
+methods.</li>
 </ul>
 </div>
 </div>
 </div>
 </section></section><section id="aio-session-5"><p>Content from <a href="session-5.html">Code Lists, SKOS, and Local Vocabulary</a></p>
 <hr>
-<p>Last updated on 2026-08-11 |
+<p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-5.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2147,7 +2187,7 @@ or duplicate that key.</p>
 blank <code>code_value</code> documents an external vocabulary but does
 not cover any value observed in the data.</p>
 <p>This work is language-independent: <code>metasalmon</code> and
-<code>salmonpy</code> read and write the same
+<code>metasalmonpy</code> read and write the same
 <code>metadata/codes.csv</code> structure.</p>
 <table class="table">
 <thead><tr>
@@ -2288,7 +2328,7 @@ evidence of broad reuse.</li>
 </div>
 </section></section><section id="aio-session-6"><p>Content from <a href="session-6.html">Route Term Gaps, Export EML, and Plan Catalog Publication</a></p>
 <hr>
-<p>Last updated on 2026-08-11 |
+<p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2436,7 +2476,7 @@ package state.</p>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1" aria-label="code-block-3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1" aria-label="code-block-3-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1" aria-label="code-block-3-4"></a><span class="im">from</span> salmonpy <span class="im">import</span> (</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1" aria-label="code-block-3-4"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1" aria-label="code-block-3-5"></a>    detect_semantic_term_gaps,</span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1" aria-label="code-block-3-6"></a>    read_salmon_datapackage,</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1" aria-label="code-block-3-7"></a>    render_ontology_term_request,</span>
@@ -2554,7 +2594,7 @@ anything:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> submit_term_request_issues</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> submit_term_request_issues</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1" aria-label="code-block-5-3"></a><span class="cf">if</span> requests.empty:</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a>    issue_preview <span class="op">=</span> pd.DataFrame()</span>
@@ -2641,10 +2681,11 @@ anything.</p>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>validate_salmon_datapackage(pkg_path, require_iris<span class="op">=</span><span class="va">True</span>)</span></code></pre>
 </div>
 <p>For publication, run the current R <code>metasalmon</code> strict
-validator shown first. <code>salmonpy</code> 0.1.6 provides a useful
-companion check for the core package, but it is not version-aligned with
-R/<code>metasalmon</code> 0.2.3 and does not enforce the full EML/KNB
-publication contract.</p>
+validator shown first. <code>metasalmonpy</code> 0.2.1 provides a useful
+companion check for the core package, but its version is a parity claim
+against metasalmon 0.2.1: it validates the earlier
+<code>sdp-0.2.0</code> shape and is not aligned with metasalmon 0.3.0.
+The R validator is the gate against the current specification.</p>
 <p>Run it only when:</p>
 <ul>
 <li>review markers such as <code>REVIEW:</code> have been resolved;</li>
@@ -2728,6 +2769,10 @@ need explicit review.</p>
 </section><section><h2 class="section-heading" id="export-validated-eml-2-2">Export validated EML 2.2<a class="anchor" aria-label="anchor" href="#export-validated-eml-2-2"></a>
 </h2>
 <hr class="half-width">
+<p>The code blocks from here to the end of this section operate on
+<code>pkg_path</code>, the reviewed package you have been building
+through the workshop; they are shown for you to run in your own session
+and are not executed when the lesson website is built.</p>
 <p>Install <code>emld</code> and <code>jsonvalidate</code>, then copy
 the package’s sidecar template once:</p>
 <div class="codewrapper sourceCode" id="cb8">
@@ -2738,19 +2783,9 @@ the package’s sidecar template once:</p>
 <span>  <span class="va">pkg_path</span>,</span>
 <span>  <span class="st">"metadata"</span>,</span>
 <span>  <span class="st">"eml-mapping.yml"</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'pkg_path' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb10">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">file.exists</span><span class="op">(</span><span class="va">eml_mapping_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">file.exists</span><span class="op">(</span><span class="va">eml_mapping_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">file.copy</span><span class="op">(</span></span>
 <span>    <span class="fu">system.file</span><span class="op">(</span></span>
 <span>      <span class="st">"extdata"</span>,</span>
@@ -2760,12 +2795,6 @@ the package’s sidecar template once:</p>
 <span>    <span class="va">eml_mapping_path</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_mapping_path' not found</code></pre>
 </div>
 <p>Stop and review the copied YAML. Replace every example value. The
 sidecar must bind the final semantic vocabulary and reviewed-selection
@@ -2779,53 +2808,15 @@ checksums, rights evidence, measurement scales, or missing-value
 meanings merely to make validation pass.</p>
 <p>When the SDP, its semantic-review evidence, and the sidecar are
 final:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span> <span class="op">&lt;-</span> <span class="fu">write_eml_from_sdp</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `write_eml_from_sdp()`:
-! could not find function "write_eml_from_sdp"</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb14">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">path</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_result' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb16">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">eml_version</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_result' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb18">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">validation</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_result' not found</code></pre>
+<code class="sourceCode R"><span><span class="va">eml_result</span> <span class="op">&lt;-</span> <span class="fu">write_eml_from_sdp</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">eml_result</span><span class="op">$</span><span class="va">path</span></span>
+<span><span class="va">eml_result</span><span class="op">$</span><span class="va">eml_version</span></span>
+<span><span class="va">eml_result</span><span class="op">$</span><span class="va">validation</span></span></code></pre>
 </div>
 <p>The default output is <code>metadata/eml.xml</code>. An identical
 existing file is an idempotent success. A different existing file is
@@ -2837,7 +2828,7 @@ after reviewing why the bytes changed.</p>
 <p>Use a dry run first. It creates local EML, OAI-ORE, and manifest
 artifacts, but it does not read credentials or make a network
 request:</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2847,37 +2838,10 @@ request:</p>
 <span>  dry_run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `publish_sdp_to_knb()`:
-! could not find function "publish_sdp_to_knb"</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb22">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">knb_plan</span><span class="op">$</span><span class="va">status</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'knb_plan' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb24">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">knb_plan</span><span class="op">$</span><span class="va">manifest_path</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'knb_plan' not found</code></pre>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">knb_plan</span><span class="op">$</span><span class="va">status</span></span>
+<span><span class="va">knb_plan</span><span class="op">$</span><span class="va">manifest_path</span></span></code></pre>
 </div>
 <p>Review <code>publication/knb-manifest.json</code>. The expanded plan
 lists the original data resources, allowlisted canonical SDP artifacts,
@@ -2905,7 +2869,7 @@ provider;</li>
 <code>confirm = TRUE</code>; and</li>
 <li>authority for the chosen access and redistribution decision.</li>
 </ul>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2915,19 +2879,9 @@ provider;</li>
 <span>  dataone_token <span class="op">=</span> <span class="fu">rstudioapi</span><span class="fu">::</span><span class="fu">askForPassword</span><span class="op">(</span></span>
 <span>    <span class="st">"Short-lived DataONE JWT"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! RStudio not running</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb28">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">tryCatch</span><span class="op">(</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">tryCatch</span><span class="op">(</span></span>
 <span>  <span class="fu">publish_sdp_to_knb</span><span class="op">(</span></span>
 <span>    <span class="va">pkg_path</span>,</span>
 <span>    public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -2937,12 +2891,6 @@ provider;</li>
 <span>  <span class="op">)</span>,</span>
 <span>  finally <span class="op">=</span> <span class="fu">options</span><span class="op">(</span>dataone_token <span class="op">=</span> <span class="va">previous_token</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `publish_sdp_to_knb()`:
-! could not find function "publish_sdp_to_knb"</code></pre>
 </div>
 <p>Do not place the token in a script, <code>.Renviron</code>, YAML,
 manifest, command argument, or shell history. Do not switch to
@@ -2961,7 +2909,7 @@ claiming completion.</p>
 regenerate the same folder from raw data and hope the edits survive.
 Read the reviewed state, make deliberate changes in memory, and write a
 new versioned folder:</p>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3076,7 +3024,7 @@ revisions, not overwrite attempts.</li>
 </div>
 </section></section><section id="aio-bonus-session"><p>Content from <a href="bonus-session.html">Optional Extension: Concept Mapping Game</a></p>
 <hr>
-<p>Last updated on 2026-08-11 |
+<p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/bonus-session.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -3228,14 +3176,14 @@ requests.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, metasalmonpy, R, Python, SKOS, I-ADOPT",
   "name": "All in One View",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/aio.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/aio.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-18",
-  "datePublished": "2026-08-18"
+  "dateModified": "2026-08-22",
+  "datePublished": "2026-08-22"
 }
 
   </script><script>

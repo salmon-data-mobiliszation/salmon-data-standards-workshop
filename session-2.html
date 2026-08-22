@@ -337,7 +337,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Create a Draft Salmon Data Package</h1>
-        <p>Last updated on 2026-08-11 |
+        <p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -484,9 +484,9 @@ companion path.</p>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a><span class="im">from</span> salmonpy <span class="im">import</span> create_sdp</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> create_sdp</span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>data_path <span class="op">=</span> files(<span class="st">"salmonpy.data"</span>).joinpath(</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>data_path <span class="op">=</span> files(<span class="st">"metasalmonpy.data"</span>).joinpath(</span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a>    <span class="st">"nuseds-fraser-coho-sample.csv"</span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1" aria-label="code-block-4-9"></a>)</span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1" aria-label="code-block-4-10"></a></span>
@@ -509,9 +509,13 @@ companion path.</p>
 </div>
 <p>The R and Python packages bundle separate practice fixtures. They
 demonstrate the same core package structure, but do not use their row
-counts to test cross-language parity. Python may also write a hidden
-<code>.salmonpy-package</code> bookkeeping file. The final EML and KNB
-workflow is R-only in the versions used here.</p>
+counts to test cross-language parity. Each writer also leaves a hidden
+bookkeeping file (<code>.metasalmon-package</code> in R,
+<code>.metasalmonpy-package</code> in Python). Note that
+<code>metasalmonpy</code> 0.2.1 writes the earlier
+<code>sdp-0.2.0</code> package shape; the final EML and KNB workflow
+taught here runs in R against the current <code>sdp-0.3.0</code>
+specification.</p>
 </div>
 </div>
 </div>
@@ -529,6 +533,7 @@ workflow is R-only in the versions used here.</p>
 <pre class="text"><code><span><span class="va">output</span><span class="op">/</span><span class="va">fraser</span><span class="op">-</span><span class="va">coho</span><span class="op">-</span><span class="va">example</span><span class="op">-</span><span class="va">sdp</span><span class="op">/</span></span>
 <span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span></span>
 <span>  <span class="va">datapackage.json</span></span>
+<span>  <span class="va">.metasalmon</span><span class="op">-</span><span class="va">package</span>          <span class="co"># hidden writer bookkeeping file; leave it alone</span></span>
 <span>  <span class="va">metadata</span><span class="op">/</span></span>
 <span>    <span class="va">dataset.csv</span></span>
 <span>    <span class="va">tables.csv</span></span>
@@ -687,7 +692,7 @@ all links to shared definitions to be complete.</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> validate_salmon_datapackage</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> validate_salmon_datapackage</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a>review_check <span class="op">=</span> validate_salmon_datapackage(</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a>    pkg_path,</span>
@@ -800,14 +805,14 @@ package.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, metasalmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Create a Draft Salmon Data Package",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-2.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-2.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-11",
-  "datePublished": "2026-08-18"
+  "dateModified": "2026-08-22",
+  "datePublished": "2026-08-22"
 }
 
   </script><script>

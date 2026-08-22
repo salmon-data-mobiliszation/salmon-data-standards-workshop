@@ -332,7 +332,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Review Terms and Measurement Meanings</h1>
-        <p>Last updated on 2026-08-11 |
+        <p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -430,7 +430,7 @@ package state.</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> (</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a>    read_salmon_datapackage,</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a>    suggest_semantics,</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>)</span>
@@ -468,14 +468,14 @@ package state.</p>
 instructors can prepare this output in advance. Omitting
 <code>sources</code> uses role-aware defaults. If you supply
 <code>sources</code> explicitly, current <code>metasalmon</code> and
-<code>salmonpy</code> treat the vector as a strict allowlist for the
+<code>metasalmonpy</code> treat the vector as a strict allowlist for the
 initial search and any LLM-requested bounded retry.</p>
 <p>Current R/<code>metasalmon</code> resolves its SMN and GCDFO indexes
 once per R session, so repeated searches use one consistent ontology
-snapshot and avoid repeated downloads. Version 0.2.2 also distinguishes
-a failed source lookup from a successful search with zero matches. If a
-result is unexpectedly empty, inspect a focused search before declaring
-a vocabulary gap:</p>
+snapshot and avoid repeated downloads. It also distinguishes a failed
+source lookup from a successful search with zero matches (since 0.2.2).
+If a result is unexpectedly empty, inspect a focused search before
+declaring a vocabulary gap:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -491,9 +491,10 @@ a vocabulary gap:</p>
 not evidence that no appropriate term exists. Do not turn a temporary
 service outage into a new-term request.</p>
 <p>For the Python exercise, omit <code>sources</code> as shown.
-<code>salmonpy</code> 0.1.6 does not bundle populated SMN or GCDFO
-indexes, so use instructor-prepared R results when the lesson
-specifically reviews those two sources.</p>
+<code>metasalmonpy</code> 0.2.1 searches the same SMN and GCDFO sources;
+a failed or empty ontology fetch raises an error rather than returning
+an empty index, so treat that error as a lookup problem, not a missing
+term.</p>
 </section><section><h2 class="section-heading" id="treat-suggestions-as-drafts">Treat suggestions as drafts<a class="anchor" aria-label="anchor" href="#treat-suggestions-as-drafts"></a></h2>
 <hr class="half-width"><p>Some tools write semantic suggestions directly into metadata as
 <code>REVIEW: &lt;iri&gt;</code>. That prefix is a warning, not
@@ -509,7 +510,7 @@ plan.</p>
 </section><section><h2 class="section-heading" id="measurement-semantics">Measurement semantics<a class="anchor" aria-label="anchor" href="#measurement-semantics"></a></h2>
 <hr class="half-width"><p>For <code>column_role = measurement</code>, SDP combines a variable
 link, I-ADOPT-style meaning components, a unit link, and an optional
-method/procedure link.</p>
+statistical-modifier link.</p>
 <table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Field</th>
 <th>Plain-language question</th>
 </tr></thead><tbody><tr><td><code>term_iri</code></td>
@@ -524,14 +525,28 @@ length, mass, or temperature?</td>
 meaning?</td>
 </tr><tr><td><code>unit_iri</code></td>
 <td>What unit are the values in?</td>
-</tr><tr><td><code>method_iri</code></td>
-<td>What method or procedure matters for interpretation, modeled outside
-I-ADOPT?</td>
-</tr></tbody></table><p>Important boundary: <code>property_iri</code>,
-<code>entity_iri</code>, and <code>constraint_iri</code> are
-I-ADOPT-style measurement-variable components. <code>unit_iri</code> and
-<code>method_iri</code> are also measurement semantics, but units and
-methods are not I-ADOPT roles. Do not use these fields as
+</tr><tr><td><code>statistical_modifier_iri</code></td>
+<td>Optional: is the column an aggregation or summary — a mean, maximum,
+minimum, total, or peak — rather than a single observation?</td>
+</tr></tbody></table><p>Since <code>sdp-0.3.0</code> (metasalmon 0.3.0), <strong>methods do
+not live in the column dictionary</strong>. A method describes how a
+value was produced, not what the column is, so it is recorded where it
+is actually constant: a procedure shared by a whole table goes in
+<code>tables.csv$method_iri</code>, a citable protocol document goes in
+<code>protocol_iri</code>/<code>protocol_citation</code> on
+<code>tables.csv</code> or <code>dataset.csv</code>, and a method that
+varies row by row becomes a code column in the data whose values resolve
+through <code>codes.csv$term_iri</code> to shared-vocabulary procedures.
+A statistical modifier is the one kind of “how” that stays in the
+dictionary, because a <em>mean</em> weight and a <em>maximum</em> weight
+are different variables. The <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd" class="external-link">metasalmon
+migration guide</a> explains the change and migrates 0.2.x packages.</p>
+<p>Important boundary: <code>property_iri</code>,
+<code>entity_iri</code>, <code>constraint_iri</code>, and
+<code>statistical_modifier_iri</code> are I-ADOPT-style
+measurement-variable components. <code>unit_iri</code> is also
+measurement semantics, but units are not an I-ADOPT role, and methods
+are not part of the variable at all. Do not use these fields as
 general-purpose relationship fields for identifiers, attributes, or
 categorical columns.</p>
 <div id="optional-llm-assisted-bundle-review" class="callout">
@@ -545,12 +560,17 @@ categorical columns.</p>
 <p>Adding <code>llm_assess = TRUE</code> in R or
 <code>llm_assess=True</code> in Python, plus an approved provider and
 model, asks the LLM to judge the retrieved candidates; it does not let
-the model invent IRIs. Current <code>metasalmon</code> and
-<code>salmonpy</code> review a measurement’s variable, property, entity,
-unit, constraint, and method candidates together as one six-slot
-bundle.</p>
-<p>R/<code>metasalmon</code> 0.2.3 retries retryable provider failures
-such as rate limits and temporary service errors, honoring
+the model invent IRIs. In metasalmon 0.3.0, a measurement’s variable,
+property, entity, unit, constraint, and statistical-modifier candidates
+are reviewed together as one bundle; a statistical-modifier candidate is
+proposed only when the column’s name, label, or description names an
+aggregation (total, mean, maximum, minimum, peak). Method candidates
+survive only for code values, where codes resolve to shared
+<code>sosa:Procedure</code> concepts. <code>metasalmonpy</code> 0.2.1
+still reviews the earlier bundle shape, which included a dictionary
+method slot.</p>
+<p>R/<code>metasalmon</code> retries retryable provider failures such as
+rate limits and temporary service errors, honoring
 <code>Retry-After</code> when present. It also sends the BioPortal key
 in an authorization header and redacts credentials from reported URLs.
 These safeguards reduce avoidable failures; they do not authorize
@@ -558,10 +578,9 @@ unbounded retries, sensitive context, or unattended acceptance of LLM
 decisions.</p>
 <p>Deterministic validators can downgrade an unsupported
 <code>accept</code> decision to <code>review</code>, but they never
-substitute or invent a term. Variable, property, entity, and unit
-candidates may become <code>REVIEW:</code> drafts on the
-<code>create_sdp()</code> path. Constraint and method candidates always
-remain manual-review suggestions.</p>
+substitute or invent a term. Suggested candidates written into the
+dictionary carry the <code>REVIEW:</code> prefix until a person confirms
+them.</p>
 <p>Context files must be passed as existing local file paths through
 <code>llm_context_files</code>, and context alone does not enable an LLM
 call. Use only an approved provider and appropriate non-sensitive
@@ -584,9 +603,13 @@ context.</p>
 definition</td>
 </tr><tr><td>Unit</td>
 <td>Fish or individuals</td>
+</tr><tr><td>Statistical modifier</td>
+<td>Blank here; fill it only when the column is an aggregation, such as
+a <em>peak</em> or <em>mean</em> count</td>
 </tr><tr><td>Method</td>
-<td>Use only if the survey or estimator is part of the variable
-meaning</td>
+<td>Not a dictionary field: record the survey or estimator on
+<code>tables.csv</code> when it is constant for the table, or as a code
+column when it varies by row</td>
 </tr></tbody></table><div id="challenge-1-review-two-mapped-fields" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -602,7 +625,9 @@ meaning</td>
 <li>decide keep, replace, remove, or defer;</li>
 <li>write one sentence explaining the decision.</li>
 </ul><p>For the measurement column, also fill or review the property, entity,
-unit, and optional constraint/method fields.</p>
+unit, and optional constraint and statistical-modifier fields, and
+decide where any method information belongs (table level, protocol
+citation, or code column).</p>
 </div>
 </div>
 </div>
@@ -621,7 +646,9 @@ answers.</li>
 <li>Optional LLM review selects from deterministic candidates and
 remains subject to deterministic checks.</li>
 <li>SDP measurement semantic fields are measurement-only in the column
-dictionary, and I-ADOPT itself does not model units or methods.</li>
+dictionary; methods live at the table, protocol, or code level rather
+than in the dictionary, and I-ADOPT itself does not model units or
+methods.</li>
 </ul></div>
 </div>
 </div>
@@ -679,14 +706,14 @@ dictionary, and I-ADOPT itself does not model units or methods.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, metasalmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Review Terms and Measurement Meanings",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-4.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-4.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-11",
-  "datePublished": "2026-08-18"
+  "dateModified": "2026-08-22",
+  "datePublished": "2026-08-22"
 }
 
   </script><script>

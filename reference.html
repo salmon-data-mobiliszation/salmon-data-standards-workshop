@@ -309,7 +309,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Reference</h1>
-        <p>Last updated on 2026-08-11 |
+        <p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -343,7 +343,7 @@ upload only with explicit authority and credentials.</li>
 <th>Python companion</th>
 </tr></thead><tbody><tr><td>Create a package</td>
 <td><code>metasalmon::create_sdp()</code></td>
-<td><code>salmonpy.create_sdp()</code></td>
+<td><code>metasalmonpy.create_sdp()</code></td>
 </tr><tr><td>Read a package</td>
 <td><code>read_salmon_datapackage()</code></td>
 <td><code>read_salmon_datapackage()</code></td>
@@ -361,19 +361,30 @@ upload only with explicit authority and credentials.</li>
 <td><code>validate_salmon_datapackage(..., require_iris=False)</code></td>
 </tr><tr><td>Run the final publication gate</td>
 <td><code>validate_salmon_datapackage(..., require_iris = TRUE)</code></td>
+<td>Hand off to current R/<code>metasalmon</code> for the
+<code>sdp-0.3.0</code> gate</td>
+</tr><tr><td>Migrate an <code>sdp-0.2.0</code> package</td>
+<td><code>migrate_sdp_methods()</code></td>
 <td>Hand off to current R/<code>metasalmon</code>
 </td>
 </tr><tr><td>Export validated EML</td>
 <td><code>write_eml_from_sdp()</code></td>
-<td>Not available in <code>salmonpy</code> 0.1.6</td>
+<td>
+<code>write_eml_from_sdp()</code> (at 0.2.1 parity; this lesson runs
+it in R)</td>
 </tr><tr><td>Plan or run a KNB deposit</td>
 <td><code>publish_sdp_to_knb()</code></td>
-<td>Not available in <code>salmonpy</code> 0.1.6</td>
-</tr></tbody></table><p>The revised lesson targets R/<code>metasalmon</code> 0.2.3 or later
-from the canonical GitHub <code>main</code> branch. The latest tagged R
-release at the time of revision was 0.1.8, and the Python companion
-remains <code>salmonpy</code> 0.1.6. Do not describe the implementations
-as fully version- or feature-aligned.</p>
+<td>
+<code>publish_sdp_to_knb()</code> (at 0.2.1 parity; this lesson runs
+it in R)</td>
+</tr></tbody></table><p>The lesson targets the tagged <strong>R/<code>metasalmon</code> 0.3.0
+release</strong> (specification <code>sdp-0.3.0</code>). The Python
+companion is <strong><code>metasalmonpy</code> 0.2.1</strong>, whose
+version is a parity claim: it mirrors metasalmon 0.2.1 behaviour and
+writes the earlier <code>sdp-0.2.0</code> package shape. Do not describe
+the implementations as fully version- or feature-aligned, and migrate
+Python-created packages with <code>migrate_sdp_methods()</code> before
+the R publication gate.</p>
 </section><section><h2 class="section-heading" id="recent-metasalmon-updates-reflected-here">Recent metasalmon updates reflected here<a class="anchor" aria-label="anchor" href="#recent-metasalmon-updates-reflected-here"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Version</th>
 <th>Workshop-relevant change</th>
@@ -397,6 +408,26 @@ searches.</td>
 <td>Allowed corrected unpublished KNB dry runs to be replanned with
 <code>overwrite = TRUE</code>, added bounded provider retries, and
 moved/redacted the BioPortal credential.</td>
+</tr><tr><td>0.2.4</td>
+<td>Made the empty field the single canonical missing-value token: a
+literal <code>"NA"</code> in data now round-trips as the string it is
+(it is a real fisheries gear code), so hand-authored packages using
+<code>NA</code> to mean missing must rewrite those cells as empty
+fields.</td>
+</tr><tr><td>0.2.5</td>
+<td>Extended credential redaction to all qualified <code>*_token</code>
+names in captured errors and reports.</td>
+</tr><tr><td>0.2.6</td>
+<td>Enforced declared <code>primary_key</code> uniqueness as a
+validation error, warned on value-like column names (pointing at
+<code>tidyr::pivot_longer()</code>), and surfaced unresolved
+<code>MISSING METADATA:</code> placeholders in default validation.</td>
+</tr><tr><td>0.3.0</td>
+<td>Implemented <code>sdp-0.3.0</code>: removed the dictionary
+<code>method_iri</code> and the <code>metadata/methods.csv</code>
+registry, added <code>statistical_modifier_iri</code>, moved methods to
+<code>tables.csv</code>/<code>protocol_iri</code>/<code>codes.csv</code>,
+and added <code>migrate_sdp_methods()</code> for 0.2.x packages.</td>
 </tr></tbody></table><p>See the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">metasalmon
 changelog</a> for the full implementation record. These changes do not
 turn a draft package, failed lookup, private deposit, or Member Node
@@ -441,7 +472,9 @@ explicitly reviewed tabular derivative.</td>
 discovery, and provenance fields</td>
 </tr><tr><td><code>metadata/tables.csv</code></td>
 <td>One row per table: file path, label, row meaning, observation unit,
-and primary key</td>
+primary key, and table-level
+<code>method_iri</code>/<code>protocol_iri</code>/<code>protocol_citation</code>
+</td>
 </tr><tr><td><code>metadata/column_dictionary.csv</code></td>
 <td>One row per data column: labels, definitions, roles, types, units,
 and semantic fields</td>
@@ -481,8 +514,9 @@ rules, and publication requirements</td>
 </tr><tr><td>I-ADOPT</td>
 <td>Measurement property, entity, and optional constraint roles</td>
 </tr><tr><td>SOSA</td>
-<td>Procedure/method alignment for <code>method_iri</code>
-</td>
+<td>Procedure alignment for table-level <code>method_iri</code> and
+method code values (<code>term_type = sosa:Procedure</code> in
+<code>codes.csv</code>)</td>
 </tr><tr><td>SKOS/OWL and published vocabularies</td>
 <td>Reusable terms and code meanings</td>
 </tr><tr><td>QUDT or another reviewed unit vocabulary</td>
@@ -578,7 +612,7 @@ coverage</td>
 <hr class="half-width"><p>For publication-ready measurement rows, SDP requires
 <code>term_iri</code>, <code>property_iri</code>,
 <code>entity_iri</code>, and <code>unit_iri</code>. Constraint and
-method IRIs remain optional.</p>
+statistical-modifier IRIs remain optional.</p>
 <table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Field</th>
 <th>Publication requirement</th>
 <th>Meaning</th>
@@ -598,13 +632,22 @@ semicolon-separated</td>
 </tr><tr><td><code>unit_iri</code></td>
 <td>Required</td>
 <td>Unit IRI, usually from a unit vocabulary such as QUDT</td>
-</tr><tr><td><code>method_iri</code></td>
+</tr><tr><td><code>statistical_modifier_iri</code></td>
 <td>Optional</td>
-<td>Procedure or method IRI, aligned to SOSA and outside the I-ADOPT
-core roles</td>
-</tr></tbody></table><p>Do not use <code>property_iri</code>, <code>entity_iri</code>,
-<code>constraint_iri</code>, or <code>method_iri</code> as general
-relationship fields for identifiers, attributes, or categorical
+<td>I-ADOPT statistical modifier: fill it only when the column is an
+aggregation or summary (mean, maximum, minimum, total, peak), because
+the summary is part of the variable’s identity</td>
+</tr></tbody></table><p>Since <code>sdp-0.3.0</code>, the dictionary has no
+<code>method_iri</code> column and the <code>metadata/methods.csv</code>
+registry is gone. A method lives where it is constant:
+<code>tables.csv$method_iri</code> for a whole-table procedure,
+<code>protocol_iri</code>/<code>protocol_citation</code> on
+<code>tables.csv</code> or <code>dataset.csv</code> for a citable
+document, or a code column resolving through
+<code>codes.csv$term_iri</code> when the method varies by row.</p>
+<p>Do not use <code>property_iri</code>, <code>entity_iri</code>,
+<code>constraint_iri</code>, or <code>statistical_modifier_iri</code> as
+general relationship fields for identifiers, attributes, or categorical
 columns.</p>
 </section><section><h2 class="section-heading" id="sdp-to-eml-crosswalk">SDP-to-EML crosswalk<a class="anchor" aria-label="anchor" href="#sdp-to-eml-crosswalk"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>SDP source</th>
@@ -747,6 +790,11 @@ review, validate, transform, and share.</p>
 <p><strong>Semantic link or mapping</strong>: A connection from a local
 column or code value to a shared definition; semantic simply means
 “about meaning.”</p>
+<p><strong>Statistical modifier</strong>: The aggregation or summary
+that is part of a measurement variable’s identity — a mean, maximum,
+minimum, total, or peak. Recorded in
+<code>statistical_modifier_iri</code>; left blank for plain
+measurements.</p>
 <p><strong>Table</strong>: A rectangular set of rows and columns with
 one consistent row meaning.</p>
 <p><strong>Vocabulary</strong>: A maintained list of reusable terms and
@@ -802,14 +850,14 @@ suggestion that must be checked before publication.</p>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, metasalmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Reference",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/reference.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/reference.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-11",
-  "datePublished": "2026-08-18"
+  "dateModified": "2026-08-22",
+  "datePublished": "2026-08-22"
 }
 
   </script><script>

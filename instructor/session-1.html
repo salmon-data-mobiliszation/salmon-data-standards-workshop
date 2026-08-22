@@ -336,7 +336,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Why Start With a Salmon Data Package?</h1>
-        <p>Last updated on 2026-08-11 |
+        <p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -522,8 +522,9 @@ CSV and <code>datapackage.json</code>.</td>
 keywords, and provenance that can map into EML, HNAP/ISO, or another
 catalog profile.</td>
 </tr><tr><td>I-ADOPT, SOSA, SKOS/OWL, and unit vocabularies</td>
-<td>External semantic roles for measurement property/entity/constraint,
-methods, reusable concepts, code lists, and units.</td>
+<td>External semantic roles for measurement
+property/entity/constraint/statistical modifier, table- and code-level
+procedures, reusable concepts, code lists, and units.</td>
 </tr><tr><td>Salmon Data Package profile</td>
 <td>The exact CSV filenames and columns, joins through
 <code>dataset_id</code>/<code>table_id</code>/<code>column_name</code>,
@@ -585,17 +586,19 @@ comfort level; you do not need to run both code blocks.</p>
 <td>R also provides strict validation, EML export, and KNB
 publication.</td>
 </tr><tr><td>Python</td>
-<td><code>salmonpy.create_sdp()</code></td>
+<td><code>metasalmonpy.create_sdp()</code></td>
 <td>Hand the compatible SDP to current R/<code>metasalmon</code> for the
 final gate.</td>
 </tr><tr><td>Excel or Calc</td>
 <td>Blank SDP CSV template folder</td>
 <td>Hand the reviewed CSV package to R/<code>metasalmon</code> for
 validation and export.</td>
-</tr></tbody></table><p>The revised R examples target <code>metasalmon</code> 0.2.3 or later
-from GitHub <code>main</code>. The Python companion remains
-<code>salmonpy</code> 0.1.6, so do not claim complete version or feature
-parity.</p>
+</tr></tbody></table><p>The R examples target the tagged <code>metasalmon</code> 0.3.0
+release, which implements <code>sdp-0.3.0</code>. The Python companion
+is <code>metasalmonpy</code> 0.2.1, whose version is a parity claim
+against metasalmon 0.2.1 — it writes the earlier <code>sdp-0.2.0</code>
+shape — so do not claim complete version or feature parity, and expect
+R’s <code>migrate_sdp_methods()</code> in the handoff.</p>
 <div id="challenge-1-pick-your-package" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -690,14 +693,14 @@ source table alone.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, metasalmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Why Start With a Salmon Data Package?",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-1.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-1.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-11",
-  "datePublished": "2026-08-18"
+  "dateModified": "2026-08-22",
+  "datePublished": "2026-08-22"
 }
 
   </script><script>

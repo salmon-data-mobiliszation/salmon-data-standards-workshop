@@ -337,7 +337,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Route Term Gaps, Export EML, and Plan Catalog Publication</h1>
-        <p>Last updated on 2026-08-11 |
+        <p>Last updated on 2026-08-22 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -485,7 +485,7 @@ package state.</p>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1" aria-label="code-block-3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1" aria-label="code-block-3-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1" aria-label="code-block-3-4"></a><span class="im">from</span> salmonpy <span class="im">import</span> (</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1" aria-label="code-block-3-4"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1" aria-label="code-block-3-5"></a>    detect_semantic_term_gaps,</span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1" aria-label="code-block-3-6"></a>    read_salmon_datapackage,</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1" aria-label="code-block-3-7"></a>    render_ontology_term_request,</span>
@@ -603,7 +603,7 @@ anything:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> salmonpy <span class="im">import</span> submit_term_request_issues</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> submit_term_request_issues</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1" aria-label="code-block-5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1" aria-label="code-block-5-3"></a><span class="cf">if</span> requests.empty:</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a>    issue_preview <span class="op">=</span> pd.DataFrame()</span>
@@ -665,10 +665,11 @@ anything.</p>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>validate_salmon_datapackage(pkg_path, require_iris<span class="op">=</span><span class="va">True</span>)</span></code></pre>
 </div>
 <p>For publication, run the current R <code>metasalmon</code> strict
-validator shown first. <code>salmonpy</code> 0.1.6 provides a useful
-companion check for the core package, but it is not version-aligned with
-R/<code>metasalmon</code> 0.2.3 and does not enforce the full EML/KNB
-publication contract.</p>
+validator shown first. <code>metasalmonpy</code> 0.2.1 provides a useful
+companion check for the core package, but its version is a parity claim
+against metasalmon 0.2.1: it validates the earlier
+<code>sdp-0.2.0</code> shape and is not aligned with metasalmon 0.3.0.
+The R validator is the gate against the current specification.</p>
 <p>Run it only when:</p>
 <ul><li>review markers such as <code>REVIEW:</code> have been resolved;</li>
 <li>required metadata placeholders are gone;</li>
@@ -722,7 +723,11 @@ into structured people, organizations, ORCIDs, and metadata-provider
 roles. Measurement scale and the meanings of missing-value tokens also
 need explicit review.</p>
 </section><section><h2 class="section-heading" id="export-validated-eml-2-2">Export validated EML 2.2<a class="anchor" aria-label="anchor" href="#export-validated-eml-2-2"></a></h2>
-<hr class="half-width"><p>Install <code>emld</code> and <code>jsonvalidate</code>, then copy
+<hr class="half-width"><p>The code blocks from here to the end of this section operate on
+<code>pkg_path</code>, the reviewed package you have been building
+through the workshop; they are shown for you to run in your own session
+and are not executed when the lesson website is built.</p>
+<p>Install <code>emld</code> and <code>jsonvalidate</code>, then copy
 the package’s sidecar template once:</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -732,19 +737,9 @@ the package’s sidecar template once:</p>
 <span>  <span class="va">pkg_path</span>,</span>
 <span>  <span class="st">"metadata"</span>,</span>
 <span>  <span class="st">"eml-mapping.yml"</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'pkg_path' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb10">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">file.exists</span><span class="op">(</span><span class="va">eml_mapping_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">file.exists</span><span class="op">(</span><span class="va">eml_mapping_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">file.copy</span><span class="op">(</span></span>
 <span>    <span class="fu">system.file</span><span class="op">(</span></span>
 <span>      <span class="st">"extdata"</span>,</span>
@@ -754,12 +749,6 @@ the package’s sidecar template once:</p>
 <span>    <span class="va">eml_mapping_path</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_mapping_path' not found</code></pre>
 </div>
 <p>Stop and review the copied YAML. Replace every example value. The
 sidecar must bind the final semantic vocabulary and reviewed-selection
@@ -773,53 +762,15 @@ checksums, rights evidence, measurement scales, or missing-value
 meanings merely to make validation pass.</p>
 <p>When the SDP, its semantic-review evidence, and the sidecar are
 final:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span> <span class="op">&lt;-</span> <span class="fu">write_eml_from_sdp</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `write_eml_from_sdp()`:
-! could not find function "write_eml_from_sdp"</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb14">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">path</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_result' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb16">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">eml_version</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_result' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb18">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">eml_result</span><span class="op">$</span><span class="va">validation</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'eml_result' not found</code></pre>
+<code class="sourceCode R"><span><span class="va">eml_result</span> <span class="op">&lt;-</span> <span class="fu">write_eml_from_sdp</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">eml_result</span><span class="op">$</span><span class="va">path</span></span>
+<span><span class="va">eml_result</span><span class="op">$</span><span class="va">eml_version</span></span>
+<span><span class="va">eml_result</span><span class="op">$</span><span class="va">validation</span></span></code></pre>
 </div>
 <p>The default output is <code>metadata/eml.xml</code>. An identical
 existing file is an idempotent success. A different existing file is
@@ -829,7 +780,7 @@ after reviewing why the bytes changed.</p>
 <hr class="half-width"><p>Use a dry run first. It creates local EML, OAI-ORE, and manifest
 artifacts, but it does not read credentials or make a network
 request:</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -839,37 +790,10 @@ request:</p>
 <span>  dry_run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `publish_sdp_to_knb()`:
-! could not find function "publish_sdp_to_knb"</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb22">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">knb_plan</span><span class="op">$</span><span class="va">status</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'knb_plan' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb24">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">knb_plan</span><span class="op">$</span><span class="va">manifest_path</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! object 'knb_plan' not found</code></pre>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">knb_plan</span><span class="op">$</span><span class="va">status</span></span>
+<span><span class="va">knb_plan</span><span class="op">$</span><span class="va">manifest_path</span></span></code></pre>
 </div>
 <p>Review <code>publication/knb-manifest.json</code>. The expanded plan
 lists the original data resources, allowlisted canonical SDP artifacts,
@@ -893,7 +817,7 @@ provider;</li>
 <li>
 <code>confirm = TRUE</code>; and</li>
 <li>authority for the chosen access and redistribution decision.</li>
-</ul><div class="codewrapper sourceCode" id="cb26">
+</ul><div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -903,19 +827,9 @@ provider;</li>
 <span>  dataone_token <span class="op">=</span> <span class="fu">rstudioapi</span><span class="fu">::</span><span class="fu">askForPassword</span><span class="op">(</span></span>
 <span>    <span class="st">"Short-lived DataONE JWT"</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error:
-! RStudio not running</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb28">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">tryCatch</span><span class="op">(</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">tryCatch</span><span class="op">(</span></span>
 <span>  <span class="fu">publish_sdp_to_knb</span><span class="op">(</span></span>
 <span>    <span class="va">pkg_path</span>,</span>
 <span>    public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -925,12 +839,6 @@ provider;</li>
 <span>  <span class="op">)</span>,</span>
 <span>  finally <span class="op">=</span> <span class="fu">options</span><span class="op">(</span>dataone_token <span class="op">=</span> <span class="va">previous_token</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `publish_sdp_to_knb()`:
-! could not find function "publish_sdp_to_knb"</code></pre>
 </div>
 <p>Do not place the token in a script, <code>.Renviron</code>, YAML,
 manifest, command argument, or shell history. Do not switch to
@@ -947,7 +855,7 @@ claiming completion.</p>
 regenerate the same folder from raw data and hope the edits survive.
 Read the reviewed state, make deliberate changes in memory, and write a
 new versioned folder:</p>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1108,14 +1016,14 @@ revisions, not overwrite attempts.</li>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, metasalmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Route Term Gaps, Export EML, and Plan Catalog Publication",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-6.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-6.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-11",
-  "datePublished": "2026-08-18"
+  "dateModified": "2026-08-22",
+  "datePublished": "2026-08-22"
 }
 
   </script><script>

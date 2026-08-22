@@ -332,8 +332,8 @@ matter most.</p>
 <p>The coded walkthrough is R-first. Python companion blocks follow the
 core creation and review steps, and spreadsheet participants work with
 the same standard package files. The final EML and KNB/DataONE
-publication workflow is currently provided by the R
-<code>metasalmon</code> package.</p>
+publication workflow taught here runs in the R <code>metasalmon</code>
+package against the current SDP specification.</p>
 
 
       <section id="setup"><section><h2 class="section-heading" id="what-you-will-be-ready-to-do">What you will be ready to do<a class="anchor" aria-label="anchor" href="#what-you-will-be-ready-to-do"></a></h2>
@@ -401,21 +401,24 @@ step currently uses R/<code>metasalmon</code>.</p>
 <li>the <code>remotes</code>, <code>readr</code>, <code>dplyr</code>,
 <code>purrr</code>, <code>readxl</code>, and <code>metasalmon</code>
 packages.</li>
-</ul><p>Install the current GitHub version used by the workshop:</p>
+</ul><p>Install the released version used by the workshop:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"remotes"</span>, <span class="st">"readr"</span>, <span class="st">"dplyr"</span>, <span class="st">"purrr"</span>, <span class="st">"readxl"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"salmon-data-mobilization/metasalmon"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"salmon-data-mobilization/metasalmon@v0.3.0"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># The revised lesson targets metasalmon 0.2.3 or later.</span></span>
+<span><span class="co"># The revised lesson targets the metasalmon 0.3.0 release.</span></span>
 <span><span class="fu">packageVersion</span><span class="op">(</span><span class="st">"metasalmon"</span><span class="op">)</span></span></code></pre>
 </div>
-<p>The canonical GitHub <code>main</code> branch was version 0.2.3 when
-this lesson was updated; the latest tagged R release was still 0.1.8.
-Check the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">metasalmon
-changelog</a> before teaching if the version has moved.</p>
+<p>The lesson targets the tagged <strong>metasalmon 0.3.0</strong>
+release, which implements version <code>sdp-0.3.0</code> of the Salmon
+Data Package specification. Check the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">metasalmon
+changelog</a> before teaching if a newer release has shipped. If you
+have packages built with metasalmon 0.2.x, the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd" class="external-link">migration
+guide</a> explains what changed and how
+<code>migrate_sdp_methods()</code> updates them.</p>
 <p>For validated EML export, also install:</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -447,29 +450,37 @@ send sensitive or restricted material outside an authorized
 environment.</p>
 </div>
 <div class="section level3">
-<h3 id="pythonsalmonpy-companion-path">Python/salmonpy companion path<a class="anchor" aria-label="anchor" href="#pythonsalmonpy-companion-path"></a></h3>
+<h3 id="pythonmetasalmonpy-companion-path">Python/metasalmonpy companion path<a class="anchor" aria-label="anchor" href="#pythonmetasalmonpy-companion-path"></a></h3>
 <p>The workshop teaches the core creation and review workflow in R first
-and then provides a Python equivalent. <code>salmonpy</code> 0.1.6 still
-supports those companion activities, but it is no longer version-aligned
-with the current R package and does not provide the final EML/KNB
-workflow taught here.</p>
+and then provides a Python equivalent. The Python package is
+<strong><code>metasalmonpy</code> 0.2.1</strong> (the repository was
+renamed from <code>metaSmnPy</code>, and the old <code>salmonpy</code>
+package name is retired). Its version is a parity claim: 0.2.1 mirrors
+metasalmon 0.2.1 behaviour, so it writes the earlier
+<code>sdp-0.2.0</code> package shape and is not yet aligned with
+metasalmon 0.3.0. Use it for the companion creation and review
+activities; run the final publication gate in R.</p>
 <p>Required:</p>
 <ul><li>Python 3.9 or newer; and</li>
 <li>a terminal, notebook, or Python editor.</li>
-</ul><p>Create an environment and install the released Python wheel:</p>
+</ul><p>Create an environment and install the tagged release directly from
+GitHub (no Git installation required):</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a><span class="bu">.</span> .venv/bin/activate</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a><span class="ex">python</span> <span class="at">-m</span> pip install <span class="dt">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a>  <span class="st">"salmonpy @ https://github.com/salmon-data-mobilization/metaSmnPy/releases/download/v0.1.6/salmonpy-0.1.6-py3-none-any.whl"</span></span></code></pre>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a>  <span class="st">"metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/tags/v0.2.1.tar.gz"</span></span></code></pre>
 </div>
-<p>The repository is named <code>metaSmnPy</code>, while the installed
-package and Python import are named <code>salmonpy</code>. See the <a href="https://salmon-data-mobilization.github.io/metaSmnPy/" class="external-link">salmonpy
-documentation</a>. Python packages can be handed to
-R/<code>metasalmon</code> for final validation, EML export, and catalog
-publication.</p>
+<p>The installed package and Python import are both named
+<code>metasalmonpy</code>. See the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/" class="external-link">metasalmonpy
+documentation</a>. Optional EML/KNB extras exist
+(<code>metasalmonpy[eml]</code>, <code>[knb]</code>), but this lesson
+runs EML export and KNB publication in R. A package created with
+<code>metasalmonpy</code> 0.2.1 follows <code>sdp-0.2.0</code>; migrate
+it with R’s <code>migrate_sdp_methods()</code> before the strict R
+validation, EML export, and catalog publication taught in Session 6.</p>
 </div>
 <div class="section level3">
 <h3 id="spreadsheet-path">Spreadsheet path<a class="anchor" aria-label="anchor" href="#spreadsheet-path"></a></h3>
@@ -502,8 +513,8 @@ and review a package</a>
 <li>metasalmon post-review workflow: <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd" class="external-link">validate,
 export EML, and preview KNB publication</a>
 </li>
-<li>salmonpy quickstart: <a href="https://salmon-data-mobilization.github.io/metaSmnPy/" class="external-link">create and
-review the same core package structure in Python</a>
+<li>metasalmonpy quickstart: <a href="https://salmon-data-mobilization.github.io/metasalmonpy/" class="external-link">create
+and review the same core package structure in Python</a>
 </li>
 <li>Optional for ontology maintainers: <a href="https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md" class="external-link">Salmon
 Domain Ontology conventions</a>
@@ -569,14 +580,14 @@ EML export later.</p>
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
-  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, salmonpy, R, Python, SKOS, I-ADOPT",
+  "keywords": "salmon, data package, metadata, Frictionless Data, EML, DataONE, KNB, metasalmon, metasalmonpy, R, Python, SKOS, I-ADOPT",
   "name": "Creating Salmon Data Packages With Shared Standards",
   "creativeWorkStatus": "active",
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/index.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/index.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-18",
-  "datePublished": "2026-08-18"
+  "dateModified": "2026-08-22",
+  "datePublished": "2026-08-22"
 }
 
   </script><script>
