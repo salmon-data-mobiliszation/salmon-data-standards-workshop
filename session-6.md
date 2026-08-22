@@ -26,6 +26,8 @@ exercises: 55
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+
 ## A gap is not a failure
 
 When no candidate term fits, do not force the closest match. Record the gap and decide where it belongs.
@@ -118,7 +120,7 @@ if (nrow(gaps) == 0) {
 from pathlib import Path
 
 import pandas as pd
-from salmonpy import (
+from metasalmonpy import (
     detect_semantic_term_gaps,
     read_salmon_datapackage,
     render_ontology_term_request,
@@ -220,7 +222,7 @@ issue_preview
 ## Python equivalent
 
 ```python
-from salmonpy import submit_term_request_issues
+from metasalmonpy import submit_term_request_issues
 
 if requests.empty:
     issue_preview = pd.DataFrame()
@@ -279,7 +281,7 @@ Python can run a useful companion check:
 validate_salmon_datapackage(pkg_path, require_iris=True)
 ```
 
-For publication, run the current R `metasalmon` strict validator shown first. `salmonpy` 0.1.6 provides a useful companion check for the core package, but it is not version-aligned with R/`metasalmon` 0.2.3 and does not enforce the full EML/KNB publication contract.
+For publication, run the current R `metasalmon` strict validator shown first. `metasalmonpy` 0.2.1 provides a useful companion check for the core package, but its version is a parity claim against metasalmon 0.2.1: it validates the earlier `sdp-0.2.0` shape and is not aligned with metasalmon 0.3.0. The R validator is the gate against the current specification.
 
 Run it only when:
 
@@ -313,6 +315,8 @@ The canonical SDP does not contain every fact EML requires. For example, a free-
 
 ## Export validated EML 2.2
 
+The code blocks from here to the end of this section operate on `pkg_path`, the reviewed package you have been building through the workshop; they are shown for you to run in your own session and are not executed when the lesson website is built.
+
 Install `emld` and `jsonvalidate`, then copy the package's sidecar template once:
 
 
@@ -322,14 +326,7 @@ eml_mapping_path <- file.path(
   "metadata",
   "eml-mapping.yml"
 )
-```
 
-``` error
-Error:
-! object 'pkg_path' not found
-```
-
-``` r
 if (!file.exists(eml_mapping_path)) {
   file.copy(
     system.file(
@@ -342,11 +339,6 @@ if (!file.exists(eml_mapping_path)) {
 }
 ```
 
-``` error
-Error:
-! object 'eml_mapping_path' not found
-```
-
 Stop and review the copied YAML. Replace every example value. The sidecar must bind the final semantic vocabulary and reviewed-selection ledger with their SHA-256 checksums; it must also record reviewed parties, rights authorization, source provenance, methods, and one measurement-scale/domain entry for every column. Set `status: final` only after that review.
 
 The detailed, current checklist is in the [metasalmon post-review and publication workflow][metasalmon-eml-workflow]. Do not invent dummy parties, checksums, rights evidence, measurement scales, or missing-value meanings merely to make validation pass.
@@ -356,38 +348,10 @@ When the SDP, its semantic-review evidence, and the sidecar are final:
 
 ``` r
 eml_result <- write_eml_from_sdp(pkg_path)
-```
 
-``` error
-Error in `write_eml_from_sdp()`:
-! could not find function "write_eml_from_sdp"
-```
-
-``` r
 eml_result$path
-```
-
-``` error
-Error:
-! object 'eml_result' not found
-```
-
-``` r
 eml_result$eml_version
-```
-
-``` error
-Error:
-! object 'eml_result' not found
-```
-
-``` r
 eml_result$validation
-```
-
-``` error
-Error:
-! object 'eml_result' not found
 ```
 
 The default output is `metadata/eml.xml`. An identical existing file is an idempotent success. A different existing file is protected unless you deliberately pass `overwrite = TRUE` after reviewing why the bytes changed.
@@ -405,29 +369,9 @@ knb_plan <- publish_sdp_to_knb(
   representation = "expanded",
   overwrite = FALSE
 )
-```
 
-``` error
-Error in `publish_sdp_to_knb()`:
-! could not find function "publish_sdp_to_knb"
-```
-
-``` r
 knb_plan$status
-```
-
-``` error
-Error:
-! object 'knb_plan' not found
-```
-
-``` r
 knb_plan$manifest_path
-```
-
-``` error
-Error:
-! object 'knb_plan' not found
 ```
 
 Review `publication/knb-manifest.json`. The expanded plan lists the original data resources, allowlisted canonical SDP artifacts, validated EML science metadata, and the OAI-ORE resource map with exact identifiers and checksums. It does not scan and upload arbitrary files from the package folder.
@@ -453,14 +397,7 @@ options(
     "Short-lived DataONE JWT"
   )
 )
-```
 
-``` error
-Error:
-! RStudio not running
-```
-
-``` r
 tryCatch(
   publish_sdp_to_knb(
     pkg_path,
@@ -471,11 +408,6 @@ tryCatch(
   ),
   finally = options(dataone_token = previous_token)
 )
-```
-
-``` error
-Error in `publish_sdp_to_knb()`:
-! could not find function "publish_sdp_to_knb"
 ```
 
 Do not place the token in a script, `.Renviron`, YAML, manifest, command argument, or shell history. Do not switch to `public = TRUE` merely for convenience: public access is a separate redistribution decision and requests DataONE preservation replicas.

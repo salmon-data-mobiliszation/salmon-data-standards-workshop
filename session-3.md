@@ -157,7 +157,7 @@ Start Python from the same project root and use the same folder layout. This exa
 from pathlib import Path
 
 import pandas as pd
-from salmonpy import create_sdp
+from metasalmonpy import create_sdp
 
 project_root = Path.cwd()
 own_data_path = project_root / "raw_data" / "my-salmon-data.csv"
@@ -181,7 +181,7 @@ pkg_path = create_sdp(
 # }
 ```
 
-The Python companion creates the core SDP package. Use current R/`metasalmon` for strict final validation and EML/KNB publication.
+The Python companion creates the core SDP package in the `sdp-0.2.0` shape (`metasalmonpy` 0.2.1 mirrors metasalmon 0.2.1). Use current R/`metasalmon` — migrating first with `migrate_sdp_methods()` — for strict final validation and EML/KNB publication against the current specification.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

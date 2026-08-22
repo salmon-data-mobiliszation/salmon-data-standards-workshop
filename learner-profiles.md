@@ -40,7 +40,7 @@ Success:
 
 Needs:
 
-- a reproducible `salmonpy.create_sdp()` path;
+- a reproducible `metasalmonpy.create_sdp()` path;
 - the same project layout and package files used in the R walkthrough;
 - accurate Python calling conventions for review and gap-detection functions;
 - a clear handoff to the normative R publication validator.
