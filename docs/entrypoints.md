@@ -30,8 +30,8 @@ This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards 
 ## Upstream workflow sources
 
 - `metasalmon`: <https://github.com/salmon-data-mobilization/metasalmon>
-- `salmonpy` repository (`metaSmnPy`): <https://github.com/salmon-data-mobilization/metaSmnPy>
-- R/Python parity contract: <https://salmon-data-mobilization.github.io/metaSmnPy/guides/parity.html>
+- `metasalmonpy` repository: <https://github.com/salmon-data-mobilization/metasalmonpy>
+- R/Python parity contract: <https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html>
 - Salmon Data Package specification: <https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md>
 - Blank SDP CSV template: <https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template>
 - SDP field reference: <https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md>

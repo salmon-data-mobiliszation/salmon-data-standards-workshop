@@ -61,7 +61,7 @@ Adjust times for breaks and group size.
 
 ## Mixed-audience facilitation
 
-Pair spreadsheet participants with R-capable participants for validation and export steps, but do not make them wait for code before they can reason about metadata. Python participants can run the paired `salmonpy` 0.1.6 blocks for the core workflow; current R/`metasalmon` performs the strict final check, EML export, and KNB publication.
+Pair spreadsheet participants with R-capable participants for validation and export steps, but do not make them wait for code before they can reason about metadata. Python participants can run the paired `metasalmonpy` 0.2.1 blocks for the core workflow; current R/`metasalmon` performs the strict final check, EML export, and KNB publication against the current `sdp-0.3.0` specification.
 
 Recommended table roles:
 
@@ -100,7 +100,7 @@ After Session 4:
 
 - Which measurement mappings are accepted?
 - Which are removed or deferred?
-- Are units and methods treated separately from I-ADOPT property/entity/constraint?
+- Are units treated separately from I-ADOPT roles, statistical modifiers used only for aggregations, and methods placed at the table, protocol, or code level rather than in the dictionary?
 
 After Sessions 5 and 6:
 
@@ -133,7 +133,7 @@ Before delivery:
 - choose a small example dataset;
 - prepare an RStudio Project containing `raw_data/`, `context/`, and `output/`;
 - prepare one already-created SDP folder and open the four filled metadata CSVs before any code;
-- verify current R/`metasalmon` 0.2.3-or-later examples and, when Python participants are expected, the separate `salmonpy` 0.1.6 companion environment;
+- verify the R/`metasalmon` 0.3.0 examples and, when Python participants are expected, the separate `metasalmonpy` 0.2.1 companion environment;
 - prepare one measurement mapping example;
 - prepare semantic suggestion output in advance if live vocabulary lookup would interrupt the schedule;
 - prepare one categorical code-list example;

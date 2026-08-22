@@ -105,9 +105,9 @@ from importlib.resources import files
 from pathlib import Path
 
 import pandas as pd
-from salmonpy import create_sdp
+from metasalmonpy import create_sdp
 
-data_path = files("salmonpy.data").joinpath(
+data_path = files("metasalmonpy.data").joinpath(
     "nuseds-fraser-coho-sample.csv"
 )
 
@@ -129,7 +129,7 @@ for path in sorted(
     print(path.relative_to(pkg_path))
 ```
 
-The R and Python packages bundle separate practice fixtures. They demonstrate the same core package structure, but do not use their row counts to test cross-language parity. Python may also write a hidden `.salmonpy-package` bookkeeping file. The final EML and KNB workflow is R-only in the versions used here.
+The R and Python packages bundle separate practice fixtures. They demonstrate the same core package structure, but do not use their row counts to test cross-language parity. Each writer also leaves a hidden bookkeeping file (`.metasalmon-package` in R, `.metasalmonpy-package` in Python). Note that `metasalmonpy` 0.2.1 writes the earlier `sdp-0.2.0` package shape; the final EML and KNB workflow taught here runs in R against the current `sdp-0.3.0` specification.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -150,6 +150,7 @@ Expected structure:
 output/fraser-coho-example-sdp/
   README-review.txt
   datapackage.json
+  .metasalmon-package          # hidden writer bookkeeping file; leave it alone
   metadata/
     dataset.csv
     tables.csv
@@ -239,7 +240,7 @@ review_check$semantic_validation$missing_terms
 ## Python equivalent
 
 ```python
-from salmonpy import validate_salmon_datapackage
+from metasalmonpy import validate_salmon_datapackage
 
 review_check = validate_salmon_datapackage(
     pkg_path,

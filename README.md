@@ -6,7 +6,7 @@ The material is being refactored for the Salmon Ontology Development Working Gro
 
 ## Learning Path
 
-1. **Structure first**: create a draft Salmon Data Package from existing data with R/`metasalmon`, the paired Python/`salmonpy` workflow, or the blank SDP CSV template.
+1. **Structure first**: create a draft Salmon Data Package from existing data with R/`metasalmon`, the paired Python/`metasalmonpy` workflow, or the blank SDP CSV template.
 2. **Context next**: write dataset, table, column, code, caveat, and method notes that travel with the data.
 3. **Meaning where it matters**: review suggested term mappings, focusing first on measurement columns and important code lists.
 4. **Contribution paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology.
@@ -25,7 +25,7 @@ No terminology-standards background is assumed. Session 1 defines semantic links
 
 ## R and Python compatibility
 
-The R examples target `metasalmon` 0.2.3 or later from the canonical GitHub `main` branch; the latest tagged R release at the time of this update is 0.1.8. The Python companion remains `salmonpy` 0.1.6. These implementations share the core SDP structure but are no longer version-aligned: use R/`metasalmon` for strict final validation, EML export, and KNB/DataONE publication.
+The R examples target the tagged `metasalmon` 0.3.0 release, which implements version `sdp-0.3.0` of the SDP specification. The Python companion is `metasalmonpy` 0.2.1 (renamed from `metaSmnPy`/`salmonpy`); its version is a parity claim against metasalmon 0.2.1, so it writes the earlier `sdp-0.2.0` package shape. Use R/`metasalmon` for strict final validation, EML export, and KNB/DataONE publication, migrating Python-created packages with `migrate_sdp_methods()` first.
 
 ## Formats
 
@@ -37,7 +37,7 @@ The same materials support two delivery modes:
 ## Repository Contents
 
 - `episodes/`: learner-facing workshop sessions.
-- `learners/setup.md`: setup guidance for R/metasalmon, Python/salmonpy, and spreadsheet participants.
+- `learners/setup.md`: setup guidance for R/metasalmon, Python/metasalmonpy, and spreadsheet participants.
 - `learners/reference.md`: glossary, decision aids, and core workflow checks.
 - `instructors/instructor-notes.md`: facilitation plans for one-hour and full-day delivery.
 - `profiles/learner-profiles.md`: persona notes for designing and testing the workshop.
@@ -47,7 +47,7 @@ The same materials support two delivery modes:
 
 - [Salmon Data Package specification](https://github.com/salmon-data-mobilization/smn-data-pkg)
 - [metasalmon R package](https://github.com/salmon-data-mobilization/metasalmon)
-- [salmonpy Python package](https://github.com/salmon-data-mobilization/metaSmnPy)
+- [metasalmonpy Python package](https://github.com/salmon-data-mobilization/metasalmonpy)
 - [Salmon Domain Ontology](https://github.com/salmon-data-mobilization/salmon-domain-ontology)
 - [GC DFO Salmon Ontology](https://github.com/dfo-pacific-science/dfo-salmon-ontology)
 

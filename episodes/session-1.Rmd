@@ -131,7 +131,7 @@ SDP combines several layers; they should not be described as one universal stand
 | --- | --- |
 | Frictionless Data Package and Table Schema | The package/resource structure, table fields, value types, constraints, and machine-readable schemas used to validate each metadata CSV and `datapackage.json`. |
 | Common discovery/catalog concepts | Titles, descriptions, contacts, licences, temporal coverage, keywords, and provenance that can map into EML, HNAP/ISO, or another catalog profile. |
-| I-ADOPT, SOSA, SKOS/OWL, and unit vocabularies | External semantic roles for measurement property/entity/constraint, methods, reusable concepts, code lists, and units. |
+| I-ADOPT, SOSA, SKOS/OWL, and unit vocabularies | External semantic roles for measurement property/entity/constraint/statistical modifier, table- and code-level procedures, reusable concepts, code lists, and units. |
 | Salmon Data Package profile | The exact CSV filenames and columns, joins through `dataset_id`/`table_id`/`column_name`, `column_role`, observation-unit conventions, categorical-code coverage, and salmon publication rules. |
 
 In other words, every metadata CSV is described with a **Frictionless Table Schema**, but not every SDP column name comes from Frictionless itself. SDP defines a custom Frictionless profile and aligns selected fields with other standards where the alignment is warranted.
@@ -160,10 +160,10 @@ The worked code uses R first. Python equivalents appear immediately afterward fo
 | If you usually work in... | Start with... | Publication handoff |
 | --- | --- | --- |
 | R | `metasalmon::create_sdp()` | R also provides strict validation, EML export, and KNB publication. |
-| Python | `salmonpy.create_sdp()` | Hand the compatible SDP to current R/`metasalmon` for the final gate. |
+| Python | `metasalmonpy.create_sdp()` | Hand the compatible SDP to current R/`metasalmon` for the final gate. |
 | Excel or Calc | Blank SDP CSV template folder | Hand the reviewed CSV package to R/`metasalmon` for validation and export. |
 
-The revised R examples target `metasalmon` 0.2.3 or later from GitHub `main`. The Python companion remains `salmonpy` 0.1.6, so do not claim complete version or feature parity.
+The R examples target the tagged `metasalmon` 0.3.0 release, which implements `sdp-0.3.0`. The Python companion is `metasalmonpy` 0.2.1, whose version is a parity claim against metasalmon 0.2.1 — it writes the earlier `sdp-0.2.0` shape — so do not claim complete version or feature parity, and expect R's `migrate_sdp_methods()` in the handoff.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 

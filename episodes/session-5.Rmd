@@ -28,7 +28,7 @@ Use `metadata/codes.csv` when a column has controlled values. It is required whe
 
 `code_value` is required unless `vocabulary_iri` is supplied. A vocabulary-only row with a blank `code_value` documents an external vocabulary but does not cover any value observed in the data.
 
-This work is language-independent: `metasalmon` and `salmonpy` read and write the same `metadata/codes.csv` structure.
+This work is language-independent: `metasalmon` and `metasalmonpy` read and write the same `metadata/codes.csv` structure.
 
 | Field | Purpose |
 | --- | --- |
