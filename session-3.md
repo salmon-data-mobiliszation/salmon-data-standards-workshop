@@ -23,7 +23,7 @@ exercises: 40
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Path B: replace the example deliberately
+## Replace the quickstart with your data
 
 Session 2 used an included dataset, ID, table name, and output folder. For personal data, replace all four together:
 
@@ -52,9 +52,17 @@ salmon-data-workshop/
 
 Use only files you are allowed to bring to the workshop. Do not send source or context files to an external service unless that use is approved.
 
-## One flat CSV
+## Create the package in your software lane
 
-This is the direct replacement for the simple example:
+Choose the same R, Python, or Spreadsheet lane you used for the quickstart. The code lanes create the package for you. The spreadsheet lane shows how to assemble the same standard files manually when you cannot run either package.
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
+
+**One flat CSV**
+
+This is the direct replacement for the quickstart:
 
 ```r
 library(metasalmon)
@@ -77,12 +85,12 @@ pkg_path <- create_sdp(
   dataset_id = "my-salmon-data",
   table_id = "observations",
   seed_semantics = FALSE,
-  check_updates = FALSE,
+  check_updates = TRUE,
   overwrite = FALSE
 )
 ```
 
-## Several CSV tables in one dataset
+**Several CSV tables in one dataset**
 
 A dataset can contain several related tables. Read each one, give each a safe unique `table_id`, and pass a **named list**. The list names become table IDs, so use letters, numbers, and underscores rather than workbook display labels with spaces.
 
@@ -104,14 +112,14 @@ multi_pkg_path <- create_sdp(
   path = file.path("output", "my-multi-table-sdp"),
   dataset_id = "my-multi-table-dataset",
   seed_semantics = FALSE,
-  check_updates = FALSE,
+  check_updates = TRUE,
   overwrite = FALSE
 )
 ```
 
 The package gets one `dataset.csv` row, two `tables.csv` rows, one data CSV per table, and one `column_dictionary.csv` row for every column in both tables.
 
-## Excel workbook with several sheets
+**Excel workbook with several sheets**
 
 An Excel workbook is a container. Read each rectangular sheet separately and pass the resulting named list just as you did for several CSVs.
 
@@ -138,20 +146,16 @@ workbook_pkg_path <- create_sdp(
   path = file.path("output", "my-workbook-sdp"),
   dataset_id = "my-workbook-dataset",
   seed_semantics = FALSE,
-  check_updates = FALSE,
+  check_updates = TRUE,
   overwrite = FALSE
 )
 ```
 
-Clean presentation artifacts before packaging: repeated headings, merged cells, notes above the header, subtotals, and two unrelated tables on one sheet are not one flat table. Keep the original workbook unchanged in `raw_data/` and document any transformation.
+## Python
 
-NetCDF is not an Excel-like multi-table container. Its dimensions, coordinates, arrays, and attributes are not preserved by this workflow, so do not present a flattened extract as the complete source unless that derivative has been explicitly reviewed and described.
+Start Python from the same project root and use the same folder layout.
 
-::::::::::::::::::::::::::::::::::::: callout
-
-## Python companion for personal data
-
-Start Python from the same project root and use the same folder layout. This example shows one CSV; for multiple tables, build a dictionary whose keys are safe table IDs and whose values are pandas DataFrames.
+**One flat CSV**
 
 ```python
 from pathlib import Path
@@ -170,24 +174,97 @@ pkg_path = create_sdp(
     dataset_id="my-salmon-data",
     table_id="observations",
     seed_semantics=False,
-    check_updates=False,
+    check_updates=True,
     overwrite=False,
 )
-
-# Multi-table shape when needed:
-# tables = {
-#     "escapement": pd.read_csv(project_root / "raw_data" / "escapement.csv"),
-#     "sites": pd.read_csv(project_root / "raw_data" / "sites.csv"),
-# }
 ```
 
-The Python companion creates the core SDP package in the `sdp-0.2.0` shape (`metasalmonpy` 0.2.1 mirrors metasalmon 0.2.1). Use current R/`metasalmon` — migrating first with `migrate_sdp_methods()` — for strict final validation and EML/KNB publication against the current specification.
+**Several CSV tables in one dataset**
+
+Use a dictionary whose keys are safe table IDs and whose values are pandas DataFrames.
+
+```python
+tables = {
+    "escapement": pd.read_csv(
+        project_root / "raw_data" / "escapement.csv"
+    ),
+    "sites": pd.read_csv(
+        project_root / "raw_data" / "sites.csv"
+    ),
+}
+
+multi_pkg_path = create_sdp(
+    tables,
+    path=project_root / "output" / "my-multi-table-sdp",
+    dataset_id="my-multi-table-dataset",
+    seed_semantics=False,
+    check_updates=True,
+    overwrite=False,
+)
+```
+
+**Excel workbook with several sheets**
+
+Pandas uses `openpyxl` to read `.xlsx` workbooks. Read each rectangular sheet explicitly and give it a safe table ID.
+
+```python
+workbook_path = project_root / "raw_data" / "my-salmon-workbook.xlsx"
+
+workbook_tables = {
+    "escapement": pd.read_excel(
+        workbook_path,
+        sheet_name="Escapement",
+    ),
+    "sites": pd.read_excel(
+        workbook_path,
+        sheet_name="Sites",
+    ),
+}
+
+workbook_pkg_path = create_sdp(
+    workbook_tables,
+    path=project_root / "output" / "my-workbook-sdp",
+    dataset_id="my-workbook-dataset",
+    seed_semantics=False,
+    check_updates=True,
+    overwrite=False,
+)
+```
+
+## Spreadsheet
+
+Copy the [blank SDP CSV template][sdp-template] into a new folder under `output/`. Keep your original table unchanged under `raw_data/`, save a rectangular CSV copy under the package's `data/` folder, and fill the canonical CSVs under `metadata/` using the [SDP field reference][sdp-field-reference].
+
+For a dataset with several tables, add one row per table to `metadata/tables.csv`, one dictionary row per column to `metadata/column_dictionary.csv`, and one CSV per table under `data/`. Preserve the template headers and folder structure. Spreadsheet review can prepare the package metadata, but it does not run automated validation.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+The R and Python implementations create the same current SDP structure. The spreadsheet lane edits that structure directly.
+
+Clean presentation artifacts before packaging: repeated headings, merged cells, notes above the header, subtotals, and two unrelated tables on one sheet are not one flat table. Keep the original workbook unchanged in `raw_data/` and document any transformation.
+
+NetCDF is not an Excel-like multi-table container. Its dimensions, coordinates, arrays, and attributes are not preserved by this workflow, so do not present a flattened extract as the complete source unless that derivative has been explicitly reviewed and described.
+
+## Protect reviewed work when you rerun
+
+The safest rule is: **generate a draft once, then treat the package you review as the current source state**.
+
+| Situation | Safe action |
+| --- | --- |
+| The output folder does not exist | Generate the draft with `overwrite = FALSE` / `overwrite=False`. |
+| A disposable quickstart folder already exists | Use a new output name, or deliberately remove that disposable example outside the lesson before recreating it. |
+| You manually edited `metadata/*.csv` | Do not rerun `create_sdp()` on the same path. Continue with `read_salmon_datapackage()` and validation. |
+| You need a new version after review | Read the reviewed package and write a new versioned folder; Chapter 6 shows this workflow. |
+
+In both language implementations, `overwrite = TRUE` / `overwrite=True` re-infers and replaces files owned by the package writer. That can erase manual edits to canonical metadata or declared data resources. `prune = TRUE` / `prune=True` is more destructive because it empties the package before rewriting it. Neither option replaces a versioned backup or Git history.
 
 ## Read supporting context separately
 
 Source dictionaries, methods notes, and provenance documents help people review the inferred templates. Reading these files does not automatically merge them into `column_dictionary.csv`; you still decide which statements belong in canonical metadata.
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 ```r
 source_dictionary <- readr::read_csv(
@@ -205,6 +282,32 @@ context_paths <- list.files(
   recursive = TRUE
 )
 ```
+
+## Python
+
+```python
+from pathlib import Path
+
+import pandas as pd
+
+context_dir = Path("context")
+
+source_dictionary = pd.read_csv(
+    context_dir / "source-data-dictionary.csv"
+)
+context_note = (
+    context_dir / "methods-and-caveats.md"
+).read_text(encoding="utf-8")
+context_paths = sorted(
+    path for path in context_dir.rglob("*") if path.is_file()
+)
+```
+
+## Spreadsheet
+
+Open the source dictionary beside the package metadata, and keep the methods/caveats note visible while reviewing dataset, table, column, and code descriptions. Copy only reviewed statements into canonical metadata; preserve longer narrative context in the note.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 `context_paths` can be reviewed directly and can later be supplied to optional, approved LLM-assisted review. Merely creating the vector does not send the files anywhere.
 

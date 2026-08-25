@@ -20,7 +20,7 @@ exercises: 55
 - Turn unresolved mappings into a term-gap plan.
 - Route candidate terms to shared, DFO-specific, or local/profile governance.
 - Run the strict SDP validation gate before export.
-- Complete the SDP-to-EML handoff and write validated EML 2.2.
+- Export the reviewed SDP as validated EML 2.2.
 - Preview an exact KNB/DataONE deposit and distinguish a dry run from a persistent live upload.
 - Write an intentional new package version from reviewed metadata.
 
@@ -34,9 +34,13 @@ When no candidate term fits, do not force the closest match. Record the gap and 
 
 The package should keep enough evidence that maintainers can understand the request without a long follow-up interview.
 
-## Post-review workflow in R
+## Build a term-gap plan in your software lane
 
 After editing the metadata files, reload and validate the current package state.
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 ```r
 pkg <- read_salmon_datapackage(pkg_path)
@@ -112,9 +116,7 @@ if (nrow(gaps) == 0) {
 }
 ```
 
-::::::::::::::::::::::::::::::::::::: callout
-
-## Python equivalent
+## Python
 
 ```python
 from pathlib import Path
@@ -197,6 +199,10 @@ else:
     )
 ```
 
+## Spreadsheet
+
+Open `semantic_suggestions.csv` and the canonical metadata CSVs. For each unresolved field or code, record the dataset, table, field, search wording, closest candidate, why it does not fit, supporting source, and proposed route (`smn`, `gcdfo`, `profile`, or defer). Keep this as a reviewable term-gap plan; spreadsheet review does not submit a request.
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 `detect_semantic_term_gaps()` combines deterministic candidate gaps with final LLM `request_new_term` decisions when LLM assessment was enabled. `gap_detection_basis` records which evidence created the gap, and `llm_escalated_from` preserves an unresolved `reject_shortlist` escalation. The deterministic `suggest_semantics()` call shown above leaves those LLM fields blank.
@@ -204,6 +210,10 @@ else:
 `render_ontology_term_request()` converts the gaps into reviewable draft payloads and proposed routes. It never submits an issue. The output is a working list, not an automatic governance decision.
 
 To preview the SMN and GCDFO issue bodies without posting anything:
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 ```r
 issue_preview <- if (nrow(requests) == 0) {
@@ -217,9 +227,7 @@ issue_preview <- if (nrow(requests) == 0) {
 issue_preview
 ```
 
-::::::::::::::::::::::::::::::::::::: callout
-
-## Python equivalent
+## Python
 
 ```python
 from metasalmonpy import submit_term_request_issues
@@ -238,6 +246,10 @@ else:
 
 print(issue_preview)
 ```
+
+## Spreadsheet
+
+Use the term-gap plan as the draft review surface. A maintainer can turn an approved row into the relevant repository's request format later; nothing in the spreadsheet posts an issue or mints a term.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -269,19 +281,27 @@ A useful request includes:
 
 ## Final validation is later
 
-Strict validation is the final gate.
+Strict validation is the final gate. Use the language lane you selected earlier.
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 ```r
 validate_salmon_datapackage(pkg_path, require_iris = TRUE)
 ```
 
-Python can run a useful companion check:
+## Python
 
 ```python
 validate_salmon_datapackage(pkg_path, require_iris=True)
 ```
 
-For publication, run the current R `metasalmon` strict validator shown first. `metasalmonpy` 0.2.1 provides a useful companion check for the core package, but its version is a parity claim against metasalmon 0.2.1: it validates the earlier `sdp-0.2.0` shape and is not aligned with metasalmon 0.3.0. The R validator is the gate against the current specification.
+## Spreadsheet
+
+Spreadsheet review can resolve metadata content, but it cannot execute the strict validator. Run this final gate against the same package folder in R or Python before EML export or publication.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 Run it only when:
 
@@ -299,7 +319,7 @@ Deferred measurement gaps are valid in draft or review state. They will not pass
 
 ## Map the reviewed SDP into EML
 
-`metasalmon` does not simply rename SDP fields. It builds a new EML document and validates the result:
+`metasalmon` and `metasalmonpy` do not simply rename SDP fields. They build a new EML document and validate the result:
 
 | Reviewed SDP source | EML output |
 | --- | --- |
@@ -313,11 +333,11 @@ Deferred measurement gaps are valid in draft or review state. They will not pass
 
 The canonical SDP does not contain every fact EML requires. For example, a free-text `creator` cell cannot safely be guessed into structured people, organizations, ORCIDs, and metadata-provider roles. Measurement scale and the meanings of missing-value tokens also need explicit review.
 
-## Export validated EML 2.2
+## Export validated EML
 
 The code blocks from here to the end of this section operate on `pkg_path`, the reviewed package you have been building through the workshop; they are shown for you to run in your own session and are not executed when the lesson website is built.
 
-Install `emld` and `jsonvalidate`, then copy the package's sidecar template once:
+Create `metadata/eml-mapping.yml` from metasalmon's [canonical mapping template][metasalmon-eml-mapping]. R users can copy the template from their installed package with the code below; Python and spreadsheet users can download the linked file and save it at the same package-relative path.
 
 
 ``` r
@@ -343,7 +363,11 @@ Stop and review the copied YAML. Replace every example value. The sidecar must b
 
 The detailed, current checklist is in the [metasalmon post-review and publication workflow][metasalmon-eml-workflow]. Do not invent dummy parties, checksums, rights evidence, measurement scales, or missing-value meanings merely to make validation pass.
 
-When the SDP, its semantic-review evidence, and the sidecar are final:
+When the SDP, its semantic-review evidence, and the sidecar are final, use your software lane:
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 
 ``` r
@@ -354,11 +378,33 @@ eml_result$eml_version
 eml_result$validation
 ```
 
-The default output is `metadata/eml.xml`. An identical existing file is an idempotent success. A different existing file is protected unless you deliberately pass `overwrite = TRUE` after reviewing why the bytes changed.
+## Python
+
+```python
+from metasalmonpy import write_eml_from_sdp
+
+eml_result = write_eml_from_sdp(pkg_path)
+
+print(eml_result["path"])
+print(eml_result["eml_version"])
+print(eml_result["validation"])
+```
+
+## Spreadsheet
+
+Spreadsheet software can be used to complete and review the SDP metadata and `eml-mapping.yml`, but it does not run the EML schema validator. When you are ready for export, open the same package folder in either code lane and run its exporter; the reviewed package remains the source state.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+The default output is `metadata/eml.xml`. An identical existing file is an idempotent success. A different existing file is protected unless you deliberately pass `overwrite = TRUE` / `overwrite=True` after reviewing why the bytes changed.
 
 ## Preview the KNB/DataONE catalog deposit
 
 Use a dry run first. It creates local EML, OAI-ORE, and manifest artifacts, but it does not read credentials or make a network request:
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 
 ``` r
@@ -367,29 +413,71 @@ knb_plan <- publish_sdp_to_knb(
   public = FALSE,
   dry_run = TRUE,
   representation = "expanded",
-  overwrite = FALSE
+  overwrite = FALSE,
+  knb_environment = "test"
 )
 
 knb_plan$status
 knb_plan$manifest_path
 ```
 
-Review `publication/knb-manifest.json`. The expanded plan lists the original data resources, allowlisted canonical SDP artifacts, validated EML science metadata, and the OAI-ORE resource map with exact identifiers and checksums. It does not scan and upload arbitrary files from the package folder.
+## Python
 
-In `metasalmon` 0.2.3 or later, `overwrite = TRUE` can rebuild conflicting artifacts left by an **unpublished dry run** after you correct an input. It cannot overwrite anything that reached DataONE; published PIDs are immutable and require a reviewed revision.
+```python
+from metasalmonpy import publish_sdp_to_knb
+
+knb_plan = publish_sdp_to_knb(
+    pkg_path,
+    public=False,
+    dry_run=True,
+    representation="expanded",
+    overwrite=False,
+    knb_environment="test",
+)
+
+print(knb_plan["status"])
+print(knb_plan["manifest_path"])
+```
+
+## Spreadsheet
+
+Spreadsheet software cannot generate the cryptographic manifest. Review an instructor-provided dry-run manifest alongside the package: confirm the intended files, identifiers, checksums, selected environment, and access decision. Generate a new manifest in R or Python before any real deposit.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Review `publication/test/knb-manifest.json`. The expanded plan lists the original data resources, allowlisted canonical SDP artifacts, validated EML science metadata, and the OAI-ORE resource map with exact identifiers and checksums. It does not scan and upload arbitrary files from the package folder. The test environment is a rehearsal: it is non-durable, cannot be promoted into production, is unsuitable for sensitive data, and cannot receive a DOI.
+
+`overwrite = TRUE` / `overwrite=True` can rebuild conflicting local artifacts left by an **unpublished dry run** after you correct an input. It cannot overwrite anything that reached DataONE; published PIDs are immutable and require a reviewed revision.
 
 ## Live upload is a separate authorized action
 
-A live call creates persistent production KNB objects even when `public = FALSE`. Private access is a review posture, not a server-side draft. The call requires:
+A live call mutates the selected KNB environment. A production call creates persistent KNB objects even when `public = FALSE`; private access is a review posture, not a server-side draft. Rehearse against the test node first, then create and review a separate production dry-run plan before authorizing production. The production call requires:
 
-- the exact pre-existing dry-run plan;
-- a short-lived DataONE JWT entered only into the current R process;
+- the exact pre-existing production dry-run plan;
+- a short-lived production DataONE JWT entered only into the current process;
 - an authenticated subject matching the reviewed EML metadata provider;
 - `confirm = TRUE`; and
 - authority for the chosen access and redistribution decision.
 
+The code below is intentionally display-only. It first creates the credential-free production plan that must be reviewed, then shows the separate live action. Here `overwrite = TRUE` / `overwrite=True` permits the planner to replace the unpublished standalone EML with the publication-aware EML that names the planned objects; it is not permission to overwrite anything already deposited.
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
+
 
 ``` r
+production_plan <- publish_sdp_to_knb(
+  pkg_path,
+  public = FALSE,
+  dry_run = TRUE,
+  representation = "expanded",
+  overwrite = TRUE,
+  knb_environment = "production"
+)
+
+production_plan$manifest_path
+
 previous_token <- getOption("dataone_token")
 
 options(
@@ -404,11 +492,52 @@ tryCatch(
     public = FALSE,
     dry_run = FALSE,
     confirm = TRUE,
-    representation = "expanded"
+    representation = "expanded",
+    knb_environment = "production"
   ),
   finally = options(dataone_token = previous_token)
 )
 ```
+
+## Python
+
+```python
+from getpass import getpass
+
+from metasalmonpy import publish_sdp_to_knb
+from metasalmonpy.knb_publication import set_dataone_token
+
+production_plan = publish_sdp_to_knb(
+    pkg_path,
+    public=False,
+    dry_run=True,
+    representation="expanded",
+    overwrite=True,
+    knb_environment="production",
+)
+
+print(production_plan["manifest_path"])
+
+set_dataone_token(getpass("Short-lived production DataONE JWT: "))
+
+try:
+    publication_result = publish_sdp_to_knb(
+        pkg_path,
+        public=False,
+        dry_run=False,
+        confirm=True,
+        representation="expanded",
+        knb_environment="production",
+    )
+finally:
+    set_dataone_token(None)
+```
+
+## Spreadsheet
+
+Do not perform a live upload from a spreadsheet. Use the manifest as the approval surface, then run the exact reviewed plan in R or Python only when the data owner and publisher have authorized the production access and redistribution decision.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 Do not place the token in a script, `.Renviron`, YAML, manifest, command argument, or shell history. Do not switch to `public = TRUE` merely for convenience: public access is a separate redistribution decision and requests DataONE preservation replicas.
 
@@ -417,6 +546,10 @@ Publication is complete only when the intended catalog state is verified, not me
 ## Later example: make a new version after review
 
 After people have edited package metadata over time, do not regenerate the same folder from raw data and hope the edits survive. Read the reviewed state, make deliberate changes in memory, and write a new versioned folder:
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 ```r
 reviewed_pkg <- read_salmon_datapackage(pkg_path)
@@ -448,6 +581,48 @@ validate_salmon_datapackage(
 )
 ```
 
+## Python
+
+```python
+from pathlib import Path
+
+from metasalmonpy import (
+    read_salmon_datapackage,
+    validate_salmon_datapackage,
+    write_salmon_datapackage,
+)
+
+reviewed_pkg = read_salmon_datapackage(pkg_path)
+
+reviewed_dataset = reviewed_pkg["dataset"].copy()
+reviewed_dataset.loc[:, "description"] = (
+    reviewed_dataset["description"].astype(str)
+    + " This version adds the reviewed 2026 return-year records."
+)
+reviewed_pkg["dataset"] = reviewed_dataset
+
+v2_path = write_salmon_datapackage(
+    resources=reviewed_pkg["resources"],
+    dataset_meta=reviewed_pkg["dataset"],
+    table_meta=reviewed_pkg["tables"],
+    dict_df=reviewed_pkg["dictionary"],
+    codes=reviewed_pkg["codes"],
+    path=Path("output") / "my-salmon-sdp-v2",
+    overwrite=False,
+)
+
+validate_salmon_datapackage(
+    v2_path,
+    require_iris=True,
+)
+```
+
+## Spreadsheet
+
+Preserve the reviewed package unchanged. Copy it to a clearly named new version folder, make the deliberate metadata or data changes in that copy, and document what changed. Before EML export or publication, run strict validation against the new folder in R or Python; do not treat a manual copy as validated merely because its files open successfully.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 If data columns changed, update the dictionary. If new categorical values appeared, update `codes.csv`. Rebuild and review version-specific semantic, EML, and publication artifacts; do not blindly copy old checksum-bound sidecars.
 
 For a later KNB version, keep the earlier package and verified manifest unchanged, add a new reviewed `publication.revision_key` to the new version's EML sidecar, and plan against the preceding `revision_manifest`. This creates an immutable revision rather than overwriting published bytes.
@@ -470,7 +645,7 @@ Decide:
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 2: Trace the publication handoff
+## Challenge 2: Trace the publication workflow
 
 Using a finalized instructor-provided package or your own package when it is ready:
 

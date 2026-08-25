@@ -14,7 +14,7 @@ Before using specialized language, say:
 
 > An ontology is a maintained set of concepts and definitions that also records how the concepts relate. In this workshop, learners use shared definitions; they do not build an ontology.
 
-Say "link to a shared definition" before introducing "semantic link" or "semantic mapping." Teach the code in R first, then point Python participants to the companion block rather than presenting two separate lectures.
+Say "link to a shared definition" before introducing "semantic link" or "semantic mapping." Present R and Python as equivalent language lanes, and point spreadsheet participants to the separate no-code subsection where one is provided.
 
 Repeat these messages throughout:
 
@@ -34,9 +34,9 @@ Use this when the goal is awareness and recruitment.
 | Time | Activity |
 | --- | --- |
 | 0:00-0:05 | State the reviewed SDP -> valid EML -> guarded catalog end goal |
-| 0:05-0:15 | Define dataset/table/flat file; show filled `dataset.csv`, `tables.csv`, `column_dictionary.csv`, and `codes.csv` |
+| 0:05-0:15 | Introduce the integration system and give a high-level tour of the SDP structure |
 | 0:15-0:20 | Confirm the project plus `raw_data/`, `context/`, and `output/` before code |
-| 0:20-0:32 | Run the simple `create_sdp()` template-generation example; point out the Python and spreadsheet paths |
+| 0:20-0:32 | Run the simple `create_sdp()` template-generation example; point out the R, Python, and spreadsheet lanes |
 | 0:32-0:45 | Review key field definitions, one measurement row, and one code row |
 | 0:45-0:55 | Trace SDP fields into EML and inspect a credential-free KNB dry-run manifest |
 | 0:55-1:00 | Explain rerun safety, authorization boundaries, and next steps |
@@ -47,7 +47,7 @@ Do not teach ontology editing in the one-hour format.
 
 | Time | Activity |
 | --- | --- |
-| 0:00-0:30 | End goal, dataset/table/flat-file definitions, filled metadata examples, and package anatomy |
+| 0:00-0:30 | Integration-system overview, dataset/table/flat-file definitions, and high-level package anatomy |
 | 0:30-0:45 | Create/open project and confirm `raw_data/`, `context/`, and `output/` |
 | 0:45-1:45 | Generate the simple example, then create or inspect learner-owned draft packages |
 | 1:45-2:15 | Peer review package structure |
@@ -61,7 +61,7 @@ Adjust times for breaks and group size.
 
 ## Mixed-audience facilitation
 
-Pair spreadsheet participants with R-capable participants for validation and export steps, but do not make them wait for code before they can reason about metadata. Python participants can run the paired `metasalmonpy` 0.2.1 blocks for the core workflow; current R/`metasalmon` performs the strict final check, EML export, and KNB publication against the current `sdp-0.3.0` specification.
+Spreadsheet participants can use a complete review-and-editing lane for the canonical metadata CSVs. Automated validation, EML export, manifest generation, and publication currently require R or Python; explain that boundary without treating either code implementation as primary.
 
 Recommended table roles:
 
@@ -84,10 +84,9 @@ After Session 1:
 After Session 2:
 
 - Was the project and folder layout ready before the demo?
-- Did the chosen R, Python, or spreadsheet path create the standard package files?
-- Can learners state whether they are following the unchanged example or personal-data path?
+- Did the chosen R or Python path generate the quickstart, or did the spreadsheet path open the canonical blank template?
+- Can learners explain that Chapter 2 uses a prepared starting point and Chapter 3 introduces their own data?
 - Which fields still contain placeholders or `REVIEW:` suggestions?
-- Can they explain what an unsafe rerun could overwrite?
 
 After Session 3:
 
@@ -95,6 +94,7 @@ After Session 3:
 - Can learners read their own file using a path relative to the project root?
 - If the dataset has several tables, did they pass a named list and preserve each table's row meaning?
 - Is enough context present to prevent obvious misuse?
+- Can they explain what an unsafe rerun could overwrite and how a new version protects reviewed work?
 
 After Session 4:
 
@@ -108,7 +108,7 @@ After Sessions 5 and 6:
 - Which are DFO-specific?
 - Which should stay local/profile?
 - Is there enough evidence to make a useful request?
-- Did strict R validation pass before EML export?
+- Did strict validation pass before EML export?
 - Which facts came directly from SDP, and which required `eml-mapping.yml`?
 - Was catalog work a dry run or an authorized live upload?
 - If updating an older package, was a new version written instead of overwriting reviewed or published state?
@@ -132,8 +132,8 @@ Before delivery:
 
 - choose a small example dataset;
 - prepare an RStudio Project containing `raw_data/`, `context/`, and `output/`;
-- prepare one already-created SDP folder and open the four filled metadata CSVs before any code;
-- verify the R/`metasalmon` 0.3.0 examples and, when Python participants are expected, the separate `metasalmonpy` 0.2.1 companion environment;
+- prepare one current, already-created SDP folder for later review after the high-level system overview and quickstart;
+- install the latest R/`metasalmon` and Python/`metasalmonpy` packages and verify the examples in each language being taught;
 - prepare one measurement mapping example;
 - prepare semantic suggestion output in advance if live vocabulary lookup would interrupt the schedule;
 - prepare one categorical code-list example;
@@ -141,5 +141,5 @@ Before delivery:
 - if demonstrating optional LLM review, use an approved provider and non-sensitive context, and show how bundle decisions can be downgraded to manual review;
 - prepare a strictly valid, fully reviewed package with real checksum-bound EML sidecars for the final export exercise; do not fabricate these facts during delivery;
 - generate and review its credential-free KNB dry-run manifest before teaching;
-- decide whether strict R validation and EML export will be learner-run or instructor-led; and
+- decide whether strict validation and EML export in the taught R or Python lane will be learner-run or instructor-led; and
 - default to no live catalog upload. If a live demonstration is explicitly authorized, pre-confirm credentials, redistribution authority, intended access, rollback/recovery expectations, and how `published_pending_catalog` will be reported.
