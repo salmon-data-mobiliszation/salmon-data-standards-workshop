@@ -34,12 +34,12 @@ The two implementations are maintained at behavioral parity and release in locks
 ```text
 salmon-data-workshop/
   salmon-data-workshop.Rproj
-  raw_data/       # unchanged source CSVs or workbooks
-  context/        # codebooks, methods, caveats, provenance
+  raw_data/       # unchanged input data, codebooks, and context files
+  scripts/        # build_sdp.R or build_sdp.py for code-based lanes
   output/         # generated Salmon Data Packages
 ```
 
-R users should open the `.Rproj` file. Every lane should work from the same project root and use paths relative to it.
+R users should open the `.Rproj` file. Keep the prepared dataset and all context inputs together under `raw_data/` and unchanged while the package is built. Every lane should work from the same project root and use paths relative to it. R and Python users put the reproducible build in `scripts/build_sdp.R` or `scripts/build_sdp.py`; spreadsheet users omit the script.
 
 ## Dataset, table, and supported inputs
 

@@ -14,7 +14,7 @@ exercises: 40
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Confirm the project, `raw_data/`, `context/`, and `output/` layout, unless you already completed this during setup.
+- Confirm the project, `raw_data/`, `scripts/`, and `output/` layout, unless you already completed this during setup.
 - Run the bundled example unchanged to generate and inspect templates.
 - Explain why Chapter 2 uses bundled quickstart data and Chapter 3 introduces your own data.
 - Identify supported single-table, multi-table, and workbook inputs.
@@ -27,22 +27,24 @@ If you already created this project and its folders in **Summary and Setup**, sk
 
 1. R users: in RStudio choose **File > New Project**, then create a new project or open the folder you prepared during setup.
 2. Confirm that the working project is `salmon-data-workshop/`; do not call `setwd()` to jump elsewhere.
-3. Create the input, context, and output folders before calling `create_sdp()`.
+3. Create the input, script, and output folders before calling `create_sdp()`.
 
 ```r
 # Run from the open RStudio Project root.
 dir.create("raw_data", showWarnings = FALSE)
-dir.create("context", showWarnings = FALSE)
+dir.create("scripts", showWarnings = FALSE)
 dir.create("output", showWarnings = FALSE)
 ```
 
 ```text
 salmon-data-workshop/
   salmon-data-workshop.Rproj
-  raw_data/                   # unchanged source files
-  context/                    # codebooks, methods, and caveats
+  raw_data/                   # unchanged data and context inputs
+  scripts/                    # build_sdp.R or build_sdp.py
   output/                     # generated package folders
 ```
+
+Keep the prepared dataset, codebooks, methods, caveats, and other context inputs together under `raw_data/` and do not edit them in place while building a package. In Chapter 3, R users will save the reproducible build as `scripts/build_sdp.R`, Python users as `scripts/build_sdp.py`, and spreadsheet users will omit the script.
 
 ## Chapter 2 uses the bundled quickstart data
 
@@ -58,7 +60,7 @@ Choose **R**, **Python**, or **Spreadsheet** below. Your selection is synchroniz
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 `metasalmon` includes a small NuSEDS-derived practice table. Generate its templates with semantic searching turned off so the first result is fast and local.
 
@@ -91,7 +93,7 @@ pkg_path <- create_sdp(
 list.files(pkg_path, recursive = TRUE)
 ```
 
-## Python
+### Python
 
 `metasalmonpy` includes the same NuSEDS-derived practice table. Generate its templates with semantic searching turned off so the first result is fast and local.
 
@@ -124,7 +126,7 @@ for path in sorted(
     print(path.relative_to(pkg_path))
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Spreadsheet participants can inspect the package structure without running code. Download or clone the `smn-data-pkg` repository, copy its [blank SDP CSV template][sdp-template] into `output/spreadsheet-quickstart-sdp/`, and open the CSV files with Excel, LibreOffice Calc, or another spreadsheet editor.
 
@@ -193,7 +195,7 @@ Early validation should catch structure problems without requiring all links to 
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 ```r
 review_check <- validate_salmon_datapackage(
@@ -205,7 +207,7 @@ review_check$semantic_validation$issues
 review_check$semantic_validation$missing_terms
 ```
 
-## Python
+### Python
 
 ```python
 from metasalmonpy import validate_salmon_datapackage
@@ -219,7 +221,7 @@ print(review_check["semantic_validation"]["issues"])
 print(review_check["semantic_validation"]["missing_terms"])
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Spreadsheet software does not currently run the SDP validator. For this quickstart, compare the prepared example's folder structure and metadata headers with the [SDP field reference][sdp-field-reference], and keep unresolved fields or term links visibly in review state. This manual review is not evidence that strict validation has passed.
 

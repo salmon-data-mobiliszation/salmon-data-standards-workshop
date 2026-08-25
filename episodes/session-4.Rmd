@@ -6,7 +6,7 @@ exercises: 40
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- Which terms should we map first?
+- How do we keep semantic review small enough to finish in the workshop?
 - How do I decide whether a suggested IRI is good enough to keep?
 - What does I-ADOPT clarify for measurement columns?
 
@@ -14,82 +14,154 @@ exercises: 40
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Review suggested `term_iri` values without treating them as final.
-- Prioritize measurements, units, observation units, and important categorical code lists.
-- Decompose a measurement using SDP semantic fields without confusing units or methods with I-ADOPT roles.
+- Review one suggested `term_iri` for the Fraser Coho measurement without treating it as final.
+- Decompose that same measurement once using the SDP's I-ADOPT fields.
+- Review one unit IRI, one table observation-unit IRI, and one method-code IRI without confusing those links with I-ADOPT roles.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Do not map everything first
+## Keep the workshop semantic review bounded
 
-The package does not need an IRI for every field. Start with fields where shared meaning changes whether data can be compared:
+In this workshop, we will not try to map every column. Everyone will use the NuSEDS Fraser Coho escapement example for one shared semantic-review exercise, even if you are also building a package from your own data. That gives the room one case to discuss and keeps the decisions small enough to finish.
 
-- measurement variables;
-- units;
-- observation units, meaning what each row is about;
-- categorical code lists that are reused or high-risk;
-- fields that carry important constraints, such as origin, life stage, method, or inclusion rules.
+We will review exactly these linked decisions:
 
-Administrative IDs, file names, local notes, and one-off workflow fields can often rely on clear descriptions.
+| Decision | SDP destination | Shared Fraser Coho example |
+| --- | --- | --- |
+| One complete measurement-variable IRI | `column_dictionary.csv$term_iri` | `NATURAL_SPAWNERS_TOTAL` |
+| One I-ADOPT decomposition | `property_iri`, `entity_iri`, and optional `constraint_iri` on that same dictionary row | abundance for natural-origin salmon in a conservation unit |
+| One simple unit | `column_dictionary.csv$unit_iri` | individuals |
+| What each table row represents | `tables.csv$observation_unit_iri` | an escapement estimate |
+| One method | `codes.csv$term_iri` for one `ESTIMATE_METHOD` value | `Area Under the Curve` |
 
-## Generate suggestions for the current package
+The method is a code-level example because the NuSEDS estimate method varies by row. It is not part of the I-ADOPT decomposition. Administrative IDs, file names, local notes, and the other categorical code lists can rely on clear descriptions for now and be mapped in a later review.
 
-If you used the fast `seed_semantics = FALSE` classroom path, generate candidates now from the package you reviewed. If semantic seeding was enabled during `create_sdp()`, the package-root `semantic_suggestions.csv` contains the original evidence; rerunning after your metadata edits searches only from the current package state.
+## Generate suggestions for the shared example
+
+Continue with the NuSEDS Fraser Coho package from Session 2, even if you created another package from your own data in Session 3. The quickstart used `seed_semantics = FALSE`, so generate candidates now from the metadata you reviewed. If semantic seeding was already enabled for this package, its package-root `semantic_suggestions.csv` contains the original evidence; rerunning after metadata edits searches from the current package state.
+
+The code below subsets the metadata before lookup, so deterministic search runs only for the shared measurement and table target. The `Area Under the Curve` method row is populated by the deterministic NuSEDS crosswalk during package creation, so this lesson reads and reviews that row instead of searching every method code again.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 ```r
-pkg <- read_salmon_datapackage(pkg_path)
+example_pkg_path <- file.path(
+  "output",
+  "fraser-coho-example-sdp"
+)
+
+pkg <- read_salmon_datapackage(example_pkg_path)
+
+measurement_dict <- pkg$dictionary |>
+  dplyr::filter(
+    column_name == "NATURAL_SPAWNERS_TOTAL"
+  )
+
+shared_table <- pkg$tables |>
+  dplyr::filter(table_id == "escapement")
 
 reviewed_dict <- suggest_semantics(
   df = pkg$resources,
-  dict = pkg$dictionary,
-  codes = pkg$codes,
-  table_meta = pkg$tables,
-  dataset_meta = pkg$dataset
+  dict = measurement_dict,
+  table_meta = shared_table
 )
 
 suggestions <- attr(reviewed_dict, "semantic_suggestions")
 
-suggestions |>
-  dplyr::filter(target_scope == "column") |>
+bounded_suggestions <- suggestions |>
+  dplyr::filter(
+    (
+      target_scope == "column" &
+        column_name == "NATURAL_SPAWNERS_TOTAL" &
+        dictionary_role %in% c(
+          "variable",
+          "property",
+          "entity",
+          "constraint",
+          "unit"
+        )
+    ) |
+      (
+        target_scope == "table" &
+          target_sdp_field == "observation_unit_iri"
+      )
+  ) |>
   dplyr::select(
+    target_scope,
     column_name,
     dictionary_role,
+    target_sdp_field,
     label,
     iri,
     source,
     definition
   )
+
+method_example <- pkg$codes |>
+  dplyr::filter(
+    column_name == "ESTIMATE_METHOD",
+    code_value == "Area Under the Curve"
+  ) |>
+  dplyr::select(
+    column_name,
+    code_value,
+    term_iri
+  )
+
+bounded_suggestions
+method_example
 ```
 
-## Python
+### Python
 
 ```python
+from pathlib import Path
+
 from metasalmonpy import (
     read_salmon_datapackage,
     suggest_semantics,
 )
 
-pkg = read_salmon_datapackage(pkg_path)
+example_pkg_path = Path("output") / "fraser-coho-example-sdp"
+
+pkg = read_salmon_datapackage(example_pkg_path)
+
+measurement_dict = pkg["dictionary"].loc[
+    pkg["dictionary"]["column_name"].eq("NATURAL_SPAWNERS_TOTAL")
+]
+shared_table = pkg["tables"].loc[
+    pkg["tables"]["table_id"].eq("escapement")
+]
 
 reviewed_dict = suggest_semantics(
     df=pkg["resources"],
-    dict_df=pkg["dictionary"],
-    codes=pkg["codes"],
-    table_meta=pkg["tables"],
-    dataset_meta=pkg["dataset"],
+    dict_df=measurement_dict,
+    table_meta=shared_table,
 )
 
 suggestions = reviewed_dict.attrs["semantic_suggestions"]
 
-column_suggestions = suggestions.loc[
-    suggestions["target_scope"].eq("column"),
+measurement_targets = (
+    suggestions["target_scope"].eq("column")
+    & suggestions["column_name"].eq("NATURAL_SPAWNERS_TOTAL")
+    & suggestions["dictionary_role"].isin(
+        ["variable", "property", "entity", "constraint", "unit"]
+    )
+)
+table_target = (
+    suggestions["target_scope"].eq("table")
+    & suggestions["target_sdp_field"].eq("observation_unit_iri")
+)
+
+bounded_suggestions = suggestions.loc[
+    measurement_targets | table_target,
     [
+        "target_scope",
         "column_name",
         "dictionary_role",
+        "target_sdp_field",
         "label",
         "iri",
         "source",
@@ -97,52 +169,25 @@ column_suggestions = suggestions.loc[
     ],
 ]
 
-print(column_suggestions)
+method_example = pkg["codes"].loc[
+    pkg["codes"]["column_name"].eq("ESTIMATE_METHOD")
+    & pkg["codes"]["code_value"].eq("Area Under the Curve"),
+    ["column_name", "code_value", "term_iri"],
+]
+
+print(bounded_suggestions)
+print(method_example)
 ```
 
-## Spreadsheet
+### Spreadsheet
 
-Open an instructor-prepared `semantic_suggestions.csv` beside the package metadata. Filter to the field or code you are reviewing, then compare each candidate label and definition with the source documentation and the data holder's explanation. Record **keep**, **replace**, **remove**, or **defer**; opening the CSV does not accept a suggestion or prove that a link is correct.
+Open an instructor-prepared `semantic_suggestions.csv` beside the NuSEDS Fraser Coho package metadata. Filter to `NATURAL_SPAWNERS_TOTAL` and the table observation-unit row. Then inspect the `Area Under the Curve` row in `metadata/codes.csv`. Compare each IRI, label, and definition with the source documentation and the data holder's explanation. Record **keep**, **replace**, **remove**, or **defer**; opening the CSV does not accept a suggestion or prove that a link is correct.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-Vocabulary lookup can take a few minutes. For a live workshop, instructors can prepare this output in advance. Omitting `sources` uses role-aware defaults. If you supply `sources` explicitly, current `metasalmon` and `metasalmonpy` treat the vector as a strict allowlist for the initial search and any LLM-requested bounded retry.
+Vocabulary lookup can take a few minutes. Omitting `sources` uses role-aware defaults. If you supply `sources` explicitly, current `metasalmon` and `metasalmonpy` treat the vector as a strict allowlist for the initial search and any LLM-requested bounded retry.
 
-Vocabulary lookup can fail independently of returning zero matches. If a result is unexpectedly empty, inspect a focused search before declaring a vocabulary gap:
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-## R
-
-```r
-probe <- find_terms(
-  "spawner count",
-  role = "property"
-)
-
-attr(probe, "diagnostics")
-```
-
-## Python
-
-```python
-from metasalmonpy import find_terms
-
-probe = find_terms(
-    "spawner count",
-    role="property",
-)
-
-print(probe.attrs.get("diagnostics"))
-```
-
-## Spreadsheet
-
-If an instructor-provided suggestion file is unexpectedly empty, do not record a vocabulary gap from that absence alone. Ask for the lookup diagnostics or use the linked vocabulary documentation to distinguish a service failure from a genuine no-match result.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-A warning or non-success diagnostic is evidence of a lookup problem, not evidence that no appropriate term exists. Do not turn a temporary service outage into a new-term request.
+At this stage, treat an empty or unexpected result as **unresolved**, not as proof that the vocabulary lacks an appropriate term. Leave that decision in review and continue with the shared example; a later workflow can distinguish a lookup problem from a genuine term gap.
 
 ## Treat suggestions as drafts
 
@@ -187,38 +232,38 @@ Context files must be passed as existing local file paths through `llm_context_f
 
 ## Example review
 
-Column: `natural_spawner_count`
+Shared example column: `NATURAL_SPAWNERS_TOTAL`
 
-| Question | Review answer |
+| Decision | Fraser Coho candidate to review |
 | --- | --- |
-| What is measured? | Count of naturally spawning adult salmon |
-| Property | Count or abundance |
-| Entity | Adult spawning salmon population |
-| Constraint | Natural-origin or naturally spawning, depending on source definition |
-| Unit | Fish or individuals |
-| Statistical modifier | Blank here; fill it only when the column is an aggregation, such as a *peak* or *mean* count |
-| Method | Not a dictionary field: record the survey or estimator on `tables.csv` when it is constant for the table, or as a code column when it varies by row |
+| Complete measurement variable, `term_iri` | Natural-origin spawner abundance; review `https://w3id.org/gcdfo/salmon#SpawnerAbundance` against the NuSEDS definition. |
+| I-ADOPT property, `property_iri` | Abundance; review `https://w3id.org/smn/Abundance`. |
+| I-ADOPT entity, `entity_iri` | The conservation unit recorded in `FULL_CU_IN`; review `https://w3id.org/gcdfo/salmon#ConservationUnit`. |
+| I-ADOPT constraint, `constraint_iri` | Natural origin; review `https://w3id.org/smn/NaturalOrigin`. |
+| Unit, `unit_iri` | Individuals; review `https://qudt.org/vocab/unit/INDIV`. This is measurement semantics, but not an I-ADOPT role. |
+| Statistical modifier | Leave blank for this exercise; do not infer *total*, *peak*, or *mean* without confirming what the source value represents. |
+| Table observation unit | Each row reports an escapement estimate; review `https://w3id.org/smn/EscapementEstimate` for `tables.csv$observation_unit_iri`. |
+| Method | `ESTIMATE_METHOD` varies by row. Review the `Area Under the Curve` code mapping to `https://w3id.org/gcdfo/salmon#AreaUnderTheCurve` in `codes.csv$term_iri`; do not put it in the measurement's I-ADOPT fields. |
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Review two mapped fields
+## Challenge 1: Complete the bounded Fraser Coho review
 
-Pick one measurement column and one non-measurement column.
+Work with the shared NuSEDS Fraser Coho package, even if you brought your own dataset. Complete only this review:
 
-For each:
+1. choose **keep**, **replace**, **remove**, or **defer** for the one `NATURAL_SPAWNERS_TOTAL` `term_iri` candidate, and write one sentence explaining why;
+2. complete one I-ADOPT decomposition of that same measurement by reviewing its property, entity, and natural-origin constraint;
+3. review the QUDT Individual unit IRI;
+4. review the escapement-estimate IRI that says what each table row represents; and
+5. review the `Area Under the Curve` method-code IRI in `codes.csv`.
 
-- read the description;
-- inspect any suggested IRI;
-- decide keep, replace, remove, or defer;
-- write one sentence explaining the decision.
-
-For the measurement column, also fill or review the property, entity, unit, and optional constraint and statistical-modifier fields, and decide where any method information belongs (table level, protocol citation, or code column).
+Do not map additional fields during this exercise. After the workshop, use the same sequence for another measurement in your own package.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- Prioritize semantic review where shared meaning affects comparison or reuse.
+- The workshop semantic exercise is bounded to one Fraser Coho measurement, one I-ADOPT decomposition, one unit, one table observation unit, and one method code.
 - `REVIEW:` suggestions are evidence to inspect, not final answers.
 - Optional LLM review selects from deterministic candidates and remains subject to deterministic checks.
 - SDP measurement semantic fields are measurement-only in the column dictionary; methods live at the table, protocol, or code level rather than in the dictionary, and I-ADOPT itself does not model units or methods.
