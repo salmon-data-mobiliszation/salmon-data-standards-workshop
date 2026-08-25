@@ -1,6 +1,6 @@
 # Salmon Data Standards Workshop
 
-This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The end goal is practical publication: preserve the context behind local data, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Code examples are R-first, with Python companion blocks for the core package-creation and review workflow.
+This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The end goal is practical publication: preserve the context behind local data, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Code-driven activities include R and Python examples, with separate spreadsheet instructions where a no-code path is useful.
 
 The material is being refactored for the Salmon Ontology Development Working Group from an ontology-development-first course into an SDP-first learning path. An ontology is a maintained set of concepts and definitions that also records how the concepts relate. Learners use shared definitions where they help; they are not expected to build an ontology or give every field an ontology term.
 
@@ -23,9 +23,9 @@ This workshop is designed for mixed groups:
 
 No terminology-standards background is assumed. Session 1 defines semantic links, vocabularies, code lists, and ontologies in plain language; later standards are introduced only when they help with a concrete review decision.
 
-## R and Python compatibility
+## R and Python implementations
 
-The R examples target the tagged `metasalmon` 0.3.0 release, which implements version `sdp-0.3.0` of the SDP specification. The Python companion is `metasalmonpy` 0.2.1 (renamed from `metaSmnPy`/`salmonpy`); its version is a parity claim against metasalmon 0.2.1, so it writes the earlier `sdp-0.2.0` package shape. Use R/`metasalmon` for strict final validation, EML export, and KNB/DataONE publication, migrating Python-created packages with `migrate_sdp_methods()` first.
+The R package `metasalmon` and Python package `metasalmonpy` are maintained at behavioral parity, with functionality and release numbers kept in lockstep. Examples use idiomatic syntax for each language rather than forcing literal API mimicry; deliberate differences are recorded in the [metasalmonpy parity guide](https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html). Workshop setup installs the latest version of each package.
 
 ## Formats
 

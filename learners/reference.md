@@ -9,13 +9,13 @@ title: Reference
 3. Review suggested semantic links.
 4. Focus first on measurements, units, observation units, and important code lists.
 5. Render and review unresolved-term routes: `smn`, `gcdfo`, `profile`, or `skip`.
-6. Run strict R validation only when the SDP is final enough for publication.
+6. Run strict validation only when the SDP is final enough for publication.
 7. Complete the reviewed EML sidecar and export schema-valid EML 2.2.
 8. Preview the KNB/DataONE object plan with a credential-free dry run; upload only with explicit authority and credentials.
 
-## R-first and Python companion functions
+## R and Python functions
 
-| Workflow | R primary | Python companion |
+| Workflow | R (`metasalmon`) | Python (`metasalmonpy`) |
 | --- | --- | --- |
 | Create a package | `metasalmon::create_sdp()` | `metasalmonpy.create_sdp()` |
 | Read a package | `read_salmon_datapackage()` | `read_salmon_datapackage()` |
@@ -23,28 +23,11 @@ title: Reference
 | Detect unresolved gaps | `detect_semantic_term_gaps()` | `detect_semantic_term_gaps()` |
 | Render request drafts | `render_ontology_term_request()` | `render_ontology_term_request()` |
 | Validate during review | `validate_salmon_datapackage(..., require_iris = FALSE)` | `validate_salmon_datapackage(..., require_iris=False)` |
-| Run the final publication gate | `validate_salmon_datapackage(..., require_iris = TRUE)` | Hand off to current R/`metasalmon` for the `sdp-0.3.0` gate |
-| Migrate an `sdp-0.2.0` package | `migrate_sdp_methods()` | Hand off to current R/`metasalmon` |
-| Export validated EML | `write_eml_from_sdp()` | `write_eml_from_sdp()` (at 0.2.1 parity; this lesson runs it in R) |
-| Plan or run a KNB deposit | `publish_sdp_to_knb()` | `publish_sdp_to_knb()` (at 0.2.1 parity; this lesson runs it in R) |
+| Run the final publication gate | `validate_salmon_datapackage(..., require_iris = TRUE)` | `validate_salmon_datapackage(..., require_iris=True)` |
+| Export validated EML | `write_eml_from_sdp()` | `write_eml_from_sdp()` (requires the `eml` extra) |
+| Plan or run a KNB deposit | `publish_sdp_to_knb()` | `publish_sdp_to_knb()` (requires the `knb` extra) |
 
-The lesson targets the tagged **R/`metasalmon` 0.3.0 release** (specification `sdp-0.3.0`). The Python companion is **`metasalmonpy` 0.2.1**, whose version is a parity claim: it mirrors metasalmon 0.2.1 behaviour and writes the earlier `sdp-0.2.0` package shape. Do not describe the implementations as fully version- or feature-aligned, and migrate Python-created packages with `migrate_sdp_methods()` before the R publication gate.
-
-## Recent metasalmon updates reflected here
-
-| Version | Workshop-relevant change |
-| --- | --- |
-| 0.1.7–0.1.8 | Added reviewed EML 2.2 export, guarded KNB/DataONE planning/publication, expanded package representation, and immutable revision handling. |
-| 0.2.0 | Made dictionary `value_type` the read authority, fixed multi-table handling, preserved reviewed sidecars during ordinary rewrites, and added `prune` as the explicit destructive reset. |
-| 0.2.1 | Made semantic ranking locale-independent and derived descriptor schema URLs from the validated SDP bundle. |
-| 0.2.2 | Cached term indexes for consistent, faster sessions and made failed vocabulary lookups distinguishable from successful zero-match searches. |
-| 0.2.3 | Allowed corrected unpublished KNB dry runs to be replanned with `overwrite = TRUE`, added bounded provider retries, and moved/redacted the BioPortal credential. |
-| 0.2.4 | Made the empty field the single canonical missing-value token: a literal `"NA"` in data now round-trips as the string it is (it is a real fisheries gear code), so hand-authored packages using `NA` to mean missing must rewrite those cells as empty fields. |
-| 0.2.5 | Extended credential redaction to all qualified `*_token` names in captured errors and reports. |
-| 0.2.6 | Enforced declared `primary_key` uniqueness as a validation error, warned on value-like column names (pointing at `tidyr::pivot_longer()`), and surfaced unresolved `MISSING METADATA:` placeholders in default validation. |
-| 0.3.0 | Implemented `sdp-0.3.0`: removed the dictionary `method_iri` and the `metadata/methods.csv` registry, added `statistical_modifier_iri`, moved methods to `tables.csv`/`protocol_iri`/`codes.csv`, and added `migrate_sdp_methods()` for 0.2.x packages. |
-
-See the [metasalmon changelog][metasalmon-changelog] for the full implementation record. These changes do not turn a draft package, failed lookup, private deposit, or Member Node write into publication evidence.
+The two implementations are maintained at behavioral parity and release in lockstep. Their syntax remains idiomatic to each language; see the [metasalmonpy parity guide][metasalmonpy-parity] for deliberate differences. Install the latest packages before the workshop.
 
 ## Recommended project layout
 
@@ -56,7 +39,7 @@ salmon-data-workshop/
   output/         # generated Salmon Data Packages
 ```
 
-Open the `.Rproj` file before working and use paths relative to the project root. Python and spreadsheet users can start from the same root folder and use the same layout.
+R users should open the `.Rproj` file. Every lane should work from the same project root and use paths relative to it.
 
 ## Dataset, table, and supported inputs
 
@@ -88,9 +71,10 @@ The output SDP data resources are CSV files.
 | `README.md` or `README-review.txt` | Human context, caveats, or review checklist |
 | `metadata/eml-mapping.yml` | Reviewed facts needed for EML and KNB that cannot be inferred safely from SDP alone |
 | `metadata/eml.xml` | Validated EML 2.2 export created near the end, not a hand-edited source file |
-| `publication/knb-manifest.json` | Exact-object KNB/DataONE dry-run or recovery manifest |
+| `publication/test/knb-manifest.json` | Exact-object manifest for the non-durable KNB Test Node rehearsal |
+| `publication/knb-manifest.json` | Exact-object production dry-run or recovery manifest |
 
-Complete filled examples are linked from Session 1: [dataset.csv][sdp-example-dataset], [tables.csv][sdp-example-tables], [column_dictionary.csv][sdp-example-dictionary], and [codes.csv][sdp-example-codes].
+Use the [blank SDP CSV template][sdp-template] for a no-code starting point, or generate the current filled quickstart with `metasalmon` or `metasalmonpy` in Chapter 2.
 
 ## Standards and conventions behind the fields
 
@@ -153,7 +137,7 @@ For publication-ready measurement rows, SDP requires `term_iri`, `property_iri`,
 | `unit_iri` | Required | Unit IRI, usually from a unit vocabulary such as QUDT |
 | `statistical_modifier_iri` | Optional | I-ADOPT statistical modifier: fill it only when the column is an aggregation or summary (mean, maximum, minimum, total, peak), because the summary is part of the variable's identity |
 
-Since `sdp-0.3.0`, the dictionary has no `method_iri` column and the `metadata/methods.csv` registry is gone. A method lives where it is constant: `tables.csv$method_iri` for a whole-table procedure, `protocol_iri`/`protocol_citation` on `tables.csv` or `dataset.csv` for a citable document, or a code column resolving through `codes.csv$term_iri` when the method varies by row.
+The dictionary does not have a `method_iri` column or a `metadata/methods.csv` registry. A method lives where it is constant: `tables.csv$method_iri` for a whole-table procedure, `protocol_iri`/`protocol_citation` on `tables.csv` or `dataset.csv` for a citable document, or a code column resolving through `codes.csv$term_iri` when the method varies by row.
 
 Do not use `property_iri`, `entity_iri`, `constraint_iri`, or `statistical_modifier_iri` as general relationship fields for identifiers, attributes, or categorical columns.
 
@@ -175,7 +159,7 @@ Do not use `property_iri`, `entity_iri`, `constraint_iri`, or `statistical_modif
 | Measurement `term_iri` and `unit_iri` | Conservative semantic annotations |
 | `eml-mapping.yml` | Structured creators/providers/contacts, rights, methods, scale/domain details, missing values, geographic/taxonomic coverage, and access decision |
 
-Not every semantic component is projected into EML. Current `metasalmon` conservatively annotates the whole measurement term and unit; it does not pretend that every I-ADOPT or method relationship has a direct EML equivalent.
+Not every semantic component is projected into EML. Both implementations conservatively annotate the whole measurement term and unit; they do not pretend that every I-ADOPT or method relationship has a direct EML equivalent.
 
 ## Rerun safety
 
@@ -183,7 +167,7 @@ Not every semantic component is projected into EML. Current `metasalmon` conserv
 | --- | --- |
 | `create_sdp(..., overwrite = FALSE)` | Fails if the output directory already exists; safest default. |
 | `create_sdp(..., overwrite = TRUE)` | Re-infers and rewrites writer-owned package files. Manual edits to canonical metadata can be lost. |
-| `create_sdp(..., overwrite = TRUE, prune = FALSE)` in R 0.2.0+ | Preserves non-owned sidecars, but still replaces owned metadata/data/descriptor outputs. |
+| `create_sdp(..., overwrite = TRUE, prune = FALSE)` | Preserves non-owned sidecars, but still replaces owned metadata/data/descriptor outputs. |
 | `create_sdp(..., overwrite = TRUE, prune = TRUE)` | Empties the package first; use only for a deliberately disposable package. |
 | `read_salmon_datapackage()` | Loads the manually reviewed package as the current source state. |
 | `write_salmon_datapackage(..., path = <new-version>, overwrite = FALSE)` | Writes an intentional new version without overwriting the reviewed folder. |
@@ -200,7 +184,7 @@ After manual edits, continue with read/validate helpers or write a new versioned
 - Measurement rows have final `term_iri`, `property_iri`, `entity_iri`, and `unit_iri` values.
 - No placeholder text or `REVIEW:` prefixes remain.
 - `datapackage.json` declares the current SDP profile/resources and agrees with the canonical CSVs.
-- Strict R validation passes.
+- Strict validation passes.
 - The EML sidecar has reviewed parties, rights authorization, methods, scales/domains, missing values, provenance, and bound semantic-review checksums.
 - `write_eml_from_sdp()` returns a valid EML 2.2 result.
 - A KNB dry-run manifest is reviewed before any credentialed live call.

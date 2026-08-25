@@ -36,6 +36,10 @@ Administrative IDs, file names, local notes, and one-off workflow fields can oft
 
 If you used the fast `seed_semantics = FALSE` classroom path, generate candidates now from the package you reviewed. If semantic seeding was enabled during `create_sdp()`, the package-root `semantic_suggestions.csv` contains the original evidence; rerunning after your metadata edits searches only from the current package state.
 
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
+
 ```r
 pkg <- read_salmon_datapackage(pkg_path)
 
@@ -61,9 +65,7 @@ suggestions |>
   )
 ```
 
-::::::::::::::::::::::::::::::::::::: callout
-
-## Python equivalent
+## Python
 
 ```python
 from metasalmonpy import (
@@ -98,11 +100,19 @@ column_suggestions = suggestions.loc[
 print(column_suggestions)
 ```
 
+## Spreadsheet
+
+Open an instructor-prepared `semantic_suggestions.csv` beside the package metadata. Filter to the field or code you are reviewing, then compare each candidate label and definition with the source documentation and the data holder's explanation. Record **keep**, **replace**, **remove**, or **defer**; opening the CSV does not accept a suggestion or prove that a link is correct.
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 Vocabulary lookup can take a few minutes. For a live workshop, instructors can prepare this output in advance. Omitting `sources` uses role-aware defaults. If you supply `sources` explicitly, current `metasalmon` and `metasalmonpy` treat the vector as a strict allowlist for the initial search and any LLM-requested bounded retry.
 
-Current R/`metasalmon` resolves its SMN and GCDFO indexes once per R session, so repeated searches use one consistent ontology snapshot and avoid repeated downloads. It also distinguishes a failed source lookup from a successful search with zero matches (since 0.2.2). If a result is unexpectedly empty, inspect a focused search before declaring a vocabulary gap:
+Vocabulary lookup can fail independently of returning zero matches. If a result is unexpectedly empty, inspect a focused search before declaring a vocabulary gap:
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+## R
 
 ```r
 probe <- find_terms(
@@ -113,9 +123,26 @@ probe <- find_terms(
 attr(probe, "diagnostics")
 ```
 
-A warning or non-success diagnostic is evidence of a lookup problem, not evidence that no appropriate term exists. Do not turn a temporary service outage into a new-term request.
+## Python
 
-For the Python exercise, omit `sources` as shown. `metasalmonpy` 0.2.1 searches the same SMN and GCDFO sources; a failed or empty ontology fetch raises an error rather than returning an empty index, so treat that error as a lookup problem, not a missing term.
+```python
+from metasalmonpy import find_terms
+
+probe = find_terms(
+    "spawner count",
+    role="property",
+)
+
+print(probe.attrs.get("diagnostics"))
+```
+
+## Spreadsheet
+
+If an instructor-provided suggestion file is unexpectedly empty, do not record a vocabulary gap from that absence alone. Ask for the lookup diagnostics or use the linked vocabulary documentation to distinguish a service failure from a genuine no-match result.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+A warning or non-success diagnostic is evidence of a lookup problem, not evidence that no appropriate term exists. Do not turn a temporary service outage into a new-term request.
 
 ## Treat suggestions as drafts
 
@@ -144,23 +171,19 @@ For `column_role = measurement`, SDP combines a variable link, I-ADOPT-style mea
 | `unit_iri` | What unit are the values in? |
 | `statistical_modifier_iri` | Optional: is the column an aggregation or summary — a mean, maximum, minimum, total, or peak — rather than a single observation? |
 
-Since `sdp-0.3.0` (metasalmon 0.3.0), **methods do not live in the column dictionary**. A method describes how a value was produced, not what the column is, so it is recorded where it is actually constant: a procedure shared by a whole table goes in `tables.csv$method_iri`, a citable protocol document goes in `protocol_iri`/`protocol_citation` on `tables.csv` or `dataset.csv`, and a method that varies row by row becomes a code column in the data whose values resolve through `codes.csv$term_iri` to shared-vocabulary procedures. A statistical modifier is the one kind of "how" that stays in the dictionary, because a *mean* weight and a *maximum* weight are different variables. The [metasalmon migration guide][metasalmon-migration] explains the change and migrates 0.2.x packages.
+**Methods do not live in the column dictionary.** A method describes how a value was produced, not what the column is, so it is recorded where it is actually constant: a procedure shared by a whole table goes in `tables.csv$method_iri`, a citable protocol document goes in `protocol_iri`/`protocol_citation` on `tables.csv` or `dataset.csv`, and a method that varies row by row becomes a code column in the data whose values resolve through `codes.csv$term_iri` to shared-vocabulary procedures. A statistical modifier is the one kind of "how" that stays in the dictionary, because a *mean* weight and a *maximum* weight are different variables.
 
 Important boundary: `property_iri`, `entity_iri`, `constraint_iri`, and `statistical_modifier_iri` are I-ADOPT-style measurement-variable components. `unit_iri` is also measurement semantics, but units are not an I-ADOPT role, and methods are not part of the variable at all. Do not use these fields as general-purpose relationship fields for identifiers, attributes, or categorical columns.
 
-::::::::::::::::::::::::::::::::::::: callout
-
 ## Optional LLM-assisted bundle review
 
-Adding `llm_assess = TRUE` in R or `llm_assess=True` in Python, plus an approved provider and model, asks the LLM to judge the retrieved candidates; it does not let the model invent IRIs. In metasalmon 0.3.0, a measurement's variable, property, entity, unit, constraint, and statistical-modifier candidates are reviewed together as one bundle; a statistical-modifier candidate is proposed only when the column's name, label, or description names an aggregation (total, mean, maximum, minimum, peak). Method candidates survive only for code values, where codes resolve to shared `sosa:Procedure` concepts. `metasalmonpy` 0.2.1 still reviews the earlier bundle shape, which included a dictionary method slot.
+Adding `llm_assess = TRUE` in R or `llm_assess=True` in Python, plus an approved provider and model, asks the LLM to judge the retrieved candidates; it does not let the model invent IRIs. A measurement's variable, property, entity, unit, constraint, and statistical-modifier candidates are reviewed together as one bundle. A statistical-modifier candidate is proposed only when the column's name, label, or description names an aggregation such as total, mean, maximum, minimum, or peak. Method candidates apply to code values, where codes can resolve to shared `sosa:Procedure` concepts.
 
-R/`metasalmon` retries retryable provider failures such as rate limits and temporary service errors, honoring `Retry-After` when present. It also sends the BioPortal key in an authorization header and redacts credentials from reported URLs. These safeguards reduce avoidable failures; they do not authorize unbounded retries, sensitive context, or unattended acceptance of LLM decisions.
+The package clients bound retries for temporary provider failures and keep credentials out of reported URLs. These safeguards reduce avoidable failures; they do not authorize unbounded retries, sensitive context, or unattended acceptance of LLM decisions.
 
 Deterministic validators can downgrade an unsupported `accept` decision to `review`, but they never substitute or invent a term. Suggested candidates written into the dictionary carry the `REVIEW:` prefix until a person confirms them.
 
 Context files must be passed as existing local file paths through `llm_context_files`, and context alone does not enable an LLM call. Use only an approved provider and appropriate non-sensitive context.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Example review
 

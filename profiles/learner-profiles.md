@@ -43,15 +43,15 @@ Needs:
 - a reproducible `metasalmonpy.create_sdp()` path;
 - the same project layout and package files used in the R walkthrough;
 - accurate Python calling conventions for review and gap-detection functions;
-- a clear handoff to the normative R publication validator.
+- current Python examples for strict validation, EML export, and guarded KNB publication.
 
 Risk:
 
-- assumes matching package versions imply that every validator and term source is identical.
+- assumes behavioral parity removes the need to review language-specific calling conventions and dependencies.
 
 Success:
 
-- can create and review a compatible package in Python, then hand it off for authoritative R validation, EML export, and catalog publication.
+- can create, review, strictly validate, and export a package in Python, then preview or perform an authorized catalog publication using the same guarded workflow.
 
 ## Ontology or vocabulary maintainer
 
@@ -76,7 +76,7 @@ Needs:
 
 - a workshop that scales across spreadsheet, R, and Python users;
 - low maintenance burden;
-- clear handoff from package drafting to governance and catalog publication;
+- a clear transition from package drafting to governance and catalog publication;
 - a one-hour format for outreach and a full-day format for practice.
 
 Risk:

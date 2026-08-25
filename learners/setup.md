@@ -4,7 +4,7 @@ title: Setup
 
 ## What you will be ready to do
 
-The workshop starts with ordinary tables and ends with a reviewed Salmon Data Package (SDP), a validated EML 2.2 metadata file, and a preview of the exact objects that `metasalmon` would upload to the Knowledge Network for Biocomplexity (KNB). A live catalog upload is available only to participants who have the required credentials and authority to redistribute the data.
+The workshop starts with ordinary tables and ends with a reviewed Salmon Data Package (SDP), a validated EML 2.2 metadata file, and a preview of the exact objects that `metasalmon` or `metasalmonpy` would upload to the Knowledge Network for Biocomplexity (KNB). A live catalog upload is available only to participants who have the required credentials and authority to redistribute the data.
 
 ## What to bring
 
@@ -54,7 +54,7 @@ Copy your source files into `raw_data/` and leave those copies unchanged. Do not
 
 ## Software options
 
-You only need one on-ramp for package creation. The final EML/catalog step currently uses R/`metasalmon`.
+Choose the R, Python, or spreadsheet lane that fits how you work. Code-driven activities include examples in both R and Python, with language-specific subsections where the commands differ. Spreadsheet-specific subsections show how to review and edit the same standard package files without code. All three lanes use the same project layout and Salmon Data Package structure, so you can stay with one lane while still following the shared discussion.
 
 ### R/metasalmon path
 
@@ -64,17 +64,16 @@ Required:
 - RStudio, Positron, or another R editor; and
 - the `remotes`, `readr`, `dplyr`, `purrr`, `readxl`, and `metasalmon` packages.
 
-Install the released version used by the workshop:
+Install or update to the latest version from GitHub before the workshop:
 
 ```r
 install.packages(c("remotes", "readr", "dplyr", "purrr", "readxl"))
-remotes::install_github("salmon-data-mobilization/metasalmon@v0.3.0")
+remotes::install_github("salmon-data-mobilization/metasalmon")
 
-# The revised lesson targets the metasalmon 0.3.0 release.
 packageVersion("metasalmon")
 ```
 
-The lesson targets the tagged **metasalmon 0.3.0** release, which implements version `sdp-0.3.0` of the Salmon Data Package specification. Check the [metasalmon changelog][metasalmon-changelog] before teaching if a newer release has shipped. If you have packages built with metasalmon 0.2.x, the [migration guide][metasalmon-migration] explains what changed and how `migrate_sdp_methods()` updates them.
+Facilitators should review the [metasalmon changelog][metasalmon-changelog] when preparing to teach.
 
 For validated EML export, also install:
 
@@ -96,25 +95,31 @@ Optional:
 
 LLM review is strictly opt-in. Context supplied through `llm_context_files` must be a character vector of existing local file paths, and it does not trigger an LLM call unless `llm_assess = TRUE`. Use only an approved provider and do not send sensitive or restricted material outside an authorized environment.
 
-### Python/metasalmonpy companion path
+### Python/metasalmonpy path
 
-The workshop teaches the core creation and review workflow in R first and then provides a Python equivalent. The Python package is **`metasalmonpy` 0.2.1** (the repository was renamed from `metaSmnPy`, and the old `salmonpy` package name is retired). Its version is a parity claim: 0.2.1 mirrors metasalmon 0.2.1 behaviour, so it writes the earlier `sdp-0.2.0` package shape and is not yet aligned with metasalmon 0.3.0. Use it for the companion creation and review activities; run the final publication gate in R.
+`metasalmonpy` is the Python implementation of the `metasalmon` workflow. The two packages are maintained at behavioral parity and their releases move in lockstep; deliberate, language-idiomatic differences are documented in the [parity guide][metasalmonpy-parity]. Use the Python examples anywhere the workshop presents a Python lane.
 
 Required:
 
 - Python 3.9 or newer; and
 - a terminal, notebook, or Python editor.
 
-Create an environment and install the tagged release directly from GitHub (no Git installation required):
+Create an environment and install or update to the latest version directly from GitHub (no Git installation required):
 
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install \
-  "metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/tags/v0.2.1.tar.gz"
+  "metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/heads/main.tar.gz"
 ```
 
-The installed package and Python import are both named `metasalmonpy`. See the [metasalmonpy documentation][metasalmonpy-docs]. Optional EML/KNB extras exist (`metasalmonpy[eml]`, `[knb]`), but this lesson runs EML export and KNB publication in R. A package created with `metasalmonpy` 0.2.1 follows `sdp-0.2.0`; migrate it with R's `migrate_sdp_methods()` before the strict R validation, EML export, and catalog publication taught in Session 6.
+The installed package and Python import are both named `metasalmonpy`. See the [metasalmonpy documentation][metasalmonpy-docs]. Validated EML export uses the optional `eml` extra, and KNB publication uses the optional `knb` extra. To prepare for both, replace `metasalmonpy` with `metasalmonpy[knb]` in the install command above; the `knb` extra includes EML support.
+
+If you will read `.xlsx` workbooks in Python during Chapter 3, also install `openpyxl`:
+
+```bash
+python -m pip install openpyxl
+```
 
 ### Spreadsheet path
 
@@ -127,14 +132,14 @@ Recommended:
 - the project folder described above; and
 - a copy of the [blank SDP CSV template][sdp-template], which you can open and edit with your spreadsheet software.
 
-Download or clone the `smn-data-pkg` repository and copy that template folder. There is no standalone workbook or template ZIP. A spreadsheet participant can complete the metadata review and then hand the package to an R user for validation and EML export.
+Download or clone the `smn-data-pkg` repository and copy that template folder. There is no standalone workbook or template ZIP. Spreadsheet participants can review and edit the canonical metadata CSVs directly with their spreadsheet software.
 
 ## Pre-workshop reading
 
 Read these only if you have time:
 
 1. Salmon Data Package specification: [normative rules][sdp-specification] and [field definitions and accepted values][sdp-field-reference]
-2. Salmon Data Package examples: [blank CSV template][sdp-template] and [filled minimal example][sdp-example]
+2. Salmon Data Package starting points: the [blank CSV template][sdp-template] and the current code-generated quickstart in Chapter 2
 3. metasalmon quickstart: [create and review a package][metasalmon-quickstart]
 4. metasalmon post-review workflow: [validate, export EML, and preview KNB publication][metasalmon-eml-workflow]
 5. metasalmonpy quickstart: [create and review the same core package structure in Python][metasalmonpy-docs]
@@ -149,6 +154,8 @@ Before the demo, confirm that:
 - the project is open at `salmon-data-workshop/`;
 - `raw_data/`, `context/`, and `output/` exist;
 - your source files are under `raw_data/`, or you plan to run the included example unchanged; and
-- R users can load `metasalmon` with `library(metasalmon)`.
+- R users can load `metasalmon` with `library(metasalmon)`;
+- Python users can import `metasalmonpy`; and
+- spreadsheet users can open the blank SDP CSV template in their editor.
 
-If your organization restricts software installation, use the spreadsheet path and pair with someone who can run the R validation and EML export later.
+If your organization restricts software installation, use the spreadsheet lane for the package-structure and metadata-review activities.
