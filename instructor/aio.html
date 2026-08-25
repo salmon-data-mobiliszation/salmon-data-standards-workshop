@@ -237,7 +237,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -373,9 +373,9 @@
     <main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>All in One View</h1>
         
-<section id="aio-session-1"><p>Content from <a href="session-1.html">Why Start With a Salmon Data Package?</a></p>
+<section id="aio-session-1"><p>Content from <a href="session-1.html">The Salmon Data Integration System</a></p>
 <hr>
-<p>Last updated on 2026-08-22 |
+<p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 50 minutes</p>
@@ -390,13 +390,14 @@
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>What will I be able to publish by the end of the workshop?</li>
+<li>What parts make up the Salmon Data Integration System?</li>
 <li>What is the difference between a dataset, a table, and a flat
 file?</li>
 <li>What does a Salmon Data Package add to an ordinary spreadsheet or
 CSV?</li>
-<li>Where do the SDP fields come from, and how do they map into
-EML?</li>
+<li>When should a team reuse, extend, or federate a controlled
+vocabulary or ontology?</li>
+<li>How do reviewed SDP facts become EML catalog metadata?</li>
 </ul>
 </div>
 </div>
@@ -410,8 +411,10 @@ EML?</li>
 guarded catalog-publication plan.</li>
 <li>Distinguish a dataset from its one or more tables and recognize
 supported tabular inputs.</li>
-<li>Recognize the core metadata CSVs before running any package
-code.</li>
+<li>Explain the roles of the SDP, <code>metasalmon</code>, shared
+semantic resources, and local vocabularies or ontologies.</li>
+<li>Choose between reusing a shared term, proposing a shared extension,
+and keeping a local term with an explicit bridge mapping.</li>
 <li>Separate the Frictionless structure, external-standard alignments,
 and salmon-specific SDP conventions.</li>
 </ul>
@@ -426,24 +429,27 @@ and salmon-specific SDP conventions.</li>
 <p>By the end of the workshop, participants should be able to:</p>
 <ol style="list-style-type: decimal">
 <li>create and review a Salmon Data Package (SDP);</li>
-<li>run the strict R/<code>metasalmon</code> publication check;</li>
-<li>export the reviewed metadata as schema-valid EML 2.2; and</li>
+<li>run a strict publication check with <code>metasalmon</code> or
+<code>metasalmonpy</code>;</li>
+<li>export the reviewed metadata as schema-valid EML 2.2.0; and</li>
 <li>preview an exact KNB/DataONE catalog deposit, then perform the
 upload when they have credentials and redistribution authority.</li>
 </ol>
 <p>An EML file is structured XML, not an arbitrary XML file with a
-different name. <code>metasalmon</code> maps reviewed SDP facts into the
-EML model and validates the result against EML 2.2. A live KNB call
-creates persistent production objects, so the workshop uses a
-credential-free dry run unless an authorized publication exercise has
-been arranged.</p>
+different name. <code>metasalmon</code> and <code>metasalmonpy</code>
+map reviewed SDP facts into the EML model and validate the result
+against EML 2.2.0. A live KNB call creates persistent production
+objects, so the workshop uses a credential-free dry run unless an
+authorized publication exercise has been arranged.</p>
 </section><section><h2 class="section-heading" id="the-problem-this-workshop-solves">The problem this workshop solves<a class="anchor" aria-label="anchor" href="#the-problem-this-workshop-solves"></a>
 </h2>
 <hr class="half-width">
 <p>Salmon data are often understandable to the person or team that
 collected them, but hard for someone else to reuse. Column names may be
 short, code values may be local, methods may be buried in reports, and
-important caveats may live only in people’s heads.</p>
+important caveats may live only in people’s heads. A word can also mean
+one thing in a stock-assessment program and something different in a
+hatchery, habitat, or fisheries context.</p>
 <p>This workshop starts with a practical rule:</p>
 <blockquote>
 <p>Package and explain the data first. Link selected fields to shared
@@ -454,10 +460,129 @@ meaning.” A <strong>semantic link</strong> connects a local column or
 code value to a shared definition.</p>
 <p>An <strong>ontology</strong> is a maintained set of concepts and
 definitions that also records how the concepts relate—for example, that
-coho salmon is a kind of salmon. A <strong>vocabulary</strong> is a
-maintained list of terms and definitions, while a <strong>code
-list</strong> records the allowed values for one data column. You will
-use these resources; you do not need to build or edit an ontology.</p>
+coho salmon is a kind of salmon. A <strong>controlled
+vocabulary</strong> is a governed list of terms and definitions, while a
+<strong>code list</strong> records the allowed values for one data
+column. Most workshop examples reuse existing resources. When local
+meaning is genuinely different, the system keeps that meaning local and
+maps it to shared concepts rather than pretending the meanings are
+identical.</p>
+</section><section><h2 class="section-heading" id="the-system-and-its-components">The system and its components<a class="anchor" aria-label="anchor" href="#the-system-and-its-components"></a>
+</h2>
+<hr class="half-width">
+<p>The <a href="https://br-johnson.github.io/salmon-data-integration-system/" class="external-link">Salmon
+Data Integration System</a> connects local salmon data and expert
+knowledge to portable packages, shared meanings, and publication
+formats. It is a set of cooperating components, not one file format or
+one ontology:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Component</th>
+<th>Role in the system</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Local data and expert context</td>
+<td>Supply the observations, methods, code meanings, caveats, and
+conditional rules that must not be lost.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md" class="external-link">Salmon
+Data Package</a></td>
+<td>Keeps the data, dataset/table descriptions, column dictionary, code
+lists, and machine-readable package descriptor together as a reviewable
+contract.</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/salmon-data-mobilization/metasalmon" class="external-link"><code>metasalmon</code></a>
+in R and <a href="https://github.com/salmon-data-mobilization/metasalmonpy" class="external-link"><code>metasalmonpy</code></a>
+in Python</td>
+<td>Create, read, review, validate, and publish SDPs. Both
+implementations provide language-idiomatic <a href="https://salmon-data-mobilization.github.io/metasalmon/reference/chat_decomposition.html" class="external-link">interactive
+decomposition chat</a> and <a href="https://salmon-data-mobilization.github.io/metasalmon/articles/llm-context-review.html" class="external-link">strictly
+opt-in LLM review</a> to help surface missing context and assess
+candidate terms; suggestions remain drafts for human review. See the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/" class="external-link">Python
+documentation</a> for its calling conventions.</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/salmon-data-mobilization/salmon-domain-ontology" class="external-link">Salmon
+Domain Ontology</a> and other governed vocabularies</td>
+<td>Provide reusable identifiers and definitions for meanings that are
+shared across programs or organizations.</td>
+</tr>
+<tr>
+<td>Local controlled vocabularies, ontologies, and bridge mappings</td>
+<td>Preserve program-specific concepts under local authority and connect
+them conservatively to shared concepts without erasing important
+differences.</td>
+</tr>
+<tr>
+<td>
+<a href="https://eml.ecoinformatics.org/" class="external-link">EML</a> and catalogs such
+as <a href="https://knb.ecoinformatics.org/" class="external-link">KNB</a>
+</td>
+<td>Turn reviewed package facts into portable discovery metadata and,
+when authorized, a catalog deposit.</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>bounded context</strong> is a program, organization, or
+workflow in which a set of terms and rules has a stable local meaning.
+The Salmon Domain Ontology serves as a shared domain model: its concepts
+provide anchors that bridge mappings can use to translate between
+bounded contexts. It does not require every team to replace its own
+terminology.</p>
+<div class="section level3">
+<h3 id="reuse-extend-or-federate">Reuse, extend, or federate?<a class="anchor" aria-label="anchor" href="#reuse-extend-or-federate"></a>
+</h3>
+<p>Use a local controlled vocabulary when the main need is to govern a
+finite list of labels or codes. Use a local ontology when the
+relationships among local concepts also need to be represented. Then
+choose the integration path that fits the evidence and authority:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Situation</th>
+<th>Appropriate path</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>An existing shared concept has the same meaning</td>
+<td>Reuse its identifier directly in the SDP.</td>
+</tr>
+<tr>
+<td>A concept is stable and likely to be reused across
+organizations</td>
+<td>Propose an extension to the Salmon Domain Ontology or the
+appropriate governed vocabulary; its steward decides whether and how it
+enters the shared resource.</td>
+</tr>
+<tr>
+<td>A concept is program-specific, policy-specific, uncertain, or not
+ready for shared governance</td>
+<td>Give it a stable identifier in a locally governed vocabulary or
+ontology, then publish a bridge mapping to the nearest shared concept
+with an honest relationship strength and provenance.</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/docs/guides/modules-and-bridges-for-biologists.md" class="external-link">modules
+and bridge profiles guide</a> shows the practical pattern: define local
+terms in a local namespace, map them to shared anchors as exact, close,
+broader, narrower, or related only when warranted, record why the
+mapping was made, and test it against real rows. This is how the system
+supports translation without collapsing two bounded contexts into
+one.</p>
+</div>
 </section><section><h2 class="section-heading" id="dataset-table-and-flat-file">Dataset, table, and flat file<a class="anchor" aria-label="anchor" href="#dataset-table-and-flat-file"></a>
 </h2>
 <hr class="half-width">
@@ -503,10 +628,10 @@ is not one flat file.</td>
 </tbody>
 </table>
 <p>The workshop supports one flat table, multiple CSV tables, or
-multiple rectangular Excel sheets. R reads each source table into a data
-frame and passes either one data frame or a <strong>named list</strong>
-of data frames to <code>create_sdp()</code>. The workflow does not
-directly preserve multidimensional NetCDF, raster, or nested-array
+multiple rectangular Excel sheets. The R and Python workflows read each
+source table into memory and pass either one table or a named collection
+of tables to <code>create_sdp()</code>. The workflow does not directly
+preserve multidimensional NetCDF, raster, or nested-array
 structures.</p>
 </section><section><h2 class="section-heading" id="the-workshop-ladder">The workshop ladder<a class="anchor" aria-label="anchor" href="#the-workshop-ladder"></a>
 </h2>
@@ -542,7 +667,8 @@ structures.</p>
 <td>Contribution</td>
 <td>Which shared definitions are missing, and who should maintain
 them?</td>
-<td>Plan to request a shared term or keep a local definition</td>
+<td>Decision to reuse, request a shared extension, or publish a local
+bridge mapping</td>
 </tr>
 <tr>
 <td>Publication</td>
@@ -569,34 +695,6 @@ human-reviewable core. <code>codes.csv</code> is conditional: include it
 when the package has categorical columns. The generated
 <code>datapackage.json</code> is the Frictionless descriptor used by
 software; it must agree with the metadata CSVs and data resources.</p>
-</section><section><h2 class="section-heading" id="see-the-metadata-csvs-before-writing-code">See the metadata CSVs before writing code<a class="anchor" aria-label="anchor" href="#see-the-metadata-csvs-before-writing-code"></a>
-</h2>
-<hr class="half-width">
-<p>The previews below are deliberately shortened so they fit on screen.
-Open the complete example files to see every canonical header: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/dataset.csv" class="external-link">dataset.csv</a>,
-<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/tables.csv" class="external-link">tables.csv</a>,
-<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/column_dictionary.csv" class="external-link">column_dictionary.csv</a>,
-and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/codes.csv" class="external-link">codes.csv</a>.</p>
-<p><code>metadata/dataset.csv</code> has one row for the dataset:</p>
-<pre class="csv"><code>dataset_id,title,description,creator,contact_name,contact_email,license,...
-demo-coho,Coho escapement demo,Practice escapement records,Demo team,Data office,data@example.org,CC-BY-4.0,...</code></pre>
-<p><code>metadata/tables.csv</code> has one row for each table:</p>
-<pre class="csv"><code>dataset_id,table_id,file_name,table_label,description,observation_unit,...
-demo-coho,escapement,data/escapement.csv,Escapement estimates,One row per population and return year,Population-year,...</code></pre>
-<p><code>metadata/column_dictionary.csv</code> is the main review
-surface. It has one row for every column in every table:</p>
-<pre class="csv"><code>dataset_id,table_id,column_name,column_label,column_description,column_role,value_type,required,unit_label,...
-demo-coho,escapement,population_id,Population ID,Stable identifier for the population,identifier,string,TRUE,,...
-demo-coho,escapement,return_year,Return year,Calendar year of adult return,temporal,integer,TRUE,,...
-demo-coho,escapement,spawner_count,Spawner count,Estimated natural-origin adult spawners,measurement,integer,FALSE,fish,...</code></pre>
-<p><code>metadata/codes.csv</code> explains stored values in categorical
-columns:</p>
-<pre class="csv"><code>dataset_id,table_id,column_name,code_value,code_label,code_description,...
-demo-coho,escapement,species_code,CO,Coho salmon,Stored species code for coho salmon,...</code></pre>
-<p>The <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
-field reference</a> gives the definition, requirement, accepted type or
-allowed values, and notes for every field. Do not guess a header or add
-a convenient extra column to a canonical metadata CSV.</p>
 </section><section><h2 class="section-heading" id="where-the-fields-come-from">Where the fields come from<a class="anchor" aria-label="anchor" href="#where-the-fields-come-from"></a>
 </h2>
 <hr class="half-width">
@@ -613,7 +711,11 @@ universal standard:</p>
 </tr></thead>
 <tbody>
 <tr>
-<td>Frictionless Data Package and Table Schema</td>
+<td>
+<a href="https://specs.frictionlessdata.io/data-package/" class="external-link">Frictionless Data
+Package</a> and <a href="https://specs.frictionlessdata.io/table-schema/" class="external-link">Table
+Schema</a>
+</td>
 <td>The package/resource structure, table fields, value types,
 constraints, and machine-readable schemas used to validate each metadata
 CSV and <code>datapackage.json</code>.</td>
@@ -621,17 +723,21 @@ CSV and <code>datapackage.json</code>.</td>
 <tr>
 <td>Common discovery/catalog concepts</td>
 <td>Titles, descriptions, contacts, licences, temporal coverage,
-keywords, and provenance that can map into EML, HNAP/ISO, or another
-catalog profile.</td>
+keywords, and provenance that can map into <a href="https://eml.ecoinformatics.org/" class="external-link">EML</a>, the Government of
+Canada’s <a href="https://schemas.metadata.geo.ca/hnap/2.3.1/HNAP.md" class="external-link">HNAP metadata
+profile</a>, or another catalog profile.</td>
 </tr>
 <tr>
-<td>I-ADOPT, SOSA, SKOS/OWL, and unit vocabularies</td>
+<td>
+<a href="https://w3id.org/iadopt/ont/" class="external-link">I-ADOPT</a>, <a href="https://www.w3.org/TR/vocab-ssn/" class="external-link">SOSA/SSN</a>, <a href="https://www.w3.org/TR/skos-reference/" class="external-link">SKOS</a>/<a href="https://www.w3.org/TR/owl2-overview/" class="external-link">OWL</a>, and <a href="https://qudt.org/" class="external-link">QUDT unit vocabularies</a>
+</td>
 <td>External semantic roles for measurement
 property/entity/constraint/statistical modifier, table- and code-level
 procedures, reusable concepts, code lists, and units.</td>
 </tr>
 <tr>
-<td>Salmon Data Package profile</td>
+<td><a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md" class="external-link">Salmon
+Data Package profile</a></td>
 <td>The exact CSV filenames and columns, joins through
 <code>dataset_id</code>/<code>table_id</code>/<code>column_name</code>,
 <code>column_role</code>, observation-unit conventions, categorical-code
@@ -644,79 +750,21 @@ coverage, and salmon publication rules.</td>
 name comes from Frictionless itself. SDP defines a custom Frictionless
 profile and aligns selected fields with other standards where the
 alignment is warranted.</p>
-</section><section><h2 class="section-heading" id="how-sdp-becomes-eml">How SDP becomes EML<a class="anchor" aria-label="anchor" href="#how-sdp-becomes-eml"></a>
+<p>For the current SDP-to-EML transformation, use
+<code>metasalmon</code>’s canonical <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/inst/extdata/eml-mapping-template.yml" class="external-link"><code>eml-mapping-template.yml</code></a>
+and <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/write_eml_from_sdp.Rd" class="external-link"><code>write_eml_from_sdp()</code>
+reference</a> rather than a duplicate field-by-field crosswalk in the
+workshop. The export combines reviewed dataset, table, column, code,
+semantic, and mapping-sidecar facts, then validates the resulting EML.
+Publication intent and authority must still be provided and reviewed;
+they cannot be inferred from a source spreadsheet.</p>
+</section><section><h2 class="section-heading" id="r-python-and-spreadsheet-participation">R, Python, and spreadsheet participation<a class="anchor" aria-label="anchor" href="#r-python-and-spreadsheet-participation"></a>
 </h2>
 <hr class="half-width">
-<p>The export is a governed transformation, not a claim that the two
-formats are identical:</p>
-<table class="table">
-<colgroup>
-<col width="50%">
-<col width="50%">
-</colgroup>
-<thead><tr>
-<th>SDP source</th>
-<th>EML destination</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>
-<code>dataset.csv$title</code>, <code>description</code>,
-<code>keywords</code>
-</td>
-<td>Dataset title, abstract, and keyword set</td>
-</tr>
-<tr>
-<td>
-<code>dataset.csv$temporal_start</code> and
-<code>temporal_end</code>
-</td>
-<td>Temporal coverage</td>
-</tr>
-<tr>
-<td>Each <code>tables.csv</code> row</td>
-<td>One EML <code>dataTable</code>, including its name, description,
-physical CSV object, and key information</td>
-</tr>
-<tr>
-<td>
-<code>column_dictionary.csv</code> names, labels, descriptions, and
-<code>value_type</code>
-</td>
-<td>EML attributes, definitions, and storage types</td>
-</tr>
-<tr>
-<td><code>column_dictionary.csv$required</code></td>
-<td>EML not-null constraints</td>
-</tr>
-<tr>
-<td><code>codes.csv</code></td>
-<td>EML enumerated domains for categorical attributes</td>
-</tr>
-<tr>
-<td>Reviewed measurement <code>term_iri</code> and
-<code>unit_iri</code>
-</td>
-<td>Conservative EML semantic annotations</td>
-</tr>
-<tr>
-<td>Reviewed <code>metadata/eml-mapping.yml</code> sidecar</td>
-<td>Structured parties, rights, methods, measurement scales,
-missing-value meanings, geographic/taxonomic coverage, and publication
-intent that SDP cannot infer safely</td>
-</tr>
-</tbody>
-</table>
-<p>The sidecar is important: a title or column type can map directly,
-but an ORCID-authenticated metadata provider, a measurement scale, or
-permission to publish cannot be inferred from a source spreadsheet.</p>
-</section><section><h2 class="section-heading" id="r-first-examples-three-ways-to-participate">R-first examples, three ways to participate<a class="anchor" aria-label="anchor" href="#r-first-examples-three-ways-to-participate"></a>
-</h2>
-<hr class="half-width">
-<p>The worked code uses R first. Python equivalents appear immediately
-afterward for the core package workflow, while spreadsheet users edit
-the same standard package files. Use the path that matches your current
-comfort level; you do not need to run both code blocks.</p>
+<p>The workshop provides R and Python examples for the code-based
+workflow, with separate spreadsheet subsections where direct metadata
+review is useful. Use the path that matches your current comfort level;
+you do not need to run every version of an exercise.</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -726,54 +774,54 @@ comfort level; you do not need to run both code blocks.</p>
 <thead><tr>
 <th>If you usually work in…</th>
 <th>Start with…</th>
-<th>Publication handoff</th>
+<th>How this path participates</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>R</td>
 <td><code>metasalmon::create_sdp()</code></td>
-<td>R also provides strict validation, EML export, and KNB
-publication.</td>
+<td>Create, review, validate, export, and plan or perform authorized
+publication in R.</td>
 </tr>
 <tr>
 <td>Python</td>
 <td><code>metasalmonpy.create_sdp()</code></td>
-<td>Hand the compatible SDP to current R/<code>metasalmon</code> for the
-final gate.</td>
+<td>Follow the corresponding creation, review, validation, export, and
+publication workflow in Python.</td>
 </tr>
 <tr>
 <td>Excel or Calc</td>
-<td>Blank SDP CSV template folder</td>
-<td>Hand the reviewed CSV package to R/<code>metasalmon</code> for
-validation and export.</td>
+<td>Open the generated SDP metadata CSVs</td>
+<td>Review and edit dataset, table, column, and code descriptions;
+follow the spreadsheet-specific subsections where they appear.</td>
 </tr>
 </tbody>
 </table>
-<p>The R examples target the tagged <code>metasalmon</code> 0.3.0
-release, which implements <code>sdp-0.3.0</code>. The Python companion
-is <code>metasalmonpy</code> 0.2.1, whose version is a parity claim
-against metasalmon 0.2.1 — it writes the earlier <code>sdp-0.2.0</code>
-shape — so do not claim complete version or feature parity, and expect
-R’s <code>migrate_sdp_methods()</code> in the handoff.</p>
-<div id="challenge-1-pick-your-package" class="callout discussion">
+<div id="challenge-1-pick-your-dataset" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-1-pick-your-package" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Pick your package</h3>
+<div id="challenge-1-pick-your-dataset" class="callout-inner">
+<h3 class="callout-title">Challenge 1: Pick your dataset</h3>
 <div class="callout-content">
-<p>Choose one dataset or example table for the workshop.</p>
-<p>Write down:</p>
+<p>Choose one salmon dataset you know well. Do not inventory its files
+or fields yet. Instead, look for meaning that the table alone does not
+explain:</p>
 <ul>
-<li>whether it is one flat table, several files, or a multi-sheet
-workbook;</li>
-<li>a short dataset name;</li>
-<li>the tables it contains and what one row means in each;</li>
-<li>who would be the best contact for questions; and</li>
-<li>one thing that could be misunderstood if the data were shared
-without context.</li>
+<li>an overloaded term such as <code>stock</code>, <code>run</code>, or
+<code>population</code> that different teams may use differently;</li>
+<li>a hidden rule that currently lives in a biologist’s head rather than
+in the data or metadata; or</li>
+<li>a column whose meaning depends on another column.</li>
 </ul>
+<p>For example, a column named <code>count</code> might mean returning
+adult spawners when <code>life_stage = "adult"</code>, but
+downstream-migrating smolts when <code>life_stage = "smolt"</code>. The
+values are both counts, yet they describe different biological
+observations.</p>
+<p>Write down <strong>one thing that could be misunderstood if the
+dataset were shared without that biological context</strong>.</p>
 </div>
 </div>
 </div>
@@ -785,23 +833,29 @@ without context.</li>
 <div class="callout-inner">
 <div class="callout-content">
 <ul>
-<li>The end-to-end target is reviewed SDP metadata, valid EML, and a
-guarded catalog-publication plan.</li>
+<li>The integration system connects local data and expert context to an
+SDP, review tools, shared or local semantic resources, EML, and catalog
+publication.</li>
 <li>A dataset can contain multiple tables; a flat file contains one
 rectangular table.</li>
 <li>The metadata CSVs are visible review surfaces, not hidden software
 internals.</li>
 <li>SDP is a custom Frictionless profile with explicit external-standard
 alignments and salmon-specific rules.</li>
-<li>EML export needs reviewed facts that cannot be inferred from the
-source table alone.</li>
+<li>The Salmon Domain Ontology provides shared anchors between bounded
+contexts; it does not erase locally governed meanings.</li>
+<li>Reuse shared terms when meanings match, propose shared extensions
+when reuse is broad and stable, and federate local terms when the local
+distinction matters.</li>
+<li>EML export uses reviewed mapping facts that cannot be inferred from
+the source table alone.</li>
 </ul>
 </div>
 </div>
 </div>
 </section></section><section id="aio-session-2"><p>Content from <a href="session-2.html">Create a Draft Salmon Data Package</a></p>
 <hr>
-<p>Last updated on 2026-08-22 |
+<p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 95 minutes</p>
@@ -817,9 +871,8 @@ source table alone.</li>
 <h3 class="card-title">Questions</h3>
 <ul>
 <li>What must I set up before running the demo?</li>
-<li>Should I run the included example or substitute my own files?</li>
+<li>What will the bundled quickstart data show me?</li>
 <li>What input structures does <code>create_sdp()</code> support?</li>
-<li>What happens if I rerun package generation after manual edits?</li>
 </ul>
 </div>
 </div>
@@ -830,25 +883,27 @@ source table alone.</li>
 <h3 class="card-title">Objectives</h3>
 <ul>
 <li>Confirm the project, <code>raw_data/</code>, <code>context/</code>,
-and <code>output/</code> layout before the demo.</li>
-<li>Run the included example unchanged, using it only to generate and
-inspect templates.</li>
-<li>Distinguish the example path from the learner-owned data path.</li>
+and <code>output/</code> layout, unless you already completed this
+during setup.</li>
+<li>Run the bundled example unchanged to generate and inspect
+templates.</li>
+<li>Explain why Chapter 2 uses bundled quickstart data and Chapter 3
+introduces your own data.</li>
 <li>Identify supported single-table, multi-table, and workbook
 inputs.</li>
-<li>Protect reviewed metadata by choosing deliberate rerun
-behavior.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="before-the-demo-open-the-project-and-create-folders">Before the demo: open the project and create folders<a class="anchor" aria-label="anchor" href="#before-the-demo-open-the-project-and-create-folders"></a>
+<section><h2 class="section-heading" id="before-the-quickstart-confirm-the-project-and-folders">Before the quickstart: confirm the project and folders<a class="anchor" aria-label="anchor" href="#before-the-quickstart-confirm-the-project-and-folders"></a>
 </h2>
 <hr class="half-width">
-<p>Work from one project root so every path in the lesson is relative
-and reproducible.</p>
+<p>If you already created this project and its folders in
+<strong>Summary and Setup</strong>, skip this section. Otherwise, work
+from one project root so every path in the lesson is relative and
+reproducible.</p>
 <ol style="list-style-type: decimal">
 <li>R users: in RStudio choose <strong>File &gt; New Project</strong>,
 then create a new project or open the folder you prepared during
@@ -873,40 +928,15 @@ jump elsewhere.</li>
   raw_data/                   # unchanged source files
   context/                    # codebooks, methods, and caveats
   output/                     # generated package folders</code></pre>
-</section><section><h2 class="section-heading" id="choose-one-of-two-paths">Choose one of two paths<a class="anchor" aria-label="anchor" href="#choose-one-of-two-paths"></a>
+</section><section><h2 class="section-heading" id="chapter-2-uses-the-bundled-quickstart-data">Chapter 2 uses the bundled quickstart data<a class="anchor" aria-label="anchor" href="#chapter-2-uses-the-bundled-quickstart-data"></a>
 </h2>
 <hr class="half-width">
-<table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
-</colgroup>
-<thead><tr>
-<th>Path</th>
-<th>What to do now</th>
-<th>What to change</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>A: included example</td>
-<td>Run the first code block exactly as written.</td>
-<td>Change nothing. This is the fastest way to see the generated
-metadata templates.</td>
-</tr>
-<tr>
-<td>B: personal data</td>
-<td>First read Path A, then move to Session 3. Put your source files in
-<code>raw_data/</code>.</td>
-<td>Replace the input path, object name, dataset/table IDs, and output
-folder with values for your files.</td>
-</tr>
-</tbody>
-</table>
-<p>Do not partly combine the two paths by reading the example but
-assigning your real dataset ID, or by reading your own data and leaving
-the example output folder. That makes review and reruns difficult to
-interpret.</p>
+<p>In this chapter, use the prepared starting point for your chosen
+software lane. The R and Python examples use a small NuSEDS-derived
+table; the spreadsheet lane uses the canonical blank SDP template. Each
+is a quickstart for seeing the package structure and starter metadata.
+Do not substitute your own files yet: Chapter 3 is the
+bring-your-own-data workflow.</p>
 </section><section><h2 class="section-heading" id="what-draft-means">What “draft” means<a class="anchor" aria-label="anchor" href="#what-draft-means"></a>
 </h2>
 <hr class="half-width">
@@ -915,9 +945,32 @@ review markers. The first example has one purpose: generate the package
 structure and starter metadata so you can inspect it. It is not a
 finished description of the source dataset and it does not export EML
 yet.</p>
-</section><section><h2 class="section-heading" id="path-a-generate-the-simple-r-example">Path A: generate the simple R example<a class="anchor" aria-label="anchor" href="#path-a-generate-the-simple-r-example"></a>
+</section><section><h2 class="section-heading" id="generate-or-open-the-prepared-quickstart">Generate or open the prepared quickstart<a class="anchor" aria-label="anchor" href="#generate-or-open-the-prepared-quickstart"></a>
 </h2>
 <hr class="half-width">
+<p>Choose <strong>R</strong>, <strong>Python</strong>, or
+<strong>Spreadsheet</strong> below. Your selection is synchronized with
+the other software choices on this page.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
 <p><code>metasalmon</code> includes a small NuSEDS-derived practice
 table. Generate its templates with semantic searching turned off so the
 first result is fast and local.</p>
@@ -946,25 +999,17 @@ first result is fast and local.</p>
 <span>  dataset_id <span class="op">=</span> <span class="st">"fraser-coho-example"</span>,</span>
 <span>  table_id <span class="op">=</span> <span class="st">"escapement"</span>,</span>
 <span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">list.files</span><span class="op">(</span><span class="va">pkg_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
-<p><code>seed_semantics = FALSE</code> is the fast classroom option. It
-skips live searches for links to shared definitions. Session 4 shows how
-to run those searches after the starter metadata has been reviewed.</p>
-<div id="python-equivalent-for-path-a" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent-for-path-a" class="callout-inner">
-<h3 class="callout-title">Python equivalent for Path A</h3>
-<div class="callout-content">
-<p>Run this block instead of the R block if you are following the Python
-companion path.</p>
+<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
+<p><code>metasalmonpy</code> includes the same NuSEDS-derived practice
+table. Generate its templates with semantic searching turned off so the
+first result is fast and local.</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -986,7 +1031,7 @@ companion path.</p>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1" aria-label="code-block-4-16"></a>    dataset_id<span class="op">=</span><span class="st">"fraser-coho-example"</span>,</span>
 <span id="cb4-17"><a href="#cb4-17" tabindex="-1" aria-label="code-block-4-17"></a>    table_id<span class="op">=</span><span class="st">"escapement"</span>,</span>
 <span id="cb4-18"><a href="#cb4-18" tabindex="-1" aria-label="code-block-4-18"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb4-20"><a href="#cb4-20" tabindex="-1" aria-label="code-block-4-20"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
 <span id="cb4-21"><a href="#cb4-21" tabindex="-1" aria-label="code-block-4-21"></a>)</span>
 <span id="cb4-22"><a href="#cb4-22" tabindex="-1" aria-label="code-block-4-22"></a></span>
@@ -995,24 +1040,34 @@ companion path.</p>
 <span id="cb4-25"><a href="#cb4-25" tabindex="-1" aria-label="code-block-4-25"></a>):</span>
 <span id="cb4-26"><a href="#cb4-26" tabindex="-1" aria-label="code-block-4-26"></a>    <span class="bu">print</span>(path.relative_to(pkg_path))</span></code></pre>
 </div>
-<p>The R and Python packages bundle separate practice fixtures. They
-demonstrate the same core package structure, but do not use their row
-counts to test cross-language parity. Each writer also leaves a hidden
-bookkeeping file (<code>.metasalmon-package</code> in R,
-<code>.metasalmonpy-package</code> in Python). Note that
-<code>metasalmonpy</code> 0.2.1 writes the earlier
-<code>sdp-0.2.0</code> package shape; the final EML and KNB workflow
-taught here runs in R against the current <code>sdp-0.3.0</code>
-specification.</p>
+</div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<p>Spreadsheet participants can inspect the package structure without
+running code. Download or clone the <code>smn-data-pkg</code>
+repository, copy its <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a> into
+<code>output/spreadsheet-quickstart-sdp/</code>, and open the CSV files
+with Excel, LibreOffice Calc, or another spreadsheet editor.</p>
+<p>Keep the copied folder structure and header rows unchanged. In this
+chapter, inspect the prepared example rather than replacing its data or
+metadata; Chapter 3 introduces your own data.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="inspect-the-generated-templates">Inspect the generated templates<a class="anchor" aria-label="anchor" href="#inspect-the-generated-templates"></a>
+<p>For the R and Python lanes, <code>seed_semantics = FALSE</code> /
+<code>seed_semantics=False</code> is the fast classroom option. It skips
+live searches for links to shared definitions. Chapter 4 shows how to
+run those searches after the starter metadata has been reviewed.</p>
+</section><section><h2 class="section-heading" id="inspect-the-package-files">Inspect the package files<a class="anchor" aria-label="anchor" href="#inspect-the-package-files"></a>
 </h2>
 <hr class="half-width">
-<p>Open these files in this order:</p>
+<p>Open these files in this order. A package generated by R or Python
+starts with <code>README-review.txt</code>; the spreadsheet template
+uses <code>README.md</code>.</p>
 <ol style="list-style-type: decimal">
-<li><code>README-review.txt</code></li>
+<li>
+<code>README-review.txt</code> or <code>README.md</code>
+</li>
 <li><code>metadata/column_dictionary.csv</code></li>
 <li><code>metadata/tables.csv</code></li>
 <li><code>metadata/dataset.csv</code></li>
@@ -1021,18 +1076,21 @@ specification.</p>
 <li>
 <code>semantic_suggestions.csv</code>, when present</li>
 </ol>
-<p>Expected structure:</p>
+<p>The R or Python quickstart has this generated structure. The
+spreadsheet template has the same core metadata CSVs but keeps
+<code>data/README.md</code> in place of a learner data table until
+Chapter 3.</p>
 <pre class="text"><code><span><span class="va">output</span><span class="op">/</span><span class="va">fraser</span><span class="op">-</span><span class="va">coho</span><span class="op">-</span><span class="va">example</span><span class="op">-</span><span class="va">sdp</span><span class="op">/</span></span>
-<span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span></span>
+<span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span>            <span class="co"># README.md in the prepared example</span></span>
 <span>  <span class="va">datapackage.json</span></span>
-<span>  <span class="va">.metasalmon</span><span class="op">-</span><span class="va">package</span>          <span class="co"># hidden writer bookkeeping file; leave it alone</span></span>
+<span>  <span class="va">.metasalmon</span><span class="op">-</span><span class="va">package</span>          <span class="co"># R writer bookkeeping; Python uses .metasalmonpy-package</span></span>
 <span>  <span class="va">metadata</span><span class="op">/</span></span>
 <span>    <span class="va">dataset.csv</span></span>
 <span>    <span class="va">tables.csv</span></span>
 <span>    <span class="va">column_dictionary.csv</span></span>
 <span>    <span class="va">codes.csv</span>                  <span class="co"># present when categorical columns exist</span></span>
 <span>  <span class="va">data</span><span class="op">/</span></span>
-<span>    <span class="va">escapement.csv</span></span></code></pre>
+<span>    <span class="va">escapement.csv</span>              <span class="co"># filename follows the table ID</span></span></code></pre>
 <p>If semantic seeding is enabled later, the package may also include
 <code>semantic_suggestions.csv</code>, and metadata fields may contain
 <code>REVIEW: &lt;iri&gt;</code> draft values. An <strong>IRI</strong>
@@ -1085,53 +1143,6 @@ derivative that does not misrepresent the source.</td>
 <p>The output data resources are CSV. Keep merged headings,
 presentation-only rows, subtotals, and multiple tables on one sheet out
 of the rectangular data frames passed to <code>create_sdp()</code>.</p>
-</section><section><h2 class="section-heading" id="reruns-and-manual-edits">Reruns and manual edits<a class="anchor" aria-label="anchor" href="#reruns-and-manual-edits"></a>
-</h2>
-<hr class="half-width">
-<p>The safest rule is: <strong>generate once, then review the package
-you generated</strong>.</p>
-<table class="table">
-<colgroup>
-<col width="50%">
-<col width="50%">
-</colgroup>
-<thead><tr>
-<th>Situation</th>
-<th>Safe action</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>The output folder does not exist</td>
-<td>Run with <code>overwrite = FALSE</code>.</td>
-</tr>
-<tr>
-<td>The example folder already exists and you have not edited it</td>
-<td>Use a new output name, or deliberately remove the disposable example
-outside the lesson before recreating it.</td>
-</tr>
-<tr>
-<td>You manually edited <code>metadata/*.csv</code>
-</td>
-<td>Do not rerun <code>create_sdp()</code> on the same path. Continue
-with <code>read_salmon_datapackage()</code> and validation.</td>
-</tr>
-<tr>
-<td>You need a new version after review</td>
-<td>Read the reviewed package and write a new versioned folder; Session
-6 shows this later workflow.</td>
-</tr>
-</tbody>
-</table>
-<p>In current R/<code>metasalmon</code>, <code>overwrite = TRUE</code>
-re-infers and replaces package files owned by the writer, including
-canonical metadata and declared data resources. Manual edits to those
-files can therefore be lost. Version 0.2.0 and later preserve non-owned
-sidecars by default, but <code>prune = TRUE</code> empties the package
-first and can remove them. Neither option is a substitute for a
-versioned backup or Git history.</p>
-<p>Python participants should use the same conservative rule: after
-manual review, choose a new output path instead of assuming that R and
-Python overwrite behavior is identical.</p>
 </section><section><h2 class="section-heading" id="field-definitions-and-accepted-values">Field definitions and accepted values<a class="anchor" aria-label="anchor" href="#field-definitions-and-accepted-values"></a>
 </h2>
 <hr class="half-width">
@@ -1185,50 +1196,32 @@ from whether an SDP metadata field itself is required.</td>
 for measurement rows and must be a valid absolute IRI.</td>
 </tr>
 </tbody>
-</table>
-<p>Validation messages identify the file, field, and row context when
-possible. Fix the source metadata rather than suppressing the error or
-adding a non-standard header.</p>
-<p>In R/<code>metasalmon</code> 0.2.0 and later, the column dictionary’s
-<code>value_type</code> is the type authority when a package is read. A
-token that does not satisfy the declared type is retained for diagnosis
-instead of being silently converted to <code>NA</code>; validation
-reports the mismatch. This makes accurate <code>value_type</code> review
-part of data preservation, not cosmetic documentation.</p>
-</section><section><h2 class="section-heading" id="spreadsheetcsv-template-path">Spreadsheet/CSV-template path<a class="anchor" aria-label="anchor" href="#spreadsheetcsv-template-path"></a>
-</h2>
-<hr class="half-width">
-<p>Download or clone the <code>smn-data-pkg</code> repository and copy
-the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-SDP CSV template</a>, then open its metadata CSV files in Excel,
-LibreOffice Calc, or another spreadsheet editor. There is no standalone
-workbook or template ZIP. Keep the folder structure and header rows
-exactly as provided.</p>
-<p>Minimum steps:</p>
-<ol style="list-style-type: decimal">
-<li>Export each source table as a CSV under <code>data/</code>.</li>
-<li>Fill one row in <code>metadata/dataset.csv</code>.</li>
-<li>Fill one row in <code>metadata/tables.csv</code> for each data
-table.</li>
-<li>Fill one row in <code>metadata/column_dictionary.csv</code> for each
-data column.</li>
-<li>When any column has <code>column_role = categorical</code>, document
-every observed non-empty value in <code>metadata/codes.csv</code>.</li>
-<li>Optionally write a short README/context note with caveats, methods,
-and known limitations.</li>
-<li>Hand the package to <code>metasalmon</code> to generate and check
-<code>datapackage.json</code>, run strict validation, and later export
-EML.</li>
-</ol>
-<p>The spreadsheet path is valid when it produces the same canonical CSV
-metadata that the code packages use. The blank template intentionally
-omits <code>datapackage.json</code>; a complete or published package
-needs the generated descriptor as well.</p>
-</section><section><h2 class="section-heading" id="review-state-validation">Review-state validation<a class="anchor" aria-label="anchor" href="#review-state-validation"></a>
+</table></section><section><h2 class="section-heading" id="review-state-validation">Review-state validation<a class="anchor" aria-label="anchor" href="#review-state-validation"></a>
 </h2>
 <hr class="half-width">
 <p>Early validation should catch structure problems without requiring
-all links to shared definitions to be complete.</p>
+all links to shared definitions to be complete. Use the same software
+lane you selected above.</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1241,14 +1234,8 @@ all links to shared definitions to be complete.</p>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">issues</span></span>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">missing_terms</span></span></code></pre>
 </div>
-<div id="python-equivalent" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1263,31 +1250,38 @@ all links to shared definitions to be complete.</p>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"missing_terms"</span>])</span></code></pre>
 </div>
 </div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
+<p>Spreadsheet software does not currently run the SDP validator. For
+this quickstart, compare the prepared example’s folder structure and
+metadata headers with the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
+field reference</a>, and keep unresolved fields or term links visibly in
+review state. This manual review is not evidence that strict validation
+has passed.</p>
 </div>
 </div>
-<p><code>require_iris = FALSE</code> allows links to shared definitions
-to remain unfinished during draft review. Warnings about missing
+</div>
+<p>In the R and Python lanes, <code>require_iris = FALSE</code> /
+<code>require_iris=False</code> allows links to shared definitions to
+remain unfinished during draft review. Warnings about missing
 measurement links, placeholders, or <code>REVIEW:</code> markers can be
-acceptable in review state. Use strict R validation only when the
-package is publication-ready.</p>
-<div id="challenge-1-generate-and-inspect-the-example-templates" class="callout discussion">
+acceptable in review state. Use strict validation only when the package
+is publication-ready.</p>
+<div id="challenge-1-generate-and-inspect-the-quickstart-templates" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-1-generate-and-inspect-the-example-templates" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Generate and inspect the example
-templates</h3>
+<div id="challenge-1-generate-and-inspect-the-quickstart-templates" class="callout-inner">
+<h3 class="callout-title">Challenge 1: Generate and inspect the
+quickstart templates</h3>
 <div class="callout-content">
-<p>Run Path A unchanged, then answer:</p>
+<p>Run the bundled quickstart unchanged, then answer:</p>
 <ul>
 <li>Where is the data table?</li>
 <li>Which metadata file describes the dataset, each table, each column,
 and categorical codes?</li>
 <li>Which fields still need human review?</li>
 <li>What would you replace when moving to your own data?</li>
-<li>Why would <code>overwrite = TRUE</code> be risky after manual
-edits?</li>
 </ul>
 </div>
 </div>
@@ -1300,24 +1294,22 @@ edits?</li>
 <div class="callout-inner">
 <div class="callout-content">
 <ul>
-<li>Prepare the project and folders before the demo.</li>
-<li>Run the included example unchanged to learn the generated package
-shape.</li>
+<li>Confirm the project and folders unless you already prepared them
+during setup.</li>
+<li>Run the bundled quickstart unchanged to learn the generated package
+shape; bring your own data in Chapter 3.</li>
 <li>
 <code>create_sdp()</code> accepts one data frame or a named list of
 tabular data frames, not arbitrary scientific file structures.</li>
 <li>The field reference is the source for definitions and allowed
 values.</li>
-<li>Protect manual edits: do not casually rerun
-<code>create_sdp(..., overwrite = TRUE)</code> on a reviewed
-package.</li>
 </ul>
 </div>
 </div>
 </div>
 </section></section><section id="aio-session-3"><p>Content from <a href="session-3.html">Use Your Data and Capture Context</a></p>
 <hr>
-<p>Last updated on 2026-08-22 |
+<p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 90 minutes</p>
@@ -1362,7 +1354,7 @@ tools.</li>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="path-b-replace-the-example-deliberately">Path B: replace the example deliberately<a class="anchor" aria-label="anchor" href="#path-b-replace-the-example-deliberately"></a>
+<section><h2 class="section-heading" id="replace-the-quickstart-with-your-data">Replace the quickstart with your data<a class="anchor" aria-label="anchor" href="#replace-the-quickstart-with-your-data"></a>
 </h2>
 <hr class="half-width">
 <p>Session 2 used an included dataset, ID, table name, and output
@@ -1416,10 +1408,35 @@ files under <code>context/</code>, and generated packages under
 <p>Use only files you are allowed to bring to the workshop. Do not send
 source or context files to an external service unless that use is
 approved.</p>
-</section><section><h2 class="section-heading" id="one-flat-csv">One flat CSV<a class="anchor" aria-label="anchor" href="#one-flat-csv"></a>
+</section><section><h2 class="section-heading" id="create-the-package-in-your-software-lane">Create the package in your software lane<a class="anchor" aria-label="anchor" href="#create-the-package-in-your-software-lane"></a>
 </h2>
 <hr class="half-width">
-<p>This is the direct replacement for the simple example:</p>
+<p>Choose the same R, Python, or Spreadsheet lane you used for the
+quickstart. The code lanes create the package for you. The spreadsheet
+lane shows how to assemble the same standard files manually when you
+cannot run either package.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
+<p><strong>One flat CSV</strong></p>
+<p>This is the direct replacement for the quickstart:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1444,13 +1461,11 @@ approved.</p>
 <span>  dataset_id <span class="op">=</span> <span class="st">"my-salmon-data"</span>,</span>
 <span>  table_id <span class="op">=</span> <span class="st">"observations"</span>,</span>
 <span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-</section><section><h2 class="section-heading" id="several-csv-tables-in-one-dataset">Several CSV tables in one dataset<a class="anchor" aria-label="anchor" href="#several-csv-tables-in-one-dataset"></a>
-</h2>
-<hr class="half-width">
+<p><strong>Several CSV tables in one dataset</strong></p>
 <p>A dataset can contain several related tables. Read each one, give
 each a safe unique <code>table_id</code>, and pass a <strong>named
 list</strong>. The list names become table IDs, so use letters, numbers,
@@ -1476,7 +1491,7 @@ and underscores rather than workbook display labels with spaces.</p>
 <span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-multi-table-sdp"</span><span class="op">)</span>,</span>
 <span>  dataset_id <span class="op">=</span> <span class="st">"my-multi-table-dataset"</span>,</span>
 <span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
@@ -1484,9 +1499,7 @@ and underscores rather than workbook display labels with spaces.</p>
 <code>tables.csv</code> rows, one data CSV per table, and one
 <code>column_dictionary.csv</code> row for every column in both
 tables.</p>
-</section><section><h2 class="section-heading" id="excel-workbook-with-several-sheets">Excel workbook with several sheets<a class="anchor" aria-label="anchor" href="#excel-workbook-with-several-sheets"></a>
-</h2>
-<hr class="half-width">
+<p><strong>Excel workbook with several sheets</strong></p>
 <p>An Excel workbook is a container. Read each rectangular sheet
 separately and pass the resulting named list just as you did for several
 CSVs.</p>
@@ -1516,30 +1529,15 @@ CSVs.</p>
 <span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-workbook-sdp"</span><span class="op">)</span>,</span>
 <span>  dataset_id <span class="op">=</span> <span class="st">"my-workbook-dataset"</span>,</span>
 <span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p>Clean presentation artifacts before packaging: repeated headings,
-merged cells, notes above the header, subtotals, and two unrelated
-tables on one sheet are not one flat table. Keep the original workbook
-unchanged in <code>raw_data/</code> and document any transformation.</p>
-<p>NetCDF is not an Excel-like multi-table container. Its dimensions,
-coordinates, arrays, and attributes are not preserved by this workflow,
-so do not present a flattened extract as the complete source unless that
-derivative has been explicitly reviewed and described.</p>
-<div id="python-companion-for-personal-data" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-companion-for-personal-data" class="callout-inner">
-<h3 class="callout-title">Python companion for personal data</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <p>Start Python from the same project root and use the same folder
-layout. This example shows one CSV; for multiple tables, build a
-dictionary whose keys are safe table IDs and whose values are pandas
-DataFrames.</p>
+layout.</p>
+<p><strong>One flat CSV</strong></p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1559,25 +1557,135 @@ DataFrames.</p>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a>    dataset_id<span class="op">=</span><span class="st">"my-salmon-data"</span>,</span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a>    table_id<span class="op">=</span><span class="st">"observations"</span>,</span>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1" aria-label="code-block-5-16"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1" aria-label="code-block-5-17"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1" aria-label="code-block-5-17"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb5-18"><a href="#cb5-18" tabindex="-1" aria-label="code-block-5-18"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1" aria-label="code-block-5-19"></a>)</span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1" aria-label="code-block-5-20"></a></span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1" aria-label="code-block-5-21"></a><span class="co"># Multi-table shape when needed:</span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1" aria-label="code-block-5-22"></a><span class="co"># tables = {</span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1" aria-label="code-block-5-23"></a><span class="co">#     "escapement": pd.read_csv(project_root / "raw_data" / "escapement.csv"),</span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1" aria-label="code-block-5-24"></a><span class="co">#     "sites": pd.read_csv(project_root / "raw_data" / "sites.csv"),</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1" aria-label="code-block-5-25"></a><span class="co"># }</span></span></code></pre>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1" aria-label="code-block-5-19"></a>)</span></code></pre>
 </div>
-<p>The Python companion creates the core SDP package in the
-<code>sdp-0.2.0</code> shape (<code>metasalmonpy</code> 0.2.1 mirrors
-metasalmon 0.2.1). Use current R/<code>metasalmon</code> — migrating
-first with <code>migrate_sdp_methods()</code> — for strict final
-validation and EML/KNB publication against the current
-specification.</p>
+<p><strong>Several CSV tables in one dataset</strong></p>
+<p>Use a dictionary whose keys are safe table IDs and whose values are
+pandas DataFrames.</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a>tables <span class="op">=</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a>    <span class="st">"escapement"</span>: pd.read_csv(</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a>        project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"escapement.csv"</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a>    ),</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a>    <span class="st">"sites"</span>: pd.read_csv(</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a>        project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"sites.csv"</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>    ),</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a>}</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a>multi_pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a>    tables,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1" aria-label="code-block-6-12"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-multi-table-sdp"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1" aria-label="code-block-6-13"></a>    dataset_id<span class="op">=</span><span class="st">"my-multi-table-dataset"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1" aria-label="code-block-6-14"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1" aria-label="code-block-6-15"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1" aria-label="code-block-6-16"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1" aria-label="code-block-6-17"></a>)</span></code></pre>
+</div>
+<p><strong>Excel workbook with several sheets</strong></p>
+<p>Pandas uses <code>openpyxl</code> to read <code>.xlsx</code>
+workbooks. Read each rectangular sheet explicitly and give it a safe
+table ID.</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>workbook_path <span class="op">=</span> project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"my-salmon-workbook.xlsx"</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a>workbook_tables <span class="op">=</span> {</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a>    <span class="st">"escapement"</span>: pd.read_excel(</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1" aria-label="code-block-7-5"></a>        workbook_path,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1" aria-label="code-block-7-6"></a>        sheet_name<span class="op">=</span><span class="st">"Escapement"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1" aria-label="code-block-7-7"></a>    ),</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1" aria-label="code-block-7-8"></a>    <span class="st">"sites"</span>: pd.read_excel(</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a>        workbook_path,</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1" aria-label="code-block-7-10"></a>        sheet_name<span class="op">=</span><span class="st">"Sites"</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1" aria-label="code-block-7-11"></a>    ),</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1" aria-label="code-block-7-12"></a>}</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1" aria-label="code-block-7-13"></a></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1" aria-label="code-block-7-14"></a>workbook_pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1" aria-label="code-block-7-15"></a>    workbook_tables,</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1" aria-label="code-block-7-16"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-workbook-sdp"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1" aria-label="code-block-7-17"></a>    dataset_id<span class="op">=</span><span class="st">"my-workbook-dataset"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1" aria-label="code-block-7-18"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1" aria-label="code-block-7-19"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1" aria-label="code-block-7-20"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1" aria-label="code-block-7-21"></a>)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<p>Copy the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a> into a new folder under <code>output/</code>. Keep
+your original table unchanged under <code>raw_data/</code>, save a
+rectangular CSV copy under the package’s <code>data/</code> folder, and
+fill the canonical CSVs under <code>metadata/</code> using the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
+field reference</a>.</p>
+<p>For a dataset with several tables, add one row per table to
+<code>metadata/tables.csv</code>, one dictionary row per column to
+<code>metadata/column_dictionary.csv</code>, and one CSV per table under
+<code>data/</code>. Preserve the template headers and folder structure.
+Spreadsheet review can prepare the package metadata, but it does not run
+automated validation.</p>
 </div>
 </div>
 </div>
+<p>The R and Python implementations create the same current SDP
+structure. The spreadsheet lane edits that structure directly.</p>
+<p>Clean presentation artifacts before packaging: repeated headings,
+merged cells, notes above the header, subtotals, and two unrelated
+tables on one sheet are not one flat table. Keep the original workbook
+unchanged in <code>raw_data/</code> and document any transformation.</p>
+<p>NetCDF is not an Excel-like multi-table container. Its dimensions,
+coordinates, arrays, and attributes are not preserved by this workflow,
+so do not present a flattened extract as the complete source unless that
+derivative has been explicitly reviewed and described.</p>
+</section><section><h2 class="section-heading" id="protect-reviewed-work-when-you-rerun">Protect reviewed work when you rerun<a class="anchor" aria-label="anchor" href="#protect-reviewed-work-when-you-rerun"></a>
+</h2>
+<hr class="half-width">
+<p>The safest rule is: <strong>generate a draft once, then treat the
+package you review as the current source state</strong>.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Situation</th>
+<th>Safe action</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>The output folder does not exist</td>
+<td>Generate the draft with <code>overwrite = FALSE</code> /
+<code>overwrite=False</code>.</td>
+</tr>
+<tr>
+<td>A disposable quickstart folder already exists</td>
+<td>Use a new output name, or deliberately remove that disposable
+example outside the lesson before recreating it.</td>
+</tr>
+<tr>
+<td>You manually edited <code>metadata/*.csv</code>
+</td>
+<td>Do not rerun <code>create_sdp()</code> on the same path. Continue
+with <code>read_salmon_datapackage()</code> and validation.</td>
+</tr>
+<tr>
+<td>You need a new version after review</td>
+<td>Read the reviewed package and write a new versioned folder; Chapter
+6 shows this workflow.</td>
+</tr>
+</tbody>
+</table>
+<p>In both language implementations, <code>overwrite = TRUE</code> /
+<code>overwrite=True</code> re-infers and replaces files owned by the
+package writer. That can erase manual edits to canonical metadata or
+declared data resources. <code>prune = TRUE</code> /
+<code>prune=True</code> is more destructive because it empties the
+package before rewriting it. Neither option replaces a versioned backup
+or Git history.</p>
 </section><section><h2 class="section-heading" id="read-supporting-context-separately">Read supporting context separately<a class="anchor" aria-label="anchor" href="#read-supporting-context-separately"></a>
 </h2>
 <hr class="half-width">
@@ -1585,7 +1693,27 @@ specification.</p>
 people review the inferred templates. Reading these files does not
 automatically merge them into <code>column_dictionary.csv</code>; you
 still decide which statements belong in canonical metadata.</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1603,6 +1731,36 @@ still decide which statements belong in canonical metadata.</p>
 <span>  full.names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  recursive <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" tabindex="-1" aria-label="code-block-9-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1" aria-label="code-block-9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1" aria-label="code-block-9-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1" aria-label="code-block-9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1" aria-label="code-block-9-5"></a>context_dir <span class="op">=</span> Path(<span class="st">"context"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1" aria-label="code-block-9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1" aria-label="code-block-9-7"></a>source_dictionary <span class="op">=</span> pd.read_csv(</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1" aria-label="code-block-9-8"></a>    context_dir <span class="op">/</span> <span class="st">"source-data-dictionary.csv"</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1" aria-label="code-block-9-9"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1" aria-label="code-block-9-10"></a>context_note <span class="op">=</span> (</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1" aria-label="code-block-9-11"></a>    context_dir <span class="op">/</span> <span class="st">"methods-and-caveats.md"</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1" aria-label="code-block-9-12"></a>).read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1" aria-label="code-block-9-13"></a>context_paths <span class="op">=</span> <span class="bu">sorted</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1" aria-label="code-block-9-14"></a>    path <span class="cf">for</span> path <span class="kw">in</span> context_dir.rglob(<span class="st">"*"</span>) <span class="cf">if</span> path.is_file()</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1" aria-label="code-block-9-15"></a>)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<p>Open the source dictionary beside the package metadata, and keep the
+methods/caveats note visible while reviewing dataset, table, column, and
+code descriptions. Copy only reviewed statements into canonical
+metadata; preserve longer narrative context in the note.</p>
+</div>
+</div>
 </div>
 <p><code>context_paths</code> can be reviewed directly and can later be
 supplied to optional, approved LLM-assisted review. Merely creating the
@@ -1753,7 +1911,7 @@ shared definition.</li>
 </div>
 </section></section><section id="aio-session-4"><p>Content from <a href="session-4.html">Review Terms and Measurement Meanings</a></p>
 <hr>
-<p>Last updated on 2026-08-22 |
+<p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 95 minutes</p>
@@ -1816,6 +1974,26 @@ seeding was enabled during <code>create_sdp()</code>, the package-root
 <code>semantic_suggestions.csv</code> contains the original evidence;
 rerunning after your metadata edits searches only from the current
 package state.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1843,14 +2021,8 @@ package state.</p>
 <span>    <span class="va">definition</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
-<div id="python-equivalent" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1886,6 +2058,15 @@ package state.</p>
 <span id="cb2-30"><a href="#cb2-30" tabindex="-1" aria-label="code-block-2-30"></a><span class="bu">print</span>(column_suggestions)</span></code></pre>
 </div>
 </div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<p>Open an instructor-prepared <code>semantic_suggestions.csv</code>
+beside the package metadata. Filter to the field or code you are
+reviewing, then compare each candidate label and definition with the
+source documentation and the data holder’s explanation. Record
+<strong>keep</strong>, <strong>replace</strong>,
+<strong>remove</strong>, or <strong>defer</strong>; opening the CSV does
+not accept a suggestion or prove that a link is correct.</p>
+</div>
 </div>
 </div>
 <p>Vocabulary lookup can take a few minutes. For a live workshop,
@@ -1894,12 +2075,29 @@ instructors can prepare this output in advance. Omitting
 <code>sources</code> explicitly, current <code>metasalmon</code> and
 <code>metasalmonpy</code> treat the vector as a strict allowlist for the
 initial search and any LLM-requested bounded retry.</p>
-<p>Current R/<code>metasalmon</code> resolves its SMN and GCDFO indexes
-once per R session, so repeated searches use one consistent ontology
-snapshot and avoid repeated downloads. It also distinguishes a failed
-source lookup from a successful search with zero matches (since 0.2.2).
+<p>Vocabulary lookup can fail independently of returning zero matches.
 If a result is unexpectedly empty, inspect a focused search before
 declaring a vocabulary gap:</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1911,14 +2109,32 @@ declaring a vocabulary gap:</p>
 <span></span>
 <span><span class="fu">attr</span><span class="op">(</span><span class="va">probe</span>, <span class="st">"diagnostics"</span><span class="op">)</span></span></code></pre>
 </div>
+</div>
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> find_terms</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a>probe <span class="op">=</span> find_terms(</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a>    <span class="st">"spawner count"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a>    role<span class="op">=</span><span class="st">"property"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a><span class="bu">print</span>(probe.attrs.get(<span class="st">"diagnostics"</span>))</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<p>If an instructor-provided suggestion file is unexpectedly empty, do
+not record a vocabulary gap from that absence alone. Ask for the lookup
+diagnostics or use the linked vocabulary documentation to distinguish a
+service failure from a genuine no-match result.</p>
+</div>
+</div>
+</div>
 <p>A warning or non-success diagnostic is evidence of a lookup problem,
 not evidence that no appropriate term exists. Do not turn a temporary
 service outage into a new-term request.</p>
-<p>For the Python exercise, omit <code>sources</code> as shown.
-<code>metasalmonpy</code> 0.2.1 searches the same SMN and GCDFO sources;
-a failed or empty ontology fetch raises an error rather than returning
-an empty index, so treat that error as a lookup problem, not a missing
-term.</p>
 </section><section><h2 class="section-heading" id="treat-suggestions-as-drafts">Treat suggestions as drafts<a class="anchor" aria-label="anchor" href="#treat-suggestions-as-drafts"></a>
 </h2>
 <hr class="half-width">
@@ -1980,19 +2196,18 @@ minimum, total, or peak — rather than a single observation?</td>
 </tr>
 </tbody>
 </table>
-<p>Since <code>sdp-0.3.0</code> (metasalmon 0.3.0), <strong>methods do
-not live in the column dictionary</strong>. A method describes how a
-value was produced, not what the column is, so it is recorded where it
-is actually constant: a procedure shared by a whole table goes in
-<code>tables.csv$method_iri</code>, a citable protocol document goes in
+<p><strong>Methods do not live in the column dictionary.</strong> A
+method describes how a value was produced, not what the column is, so it
+is recorded where it is actually constant: a procedure shared by a whole
+table goes in <code>tables.csv$method_iri</code>, a citable protocol
+document goes in
 <code>protocol_iri</code>/<code>protocol_citation</code> on
 <code>tables.csv</code> or <code>dataset.csv</code>, and a method that
 varies row by row becomes a code column in the data whose values resolve
 through <code>codes.csv$term_iri</code> to shared-vocabulary procedures.
 A statistical modifier is the one kind of “how” that stays in the
 dictionary, because a <em>mean</em> weight and a <em>maximum</em> weight
-are different variables. The <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd" class="external-link">metasalmon
-migration guide</a> explains the change and migrates 0.2.x packages.</p>
+are different variables.</p>
 <p>Important boundary: <code>property_iri</code>,
 <code>entity_iri</code>, <code>constraint_iri</code>, and
 <code>statistical_modifier_iri</code> are I-ADOPT-style
@@ -2001,33 +2216,23 @@ measurement semantics, but units are not an I-ADOPT role, and methods
 are not part of the variable at all. Do not use these fields as
 general-purpose relationship fields for identifiers, attributes, or
 categorical columns.</p>
-<div id="optional-llm-assisted-bundle-review" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<span class="callout-header">Callout</span>
-<div id="optional-llm-assisted-bundle-review" class="callout-inner">
-<h3 class="callout-title">Optional LLM-assisted bundle review</h3>
-<div class="callout-content">
+</section><section><h2 class="section-heading" id="optional-llm-assisted-bundle-review">Optional LLM-assisted bundle review<a class="anchor" aria-label="anchor" href="#optional-llm-assisted-bundle-review"></a>
+</h2>
+<hr class="half-width">
 <p>Adding <code>llm_assess = TRUE</code> in R or
 <code>llm_assess=True</code> in Python, plus an approved provider and
 model, asks the LLM to judge the retrieved candidates; it does not let
-the model invent IRIs. In metasalmon 0.3.0, a measurement’s variable,
-property, entity, unit, constraint, and statistical-modifier candidates
-are reviewed together as one bundle; a statistical-modifier candidate is
-proposed only when the column’s name, label, or description names an
-aggregation (total, mean, maximum, minimum, peak). Method candidates
-survive only for code values, where codes resolve to shared
-<code>sosa:Procedure</code> concepts. <code>metasalmonpy</code> 0.2.1
-still reviews the earlier bundle shape, which included a dictionary
-method slot.</p>
-<p>R/<code>metasalmon</code> retries retryable provider failures such as
-rate limits and temporary service errors, honoring
-<code>Retry-After</code> when present. It also sends the BioPortal key
-in an authorization header and redacts credentials from reported URLs.
-These safeguards reduce avoidable failures; they do not authorize
-unbounded retries, sensitive context, or unattended acceptance of LLM
-decisions.</p>
+the model invent IRIs. A measurement’s variable, property, entity, unit,
+constraint, and statistical-modifier candidates are reviewed together as
+one bundle. A statistical-modifier candidate is proposed only when the
+column’s name, label, or description names an aggregation such as total,
+mean, maximum, minimum, or peak. Method candidates apply to code values,
+where codes can resolve to shared <code>sosa:Procedure</code>
+concepts.</p>
+<p>The package clients bound retries for temporary provider failures and
+keep credentials out of reported URLs. These safeguards reduce avoidable
+failures; they do not authorize unbounded retries, sensitive context, or
+unattended acceptance of LLM decisions.</p>
 <p>Deterministic validators can downgrade an unsupported
 <code>accept</code> decision to <code>review</code>, but they never
 substitute or invent a term. Suggested candidates written into the
@@ -2037,9 +2242,6 @@ them.</p>
 <code>llm_context_files</code>, and context alone does not enable an LLM
 call. Use only an approved provider and appropriate non-sensitive
 context.</p>
-</div>
-</div>
-</div>
 </section><section><h2 class="section-heading" id="example-review">Example review<a class="anchor" aria-label="anchor" href="#example-review"></a>
 </h2>
 <hr class="half-width">
@@ -2335,7 +2537,7 @@ evidence of broad reuse.</li>
 </div>
 </section></section><section id="aio-session-6"><p>Content from <a href="session-6.html">Route Term Gaps, Export EML, and Plan Catalog Publication</a></p>
 <hr>
-<p>Last updated on 2026-08-22 |
+<p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 135 minutes</p>
@@ -2370,7 +2572,7 @@ reviewed metadata?</li>
 <li>Route candidate terms to shared, DFO-specific, or local/profile
 governance.</li>
 <li>Run the strict SDP validation gate before export.</li>
-<li>Complete the SDP-to-EML handoff and write validated EML 2.2.</li>
+<li>Export the reviewed SDP as validated EML 2.2.</li>
 <li>Preview an exact KNB/DataONE deposit and distinguish a dry run from
 a persistent live upload.</li>
 <li>Write an intentional new package version from reviewed
@@ -2388,11 +2590,31 @@ metadata.</li>
 the gap and decide where it belongs.</p>
 <p>The package should keep enough evidence that maintainers can
 understand the request without a long follow-up interview.</p>
-</section><section><h2 class="section-heading" id="post-review-workflow-in-r">Post-review workflow in R<a class="anchor" aria-label="anchor" href="#post-review-workflow-in-r"></a>
+</section><section><h2 class="section-heading" id="build-a-term-gap-plan-in-your-software-lane">Build a term-gap plan in your software lane<a class="anchor" aria-label="anchor" href="#build-a-term-gap-plan-in-your-software-lane"></a>
 </h2>
 <hr class="half-width">
 <p>After editing the metadata files, reload and validate the current
 package state.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2470,14 +2692,8 @@ package state.</p>
 <span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu">write_csv</span><span class="op">(</span><span class="va">request_plan</span>, <span class="fu">file.path</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="st">"term-request-plan.csv"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<div id="python-equivalent" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2561,6 +2777,15 @@ package state.</p>
 <span id="cb3-78"><a href="#cb3-78" tabindex="-1" aria-label="code-block-3-78"></a>    )</span></code></pre>
 </div>
 </div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<p>Open <code>semantic_suggestions.csv</code> and the canonical metadata
+CSVs. For each unresolved field or code, record the dataset, table,
+field, search wording, closest candidate, why it does not fit,
+supporting source, and proposed route (<code>smn</code>,
+<code>gcdfo</code>, <code>profile</code>, or defer). Keep this as a
+reviewable term-gap plan; spreadsheet review does not submit a
+request.</p>
+</div>
 </div>
 </div>
 <p><code>detect_semantic_term_gaps()</code> combines deterministic
@@ -2577,6 +2802,26 @@ issue. The output is a working list, not an automatic governance
 decision.</p>
 <p>To preview the SMN and GCDFO issue bodies without posting
 anything:</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2591,14 +2836,8 @@ anything:</p>
 <span></span>
 <span><span class="va">issue_preview</span></span></code></pre>
 </div>
-<div id="python-equivalent-1" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent-1" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2618,6 +2857,11 @@ anything:</p>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a></span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a><span class="bu">print</span>(issue_preview)</span></code></pre>
 </div>
+</div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<p>Use the term-gap plan as the draft review surface. A maintainer can
+turn an approved row into the relevant repository’s request format
+later; nothing in the spreadsheet posts an issue or mints a term.</p>
 </div>
 </div>
 </div>
@@ -2675,25 +2919,49 @@ anything.</p>
 </ul></section><section><h2 class="section-heading" id="final-validation-is-later">Final validation is later<a class="anchor" aria-label="anchor" href="#final-validation-is-later"></a>
 </h2>
 <hr class="half-width">
-<p>Strict validation is the final gate.</p>
+<p>Strict validation is the final gate. Use the language lane you
+selected earlier.</p>
+<div class="tabs">
+<nav><div id="nav-tab-3" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-3-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-R" type="button" role="tab" aria-controls="nav-tabpanel-3-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-3-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-3-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Python" type="button" role="tab" aria-controls="nav-tabpanel-3-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-3-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-3-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-3-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-3-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-3" class="tab-content">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-3-R">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">validate_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span>, require_iris <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Python can run a useful companion check:</p>
+</div>
+<div id="nav-tabpanel-3-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Python">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>validate_salmon_datapackage(pkg_path, require_iris<span class="op">=</span><span class="va">True</span>)</span></code></pre>
 </div>
-<p>For publication, run the current R <code>metasalmon</code> strict
-validator shown first. <code>metasalmonpy</code> 0.2.1 provides a useful
-companion check for the core package, but its version is a parity claim
-against metasalmon 0.2.1: it validates the earlier
-<code>sdp-0.2.0</code> shape and is not aligned with metasalmon 0.3.0.
-The R validator is the gate against the current specification.</p>
+</div>
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Spreadsheet">
+<p>Spreadsheet review can resolve metadata content, but it cannot
+execute the strict validator. Run this final gate against the same
+package folder in R or Python before EML export or publication.</p>
+</div>
+</div>
+</div>
 <p>Run it only when:</p>
 <ul>
 <li>review markers such as <code>REVIEW:</code> have been resolved;</li>
@@ -2722,8 +2990,9 @@ measurement semantic fields are resolved.</p>
 </section><section><h2 class="section-heading" id="map-the-reviewed-sdp-into-eml">Map the reviewed SDP into EML<a class="anchor" aria-label="anchor" href="#map-the-reviewed-sdp-into-eml"></a>
 </h2>
 <hr class="half-width">
-<p><code>metasalmon</code> does not simply rename SDP fields. It builds
-a new EML document and validates the result:</p>
+<p><code>metasalmon</code> and <code>metasalmonpy</code> do not simply
+rename SDP fields. They build a new EML document and validate the
+result:</p>
 <table class="table">
 <colgroup>
 <col width="50%">
@@ -2774,15 +3043,17 @@ example, a free-text <code>creator</code> cell cannot safely be guessed
 into structured people, organizations, ORCIDs, and metadata-provider
 roles. Measurement scale and the meanings of missing-value tokens also
 need explicit review.</p>
-</section><section><h2 class="section-heading" id="export-validated-eml-2-2">Export validated EML 2.2<a class="anchor" aria-label="anchor" href="#export-validated-eml-2-2"></a>
+</section><section><h2 class="section-heading" id="export-validated-eml">Export validated EML<a class="anchor" aria-label="anchor" href="#export-validated-eml"></a>
 </h2>
 <hr class="half-width">
 <p>The code blocks from here to the end of this section operate on
 <code>pkg_path</code>, the reviewed package you have been building
 through the workshop; they are shown for you to run in your own session
 and are not executed when the lesson website is built.</p>
-<p>Install <code>emld</code> and <code>jsonvalidate</code>, then copy
-the package’s sidecar template once:</p>
+<p>Create <code>metadata/eml-mapping.yml</code> from metasalmon’s <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/inst/extdata/eml-mapping-template.yml" class="external-link">canonical
+mapping template</a>. R users can copy the template from their installed
+package with the code below; Python and spreadsheet users can download
+the linked file and save it at the same package-relative path.</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2815,7 +3086,27 @@ post-review and publication workflow</a>. Do not invent dummy parties,
 checksums, rights evidence, measurement scales, or missing-value
 meanings merely to make validation pass.</p>
 <p>When the SDP, its semantic-review evidence, and the sidecar are
-final:</p>
+final, use your software lane:</p>
+<div class="tabs">
+<nav><div id="nav-tab-4" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-4-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-4-R" type="button" role="tab" aria-controls="nav-tabpanel-4-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-4-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-4-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-4-Python" type="button" role="tab" aria-controls="nav-tabpanel-4-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-4-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-4-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-4-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-4-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-4-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-4" class="tab-content">
+<div id="nav-tabpanel-4-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-4-R">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2826,17 +3117,60 @@ final:</p>
 <span><span class="va">eml_result</span><span class="op">$</span><span class="va">eml_version</span></span>
 <span><span class="va">eml_result</span><span class="op">$</span><span class="va">validation</span></span></code></pre>
 </div>
+</div>
+<div id="nav-tabpanel-4-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-4-Python">
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" tabindex="-1" aria-label="code-block-10-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> write_eml_from_sdp</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1" aria-label="code-block-10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1" aria-label="code-block-10-3"></a>eml_result <span class="op">=</span> write_eml_from_sdp(pkg_path)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1" aria-label="code-block-10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1" aria-label="code-block-10-5"></a><span class="bu">print</span>(eml_result[<span class="st">"path"</span>])</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1" aria-label="code-block-10-6"></a><span class="bu">print</span>(eml_result[<span class="st">"eml_version"</span>])</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1" aria-label="code-block-10-7"></a><span class="bu">print</span>(eml_result[<span class="st">"validation"</span>])</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-4-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-4-Spreadsheet">
+<p>Spreadsheet software can be used to complete and review the SDP
+metadata and <code>eml-mapping.yml</code>, but it does not run the EML
+schema validator. When you are ready for export, open the same package
+folder in either code lane and run its exporter; the reviewed package
+remains the source state.</p>
+</div>
+</div>
+</div>
 <p>The default output is <code>metadata/eml.xml</code>. An identical
 existing file is an idempotent success. A different existing file is
-protected unless you deliberately pass <code>overwrite = TRUE</code>
-after reviewing why the bytes changed.</p>
+protected unless you deliberately pass <code>overwrite = TRUE</code> /
+<code>overwrite=True</code> after reviewing why the bytes changed.</p>
 </section><section><h2 class="section-heading" id="preview-the-knbdataone-catalog-deposit">Preview the KNB/DataONE catalog deposit<a class="anchor" aria-label="anchor" href="#preview-the-knbdataone-catalog-deposit"></a>
 </h2>
 <hr class="half-width">
 <p>Use a dry run first. It creates local EML, OAI-ORE, and manifest
 artifacts, but it does not read credentials or make a network
 request:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="tabs">
+<nav><div id="nav-tab-5" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-5-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-5-R" type="button" role="tab" aria-controls="nav-tabpanel-5-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-5-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-5-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-5-Python" type="button" role="tab" aria-controls="nav-tabpanel-5-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-5-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-5-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-5-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-5-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-5-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-5" class="tab-content">
+<div id="nav-tabpanel-5-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-5-R">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2845,31 +3179,66 @@ request:</p>
 <span>  public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dry_run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  knb_environment <span class="op">=</span> <span class="st">"test"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">knb_plan</span><span class="op">$</span><span class="va">status</span></span>
 <span><span class="va">knb_plan</span><span class="op">$</span><span class="va">manifest_path</span></span></code></pre>
 </div>
-<p>Review <code>publication/knb-manifest.json</code>. The expanded plan
-lists the original data resources, allowlisted canonical SDP artifacts,
-validated EML science metadata, and the OAI-ORE resource map with exact
-identifiers and checksums. It does not scan and upload arbitrary files
-from the package folder.</p>
-<p>In <code>metasalmon</code> 0.2.3 or later,
-<code>overwrite = TRUE</code> can rebuild conflicting artifacts left by
-an <strong>unpublished dry run</strong> after you correct an input. It
-cannot overwrite anything that reached DataONE; published PIDs are
-immutable and require a reviewed revision.</p>
+</div>
+<div id="nav-tabpanel-5-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-5-Python">
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" tabindex="-1" aria-label="code-block-12-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> publish_sdp_to_knb</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1" aria-label="code-block-12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1" aria-label="code-block-12-3"></a>knb_plan <span class="op">=</span> publish_sdp_to_knb(</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1" aria-label="code-block-12-4"></a>    pkg_path,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1" aria-label="code-block-12-5"></a>    public<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1" aria-label="code-block-12-6"></a>    dry_run<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1" aria-label="code-block-12-7"></a>    representation<span class="op">=</span><span class="st">"expanded"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1" aria-label="code-block-12-8"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1" aria-label="code-block-12-9"></a>    knb_environment<span class="op">=</span><span class="st">"test"</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1" aria-label="code-block-12-10"></a>)</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1" aria-label="code-block-12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a><span class="bu">print</span>(knb_plan[<span class="st">"status"</span>])</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1" aria-label="code-block-12-13"></a><span class="bu">print</span>(knb_plan[<span class="st">"manifest_path"</span>])</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-5-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-5-Spreadsheet">
+<p>Spreadsheet software cannot generate the cryptographic manifest.
+Review an instructor-provided dry-run manifest alongside the package:
+confirm the intended files, identifiers, checksums, selected
+environment, and access decision. Generate a new manifest in R or Python
+before any real deposit.</p>
+</div>
+</div>
+</div>
+<p>Review <code>publication/test/knb-manifest.json</code>. The expanded
+plan lists the original data resources, allowlisted canonical SDP
+artifacts, validated EML science metadata, and the OAI-ORE resource map
+with exact identifiers and checksums. It does not scan and upload
+arbitrary files from the package folder. The test environment is a
+rehearsal: it is non-durable, cannot be promoted into production, is
+unsuitable for sensitive data, and cannot receive a DOI.</p>
+<p><code>overwrite = TRUE</code> / <code>overwrite=True</code> can
+rebuild conflicting local artifacts left by an <strong>unpublished dry
+run</strong> after you correct an input. It cannot overwrite anything
+that reached DataONE; published PIDs are immutable and require a
+reviewed revision.</p>
 </section><section><h2 class="section-heading" id="live-upload-is-a-separate-authorized-action">Live upload is a separate authorized action<a class="anchor" aria-label="anchor" href="#live-upload-is-a-separate-authorized-action"></a>
 </h2>
 <hr class="half-width">
-<p>A live call creates persistent production KNB objects even when
-<code>public = FALSE</code>. Private access is a review posture, not a
-server-side draft. The call requires:</p>
+<p>A live call mutates the selected KNB environment. A production call
+creates persistent KNB objects even when <code>public = FALSE</code>;
+private access is a review posture, not a server-side draft. Rehearse
+against the test node first, then create and review a separate
+production dry-run plan before authorizing production. The production
+call requires:</p>
 <ul>
-<li>the exact pre-existing dry-run plan;</li>
-<li>a short-lived DataONE JWT entered only into the current R
+<li>the exact pre-existing production dry-run plan;</li>
+<li>a short-lived production DataONE JWT entered only into the current
 process;</li>
 <li>an authenticated subject matching the reviewed EML metadata
 provider;</li>
@@ -2877,11 +3246,49 @@ provider;</li>
 <code>confirm = TRUE</code>; and</li>
 <li>authority for the chosen access and redistribution decision.</li>
 </ul>
-<div class="codewrapper sourceCode" id="cb11">
+<p>The code below is intentionally display-only. It first creates the
+credential-free production plan that must be reviewed, then shows the
+separate live action. Here <code>overwrite = TRUE</code> /
+<code>overwrite=True</code> permits the planner to replace the
+unpublished standalone EML with the publication-aware EML that names the
+planned objects; it is not permission to overwrite anything already
+deposited.</p>
+<div class="tabs">
+<nav><div id="nav-tab-6" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-6-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-6-R" type="button" role="tab" aria-controls="nav-tabpanel-6-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-6-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-6-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-6-Python" type="button" role="tab" aria-controls="nav-tabpanel-6-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-6-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-6-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-6-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-6-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-6-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-6" class="tab-content">
+<div id="nav-tabpanel-6-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-6-R">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">previous_token</span> <span class="op">&lt;-</span> <span class="fu">getOption</span><span class="op">(</span><span class="st">"dataone_token"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">production_plan</span> <span class="op">&lt;-</span> <span class="fu">publish_sdp_to_knb</span><span class="op">(</span></span>
+<span>  <span class="va">pkg_path</span>,</span>
+<span>  public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dry_run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  knb_environment <span class="op">=</span> <span class="st">"production"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">production_plan</span><span class="op">$</span><span class="va">manifest_path</span></span>
+<span></span>
+<span><span class="va">previous_token</span> <span class="op">&lt;-</span> <span class="fu">getOption</span><span class="op">(</span><span class="st">"dataone_token"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">options</span><span class="op">(</span></span>
 <span>  dataone_token <span class="op">=</span> <span class="fu">rstudioapi</span><span class="fu">::</span><span class="fu">askForPassword</span><span class="op">(</span></span>
@@ -2895,10 +3302,55 @@ provider;</li>
 <span>    public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    dry_run <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    representation <span class="op">=</span> <span class="st">"expanded"</span></span>
+<span>    representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
+<span>    knb_environment <span class="op">=</span> <span class="st">"production"</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  finally <span class="op">=</span> <span class="fu">options</span><span class="op">(</span>dataone_token <span class="op">=</span> <span class="va">previous_token</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-6-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-6-Python">
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" tabindex="-1" aria-label="code-block-14-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1" aria-label="code-block-14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1" aria-label="code-block-14-3"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> publish_sdp_to_knb</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1" aria-label="code-block-14-4"></a><span class="im">from</span> metasalmonpy.knb_publication <span class="im">import</span> set_dataone_token</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1" aria-label="code-block-14-5"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1" aria-label="code-block-14-6"></a>production_plan <span class="op">=</span> publish_sdp_to_knb(</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1" aria-label="code-block-14-7"></a>    pkg_path,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1" aria-label="code-block-14-8"></a>    public<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1" aria-label="code-block-14-9"></a>    dry_run<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1" aria-label="code-block-14-10"></a>    representation<span class="op">=</span><span class="st">"expanded"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1" aria-label="code-block-14-11"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1" aria-label="code-block-14-12"></a>    knb_environment<span class="op">=</span><span class="st">"production"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1" aria-label="code-block-14-13"></a>)</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1" aria-label="code-block-14-14"></a></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1" aria-label="code-block-14-15"></a><span class="bu">print</span>(production_plan[<span class="st">"manifest_path"</span>])</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1" aria-label="code-block-14-16"></a></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1" aria-label="code-block-14-17"></a>set_dataone_token(getpass(<span class="st">"Short-lived production DataONE JWT: "</span>))</span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1" aria-label="code-block-14-18"></a></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1" aria-label="code-block-14-19"></a><span class="cf">try</span>:</span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1" aria-label="code-block-14-20"></a>    publication_result <span class="op">=</span> publish_sdp_to_knb(</span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1" aria-label="code-block-14-21"></a>        pkg_path,</span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1" aria-label="code-block-14-22"></a>        public<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1" aria-label="code-block-14-23"></a>        dry_run<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1" aria-label="code-block-14-24"></a>        confirm<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1" aria-label="code-block-14-25"></a>        representation<span class="op">=</span><span class="st">"expanded"</span>,</span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1" aria-label="code-block-14-26"></a>        knb_environment<span class="op">=</span><span class="st">"production"</span>,</span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1" aria-label="code-block-14-27"></a>    )</span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1" aria-label="code-block-14-28"></a><span class="cf">finally</span>:</span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1" aria-label="code-block-14-29"></a>    set_dataone_token(<span class="va">None</span>)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-6-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-6-Spreadsheet">
+<p>Do not perform a live upload from a spreadsheet. Use the manifest as
+the approval surface, then run the exact reviewed plan in R or Python
+only when the data owner and publisher have authorized the production
+access and redistribution decision.</p>
+</div>
+</div>
 </div>
 <p>Do not place the token in a script, <code>.Renviron</code>, YAML,
 manifest, command argument, or shell history. Do not switch to
@@ -2917,7 +3369,27 @@ claiming completion.</p>
 regenerate the same folder from raw data and hope the edits survive.
 Read the reviewed state, make deliberate changes in memory, and write a
 new versioned folder:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="tabs">
+<nav><div id="nav-tab-7" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-7-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-7-R" type="button" role="tab" aria-controls="nav-tabpanel-7-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-7-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-7-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-7-Python" type="button" role="tab" aria-controls="nav-tabpanel-7-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-7-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-7-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-7-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-7-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-7-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-7" class="tab-content">
+<div id="nav-tabpanel-7-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-7-R">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2948,6 +3420,53 @@ new versioned folder:</p>
 <span>  <span class="va">v2_path</span>,</span>
 <span>  require_iris <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-7-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-7-Python">
+<div class="codewrapper sourceCode" id="cb16">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" tabindex="-1" aria-label="code-block-16-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1" aria-label="code-block-16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1" aria-label="code-block-16-3"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1" aria-label="code-block-16-4"></a>    read_salmon_datapackage,</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1" aria-label="code-block-16-5"></a>    validate_salmon_datapackage,</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1" aria-label="code-block-16-6"></a>    write_salmon_datapackage,</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1" aria-label="code-block-16-7"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1" aria-label="code-block-16-8"></a></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1" aria-label="code-block-16-9"></a>reviewed_pkg <span class="op">=</span> read_salmon_datapackage(pkg_path)</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1" aria-label="code-block-16-10"></a></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1" aria-label="code-block-16-11"></a>reviewed_dataset <span class="op">=</span> reviewed_pkg[<span class="st">"dataset"</span>].copy()</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1" aria-label="code-block-16-12"></a>reviewed_dataset.loc[:, <span class="st">"description"</span>] <span class="op">=</span> (</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1" aria-label="code-block-16-13"></a>    reviewed_dataset[<span class="st">"description"</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1" aria-label="code-block-16-14"></a>    <span class="op">+</span> <span class="st">" This version adds the reviewed 2026 return-year records."</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1" aria-label="code-block-16-15"></a>)</span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1" aria-label="code-block-16-16"></a>reviewed_pkg[<span class="st">"dataset"</span>] <span class="op">=</span> reviewed_dataset</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1" aria-label="code-block-16-17"></a></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1" aria-label="code-block-16-18"></a>v2_path <span class="op">=</span> write_salmon_datapackage(</span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1" aria-label="code-block-16-19"></a>    resources<span class="op">=</span>reviewed_pkg[<span class="st">"resources"</span>],</span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1" aria-label="code-block-16-20"></a>    dataset_meta<span class="op">=</span>reviewed_pkg[<span class="st">"dataset"</span>],</span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1" aria-label="code-block-16-21"></a>    table_meta<span class="op">=</span>reviewed_pkg[<span class="st">"tables"</span>],</span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1" aria-label="code-block-16-22"></a>    dict_df<span class="op">=</span>reviewed_pkg[<span class="st">"dictionary"</span>],</span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1" aria-label="code-block-16-23"></a>    codes<span class="op">=</span>reviewed_pkg[<span class="st">"codes"</span>],</span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1" aria-label="code-block-16-24"></a>    path<span class="op">=</span>Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"my-salmon-sdp-v2"</span>,</span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1" aria-label="code-block-16-25"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1" aria-label="code-block-16-26"></a>)</span>
+<span id="cb16-27"><a href="#cb16-27" tabindex="-1" aria-label="code-block-16-27"></a></span>
+<span id="cb16-28"><a href="#cb16-28" tabindex="-1" aria-label="code-block-16-28"></a>validate_salmon_datapackage(</span>
+<span id="cb16-29"><a href="#cb16-29" tabindex="-1" aria-label="code-block-16-29"></a>    v2_path,</span>
+<span id="cb16-30"><a href="#cb16-30" tabindex="-1" aria-label="code-block-16-30"></a>    require_iris<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb16-31"><a href="#cb16-31" tabindex="-1" aria-label="code-block-16-31"></a>)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-7-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-7-Spreadsheet">
+<p>Preserve the reviewed package unchanged. Copy it to a clearly named
+new version folder, make the deliberate metadata or data changes in that
+copy, and document what changed. Before EML export or publication, run
+strict validation against the new folder in R or Python; do not treat a
+manual copy as validated merely because its files open successfully.</p>
+</div>
+</div>
 </div>
 <p>If data columns changed, update the dictionary. If new categorical
 values appeared, update <code>codes.csv</code>. Rebuild and review
@@ -2980,14 +3499,14 @@ or <code>skip</code>/defer;</li>
 </div>
 </div>
 </div>
-<div id="challenge-2-trace-the-publication-handoff" class="callout discussion">
+<div id="challenge-2-trace-the-publication-workflow" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-2-trace-the-publication-handoff" class="callout-inner">
+<div id="challenge-2-trace-the-publication-workflow" class="callout-inner">
 <h3 class="callout-title">Challenge 2: Trace the publication
-handoff</h3>
+workflow</h3>
 <div class="callout-content">
 <p>Using a finalized instructor-provided package or your own package
 when it is ready:</p>

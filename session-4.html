@@ -199,7 +199,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -240,6 +240,7 @@
 <li><a href="#generate-suggestions-for-the-current-package">Generate suggestions for the current package</a></li>
 <li><a href="#treat-suggestions-as-drafts">Treat suggestions as drafts</a></li>
 <li><a href="#measurement-semantics">Measurement semantics</a></li>
+<li><a href="#optional-llm-assisted-bundle-review">Optional LLM-assisted bundle review</a></li>
 <li><a href="#example-review">Example review</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -332,7 +333,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Review Terms and Measurement Meanings</h1>
-        <p>Last updated on 2026-08-22 |
+        <p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -390,6 +391,26 @@ seeding was enabled during <code>create_sdp()</code>, the package-root
 <code>semantic_suggestions.csv</code> contains the original evidence;
 rerunning after your metadata edits searches only from the current
 package state.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -417,14 +438,8 @@ package state.</p>
 <span>    <span class="va">definition</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
-<div id="python-equivalent" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -460,6 +475,15 @@ package state.</p>
 <span id="cb2-30"><a href="#cb2-30" tabindex="-1" aria-label="code-block-2-30"></a><span class="bu">print</span>(column_suggestions)</span></code></pre>
 </div>
 </div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<p>Open an instructor-prepared <code>semantic_suggestions.csv</code>
+beside the package metadata. Filter to the field or code you are
+reviewing, then compare each candidate label and definition with the
+source documentation and the data holder’s explanation. Record
+<strong>keep</strong>, <strong>replace</strong>,
+<strong>remove</strong>, or <strong>defer</strong>; opening the CSV does
+not accept a suggestion or prove that a link is correct.</p>
+</div>
 </div>
 </div>
 <p>Vocabulary lookup can take a few minutes. For a live workshop,
@@ -468,12 +492,29 @@ instructors can prepare this output in advance. Omitting
 <code>sources</code> explicitly, current <code>metasalmon</code> and
 <code>metasalmonpy</code> treat the vector as a strict allowlist for the
 initial search and any LLM-requested bounded retry.</p>
-<p>Current R/<code>metasalmon</code> resolves its SMN and GCDFO indexes
-once per R session, so repeated searches use one consistent ontology
-snapshot and avoid repeated downloads. It also distinguishes a failed
-source lookup from a successful search with zero matches (since 0.2.2).
+<p>Vocabulary lookup can fail independently of returning zero matches.
 If a result is unexpectedly empty, inspect a focused search before
 declaring a vocabulary gap:</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -485,14 +526,32 @@ declaring a vocabulary gap:</p>
 <span></span>
 <span><span class="fu">attr</span><span class="op">(</span><span class="va">probe</span>, <span class="st">"diagnostics"</span><span class="op">)</span></span></code></pre>
 </div>
+</div>
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> find_terms</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a>probe <span class="op">=</span> find_terms(</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a>    <span class="st">"spawner count"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a>    role<span class="op">=</span><span class="st">"property"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a><span class="bu">print</span>(probe.attrs.get(<span class="st">"diagnostics"</span>))</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<p>If an instructor-provided suggestion file is unexpectedly empty, do
+not record a vocabulary gap from that absence alone. Ask for the lookup
+diagnostics or use the linked vocabulary documentation to distinguish a
+service failure from a genuine no-match result.</p>
+</div>
+</div>
+</div>
 <p>A warning or non-success diagnostic is evidence of a lookup problem,
 not evidence that no appropriate term exists. Do not turn a temporary
 service outage into a new-term request.</p>
-<p>For the Python exercise, omit <code>sources</code> as shown.
-<code>metasalmonpy</code> 0.2.1 searches the same SMN and GCDFO sources;
-a failed or empty ontology fetch raises an error rather than returning
-an empty index, so treat that error as a lookup problem, not a missing
-term.</p>
 </section><section><h2 class="section-heading" id="treat-suggestions-as-drafts">Treat suggestions as drafts<a class="anchor" aria-label="anchor" href="#treat-suggestions-as-drafts"></a></h2>
 <hr class="half-width"><p>Some tools write semantic suggestions directly into metadata as
 <code>REVIEW: &lt;iri&gt;</code>. That prefix is a warning, not
@@ -526,19 +585,18 @@ meaning?</td>
 </tr><tr><td><code>statistical_modifier_iri</code></td>
 <td>Optional: is the column an aggregation or summary — a mean, maximum,
 minimum, total, or peak — rather than a single observation?</td>
-</tr></tbody></table><p>Since <code>sdp-0.3.0</code> (metasalmon 0.3.0), <strong>methods do
-not live in the column dictionary</strong>. A method describes how a
-value was produced, not what the column is, so it is recorded where it
-is actually constant: a procedure shared by a whole table goes in
-<code>tables.csv$method_iri</code>, a citable protocol document goes in
+</tr></tbody></table><p><strong>Methods do not live in the column dictionary.</strong> A
+method describes how a value was produced, not what the column is, so it
+is recorded where it is actually constant: a procedure shared by a whole
+table goes in <code>tables.csv$method_iri</code>, a citable protocol
+document goes in
 <code>protocol_iri</code>/<code>protocol_citation</code> on
 <code>tables.csv</code> or <code>dataset.csv</code>, and a method that
 varies row by row becomes a code column in the data whose values resolve
 through <code>codes.csv$term_iri</code> to shared-vocabulary procedures.
 A statistical modifier is the one kind of “how” that stays in the
 dictionary, because a <em>mean</em> weight and a <em>maximum</em> weight
-are different variables. The <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd" class="external-link">metasalmon
-migration guide</a> explains the change and migrates 0.2.x packages.</p>
+are different variables.</p>
 <p>Important boundary: <code>property_iri</code>,
 <code>entity_iri</code>, <code>constraint_iri</code>, and
 <code>statistical_modifier_iri</code> are I-ADOPT-style
@@ -547,33 +605,21 @@ measurement semantics, but units are not an I-ADOPT role, and methods
 are not part of the variable at all. Do not use these fields as
 general-purpose relationship fields for identifiers, attributes, or
 categorical columns.</p>
-<div id="optional-llm-assisted-bundle-review" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<span class="callout-header">Callout</span>
-<div id="optional-llm-assisted-bundle-review" class="callout-inner">
-<h3 class="callout-title">Optional LLM-assisted bundle review</h3>
-<div class="callout-content">
-<p>Adding <code>llm_assess = TRUE</code> in R or
+</section><section><h2 class="section-heading" id="optional-llm-assisted-bundle-review">Optional LLM-assisted bundle review<a class="anchor" aria-label="anchor" href="#optional-llm-assisted-bundle-review"></a></h2>
+<hr class="half-width"><p>Adding <code>llm_assess = TRUE</code> in R or
 <code>llm_assess=True</code> in Python, plus an approved provider and
 model, asks the LLM to judge the retrieved candidates; it does not let
-the model invent IRIs. In metasalmon 0.3.0, a measurement’s variable,
-property, entity, unit, constraint, and statistical-modifier candidates
-are reviewed together as one bundle; a statistical-modifier candidate is
-proposed only when the column’s name, label, or description names an
-aggregation (total, mean, maximum, minimum, peak). Method candidates
-survive only for code values, where codes resolve to shared
-<code>sosa:Procedure</code> concepts. <code>metasalmonpy</code> 0.2.1
-still reviews the earlier bundle shape, which included a dictionary
-method slot.</p>
-<p>R/<code>metasalmon</code> retries retryable provider failures such as
-rate limits and temporary service errors, honoring
-<code>Retry-After</code> when present. It also sends the BioPortal key
-in an authorization header and redacts credentials from reported URLs.
-These safeguards reduce avoidable failures; they do not authorize
-unbounded retries, sensitive context, or unattended acceptance of LLM
-decisions.</p>
+the model invent IRIs. A measurement’s variable, property, entity, unit,
+constraint, and statistical-modifier candidates are reviewed together as
+one bundle. A statistical-modifier candidate is proposed only when the
+column’s name, label, or description names an aggregation such as total,
+mean, maximum, minimum, or peak. Method candidates apply to code values,
+where codes can resolve to shared <code>sosa:Procedure</code>
+concepts.</p>
+<p>The package clients bound retries for temporary provider failures and
+keep credentials out of reported URLs. These safeguards reduce avoidable
+failures; they do not authorize unbounded retries, sensitive context, or
+unattended acceptance of LLM decisions.</p>
 <p>Deterministic validators can downgrade an unsupported
 <code>accept</code> decision to <code>review</code>, but they never
 substitute or invent a term. Suggested candidates written into the
@@ -583,9 +629,6 @@ them.</p>
 <code>llm_context_files</code>, and context alone does not enable an LLM
 call. Use only an approved provider and appropriate non-sensitive
 context.</p>
-</div>
-</div>
-</div>
 </section><section><h2 class="section-heading" id="example-review">Example review<a class="anchor" aria-label="anchor" href="#example-review"></a></h2>
 <hr class="half-width"><p>Column: <code>natural_spawner_count</code></p>
 <table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Question</th>
@@ -710,7 +753,7 @@ methods.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-4.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-4.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-22",
+  "dateModified": "2026-08-25",
   "datePublished": "2026-08-25"
 }
 

@@ -237,7 +237,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -394,9 +394,9 @@ records how the concepts relate. In this workshop, learners use shared
 definitions; they do not build an ontology.</p>
 </blockquote>
 <p>Say “link to a shared definition” before introducing “semantic link”
-or “semantic mapping.” Teach the code in R first, then point Python
-participants to the companion block rather than presenting two separate
-lectures.</p>
+or “semantic mapping.” Present R and Python as equivalent language
+lanes, and point spreadsheet participants to the separate no-code
+subsection where one is provided.</p>
 <p>Repeat these messages throughout:</p>
 <ul>
 <li>A clear description is better than a forced IRI.</li>
@@ -431,10 +431,8 @@ goal</td>
 </tr>
 <tr>
 <td>0:05-0:15</td>
-<td>Define dataset/table/flat file; show filled
-<code>dataset.csv</code>, <code>tables.csv</code>,
-<code>column_dictionary.csv</code>, and <code>codes.csv</code>
-</td>
+<td>Introduce the integration system and give a high-level tour of the
+SDP structure</td>
 </tr>
 <tr>
 <td>0:15-0:20</td>
@@ -444,7 +442,7 @@ goal</td>
 <tr>
 <td>0:20-0:32</td>
 <td>Run the simple <code>create_sdp()</code> template-generation
-example; point out the Python and spreadsheet paths</td>
+example; point out the R, Python, and spreadsheet lanes</td>
 </tr>
 <tr>
 <td>0:32-0:45</td>
@@ -478,8 +476,8 @@ manifest</td>
 <tbody>
 <tr>
 <td>0:00-0:30</td>
-<td>End goal, dataset/table/flat-file definitions, filled metadata
-examples, and package anatomy</td>
+<td>Integration-system overview, dataset/table/flat-file definitions,
+and high-level package anatomy</td>
 </tr>
 <tr>
 <td>0:30-0:45</td>
@@ -523,13 +521,11 @@ workflow</td>
 </section><section><h2 class="section-heading" id="mixed-audience-facilitation">Mixed-audience facilitation<a class="anchor" aria-label="anchor" href="#mixed-audience-facilitation"></a>
 </h2>
 <hr class="half-width">
-<p>Pair spreadsheet participants with R-capable participants for
-validation and export steps, but do not make them wait for code before
-they can reason about metadata. Python participants can run the paired
-<code>metasalmonpy</code> 0.2.1 blocks for the core workflow; current
-R/<code>metasalmon</code> performs the strict final check, EML export,
-and KNB publication against the current <code>sdp-0.3.0</code>
-specification.</p>
+<p>Spreadsheet participants can use a complete review-and-editing lane
+for the canonical metadata CSVs. Automated validation, EML export,
+manifest generation, and publication currently require R or Python;
+explain that boundary without treating either code implementation as
+primary.</p>
 <p>Recommended table roles:</p>
 <ul>
 <li>data owner: explains what the data mean;</li>
@@ -554,13 +550,12 @@ explicit mapping sidecar?</li>
 <p>After Session 2:</p>
 <ul>
 <li>Was the project and folder layout ready before the demo?</li>
-<li>Did the chosen R, Python, or spreadsheet path create the standard
-package files?</li>
-<li>Can learners state whether they are following the unchanged example
-or personal-data path?</li>
+<li>Did the chosen R or Python path generate the quickstart, or did the
+spreadsheet path open the canonical blank template?</li>
+<li>Can learners explain that Chapter 2 uses a prepared starting point
+and Chapter 3 introduces their own data?</li>
 <li>Which fields still contain placeholders or <code>REVIEW:</code>
 suggestions?</li>
-<li>Can they explain what an unsafe rerun could overwrite?</li>
 </ul>
 <p>After Session 3:</p>
 <ul>
@@ -572,6 +567,8 @@ project root?</li>
 <li>If the dataset has several tables, did they pass a named list and
 preserve each table’s row meaning?</li>
 <li>Is enough context present to prevent obvious misuse?</li>
+<li>Can they explain what an unsafe rerun could overwrite and how a new
+version protects reviewed work?</li>
 </ul>
 <p>After Session 4:</p>
 <ul>
@@ -587,7 +584,7 @@ protocol, or code level rather than in the dictionary?</li>
 <li>Which are DFO-specific?</li>
 <li>Which should stay local/profile?</li>
 <li>Is there enough evidence to make a useful request?</li>
-<li>Did strict R validation pass before EML export?</li>
+<li>Did strict validation pass before EML export?</li>
 <li>Which facts came directly from SDP, and which required
 <code>eml-mapping.yml</code>?</li>
 <li>Was catalog work a dry run or an authorized live upload?</li>
@@ -629,11 +626,11 @@ objects; use a local dry run for teaching.</li>
 <li>choose a small example dataset;</li>
 <li>prepare an RStudio Project containing <code>raw_data/</code>,
 <code>context/</code>, and <code>output/</code>;</li>
-<li>prepare one already-created SDP folder and open the four filled
-metadata CSVs before any code;</li>
-<li>verify the R/<code>metasalmon</code> 0.3.0 examples and, when Python
-participants are expected, the separate <code>metasalmonpy</code> 0.2.1
-companion environment;</li>
+<li>prepare one current, already-created SDP folder for later review
+after the high-level system overview and quickstart;</li>
+<li>install the latest R/<code>metasalmon</code> and
+Python/<code>metasalmonpy</code> packages and verify the examples in
+each language being taught;</li>
 <li>prepare one measurement mapping example;</li>
 <li>prepare semantic suggestion output in advance if live vocabulary
 lookup would interrupt the schedule;</li>
@@ -647,13 +644,13 @@ checksum-bound EML sidecars for the final export exercise; do not
 fabricate these facts during delivery;</li>
 <li>generate and review its credential-free KNB dry-run manifest before
 teaching;</li>
-<li>decide whether strict R validation and EML export will be
-learner-run or instructor-led; and</li>
+<li>decide whether strict validation and EML export in the taught R or
+Python lane will be learner-run or instructor-led; and</li>
 <li>default to no live catalog upload. If a live demonstration is
 explicitly authorized, pre-confirm credentials, redistribution
 authority, intended access, rollback/recovery expectations, and how
 <code>published_pending_catalog</code> will be reported.</li>
-</ul></section><section id="aggregate-instructor-notes"><section id="session-1"><h2 class="section-heading"><a href="session-1.html">Why Start With a Salmon Data Package?</a></h2>
+</ul></section><section id="aggregate-instructor-notes"><section id="session-1"><h2 class="section-heading"><a href="session-1.html">The Salmon Data Integration System</a></h2>
 <hr class="half-width"></section><section id="session-2"><h2 class="section-heading"><a href="session-2.html">Create a Draft Salmon Data Package</a></h2>
 <hr class="half-width"></section><section id="session-3"><h2 class="section-heading"><a href="session-3.html">Use Your Data and Capture Context</a></h2>
 <hr class="half-width"></section><section id="session-4"><h2 class="section-heading"><a href="session-4.html">Review Terms and Measurement Meanings</a></h2>

@@ -196,7 +196,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -309,7 +309,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Reference</h1>
-        <p>Last updated on 2026-08-22 |
+        <p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -331,16 +331,16 @@ descriptions.</li>
 code lists.</li>
 <li>Render and review unresolved-term routes: <code>smn</code>,
 <code>gcdfo</code>, <code>profile</code>, or <code>skip</code>.</li>
-<li>Run strict R validation only when the SDP is final enough for
+<li>Run strict validation only when the SDP is final enough for
 publication.</li>
 <li>Complete the reviewed EML sidecar and export schema-valid EML
 2.2.</li>
 <li>Preview the KNB/DataONE object plan with a credential-free dry run;
 upload only with explicit authority and credentials.</li>
-</ol></section><section><h2 class="section-heading" id="r-first-and-python-companion-functions">R-first and Python companion functions<a class="anchor" aria-label="anchor" href="#r-first-and-python-companion-functions"></a></h2>
+</ol></section><section><h2 class="section-heading" id="r-and-python-functions">R and Python functions<a class="anchor" aria-label="anchor" href="#r-and-python-functions"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Workflow</th>
-<th>R primary</th>
-<th>Python companion</th>
+<th>R (<code>metasalmon</code>)</th>
+<th>Python (<code>metasalmonpy</code>)</th>
 </tr></thead><tbody><tr><td>Create a package</td>
 <td><code>metasalmon::create_sdp()</code></td>
 <td><code>metasalmonpy.create_sdp()</code></td>
@@ -361,86 +361,30 @@ upload only with explicit authority and credentials.</li>
 <td><code>validate_salmon_datapackage(..., require_iris=False)</code></td>
 </tr><tr><td>Run the final publication gate</td>
 <td><code>validate_salmon_datapackage(..., require_iris = TRUE)</code></td>
-<td>Hand off to current R/<code>metasalmon</code> for the
-<code>sdp-0.3.0</code> gate</td>
-</tr><tr><td>Migrate an <code>sdp-0.2.0</code> package</td>
-<td><code>migrate_sdp_methods()</code></td>
-<td>Hand off to current R/<code>metasalmon</code>
-</td>
+<td><code>validate_salmon_datapackage(..., require_iris=True)</code></td>
 </tr><tr><td>Export validated EML</td>
 <td><code>write_eml_from_sdp()</code></td>
 <td>
-<code>write_eml_from_sdp()</code> (at 0.2.1 parity; this lesson runs
-it in R)</td>
+<code>write_eml_from_sdp()</code> (requires the <code>eml</code>
+extra)</td>
 </tr><tr><td>Plan or run a KNB deposit</td>
 <td><code>publish_sdp_to_knb()</code></td>
 <td>
-<code>publish_sdp_to_knb()</code> (at 0.2.1 parity; this lesson runs
-it in R)</td>
-</tr></tbody></table><p>The lesson targets the tagged <strong>R/<code>metasalmon</code> 0.3.0
-release</strong> (specification <code>sdp-0.3.0</code>). The Python
-companion is <strong><code>metasalmonpy</code> 0.2.1</strong>, whose
-version is a parity claim: it mirrors metasalmon 0.2.1 behaviour and
-writes the earlier <code>sdp-0.2.0</code> package shape. Do not describe
-the implementations as fully version- or feature-aligned, and migrate
-Python-created packages with <code>migrate_sdp_methods()</code> before
-the R publication gate.</p>
-</section><section><h2 class="section-heading" id="recent-metasalmon-updates-reflected-here">Recent metasalmon updates reflected here<a class="anchor" aria-label="anchor" href="#recent-metasalmon-updates-reflected-here"></a></h2>
-<hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Version</th>
-<th>Workshop-relevant change</th>
-</tr></thead><tbody><tr><td>0.1.7–0.1.8</td>
-<td>Added reviewed EML 2.2 export, guarded KNB/DataONE
-planning/publication, expanded package representation, and immutable
-revision handling.</td>
-</tr><tr><td>0.2.0</td>
-<td>Made dictionary <code>value_type</code> the read authority, fixed
-multi-table handling, preserved reviewed sidecars during ordinary
-rewrites, and added <code>prune</code> as the explicit destructive
-reset.</td>
-</tr><tr><td>0.2.1</td>
-<td>Made semantic ranking locale-independent and derived descriptor
-schema URLs from the validated SDP bundle.</td>
-</tr><tr><td>0.2.2</td>
-<td>Cached term indexes for consistent, faster sessions and made failed
-vocabulary lookups distinguishable from successful zero-match
-searches.</td>
-</tr><tr><td>0.2.3</td>
-<td>Allowed corrected unpublished KNB dry runs to be replanned with
-<code>overwrite = TRUE</code>, added bounded provider retries, and
-moved/redacted the BioPortal credential.</td>
-</tr><tr><td>0.2.4</td>
-<td>Made the empty field the single canonical missing-value token: a
-literal <code>"NA"</code> in data now round-trips as the string it is
-(it is a real fisheries gear code), so hand-authored packages using
-<code>NA</code> to mean missing must rewrite those cells as empty
-fields.</td>
-</tr><tr><td>0.2.5</td>
-<td>Extended credential redaction to all qualified <code>*_token</code>
-names in captured errors and reports.</td>
-</tr><tr><td>0.2.6</td>
-<td>Enforced declared <code>primary_key</code> uniqueness as a
-validation error, warned on value-like column names (pointing at
-<code>tidyr::pivot_longer()</code>), and surfaced unresolved
-<code>MISSING METADATA:</code> placeholders in default validation.</td>
-</tr><tr><td>0.3.0</td>
-<td>Implemented <code>sdp-0.3.0</code>: removed the dictionary
-<code>method_iri</code> and the <code>metadata/methods.csv</code>
-registry, added <code>statistical_modifier_iri</code>, moved methods to
-<code>tables.csv</code>/<code>protocol_iri</code>/<code>codes.csv</code>,
-and added <code>migrate_sdp_methods()</code> for 0.2.x packages.</td>
-</tr></tbody></table><p>See the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">metasalmon
-changelog</a> for the full implementation record. These changes do not
-turn a draft package, failed lookup, private deposit, or Member Node
-write into publication evidence.</p>
+<code>publish_sdp_to_knb()</code> (requires the <code>knb</code>
+extra)</td>
+</tr></tbody></table><p>The two implementations are maintained at behavioral parity and
+release in lockstep. Their syntax remains idiomatic to each language;
+see the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html" class="external-link">metasalmonpy
+parity guide</a> for deliberate differences. Install the latest packages
+before the workshop.</p>
 </section><section><h2 class="section-heading" id="recommended-project-layout">Recommended project layout<a class="anchor" aria-label="anchor" href="#recommended-project-layout"></a></h2>
 <hr class="half-width"><pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj
   raw_data/       # unchanged source CSVs or workbooks
   context/        # codebooks, methods, caveats, provenance
   output/         # generated Salmon Data Packages</code></pre>
-<p>Open the <code>.Rproj</code> file before working and use paths
-relative to the project root. Python and spreadsheet users can start
-from the same root folder and use the same layout.</p>
+<p>R users should open the <code>.Rproj</code> file. Every lane should
+work from the same project root and use paths relative to it.</p>
 </section><section><h2 class="section-heading" id="dataset-table-and-supported-inputs">Dataset, table, and supported inputs<a class="anchor" aria-label="anchor" href="#dataset-table-and-supported-inputs"></a></h2>
 <hr class="half-width"><p><strong>Dataset</strong> means the complete collection being
 documented. It can contain one or many related tables.</p>
@@ -496,12 +440,15 @@ from SDP alone</td>
 </tr><tr><td><code>metadata/eml.xml</code></td>
 <td>Validated EML 2.2 export created near the end, not a hand-edited
 source file</td>
+</tr><tr><td><code>publication/test/knb-manifest.json</code></td>
+<td>Exact-object manifest for the non-durable KNB Test Node
+rehearsal</td>
 </tr><tr><td><code>publication/knb-manifest.json</code></td>
-<td>Exact-object KNB/DataONE dry-run or recovery manifest</td>
-</tr></tbody></table><p>Complete filled examples are linked from Session 1: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/dataset.csv" class="external-link">dataset.csv</a>,
-<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/tables.csv" class="external-link">tables.csv</a>,
-<a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/column_dictionary.csv" class="external-link">column_dictionary.csv</a>,
-and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/examples/minimal-example/metadata/codes.csv" class="external-link">codes.csv</a>.</p>
+<td>Exact-object production dry-run or recovery manifest</td>
+</tr></tbody></table><p>Use the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a> for a no-code starting point, or generate the
+current filled quickstart with <code>metasalmon</code> or
+<code>metasalmonpy</code> in Chapter 2.</p>
 </section><section><h2 class="section-heading" id="standards-and-conventions-behind-the-fields">Standards and conventions behind the fields<a class="anchor" aria-label="anchor" href="#standards-and-conventions-behind-the-fields"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Source</th>
 <th>Scope in SDP</th>
@@ -637,11 +584,10 @@ semicolon-separated</td>
 <td>I-ADOPT statistical modifier: fill it only when the column is an
 aggregation or summary (mean, maximum, minimum, total, peak), because
 the summary is part of the variable’s identity</td>
-</tr></tbody></table><p>Since <code>sdp-0.3.0</code>, the dictionary has no
-<code>method_iri</code> column and the <code>metadata/methods.csv</code>
-registry is gone. A method lives where it is constant:
-<code>tables.csv$method_iri</code> for a whole-table procedure,
-<code>protocol_iri</code>/<code>protocol_citation</code> on
+</tr></tbody></table><p>The dictionary does not have a <code>method_iri</code> column or a
+<code>metadata/methods.csv</code> registry. A method lives where it is
+constant: <code>tables.csv$method_iri</code> for a whole-table
+procedure, <code>protocol_iri</code>/<code>protocol_citation</code> on
 <code>tables.csv</code> or <code>dataset.csv</code> for a citable
 document, or a code column resolving through
 <code>codes.csv$term_iri</code> when the method varies by row.</p>
@@ -682,10 +628,10 @@ columns.</p>
 <td>Structured creators/providers/contacts, rights, methods,
 scale/domain details, missing values, geographic/taxonomic coverage, and
 access decision</td>
-</tr></tbody></table><p>Not every semantic component is projected into EML. Current
-<code>metasalmon</code> conservatively annotates the whole measurement
-term and unit; it does not pretend that every I-ADOPT or method
-relationship has a direct EML equivalent.</p>
+</tr></tbody></table><p>Not every semantic component is projected into EML. Both
+implementations conservatively annotate the whole measurement term and
+unit; they do not pretend that every I-ADOPT or method relationship has
+a direct EML equivalent.</p>
 </section><section><h2 class="section-heading" id="rerun-safety">Rerun safety<a class="anchor" aria-label="anchor" href="#rerun-safety"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Command or state</th>
 <th>Effect</th>
@@ -694,9 +640,7 @@ relationship has a direct EML equivalent.</p>
 </tr><tr><td><code>create_sdp(..., overwrite = TRUE)</code></td>
 <td>Re-infers and rewrites writer-owned package files. Manual edits to
 canonical metadata can be lost.</td>
-</tr><tr><td>
-<code>create_sdp(..., overwrite = TRUE, prune = FALSE)</code> in R
-0.2.0+</td>
+</tr><tr><td><code>create_sdp(..., overwrite = TRUE, prune = FALSE)</code></td>
 <td>Preserves non-owned sidecars, but still replaces owned
 metadata/data/descriptor outputs.</td>
 </tr><tr><td><code>create_sdp(..., overwrite = TRUE, prune = TRUE)</code></td>
@@ -730,7 +674,7 @@ headers.</li>
 <li>
 <code>datapackage.json</code> declares the current SDP
 profile/resources and agrees with the canonical CSVs.</li>
-<li>Strict R validation passes.</li>
+<li>Strict validation passes.</li>
 <li>The EML sidecar has reviewed parties, rights authorization, methods,
 scales/domains, missing values, provenance, and bound semantic-review
 checksums.</li>
@@ -856,7 +800,7 @@ suggestion that must be checked before publication.</p>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/reference.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/reference.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-22",
+  "dateModified": "2026-08-25",
   "datePublished": "2026-08-25"
 }
 

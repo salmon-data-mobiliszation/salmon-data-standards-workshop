@@ -196,7 +196,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -309,7 +309,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Entrypoints</h1>
-        <p>Last updated on 2026-08-22 |
+        <p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/docs/entrypoints.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -351,19 +351,33 @@ delivery notes.</li>
 personas.</li>
 </ul></div>
 <div class="section level2">
+<h2 id="software-lanes">Software lanes<a class="anchor" aria-label="anchor" href="#software-lanes"></a></h2>
+<ul><li>R instructions use the latest <code>metasalmon</code> from the
+repository without a version pin.</li>
+<li>Python instructions use the latest <code>metasalmonpy</code> from
+the repository without a version pin.</li>
+<li>Spreadsheet instructions use the same canonical SDP CSV files and
+appear separately where no code is required.</li>
+<li>
+<code>metasalmon</code> and <code>metasalmonpy</code> are treated as
+behaviorally aligned implementations; deliberate language differences
+belong in the upstream parity guide.</li>
+</ul></div>
+<div class="section level2">
 <h2 id="current-episode-ladder">Current episode ladder<a class="anchor" aria-label="anchor" href="#current-episode-ladder"></a></h2>
 <ol style="list-style-type: decimal"><li>
-<code>episodes/session-1.Rmd</code>: frame the EML/catalog end goal,
-define dataset/table/flat file, preview the metadata CSVs, and explain
-the Frictionless/SDP/EML layers.</li>
+<code>episodes/session-1.Rmd</code>: introduce the salmon data
+integration system, its SDP and software components, shared and local
+semantic resources, bounded contexts, and the SDP-to-EML publication
+direction.</li>
 <li>
-<code>episodes/session-2.Rmd</code>: prepare the project before the
-demo, generate a simple draft template, distinguish example and
-personal-data paths, and explain reruns.</li>
+<code>episodes/session-2.Rmd</code>: run a prepared quickstart in
+the selected R, Python, or Spreadsheet lane and inspect the resulting
+package structure.</li>
 <li>
-<code>episodes/session-3.Rmd</code>: use shared R/Python relative
-paths for learner-owned single-table, multi-CSV, or multi-sheet Excel
-inputs and capture context.</li>
+<code>episodes/session-3.Rmd</code>: bring learner-owned
+single-table, multi-CSV, or multi-sheet Excel inputs into the same
+lanes, capture context, and protect reviewed work during reruns.</li>
 <li>
 <code>episodes/session-4.Rmd</code>: generate and review
 deterministic suggestions in R or Python, with optional bundle-aware LLM
@@ -379,6 +393,20 @@ later version without discarding reviewed metadata.</li>
 <code>episodes/bonus-session.Rmd</code>: optional concept mapping
 extension.</li>
 </ol></div>
+<div class="section level2">
+<h2 id="presentation-behavior">Presentation behavior<a class="anchor" aria-label="anchor" href="#presentation-behavior"></a></h2>
+<ul><li>Sandpaper’s native <code>group-tab</code> fenced div is the
+canonical control for synchronized R, Python, and Spreadsheet
+alternatives.</li>
+<li>A tab group shows one software lane at a time; use the same tab
+labels and order wherever those alternatives recur.</li>
+<li>Site presentation comes from the repository’s Sandpaper/Varnish
+theme. Do not add a parallel CSS or JavaScript system for language
+selection.</li>
+<li>Edit learner source under <code>episodes/</code>,
+<code>learners/</code>, and <code>index.md</code>; never hand-edit
+generated files under <code>site/</code>.</li>
+</ul></div>
 <div class="section level2">
 <h2 id="upstream-workflow-sources">Upstream workflow sources<a class="anchor" aria-label="anchor" href="#upstream-workflow-sources"></a></h2>
 <ul><li>
@@ -470,7 +498,7 @@ server.</p>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/entrypoints.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/entrypoints.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-22",
+  "dateModified": "2026-08-25",
   "datePublished": "2026-08-25"
 }
 

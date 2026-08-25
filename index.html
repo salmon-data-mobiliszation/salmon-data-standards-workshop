@@ -212,7 +212,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -318,7 +318,7 @@
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="session-1.html" rel="next">Next: Why Start With a... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="session-1.html" rel="next">Next: The Salmon Data... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
     </nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Setup</h1>
       
@@ -329,20 +329,21 @@ package metadata into a validated EML 2.2 file and prepare a guarded
 upload to an EML-aware catalog such as KNB. It starts with package
 structure and context, then adds links to shared definitions where they
 matter most.</p>
-<p>The coded walkthrough is R-first. Python companion blocks follow the
-core creation and review steps, and spreadsheet participants work with
-the same standard package files. The final EML and KNB/DataONE
-publication workflow taught here runs in the R <code>metasalmon</code>
-package against the current SDP specification.</p>
+<p>Code-driven activities include matching R and Python lanes, and
+spreadsheet-specific subsections work with the same standard package
+files without requiring code. The R <code>metasalmon</code> and Python
+<code>metasalmonpy</code> implementations are maintained at behavioral
+parity while retaining idiomatic syntax for each language.</p>
 
 
       <section id="setup"><section><h2 class="section-heading" id="what-you-will-be-ready-to-do">What you will be ready to do<a class="anchor" aria-label="anchor" href="#what-you-will-be-ready-to-do"></a></h2>
 <hr class="half-width"><p>The workshop starts with ordinary tables and ends with a reviewed
 Salmon Data Package (SDP), a validated EML 2.2 metadata file, and a
-preview of the exact objects that <code>metasalmon</code> would upload
-to the Knowledge Network for Biocomplexity (KNB). A live catalog upload
-is available only to participants who have the required credentials and
-authority to redistribute the data.</p>
+preview of the exact objects that <code>metasalmon</code> or
+<code>metasalmonpy</code> would upload to the Knowledge Network for
+Biocomplexity (KNB). A live catalog upload is available only to
+participants who have the required credentials and authority to
+redistribute the data.</p>
 </section><section><h2 class="section-heading" id="what-to-bring">What to bring<a class="anchor" aria-label="anchor" href="#what-to-bring"></a></h2>
 <hr class="half-width"><p>Bring one small salmon-related dataset if you can. Supported workshop
 inputs are:</p>
@@ -391,8 +392,13 @@ same layout.</p>
 copies unchanged. Do not put source files directly inside a generated
 package.</p>
 </section><section><h2 class="section-heading" id="software-options">Software options<a class="anchor" aria-label="anchor" href="#software-options"></a></h2>
-<hr class="half-width"><p>You only need one on-ramp for package creation. The final EML/catalog
-step currently uses R/<code>metasalmon</code>.</p>
+<hr class="half-width"><p>Choose the R, Python, or spreadsheet lane that fits how you work.
+Code-driven activities include examples in both R and Python, with
+language-specific subsections where the commands differ.
+Spreadsheet-specific subsections show how to review and edit the same
+standard package files without code. All three lanes use the same
+project layout and Salmon Data Package structure, so you can stay with
+one lane while still following the shared discussion.</p>
 <div class="section level3">
 <h3 id="rmetasalmon-path">R/metasalmon path<a class="anchor" aria-label="anchor" href="#rmetasalmon-path"></a></h3>
 <p>Required:</p>
@@ -401,24 +407,19 @@ step currently uses R/<code>metasalmon</code>.</p>
 <li>the <code>remotes</code>, <code>readr</code>, <code>dplyr</code>,
 <code>purrr</code>, <code>readxl</code>, and <code>metasalmon</code>
 packages.</li>
-</ul><p>Install the released version used by the workshop:</p>
+</ul><p>Install or update to the latest version from GitHub before the
+workshop:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"remotes"</span>, <span class="st">"readr"</span>, <span class="st">"dplyr"</span>, <span class="st">"purrr"</span>, <span class="st">"readxl"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"salmon-data-mobilization/metasalmon@v0.3.0"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"salmon-data-mobilization/metasalmon"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># The revised lesson targets the metasalmon 0.3.0 release.</span></span>
 <span><span class="fu">packageVersion</span><span class="op">(</span><span class="st">"metasalmon"</span><span class="op">)</span></span></code></pre>
 </div>
-<p>The lesson targets the tagged <strong>metasalmon 0.3.0</strong>
-release, which implements version <code>sdp-0.3.0</code> of the Salmon
-Data Package specification. Check the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">metasalmon
-changelog</a> before teaching if a newer release has shipped. If you
-have packages built with metasalmon 0.2.x, the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd" class="external-link">migration
-guide</a> explains what changed and how
-<code>migrate_sdp_methods()</code> updates them.</p>
+<p>Facilitators should review the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">metasalmon
+changelog</a> when preparing to teach.</p>
 <p>For validated EML export, also install:</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -450,37 +451,41 @@ send sensitive or restricted material outside an authorized
 environment.</p>
 </div>
 <div class="section level3">
-<h3 id="pythonmetasalmonpy-companion-path">Python/metasalmonpy companion path<a class="anchor" aria-label="anchor" href="#pythonmetasalmonpy-companion-path"></a></h3>
-<p>The workshop teaches the core creation and review workflow in R first
-and then provides a Python equivalent. The Python package is
-<strong><code>metasalmonpy</code> 0.2.1</strong> (the repository was
-renamed from <code>metaSmnPy</code>, and the old <code>salmonpy</code>
-package name is retired). Its version is a parity claim: 0.2.1 mirrors
-metasalmon 0.2.1 behaviour, so it writes the earlier
-<code>sdp-0.2.0</code> package shape and is not yet aligned with
-metasalmon 0.3.0. Use it for the companion creation and review
-activities; run the final publication gate in R.</p>
+<h3 id="pythonmetasalmonpy-path">Python/metasalmonpy path<a class="anchor" aria-label="anchor" href="#pythonmetasalmonpy-path"></a></h3>
+<p><code>metasalmonpy</code> is the Python implementation of the
+<code>metasalmon</code> workflow. The two packages are maintained at
+behavioral parity and their releases move in lockstep; deliberate,
+language-idiomatic differences are documented in the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html" class="external-link">parity
+guide</a>. Use the Python examples anywhere the workshop presents a
+Python lane.</p>
 <p>Required:</p>
 <ul><li>Python 3.9 or newer; and</li>
 <li>a terminal, notebook, or Python editor.</li>
-</ul><p>Create an environment and install the tagged release directly from
-GitHub (no Git installation required):</p>
+</ul><p>Create an environment and install or update to the latest version
+directly from GitHub (no Git installation required):</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv .venv</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a><span class="bu">.</span> .venv/bin/activate</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a><span class="ex">python</span> <span class="at">-m</span> pip install <span class="dt">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a>  <span class="st">"metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/tags/v0.2.1.tar.gz"</span></span></code></pre>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a>  <span class="st">"metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/heads/main.tar.gz"</span></span></code></pre>
 </div>
 <p>The installed package and Python import are both named
 <code>metasalmonpy</code>. See the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/" class="external-link">metasalmonpy
-documentation</a>. Optional EML/KNB extras exist
-(<code>metasalmonpy[eml]</code>, <code>[knb]</code>), but this lesson
-runs EML export and KNB publication in R. A package created with
-<code>metasalmonpy</code> 0.2.1 follows <code>sdp-0.2.0</code>; migrate
-it with R’s <code>migrate_sdp_methods()</code> before the strict R
-validation, EML export, and catalog publication taught in Session 6.</p>
+documentation</a>. Validated EML export uses the optional
+<code>eml</code> extra, and KNB publication uses the optional
+<code>knb</code> extra. To prepare for both, replace
+<code>metasalmonpy</code> with <code>metasalmonpy[knb]</code> in the
+install command above; the <code>knb</code> extra includes EML
+support.</p>
+<p>If you will read <code>.xlsx</code> workbooks in Python during
+Chapter 3, also install <code>openpyxl</code>:</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="ex">python</span> <span class="at">-m</span> pip install openpyxl</span></code></pre>
+</div>
 </div>
 <div class="section level3">
 <h3 id="spreadsheet-path">Spreadsheet path<a class="anchor" aria-label="anchor" href="#spreadsheet-path"></a></h3>
@@ -493,9 +498,9 @@ that can save CSV files.</li>
 SDP CSV template</a>, which you can open and edit with your spreadsheet
 software.</li>
 </ul><p>Download or clone the <code>smn-data-pkg</code> repository and copy
-that template folder. There is no standalone workbook or template ZIP. A
-spreadsheet participant can complete the metadata review and then hand
-the package to an R user for validation and EML export.</p>
+that template folder. There is no standalone workbook or template ZIP.
+Spreadsheet participants can review and edit the canonical metadata CSVs
+directly with their spreadsheet software.</p>
 </div>
 </section><section><h2 class="section-heading" id="pre-workshop-reading">Pre-workshop reading<a class="anchor" aria-label="anchor" href="#pre-workshop-reading"></a></h2>
 <hr class="half-width"><p>Read these only if you have time:</p>
@@ -503,10 +508,9 @@ the package to an R user for validation and EML export.</p>
 rules</a> and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">field
 definitions and accepted values</a>
 </li>
-<li>Salmon Data Package examples: <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-CSV template</a> and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/examples/minimal-example" class="external-link">filled
-minimal example</a>
-</li>
+<li>Salmon Data Package starting points: the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+CSV template</a> and the current code-generated quickstart in Chapter
+2</li>
 <li>metasalmon quickstart: <a href="https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html" class="external-link">create
 and review a package</a>
 </li>
@@ -531,16 +535,19 @@ it.</p>
 <li>your source files are under <code>raw_data/</code>, or you plan to
 run the included example unchanged; and</li>
 <li>R users can load <code>metasalmon</code> with
-<code>library(metasalmon)</code>.</li>
+<code>library(metasalmon)</code>;</li>
+<li>Python users can import <code>metasalmonpy</code>; and</li>
+<li>spreadsheet users can open the blank SDP CSV template in their
+editor.</li>
 </ul><p>If your organization restricts software installation, use the
-spreadsheet path and pair with someone who can run the R validation and
-EML export later.</p>
+spreadsheet lane for the package-structure and metadata-review
+activities.</p>
 </section></section></main><nav class="bottom-pagination mx-md-4" aria-label="Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link float-end" href="session-1.html" rel="next">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="session-1.html" rel="next">Next: Why Start With a... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="session-1.html" rel="next">Next: The Salmon Data... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
     </nav></div>
 <!-- END  : inst/pkgdown/templates/content-syllabus.html -->

@@ -236,7 +236,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -371,33 +371,37 @@
     <main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Key Points</h1>
         
-<section id="session-1"><h2 class="section-heading"><a href="session-1.html">Why Start With a Salmon Data Package?</a></h2>
+<section id="session-1"><h2 class="section-heading"><a href="session-1.html">The Salmon Data Integration System</a></h2>
 <hr class="half-width">
 <ul>
-<li>The end-to-end target is reviewed SDP metadata, valid EML, and a
-guarded catalog-publication plan.</li>
+<li>The integration system connects local data and expert context to an
+SDP, review tools, shared or local semantic resources, EML, and catalog
+publication.</li>
 <li>A dataset can contain multiple tables; a flat file contains one
 rectangular table.</li>
 <li>The metadata CSVs are visible review surfaces, not hidden software
 internals.</li>
 <li>SDP is a custom Frictionless profile with explicit external-standard
 alignments and salmon-specific rules.</li>
-<li>EML export needs reviewed facts that cannot be inferred from the
-source table alone.</li>
+<li>The Salmon Domain Ontology provides shared anchors between bounded
+contexts; it does not erase locally governed meanings.</li>
+<li>Reuse shared terms when meanings match, propose shared extensions
+when reuse is broad and stable, and federate local terms when the local
+distinction matters.</li>
+<li>EML export uses reviewed mapping facts that cannot be inferred from
+the source table alone.</li>
 </ul></section><section id="session-2"><h2 class="section-heading"><a href="session-2.html">Create a Draft Salmon Data Package</a></h2>
 <hr class="half-width">
 <ul>
-<li>Prepare the project and folders before the demo.</li>
-<li>Run the included example unchanged to learn the generated package
-shape.</li>
+<li>Confirm the project and folders unless you already prepared them
+during setup.</li>
+<li>Run the bundled quickstart unchanged to learn the generated package
+shape; bring your own data in Chapter 3.</li>
 <li>
 <code>create_sdp()</code> accepts one data frame or a named list of
 tabular data frames, not arbitrary scientific file structures.</li>
 <li>The field reference is the source for definitions and allowed
 values.</li>
-<li>Protect manual edits: do not casually rerun
-<code>create_sdp(..., overwrite = TRUE)</code> on a reviewed
-package.</li>
 </ul></section><section id="session-3"><h2 class="section-heading"><a href="session-3.html">Use Your Data and Capture Context</a></h2>
 <hr class="half-width">
 <ul>

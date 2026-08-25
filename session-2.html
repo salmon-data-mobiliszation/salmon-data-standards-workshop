@@ -199,7 +199,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -218,15 +218,13 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#before-the-demo-open-the-project-and-create-folders">Before the demo: open the project and create folders</a></li>
-<li><a href="#choose-one-of-two-paths">Choose one of two paths</a></li>
+        <ul><li><a href="#before-the-quickstart-confirm-the-project-and-folders">Before the quickstart: confirm the project and folders</a></li>
+<li><a href="#chapter-2-uses-the-bundled-quickstart-data">Chapter 2 uses the bundled quickstart data</a></li>
 <li><a href="#what-draft-means">What “draft” means</a></li>
-<li><a href="#path-a-generate-the-simple-r-example">Path A: generate the simple R example</a></li>
-<li><a href="#inspect-the-generated-templates">Inspect the generated templates</a></li>
+<li><a href="#generate-or-open-the-prepared-quickstart">Generate or open the prepared quickstart</a></li>
+<li><a href="#inspect-the-package-files">Inspect the package files</a></li>
 <li><a href="#what-input-structures-are-supported">What input structures are supported?</a></li>
-<li><a href="#reruns-and-manual-edits">Reruns and manual edits</a></li>
 <li><a href="#field-definitions-and-accepted-values">Field definitions and accepted values</a></li>
-<li><a href="#spreadsheetcsv-template-path">Spreadsheet/CSV-template path</a></li>
 <li><a href="#review-state-validation">Review-state validation</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -328,7 +326,7 @@
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-1.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Why Start With a
+          Previous: The Salmon Data
         </a>
         <a class="chapter-link float-end" href="session-3.html" rel="next">
           Next: Use Your Data and...
@@ -337,7 +335,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Create a Draft Salmon Data Package</h1>
-        <p>Last updated on 2026-08-22 |
+        <p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -357,9 +355,8 @@
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul><li>What must I set up before running the demo?</li>
-<li>Should I run the included example or substitute my own files?</li>
+<li>What will the bundled quickstart data show me?</li>
 <li>What input structures does <code>create_sdp()</code> support?</li>
-<li>What happens if I rerun package generation after manual edits?</li>
 </ul></div>
 </div>
 </div>
@@ -368,22 +365,24 @@
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul><li>Confirm the project, <code>raw_data/</code>, <code>context/</code>,
-and <code>output/</code> layout before the demo.</li>
-<li>Run the included example unchanged, using it only to generate and
-inspect templates.</li>
-<li>Distinguish the example path from the learner-owned data path.</li>
+and <code>output/</code> layout, unless you already completed this
+during setup.</li>
+<li>Run the bundled example unchanged to generate and inspect
+templates.</li>
+<li>Explain why Chapter 2 uses bundled quickstart data and Chapter 3
+introduces your own data.</li>
 <li>Identify supported single-table, multi-table, and workbook
 inputs.</li>
-<li>Protect reviewed metadata by choosing deliberate rerun
-behavior.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="before-the-demo-open-the-project-and-create-folders">Before the demo: open the project and create folders<a class="anchor" aria-label="anchor" href="#before-the-demo-open-the-project-and-create-folders"></a></h2>
-<hr class="half-width"><p>Work from one project root so every path in the lesson is relative
-and reproducible.</p>
+<section><h2 class="section-heading" id="before-the-quickstart-confirm-the-project-and-folders">Before the quickstart: confirm the project and folders<a class="anchor" aria-label="anchor" href="#before-the-quickstart-confirm-the-project-and-folders"></a></h2>
+<hr class="half-width"><p>If you already created this project and its folders in
+<strong>Summary and Setup</strong>, skip this section. Otherwise, work
+from one project root so every path in the lesson is relative and
+reproducible.</p>
 <ol style="list-style-type: decimal"><li>R users: in RStudio choose <strong>File &gt; New Project</strong>,
 then create a new project or open the folder you prepared during
 setup.</li>
@@ -406,31 +405,44 @@ jump elsewhere.</li>
   raw_data/                   # unchanged source files
   context/                    # codebooks, methods, and caveats
   output/                     # generated package folders</code></pre>
-</section><section><h2 class="section-heading" id="choose-one-of-two-paths">Choose one of two paths<a class="anchor" aria-label="anchor" href="#choose-one-of-two-paths"></a></h2>
-<hr class="half-width"><table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Path</th>
-<th>What to do now</th>
-<th>What to change</th>
-</tr></thead><tbody><tr><td>A: included example</td>
-<td>Run the first code block exactly as written.</td>
-<td>Change nothing. This is the fastest way to see the generated
-metadata templates.</td>
-</tr><tr><td>B: personal data</td>
-<td>First read Path A, then move to Session 3. Put your source files in
-<code>raw_data/</code>.</td>
-<td>Replace the input path, object name, dataset/table IDs, and output
-folder with values for your files.</td>
-</tr></tbody></table><p>Do not partly combine the two paths by reading the example but
-assigning your real dataset ID, or by reading your own data and leaving
-the example output folder. That makes review and reruns difficult to
-interpret.</p>
+</section><section><h2 class="section-heading" id="chapter-2-uses-the-bundled-quickstart-data">Chapter 2 uses the bundled quickstart data<a class="anchor" aria-label="anchor" href="#chapter-2-uses-the-bundled-quickstart-data"></a></h2>
+<hr class="half-width"><p>In this chapter, use the prepared starting point for your chosen
+software lane. The R and Python examples use a small NuSEDS-derived
+table; the spreadsheet lane uses the canonical blank SDP template. Each
+is a quickstart for seeing the package structure and starter metadata.
+Do not substitute your own files yet: Chapter 3 is the
+bring-your-own-data workflow.</p>
 </section><section><h2 class="section-heading" id="what-draft-means">What “draft” means<a class="anchor" aria-label="anchor" href="#what-draft-means"></a></h2>
 <hr class="half-width"><p>A draft package is allowed to contain blanks, placeholders, and
 review markers. The first example has one purpose: generate the package
 structure and starter metadata so you can inspect it. It is not a
 finished description of the source dataset and it does not export EML
 yet.</p>
-</section><section><h2 class="section-heading" id="path-a-generate-the-simple-r-example">Path A: generate the simple R example<a class="anchor" aria-label="anchor" href="#path-a-generate-the-simple-r-example"></a></h2>
-<hr class="half-width"><p><code>metasalmon</code> includes a small NuSEDS-derived practice
+</section><section><h2 class="section-heading" id="generate-or-open-the-prepared-quickstart">Generate or open the prepared quickstart<a class="anchor" aria-label="anchor" href="#generate-or-open-the-prepared-quickstart"></a></h2>
+<hr class="half-width"><p>Choose <strong>R</strong>, <strong>Python</strong>, or
+<strong>Spreadsheet</strong> below. Your selection is synchronized with
+the other software choices on this page.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
+<p><code>metasalmon</code> includes a small NuSEDS-derived practice
 table. Generate its templates with semantic searching turned off so the
 first result is fast and local.</p>
 <div class="codewrapper sourceCode" id="cb3">
@@ -458,25 +470,17 @@ first result is fast and local.</p>
 <span>  dataset_id <span class="op">=</span> <span class="st">"fraser-coho-example"</span>,</span>
 <span>  table_id <span class="op">=</span> <span class="st">"escapement"</span>,</span>
 <span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">list.files</span><span class="op">(</span><span class="va">pkg_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
-<p><code>seed_semantics = FALSE</code> is the fast classroom option. It
-skips live searches for links to shared definitions. Session 4 shows how
-to run those searches after the starter metadata has been reviewed.</p>
-<div id="python-equivalent-for-path-a" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent-for-path-a" class="callout-inner">
-<h3 class="callout-title">Python equivalent for Path A</h3>
-<div class="callout-content">
-<p>Run this block instead of the R block if you are following the Python
-companion path.</p>
+<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
+<p><code>metasalmonpy</code> includes the same NuSEDS-derived practice
+table. Generate its templates with semantic searching turned off so the
+first result is fast and local.</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -498,7 +502,7 @@ companion path.</p>
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1" aria-label="code-block-4-16"></a>    dataset_id<span class="op">=</span><span class="st">"fraser-coho-example"</span>,</span>
 <span id="cb4-17"><a href="#cb4-17" tabindex="-1" aria-label="code-block-4-17"></a>    table_id<span class="op">=</span><span class="st">"escapement"</span>,</span>
 <span id="cb4-18"><a href="#cb4-18" tabindex="-1" aria-label="code-block-4-18"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb4-20"><a href="#cb4-20" tabindex="-1" aria-label="code-block-4-20"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
 <span id="cb4-21"><a href="#cb4-21" tabindex="-1" aria-label="code-block-4-21"></a>)</span>
 <span id="cb4-22"><a href="#cb4-22" tabindex="-1" aria-label="code-block-4-22"></a></span>
@@ -507,21 +511,31 @@ companion path.</p>
 <span id="cb4-25"><a href="#cb4-25" tabindex="-1" aria-label="code-block-4-25"></a>):</span>
 <span id="cb4-26"><a href="#cb4-26" tabindex="-1" aria-label="code-block-4-26"></a>    <span class="bu">print</span>(path.relative_to(pkg_path))</span></code></pre>
 </div>
-<p>The R and Python packages bundle separate practice fixtures. They
-demonstrate the same core package structure, but do not use their row
-counts to test cross-language parity. Each writer also leaves a hidden
-bookkeeping file (<code>.metasalmon-package</code> in R,
-<code>.metasalmonpy-package</code> in Python). Note that
-<code>metasalmonpy</code> 0.2.1 writes the earlier
-<code>sdp-0.2.0</code> package shape; the final EML and KNB workflow
-taught here runs in R against the current <code>sdp-0.3.0</code>
-specification.</p>
+</div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<p>Spreadsheet participants can inspect the package structure without
+running code. Download or clone the <code>smn-data-pkg</code>
+repository, copy its <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a> into
+<code>output/spreadsheet-quickstart-sdp/</code>, and open the CSV files
+with Excel, LibreOffice Calc, or another spreadsheet editor.</p>
+<p>Keep the copied folder structure and header rows unchanged. In this
+chapter, inspect the prepared example rather than replacing its data or
+metadata; Chapter 3 introduces your own data.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="inspect-the-generated-templates">Inspect the generated templates<a class="anchor" aria-label="anchor" href="#inspect-the-generated-templates"></a></h2>
-<hr class="half-width"><p>Open these files in this order:</p>
-<ol style="list-style-type: decimal"><li><code>README-review.txt</code></li>
+<p>For the R and Python lanes, <code>seed_semantics = FALSE</code> /
+<code>seed_semantics=False</code> is the fast classroom option. It skips
+live searches for links to shared definitions. Chapter 4 shows how to
+run those searches after the starter metadata has been reviewed.</p>
+</section><section><h2 class="section-heading" id="inspect-the-package-files">Inspect the package files<a class="anchor" aria-label="anchor" href="#inspect-the-package-files"></a></h2>
+<hr class="half-width"><p>Open these files in this order. A package generated by R or Python
+starts with <code>README-review.txt</code>; the spreadsheet template
+uses <code>README.md</code>.</p>
+<ol style="list-style-type: decimal"><li>
+<code>README-review.txt</code> or <code>README.md</code>
+</li>
 <li><code>metadata/column_dictionary.csv</code></li>
 <li><code>metadata/tables.csv</code></li>
 <li><code>metadata/dataset.csv</code></li>
@@ -529,18 +543,21 @@ specification.</p>
 <code>metadata/codes.csv</code>, when present</li>
 <li>
 <code>semantic_suggestions.csv</code>, when present</li>
-</ol><p>Expected structure:</p>
+</ol><p>The R or Python quickstart has this generated structure. The
+spreadsheet template has the same core metadata CSVs but keeps
+<code>data/README.md</code> in place of a learner data table until
+Chapter 3.</p>
 <pre class="text"><code><span><span class="va">output</span><span class="op">/</span><span class="va">fraser</span><span class="op">-</span><span class="va">coho</span><span class="op">-</span><span class="va">example</span><span class="op">-</span><span class="va">sdp</span><span class="op">/</span></span>
-<span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span></span>
+<span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span>            <span class="co"># README.md in the prepared example</span></span>
 <span>  <span class="va">datapackage.json</span></span>
-<span>  <span class="va">.metasalmon</span><span class="op">-</span><span class="va">package</span>          <span class="co"># hidden writer bookkeeping file; leave it alone</span></span>
+<span>  <span class="va">.metasalmon</span><span class="op">-</span><span class="va">package</span>          <span class="co"># R writer bookkeeping; Python uses .metasalmonpy-package</span></span>
 <span>  <span class="va">metadata</span><span class="op">/</span></span>
 <span>    <span class="va">dataset.csv</span></span>
 <span>    <span class="va">tables.csv</span></span>
 <span>    <span class="va">column_dictionary.csv</span></span>
 <span>    <span class="va">codes.csv</span>                  <span class="co"># present when categorical columns exist</span></span>
 <span>  <span class="va">data</span><span class="op">/</span></span>
-<span>    <span class="va">escapement.csv</span></span></code></pre>
+<span>    <span class="va">escapement.csv</span>              <span class="co"># filename follows the table ID</span></span></code></pre>
 <p>If semantic seeding is enabled later, the package may also include
 <code>semantic_suggestions.csv</code>, and metadata fields may contain
 <code>REVIEW: &lt;iri&gt;</code> draft values. An <strong>IRI</strong>
@@ -572,33 +589,6 @@ derivative that does not misrepresent the source.</td>
 </tr></tbody></table><p>The output data resources are CSV. Keep merged headings,
 presentation-only rows, subtotals, and multiple tables on one sheet out
 of the rectangular data frames passed to <code>create_sdp()</code>.</p>
-</section><section><h2 class="section-heading" id="reruns-and-manual-edits">Reruns and manual edits<a class="anchor" aria-label="anchor" href="#reruns-and-manual-edits"></a></h2>
-<hr class="half-width"><p>The safest rule is: <strong>generate once, then review the package
-you generated</strong>.</p>
-<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Situation</th>
-<th>Safe action</th>
-</tr></thead><tbody><tr><td>The output folder does not exist</td>
-<td>Run with <code>overwrite = FALSE</code>.</td>
-</tr><tr><td>The example folder already exists and you have not edited it</td>
-<td>Use a new output name, or deliberately remove the disposable example
-outside the lesson before recreating it.</td>
-</tr><tr><td>You manually edited <code>metadata/*.csv</code>
-</td>
-<td>Do not rerun <code>create_sdp()</code> on the same path. Continue
-with <code>read_salmon_datapackage()</code> and validation.</td>
-</tr><tr><td>You need a new version after review</td>
-<td>Read the reviewed package and write a new versioned folder; Session
-6 shows this later workflow.</td>
-</tr></tbody></table><p>In current R/<code>metasalmon</code>, <code>overwrite = TRUE</code>
-re-infers and replaces package files owned by the writer, including
-canonical metadata and declared data resources. Manual edits to those
-files can therefore be lost. Version 0.2.0 and later preserve non-owned
-sidecars by default, but <code>prune = TRUE</code> empties the package
-first and can remove them. Neither option is a substitute for a
-versioned backup or Git history.</p>
-<p>Python participants should use the same conservative rule: after
-manual review, choose a new output path instead of assuming that R and
-Python overwrite behavior is identical.</p>
 </section><section><h2 class="section-heading" id="field-definitions-and-accepted-values">Field definitions and accepted values<a class="anchor" aria-label="anchor" href="#field-definitions-and-accepted-values"></a></h2>
 <hr class="half-width"><p>Use the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
 field reference</a> while editing. Four fields that commonly cause
@@ -632,43 +622,30 @@ from whether an SDP metadata field itself is required.</td>
 <td>
 <code>unit_label</code> is text; <code>unit_iri</code> is required
 for measurement rows and must be a valid absolute IRI.</td>
-</tr></tbody></table><p>Validation messages identify the file, field, and row context when
-possible. Fix the source metadata rather than suppressing the error or
-adding a non-standard header.</p>
-<p>In R/<code>metasalmon</code> 0.2.0 and later, the column dictionary’s
-<code>value_type</code> is the type authority when a package is read. A
-token that does not satisfy the declared type is retained for diagnosis
-instead of being silently converted to <code>NA</code>; validation
-reports the mismatch. This makes accurate <code>value_type</code> review
-part of data preservation, not cosmetic documentation.</p>
-</section><section><h2 class="section-heading" id="spreadsheetcsv-template-path">Spreadsheet/CSV-template path<a class="anchor" aria-label="anchor" href="#spreadsheetcsv-template-path"></a></h2>
-<hr class="half-width"><p>Download or clone the <code>smn-data-pkg</code> repository and copy
-the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-SDP CSV template</a>, then open its metadata CSV files in Excel,
-LibreOffice Calc, or another spreadsheet editor. There is no standalone
-workbook or template ZIP. Keep the folder structure and header rows
-exactly as provided.</p>
-<p>Minimum steps:</p>
-<ol style="list-style-type: decimal"><li>Export each source table as a CSV under <code>data/</code>.</li>
-<li>Fill one row in <code>metadata/dataset.csv</code>.</li>
-<li>Fill one row in <code>metadata/tables.csv</code> for each data
-table.</li>
-<li>Fill one row in <code>metadata/column_dictionary.csv</code> for each
-data column.</li>
-<li>When any column has <code>column_role = categorical</code>, document
-every observed non-empty value in <code>metadata/codes.csv</code>.</li>
-<li>Optionally write a short README/context note with caveats, methods,
-and known limitations.</li>
-<li>Hand the package to <code>metasalmon</code> to generate and check
-<code>datapackage.json</code>, run strict validation, and later export
-EML.</li>
-</ol><p>The spreadsheet path is valid when it produces the same canonical CSV
-metadata that the code packages use. The blank template intentionally
-omits <code>datapackage.json</code>; a complete or published package
-needs the generated descriptor as well.</p>
-</section><section><h2 class="section-heading" id="review-state-validation">Review-state validation<a class="anchor" aria-label="anchor" href="#review-state-validation"></a></h2>
+</tr></tbody></table></section><section><h2 class="section-heading" id="review-state-validation">Review-state validation<a class="anchor" aria-label="anchor" href="#review-state-validation"></a></h2>
 <hr class="half-width"><p>Early validation should catch structure problems without requiring
-all links to shared definitions to be complete.</p>
+all links to shared definitions to be complete. Use the same software
+lane you selected above.</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -681,14 +658,8 @@ all links to shared definitions to be complete.</p>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">issues</span></span>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">missing_terms</span></span></code></pre>
 </div>
-<div id="python-equivalent" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -703,30 +674,37 @@ all links to shared definitions to be complete.</p>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"missing_terms"</span>])</span></code></pre>
 </div>
 </div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
+<p>Spreadsheet software does not currently run the SDP validator. For
+this quickstart, compare the prepared example’s folder structure and
+metadata headers with the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
+field reference</a>, and keep unresolved fields or term links visibly in
+review state. This manual review is not evidence that strict validation
+has passed.</p>
 </div>
 </div>
-<p><code>require_iris = FALSE</code> allows links to shared definitions
-to remain unfinished during draft review. Warnings about missing
+</div>
+<p>In the R and Python lanes, <code>require_iris = FALSE</code> /
+<code>require_iris=False</code> allows links to shared definitions to
+remain unfinished during draft review. Warnings about missing
 measurement links, placeholders, or <code>REVIEW:</code> markers can be
-acceptable in review state. Use strict R validation only when the
-package is publication-ready.</p>
-<div id="challenge-1-generate-and-inspect-the-example-templates" class="callout discussion">
+acceptable in review state. Use strict validation only when the package
+is publication-ready.</p>
+<div id="challenge-1-generate-and-inspect-the-quickstart-templates" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-1-generate-and-inspect-the-example-templates" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Generate and inspect the example
-templates</h3>
+<div id="challenge-1-generate-and-inspect-the-quickstart-templates" class="callout-inner">
+<h3 class="callout-title">Challenge 1: Generate and inspect the
+quickstart templates</h3>
 <div class="callout-content">
-<p>Run Path A unchanged, then answer:</p>
+<p>Run the bundled quickstart unchanged, then answer:</p>
 <ul><li>Where is the data table?</li>
 <li>Which metadata file describes the dataset, each table, each column,
 and categorical codes?</li>
 <li>Which fields still need human review?</li>
 <li>What would you replace when moving to your own data?</li>
-<li>Why would <code>overwrite = TRUE</code> be risky after manual
-edits?</li>
 </ul></div>
 </div>
 </div>
@@ -737,17 +715,15 @@ edits?</li>
 <span class="callout-header">Key Points</span>
 <div class="callout-inner">
 <div class="callout-content">
-<ul><li>Prepare the project and folders before the demo.</li>
-<li>Run the included example unchanged to learn the generated package
-shape.</li>
+<ul><li>Confirm the project and folders unless you already prepared them
+during setup.</li>
+<li>Run the bundled quickstart unchanged to learn the generated package
+shape; bring your own data in Chapter 3.</li>
 <li>
 <code>create_sdp()</code> accepts one data frame or a named list of
 tabular data frames, not arbitrary scientific file structures.</li>
 <li>The field reference is the source for definitions and allowed
 values.</li>
-<li>Protect manual edits: do not casually rerun
-<code>create_sdp(..., overwrite = TRUE)</code> on a reviewed
-package.</li>
 </ul></div>
 </div>
 </div>
@@ -760,7 +736,7 @@ package.</li>
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-1.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Why Start With a
+          Previous: The Salmon Data
         </a>
         <a class="chapter-link float-end" href="session-3.html" rel="next">
           Next: Use Your Data and...
@@ -811,7 +787,7 @@ package.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-2.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-2.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-22",
+  "dateModified": "2026-08-25",
   "datePublished": "2026-08-25"
 }
 

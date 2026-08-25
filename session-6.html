@@ -199,7 +199,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. Why Start With a Salmon Data Package?</a>
+        <a href="session-1.html">1. The Salmon Data Integration System</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -255,12 +255,12 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#a-gap-is-not-a-failure">A gap is not a failure</a></li>
-<li><a href="#post-review-workflow-in-r">Post-review workflow in R</a></li>
+<li><a href="#build-a-term-gap-plan-in-your-software-lane">Build a term-gap plan in your software lane</a></li>
 <li><a href="#routing-decision">Routing decision</a></li>
 <li><a href="#useful-term-request-ingredients">Useful term-request ingredients</a></li>
 <li><a href="#final-validation-is-later">Final validation is later</a></li>
 <li><a href="#map-the-reviewed-sdp-into-eml">Map the reviewed SDP into EML</a></li>
-<li><a href="#export-validated-eml-2.2">Export validated EML 2.2</a></li>
+<li><a href="#export-validated-eml">Export validated EML</a></li>
 <li><a href="#preview-the-knbdataone-catalog-deposit">Preview the KNB/DataONE catalog deposit</a></li>
 <li><a href="#live-upload-is-a-separate-authorized-action">Live upload is a separate authorized action</a></li>
 <li><a href="#later-example-make-a-new-version-after-review">Later example: make a new version after review</a></li>
@@ -337,7 +337,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Route Term Gaps, Export EML, and Plan Catalog Publication</h1>
-        <p>Last updated on 2026-08-22 |
+        <p>Last updated on 2026-08-25 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-6.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -374,7 +374,7 @@ reviewed metadata?</li>
 <li>Route candidate terms to shared, DFO-specific, or local/profile
 governance.</li>
 <li>Run the strict SDP validation gate before export.</li>
-<li>Complete the SDP-to-EML handoff and write validated EML 2.2.</li>
+<li>Export the reviewed SDP as validated EML 2.2.</li>
 <li>Preview an exact KNB/DataONE deposit and distinguish a dry run from
 a persistent live upload.</li>
 <li>Write an intentional new package version from reviewed
@@ -389,9 +389,29 @@ metadata.</li>
 the gap and decide where it belongs.</p>
 <p>The package should keep enough evidence that maintainers can
 understand the request without a long follow-up interview.</p>
-</section><section><h2 class="section-heading" id="post-review-workflow-in-r">Post-review workflow in R<a class="anchor" aria-label="anchor" href="#post-review-workflow-in-r"></a></h2>
+</section><section><h2 class="section-heading" id="build-a-term-gap-plan-in-your-software-lane">Build a term-gap plan in your software lane<a class="anchor" aria-label="anchor" href="#build-a-term-gap-plan-in-your-software-lane"></a></h2>
 <hr class="half-width"><p>After editing the metadata files, reload and validate the current
 package state.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -469,14 +489,8 @@ package state.</p>
 <span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu">write_csv</span><span class="op">(</span><span class="va">request_plan</span>, <span class="fu">file.path</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="st">"term-request-plan.csv"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-<div id="python-equivalent" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -560,6 +574,15 @@ package state.</p>
 <span id="cb3-78"><a href="#cb3-78" tabindex="-1" aria-label="code-block-3-78"></a>    )</span></code></pre>
 </div>
 </div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<p>Open <code>semantic_suggestions.csv</code> and the canonical metadata
+CSVs. For each unresolved field or code, record the dataset, table,
+field, search wording, closest candidate, why it does not fit,
+supporting source, and proposed route (<code>smn</code>,
+<code>gcdfo</code>, <code>profile</code>, or defer). Keep this as a
+reviewable term-gap plan; spreadsheet review does not submit a
+request.</p>
+</div>
 </div>
 </div>
 <p><code>detect_semantic_term_gaps()</code> combines deterministic
@@ -576,6 +599,26 @@ issue. The output is a working list, not an automatic governance
 decision.</p>
 <p>To preview the SMN and GCDFO issue bodies without posting
 anything:</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -590,14 +633,8 @@ anything:</p>
 <span></span>
 <span><span class="va">issue_preview</span></span></code></pre>
 </div>
-<div id="python-equivalent-1" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<span class="callout-header">Callout</span>
-<div id="python-equivalent-1" class="callout-inner">
-<h3 class="callout-title">Python equivalent</h3>
-<div class="callout-content">
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -617,6 +654,11 @@ anything:</p>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a></span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a><span class="bu">print</span>(issue_preview)</span></code></pre>
 </div>
+</div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<p>Use the term-gap plan as the draft review surface. A maintainer can
+turn an approved row into the relevant repository’s request format
+later; nothing in the spreadsheet posts an issue or mints a term.</p>
 </div>
 </div>
 </div>
@@ -649,25 +691,49 @@ anything.</p>
 <li>whether the term is shared, DFO-specific, or local/profile;</li>
 <li>any mapping strength you believe is appropriate.</li>
 </ul></section><section><h2 class="section-heading" id="final-validation-is-later">Final validation is later<a class="anchor" aria-label="anchor" href="#final-validation-is-later"></a></h2>
-<hr class="half-width"><p>Strict validation is the final gate.</p>
+<hr class="half-width"><p>Strict validation is the final gate. Use the language lane you
+selected earlier.</p>
+<div class="tabs">
+<nav><div id="nav-tab-3" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-3-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-R" type="button" role="tab" aria-controls="nav-tabpanel-3-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-3-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-3-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Python" type="button" role="tab" aria-controls="nav-tabpanel-3-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-3-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-3-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-3-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-3-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-3" class="tab-content">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-3-R">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">validate_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span>, require_iris <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Python can run a useful companion check:</p>
+</div>
+<div id="nav-tabpanel-3-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Python">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>validate_salmon_datapackage(pkg_path, require_iris<span class="op">=</span><span class="va">True</span>)</span></code></pre>
 </div>
-<p>For publication, run the current R <code>metasalmon</code> strict
-validator shown first. <code>metasalmonpy</code> 0.2.1 provides a useful
-companion check for the core package, but its version is a parity claim
-against metasalmon 0.2.1: it validates the earlier
-<code>sdp-0.2.0</code> shape and is not aligned with metasalmon 0.3.0.
-The R validator is the gate against the current specification.</p>
+</div>
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Spreadsheet">
+<p>Spreadsheet review can resolve metadata content, but it cannot
+execute the strict validator. Run this final gate against the same
+package folder in R or Python before EML export or publication.</p>
+</div>
+</div>
+</div>
 <p>Run it only when:</p>
 <ul><li>review markers such as <code>REVIEW:</code> have been resolved;</li>
 <li>required metadata placeholders are gone;</li>
@@ -692,8 +758,9 @@ data files;</li>
 will not pass strict publication validation until the required
 measurement semantic fields are resolved.</p>
 </section><section><h2 class="section-heading" id="map-the-reviewed-sdp-into-eml">Map the reviewed SDP into EML<a class="anchor" aria-label="anchor" href="#map-the-reviewed-sdp-into-eml"></a></h2>
-<hr class="half-width"><p><code>metasalmon</code> does not simply rename SDP fields. It builds
-a new EML document and validates the result:</p>
+<hr class="half-width"><p><code>metasalmon</code> and <code>metasalmonpy</code> do not simply
+rename SDP fields. They build a new EML document and validate the
+result:</p>
 <table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Reviewed SDP source</th>
 <th>EML output</th>
 </tr></thead><tbody><tr><td>Dataset ID, title, description, keywords, temporal coverage</td>
@@ -720,13 +787,15 @@ example, a free-text <code>creator</code> cell cannot safely be guessed
 into structured people, organizations, ORCIDs, and metadata-provider
 roles. Measurement scale and the meanings of missing-value tokens also
 need explicit review.</p>
-</section><section><h2 class="section-heading" id="export-validated-eml-2-2">Export validated EML 2.2<a class="anchor" aria-label="anchor" href="#export-validated-eml-2-2"></a></h2>
+</section><section><h2 class="section-heading" id="export-validated-eml">Export validated EML<a class="anchor" aria-label="anchor" href="#export-validated-eml"></a></h2>
 <hr class="half-width"><p>The code blocks from here to the end of this section operate on
 <code>pkg_path</code>, the reviewed package you have been building
 through the workshop; they are shown for you to run in your own session
 and are not executed when the lesson website is built.</p>
-<p>Install <code>emld</code> and <code>jsonvalidate</code>, then copy
-the package’s sidecar template once:</p>
+<p>Create <code>metadata/eml-mapping.yml</code> from metasalmon’s <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/inst/extdata/eml-mapping-template.yml" class="external-link">canonical
+mapping template</a>. R users can copy the template from their installed
+package with the code below; Python and spreadsheet users can download
+the linked file and save it at the same package-relative path.</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -759,7 +828,27 @@ post-review and publication workflow</a>. Do not invent dummy parties,
 checksums, rights evidence, measurement scales, or missing-value
 meanings merely to make validation pass.</p>
 <p>When the SDP, its semantic-review evidence, and the sidecar are
-final:</p>
+final, use your software lane:</p>
+<div class="tabs">
+<nav><div id="nav-tab-4" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-4-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-4-R" type="button" role="tab" aria-controls="nav-tabpanel-4-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-4-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-4-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-4-Python" type="button" role="tab" aria-controls="nav-tabpanel-4-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-4-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-4-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-4-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-4-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-4-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-4" class="tab-content">
+<div id="nav-tabpanel-4-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-4-R">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -770,15 +859,58 @@ final:</p>
 <span><span class="va">eml_result</span><span class="op">$</span><span class="va">eml_version</span></span>
 <span><span class="va">eml_result</span><span class="op">$</span><span class="va">validation</span></span></code></pre>
 </div>
+</div>
+<div id="nav-tabpanel-4-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-4-Python">
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" tabindex="-1" aria-label="code-block-10-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> write_eml_from_sdp</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1" aria-label="code-block-10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1" aria-label="code-block-10-3"></a>eml_result <span class="op">=</span> write_eml_from_sdp(pkg_path)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1" aria-label="code-block-10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1" aria-label="code-block-10-5"></a><span class="bu">print</span>(eml_result[<span class="st">"path"</span>])</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1" aria-label="code-block-10-6"></a><span class="bu">print</span>(eml_result[<span class="st">"eml_version"</span>])</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1" aria-label="code-block-10-7"></a><span class="bu">print</span>(eml_result[<span class="st">"validation"</span>])</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-4-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-4-Spreadsheet">
+<p>Spreadsheet software can be used to complete and review the SDP
+metadata and <code>eml-mapping.yml</code>, but it does not run the EML
+schema validator. When you are ready for export, open the same package
+folder in either code lane and run its exporter; the reviewed package
+remains the source state.</p>
+</div>
+</div>
+</div>
 <p>The default output is <code>metadata/eml.xml</code>. An identical
 existing file is an idempotent success. A different existing file is
-protected unless you deliberately pass <code>overwrite = TRUE</code>
-after reviewing why the bytes changed.</p>
+protected unless you deliberately pass <code>overwrite = TRUE</code> /
+<code>overwrite=True</code> after reviewing why the bytes changed.</p>
 </section><section><h2 class="section-heading" id="preview-the-knbdataone-catalog-deposit">Preview the KNB/DataONE catalog deposit<a class="anchor" aria-label="anchor" href="#preview-the-knbdataone-catalog-deposit"></a></h2>
 <hr class="half-width"><p>Use a dry run first. It creates local EML, OAI-ORE, and manifest
 artifacts, but it does not read credentials or make a network
 request:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="tabs">
+<nav><div id="nav-tab-5" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-5-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-5-R" type="button" role="tab" aria-controls="nav-tabpanel-5-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-5-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-5-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-5-Python" type="button" role="tab" aria-controls="nav-tabpanel-5-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-5-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-5-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-5-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-5-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-5-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-5" class="tab-content">
+<div id="nav-tabpanel-5-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-5-R">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -787,39 +919,112 @@ request:</p>
 <span>  public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dry_run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  knb_environment <span class="op">=</span> <span class="st">"test"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">knb_plan</span><span class="op">$</span><span class="va">status</span></span>
 <span><span class="va">knb_plan</span><span class="op">$</span><span class="va">manifest_path</span></span></code></pre>
 </div>
-<p>Review <code>publication/knb-manifest.json</code>. The expanded plan
-lists the original data resources, allowlisted canonical SDP artifacts,
-validated EML science metadata, and the OAI-ORE resource map with exact
-identifiers and checksums. It does not scan and upload arbitrary files
-from the package folder.</p>
-<p>In <code>metasalmon</code> 0.2.3 or later,
-<code>overwrite = TRUE</code> can rebuild conflicting artifacts left by
-an <strong>unpublished dry run</strong> after you correct an input. It
-cannot overwrite anything that reached DataONE; published PIDs are
-immutable and require a reviewed revision.</p>
+</div>
+<div id="nav-tabpanel-5-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-5-Python">
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" tabindex="-1" aria-label="code-block-12-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> publish_sdp_to_knb</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1" aria-label="code-block-12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1" aria-label="code-block-12-3"></a>knb_plan <span class="op">=</span> publish_sdp_to_knb(</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1" aria-label="code-block-12-4"></a>    pkg_path,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1" aria-label="code-block-12-5"></a>    public<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1" aria-label="code-block-12-6"></a>    dry_run<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1" aria-label="code-block-12-7"></a>    representation<span class="op">=</span><span class="st">"expanded"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1" aria-label="code-block-12-8"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1" aria-label="code-block-12-9"></a>    knb_environment<span class="op">=</span><span class="st">"test"</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1" aria-label="code-block-12-10"></a>)</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1" aria-label="code-block-12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a><span class="bu">print</span>(knb_plan[<span class="st">"status"</span>])</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1" aria-label="code-block-12-13"></a><span class="bu">print</span>(knb_plan[<span class="st">"manifest_path"</span>])</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-5-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-5-Spreadsheet">
+<p>Spreadsheet software cannot generate the cryptographic manifest.
+Review an instructor-provided dry-run manifest alongside the package:
+confirm the intended files, identifiers, checksums, selected
+environment, and access decision. Generate a new manifest in R or Python
+before any real deposit.</p>
+</div>
+</div>
+</div>
+<p>Review <code>publication/test/knb-manifest.json</code>. The expanded
+plan lists the original data resources, allowlisted canonical SDP
+artifacts, validated EML science metadata, and the OAI-ORE resource map
+with exact identifiers and checksums. It does not scan and upload
+arbitrary files from the package folder. The test environment is a
+rehearsal: it is non-durable, cannot be promoted into production, is
+unsuitable for sensitive data, and cannot receive a DOI.</p>
+<p><code>overwrite = TRUE</code> / <code>overwrite=True</code> can
+rebuild conflicting local artifacts left by an <strong>unpublished dry
+run</strong> after you correct an input. It cannot overwrite anything
+that reached DataONE; published PIDs are immutable and require a
+reviewed revision.</p>
 </section><section><h2 class="section-heading" id="live-upload-is-a-separate-authorized-action">Live upload is a separate authorized action<a class="anchor" aria-label="anchor" href="#live-upload-is-a-separate-authorized-action"></a></h2>
-<hr class="half-width"><p>A live call creates persistent production KNB objects even when
-<code>public = FALSE</code>. Private access is a review posture, not a
-server-side draft. The call requires:</p>
-<ul><li>the exact pre-existing dry-run plan;</li>
-<li>a short-lived DataONE JWT entered only into the current R
+<hr class="half-width"><p>A live call mutates the selected KNB environment. A production call
+creates persistent KNB objects even when <code>public = FALSE</code>;
+private access is a review posture, not a server-side draft. Rehearse
+against the test node first, then create and review a separate
+production dry-run plan before authorizing production. The production
+call requires:</p>
+<ul><li>the exact pre-existing production dry-run plan;</li>
+<li>a short-lived production DataONE JWT entered only into the current
 process;</li>
 <li>an authenticated subject matching the reviewed EML metadata
 provider;</li>
 <li>
 <code>confirm = TRUE</code>; and</li>
 <li>authority for the chosen access and redistribution decision.</li>
-</ul><div class="codewrapper sourceCode" id="cb11">
+</ul><p>The code below is intentionally display-only. It first creates the
+credential-free production plan that must be reviewed, then shows the
+separate live action. Here <code>overwrite = TRUE</code> /
+<code>overwrite=True</code> permits the planner to replace the
+unpublished standalone EML with the publication-aware EML that names the
+planned objects; it is not permission to overwrite anything already
+deposited.</p>
+<div class="tabs">
+<nav><div id="nav-tab-6" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-6-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-6-R" type="button" role="tab" aria-controls="nav-tabpanel-6-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-6-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-6-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-6-Python" type="button" role="tab" aria-controls="nav-tabpanel-6-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-6-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-6-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-6-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-6-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-6-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-6" class="tab-content">
+<div id="nav-tabpanel-6-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-6-R">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">previous_token</span> <span class="op">&lt;-</span> <span class="fu">getOption</span><span class="op">(</span><span class="st">"dataone_token"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">production_plan</span> <span class="op">&lt;-</span> <span class="fu">publish_sdp_to_knb</span><span class="op">(</span></span>
+<span>  <span class="va">pkg_path</span>,</span>
+<span>  public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dry_run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  knb_environment <span class="op">=</span> <span class="st">"production"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">production_plan</span><span class="op">$</span><span class="va">manifest_path</span></span>
+<span></span>
+<span><span class="va">previous_token</span> <span class="op">&lt;-</span> <span class="fu">getOption</span><span class="op">(</span><span class="st">"dataone_token"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">options</span><span class="op">(</span></span>
 <span>  dataone_token <span class="op">=</span> <span class="fu">rstudioapi</span><span class="fu">::</span><span class="fu">askForPassword</span><span class="op">(</span></span>
@@ -833,10 +1038,55 @@ provider;</li>
 <span>    public <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    dry_run <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    representation <span class="op">=</span> <span class="st">"expanded"</span></span>
+<span>    representation <span class="op">=</span> <span class="st">"expanded"</span>,</span>
+<span>    knb_environment <span class="op">=</span> <span class="st">"production"</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  finally <span class="op">=</span> <span class="fu">options</span><span class="op">(</span>dataone_token <span class="op">=</span> <span class="va">previous_token</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-6-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-6-Python">
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" tabindex="-1" aria-label="code-block-14-1"></a><span class="im">from</span> getpass <span class="im">import</span> getpass</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1" aria-label="code-block-14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1" aria-label="code-block-14-3"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> publish_sdp_to_knb</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1" aria-label="code-block-14-4"></a><span class="im">from</span> metasalmonpy.knb_publication <span class="im">import</span> set_dataone_token</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1" aria-label="code-block-14-5"></a></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1" aria-label="code-block-14-6"></a>production_plan <span class="op">=</span> publish_sdp_to_knb(</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1" aria-label="code-block-14-7"></a>    pkg_path,</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1" aria-label="code-block-14-8"></a>    public<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1" aria-label="code-block-14-9"></a>    dry_run<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1" aria-label="code-block-14-10"></a>    representation<span class="op">=</span><span class="st">"expanded"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1" aria-label="code-block-14-11"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1" aria-label="code-block-14-12"></a>    knb_environment<span class="op">=</span><span class="st">"production"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1" aria-label="code-block-14-13"></a>)</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1" aria-label="code-block-14-14"></a></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1" aria-label="code-block-14-15"></a><span class="bu">print</span>(production_plan[<span class="st">"manifest_path"</span>])</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1" aria-label="code-block-14-16"></a></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1" aria-label="code-block-14-17"></a>set_dataone_token(getpass(<span class="st">"Short-lived production DataONE JWT: "</span>))</span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1" aria-label="code-block-14-18"></a></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1" aria-label="code-block-14-19"></a><span class="cf">try</span>:</span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1" aria-label="code-block-14-20"></a>    publication_result <span class="op">=</span> publish_sdp_to_knb(</span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1" aria-label="code-block-14-21"></a>        pkg_path,</span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1" aria-label="code-block-14-22"></a>        public<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1" aria-label="code-block-14-23"></a>        dry_run<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1" aria-label="code-block-14-24"></a>        confirm<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1" aria-label="code-block-14-25"></a>        representation<span class="op">=</span><span class="st">"expanded"</span>,</span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1" aria-label="code-block-14-26"></a>        knb_environment<span class="op">=</span><span class="st">"production"</span>,</span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1" aria-label="code-block-14-27"></a>    )</span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1" aria-label="code-block-14-28"></a><span class="cf">finally</span>:</span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1" aria-label="code-block-14-29"></a>    set_dataone_token(<span class="va">None</span>)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-6-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-6-Spreadsheet">
+<p>Do not perform a live upload from a spreadsheet. Use the manifest as
+the approval surface, then run the exact reviewed plan in R or Python
+only when the data owner and publisher have authorized the production
+access and redistribution decision.</p>
+</div>
+</div>
 </div>
 <p>Do not place the token in a script, <code>.Renviron</code>, YAML,
 manifest, command argument, or shell history. Do not switch to
@@ -853,7 +1103,27 @@ claiming completion.</p>
 regenerate the same folder from raw data and hope the edits survive.
 Read the reviewed state, make deliberate changes in memory, and write a
 new versioned folder:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="tabs">
+<nav><div id="nav-tab-7" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-7-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-7-R" type="button" role="tab" aria-controls="nav-tabpanel-7-R" aria-selected="true">
+  <h2 class="tab-header" id="nav-tab-heading-7-R">
+  R
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-7-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-7-Python" type="button" role="tab" aria-controls="nav-tabpanel-7-Python" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-7-Python">
+  Python
+  </h2>
+</button>
+<button class="nav-link" id="nav-tab-7-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-7-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-7-Spreadsheet" aria-selected="false">
+  <h2 class="tab-header" id="nav-tab-heading-7-Spreadsheet">
+  Spreadsheet
+  </h2>
+</button>
+</div>
+</nav><div id="nav-tabContent-7" class="tab-content">
+<div id="nav-tabpanel-7-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-7-R">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -885,6 +1155,53 @@ new versioned folder:</p>
 <span>  require_iris <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
+</div>
+<div id="nav-tabpanel-7-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-7-Python">
+<div class="codewrapper sourceCode" id="cb16">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" tabindex="-1" aria-label="code-block-16-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1" aria-label="code-block-16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1" aria-label="code-block-16-3"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1" aria-label="code-block-16-4"></a>    read_salmon_datapackage,</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1" aria-label="code-block-16-5"></a>    validate_salmon_datapackage,</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1" aria-label="code-block-16-6"></a>    write_salmon_datapackage,</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1" aria-label="code-block-16-7"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1" aria-label="code-block-16-8"></a></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1" aria-label="code-block-16-9"></a>reviewed_pkg <span class="op">=</span> read_salmon_datapackage(pkg_path)</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1" aria-label="code-block-16-10"></a></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1" aria-label="code-block-16-11"></a>reviewed_dataset <span class="op">=</span> reviewed_pkg[<span class="st">"dataset"</span>].copy()</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1" aria-label="code-block-16-12"></a>reviewed_dataset.loc[:, <span class="st">"description"</span>] <span class="op">=</span> (</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1" aria-label="code-block-16-13"></a>    reviewed_dataset[<span class="st">"description"</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1" aria-label="code-block-16-14"></a>    <span class="op">+</span> <span class="st">" This version adds the reviewed 2026 return-year records."</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1" aria-label="code-block-16-15"></a>)</span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1" aria-label="code-block-16-16"></a>reviewed_pkg[<span class="st">"dataset"</span>] <span class="op">=</span> reviewed_dataset</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1" aria-label="code-block-16-17"></a></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1" aria-label="code-block-16-18"></a>v2_path <span class="op">=</span> write_salmon_datapackage(</span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1" aria-label="code-block-16-19"></a>    resources<span class="op">=</span>reviewed_pkg[<span class="st">"resources"</span>],</span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1" aria-label="code-block-16-20"></a>    dataset_meta<span class="op">=</span>reviewed_pkg[<span class="st">"dataset"</span>],</span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1" aria-label="code-block-16-21"></a>    table_meta<span class="op">=</span>reviewed_pkg[<span class="st">"tables"</span>],</span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1" aria-label="code-block-16-22"></a>    dict_df<span class="op">=</span>reviewed_pkg[<span class="st">"dictionary"</span>],</span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1" aria-label="code-block-16-23"></a>    codes<span class="op">=</span>reviewed_pkg[<span class="st">"codes"</span>],</span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1" aria-label="code-block-16-24"></a>    path<span class="op">=</span>Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"my-salmon-sdp-v2"</span>,</span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1" aria-label="code-block-16-25"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1" aria-label="code-block-16-26"></a>)</span>
+<span id="cb16-27"><a href="#cb16-27" tabindex="-1" aria-label="code-block-16-27"></a></span>
+<span id="cb16-28"><a href="#cb16-28" tabindex="-1" aria-label="code-block-16-28"></a>validate_salmon_datapackage(</span>
+<span id="cb16-29"><a href="#cb16-29" tabindex="-1" aria-label="code-block-16-29"></a>    v2_path,</span>
+<span id="cb16-30"><a href="#cb16-30" tabindex="-1" aria-label="code-block-16-30"></a>    require_iris<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb16-31"><a href="#cb16-31" tabindex="-1" aria-label="code-block-16-31"></a>)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-7-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-7-Spreadsheet">
+<p>Preserve the reviewed package unchanged. Copy it to a clearly named
+new version folder, make the deliberate metadata or data changes in that
+copy, and document what changed. Before EML export or publication, run
+strict validation against the new folder in R or Python; do not treat a
+manual copy as validated merely because its files open successfully.</p>
+</div>
+</div>
+</div>
 <p>If data columns changed, update the dictionary. If new categorical
 values appeared, update <code>codes.csv</code>. Rebuild and review
 version-specific semantic, EML, and publication artifacts; do not
@@ -914,14 +1231,14 @@ or <code>skip</code>/defer;</li>
 </ul></div>
 </div>
 </div>
-<div id="challenge-2-trace-the-publication-handoff" class="callout discussion">
+<div id="challenge-2-trace-the-publication-workflow" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-2-trace-the-publication-handoff" class="callout-inner">
+<div id="challenge-2-trace-the-publication-workflow" class="callout-inner">
 <h3 class="callout-title">Challenge 2: Trace the publication
-handoff</h3>
+workflow</h3>
 <div class="callout-content">
 <p>Using a finalized instructor-provided package or your own package
 when it is ready:</p>
@@ -1020,7 +1337,7 @@ revisions, not overwrite attempts.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-6.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-6.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-22",
+  "dateModified": "2026-08-25",
   "datePublished": "2026-08-25"
 }
 
