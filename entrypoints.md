@@ -28,17 +28,19 @@ This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards 
 
 1. `episodes/session-1.Rmd`: introduce the salmon data integration system, its SDP and software components, shared and local semantic resources, bounded contexts, and the SDP-to-EML publication direction.
 2. `episodes/session-2.Rmd`: run a prepared quickstart in the selected R, Python, or Spreadsheet lane and inspect the resulting package structure.
-3. `episodes/session-3.Rmd`: bring learner-owned single-table, multi-CSV, or multi-sheet Excel inputs into the same lanes, capture context, and protect reviewed work during reruns.
-4. `episodes/session-4.Rmd`: generate and review deterministic suggestions in R or Python, with optional bundle-aware LLM review.
+3. `episodes/session-3.Rmd`: bring learner-owned single-table, multi-CSV, or multi-sheet Excel inputs into a reproducible R or Python build script, declare context inputs, seed semantic candidates, and encode accepted review decisions for reruns.
+4. `episodes/session-4.Rmd`: use the shared NuSEDS Fraser Coho example to review one measurement IRI, one I-ADOPT decomposition, one unit, one table observation-unit IRI, and one method-code IRI, with optional bundle-aware LLM review.
 5. `episodes/session-5.Rmd`: code lists, SKOS, and local vocabulary.
 6. `episodes/session-6.Rmd`: render SMN, GCDFO, profile, or skip routes; write validated EML; preview KNB publication; and create a later version without discarding reviewed metadata.
 7. `episodes/bonus-session.Rmd`: optional concept mapping extension.
 
-## Presentation behavior
+## Styling and presentation
 
-- Sandpaper's native `group-tab` fenced div is the canonical control for synchronized R, Python, and Spreadsheet alternatives.
-- A tab group shows one software lane at a time; use the same tab labels and order wherever those alternatives recur.
-- Site presentation comes from the repository's Sandpaper/Varnish theme. Do not add a parallel CSS or JavaScript system for language selection.
+- **Canonical styling system:** author semantic Markdown in Sandpaper and use the global CSS and Bootstrap design tokens supplied by the Varnish theme. Sandpaper's native `group-tab` fenced div is the canonical control for synchronized R, Python, and Spreadsheet alternatives.
+- **Style entry pattern:** inside every `group-tab`, use third-level headings in the consistent order `### R`, `### Python`, and `### Spreadsheet`. Sandpaper preserves that heading level and Varnish's existing `h3.tab-header` rule supplies the smaller responsive label size. A tab group shows one software lane at a time.
+- **Subsections inside tabs:** Sandpaper converts every Markdown heading inside a `group-tab` into another tab button. Use an ordinary Markdown span with the theme's Bootstrap heading and display classes plus an accessible heading role (for example, `[Subsection]{.h4 .d-block role="heading" aria-level="4"}`) for a visually prominent subsection that must remain inside one software lane.
+- **Tokens:** this repository defines no custom design tokens. Colors, spacing, typography, responsive breakpoints, and tab behavior come from Varnish/Bootstrap. Theme assets under `site/docs/assets/` are generated build output and must not be edited.
+- **Inline-style policy:** do not add inline CSS, page-local `<style>` elements, template overrides, or parallel JavaScript for language selection. Prefer supported Sandpaper structure and existing Varnish rules; introduce a repository-wide stylesheet only if a future requirement cannot be expressed through those native patterns.
 - Edit learner source under `episodes/`, `learners/`, and `index.md`; never hand-edit generated files under `site/`.
 
 ## Upstream workflow sources

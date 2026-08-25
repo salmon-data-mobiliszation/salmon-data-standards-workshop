@@ -40,7 +40,7 @@ After editing the metadata files, reload and validate the current package state.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 ```r
 pkg <- read_salmon_datapackage(pkg_path)
@@ -116,7 +116,7 @@ if (nrow(gaps) == 0) {
 }
 ```
 
-## Python
+### Python
 
 ```python
 from pathlib import Path
@@ -199,7 +199,7 @@ else:
     )
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Open `semantic_suggestions.csv` and the canonical metadata CSVs. For each unresolved field or code, record the dataset, table, field, search wording, closest candidate, why it does not fit, supporting source, and proposed route (`smn`, `gcdfo`, `profile`, or defer). Keep this as a reviewable term-gap plan; spreadsheet review does not submit a request.
 
@@ -213,7 +213,7 @@ To preview the SMN and GCDFO issue bodies without posting anything:
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 ```r
 issue_preview <- if (nrow(requests) == 0) {
@@ -227,7 +227,7 @@ issue_preview <- if (nrow(requests) == 0) {
 issue_preview
 ```
 
-## Python
+### Python
 
 ```python
 from metasalmonpy import submit_term_request_issues
@@ -247,7 +247,7 @@ else:
 print(issue_preview)
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Use the term-gap plan as the draft review surface. A maintainer can turn an approved row into the relevant repository's request format later; nothing in the spreadsheet posts an issue or mints a term.
 
@@ -285,19 +285,19 @@ Strict validation is the final gate. Use the language lane you selected earlier.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 ```r
 validate_salmon_datapackage(pkg_path, require_iris = TRUE)
 ```
 
-## Python
+### Python
 
 ```python
 validate_salmon_datapackage(pkg_path, require_iris=True)
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Spreadsheet review can resolve metadata content, but it cannot execute the strict validator. Run this final gate against the same package folder in R or Python before EML export or publication.
 
@@ -367,7 +367,7 @@ When the SDP, its semantic-review evidence, and the sidecar are final, use your 
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 
 ``` r
@@ -378,7 +378,7 @@ eml_result$eml_version
 eml_result$validation
 ```
 
-## Python
+### Python
 
 ```python
 from metasalmonpy import write_eml_from_sdp
@@ -390,7 +390,7 @@ print(eml_result["eml_version"])
 print(eml_result["validation"])
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Spreadsheet software can be used to complete and review the SDP metadata and `eml-mapping.yml`, but it does not run the EML schema validator. When you are ready for export, open the same package folder in either code lane and run its exporter; the reviewed package remains the source state.
 
@@ -404,7 +404,7 @@ Use a dry run first. It creates local EML, OAI-ORE, and manifest artifacts, but 
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 
 ``` r
@@ -421,7 +421,7 @@ knb_plan$status
 knb_plan$manifest_path
 ```
 
-## Python
+### Python
 
 ```python
 from metasalmonpy import publish_sdp_to_knb
@@ -439,7 +439,7 @@ print(knb_plan["status"])
 print(knb_plan["manifest_path"])
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Spreadsheet software cannot generate the cryptographic manifest. Review an instructor-provided dry-run manifest alongside the package: confirm the intended files, identifiers, checksums, selected environment, and access decision. Generate a new manifest in R or Python before any real deposit.
 
@@ -463,7 +463,7 @@ The code below is intentionally display-only. It first creates the credential-fr
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 
 ``` r
@@ -499,7 +499,7 @@ tryCatch(
 )
 ```
 
-## Python
+### Python
 
 ```python
 from getpass import getpass
@@ -533,7 +533,7 @@ finally:
     set_dataone_token(None)
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Do not perform a live upload from a spreadsheet. Use the manifest as the approval surface, then run the exact reviewed plan in R or Python only when the data owner and publisher have authorized the production access and redistribution decision.
 
@@ -549,7 +549,7 @@ After people have edited package metadata over time, do not regenerate the same 
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
-## R
+### R
 
 ```r
 reviewed_pkg <- read_salmon_datapackage(pkg_path)
@@ -581,7 +581,7 @@ validate_salmon_datapackage(
 )
 ```
 
-## Python
+### Python
 
 ```python
 from pathlib import Path
@@ -617,7 +617,7 @@ validate_salmon_datapackage(
 )
 ```
 
-## Spreadsheet
+### Spreadsheet
 
 Preserve the reviewed package unchanged. Copy it to a clearly named new version folder, make the deliberate metadata or data changes in that copy, and document what changed. Before EML export or publication, run strict validation against the new folder in R or Python; do not treat a manual copy as validated merely because its files open successfully.
 

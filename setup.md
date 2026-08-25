@@ -16,7 +16,9 @@ Bring one small salmon-related dataset if you can. Supported workshop inputs are
 
 A **flat file** stores one two-dimensional table: one header row, then records in rows and fields in columns. A dataset can contain more than one table, so several flat files or workbook sheets can still belong to one dataset.
 
-This tabular workflow does not directly support multidimensional formats such as NetCDF, rasters, or nested scientific arrays. Convert an appropriate tabular slice only when that conversion preserves the meaning of the source; otherwise use a workflow designed for that format.
+Bring data that are already organized as tidy rectangular tables. In [Wickham's tidy-data formulation](https://doi.org/10.18637/jss.v059.i10), each variable is a column, each observation is a row, and each value is a cell. Before the workshop, prepare a tabular copy without spreadsheet presentation features such as merged cells, repeated title or header rows, notes above the header, or subtotals mixed into the observations. If one sheet contains unrelated tables, separate them into distinct tables, while retaining the original source outside the workshop project.
+
+NetCDF, rasters, and other multidimensional scientific formats are outside the scope of this workshop. Do not flatten a NetCDF file and present it as though it were an ordinary spreadsheet or the complete source dataset. Use a format-specific packaging workflow instead, or bring a separately reviewed and documented tabular derivative whose meaning is preserved.
 
 Choose files you are allowed to discuss in the workshop. If you do not have a suitable dataset, use the included example unchanged.
 
@@ -36,8 +38,8 @@ Create these subfolders before the package demo:
 ```text
 salmon-data-workshop/
   salmon-data-workshop.Rproj  # R users
-  raw_data/                   # unchanged source CSVs or workbooks
-  context/                    # codebooks, methods, caveats, provenance
+  raw_data/                   # unchanged input data and context files
+  scripts/                    # reproducible R or Python build scripts
   output/                     # generated Salmon Data Packages
 ```
 
@@ -46,11 +48,11 @@ From R, you can create the folders with:
 ```r
 # Run these commands from the open RStudio Project root.
 dir.create("raw_data", showWarnings = FALSE)
-dir.create("context", showWarnings = FALSE)
+dir.create("scripts", showWarnings = FALSE)
 dir.create("output", showWarnings = FALSE)
 ```
 
-Copy your source files into `raw_data/` and leave those copies unchanged. Do not put source files directly inside a generated package.
+Copy the prepared dataset and its context files—such as codebooks, methods, caveats, and provenance notes—into `raw_data/` and leave those inputs unchanged while building the package. R users will put the reproducible build in `scripts/build_sdp.R`; Python users will use `scripts/build_sdp.py`. Spreadsheet users do not need a build script. Do not put source files directly inside a generated package.
 
 ## Software options
 
@@ -152,8 +154,9 @@ You do not need to read ontology documentation before attending. Session 1 expla
 Before the demo, confirm that:
 
 - the project is open at `salmon-data-workshop/`;
-- `raw_data/`, `context/`, and `output/` exist;
-- your source files are under `raw_data/`, or you plan to run the included example unchanged; and
+- `raw_data/`, `scripts/`, and `output/` exist;
+- your prepared data and context files are under `raw_data/`, or you plan to run the included example unchanged;
+- R or Python users have a place for `scripts/build_sdp.R` or `scripts/build_sdp.py`;
 - R users can load `metasalmon` with `library(metasalmon)`;
 - Python users can import `metasalmonpy`; and
 - spreadsheet users can open the blank SDP CSV template in their editor.

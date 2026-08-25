@@ -35,7 +35,7 @@ Use this when the goal is awareness and recruitment.
 | --- | --- |
 | 0:00-0:05 | State the reviewed SDP -> valid EML -> guarded catalog end goal |
 | 0:05-0:15 | Introduce the integration system and give a high-level tour of the SDP structure |
-| 0:15-0:20 | Confirm the project plus `raw_data/`, `context/`, and `output/` before code |
+| 0:15-0:20 | Confirm the project plus `raw_data/`, `scripts/`, and `output/` before code |
 | 0:20-0:32 | Run the simple `create_sdp()` template-generation example; point out the R, Python, and spreadsheet lanes |
 | 0:32-0:45 | Review key field definitions, one measurement row, and one code row |
 | 0:45-0:55 | Trace SDP fields into EML and inspect a credential-free KNB dry-run manifest |
@@ -48,7 +48,7 @@ Do not teach ontology editing in the one-hour format.
 | Time | Activity |
 | --- | --- |
 | 0:00-0:30 | Integration-system overview, dataset/table/flat-file definitions, and high-level package anatomy |
-| 0:30-0:45 | Create/open project and confirm `raw_data/`, `context/`, and `output/` |
+| 0:30-0:45 | Create/open project and confirm `raw_data/`, `scripts/`, and `output/` |
 | 0:45-1:45 | Generate the simple example, then create or inspect learner-owned draft packages |
 | 1:45-2:15 | Peer review package structure |
 | 2:15-3:15 | Write metadata and README/context notes |
@@ -90,7 +90,7 @@ After Session 2:
 
 After Session 3:
 
-- Are source data under `raw_data/`, context under `context/`, and generated packages under `output/`?
+- Are the prepared source data and context files together and unchanged under `raw_data/`, reproducible R/Python builds under `scripts/`, and generated packages under `output/`?
 - Can learners read their own file using a path relative to the project root?
 - If the dataset has several tables, did they pass a named list and preserve each table's row meaning?
 - Is enough context present to prevent obvious misuse?
@@ -131,7 +131,7 @@ After Sessions 5 and 6:
 Before delivery:
 
 - choose a small example dataset;
-- prepare an RStudio Project containing `raw_data/`, `context/`, and `output/`;
+- prepare an RStudio Project containing `raw_data/`, `scripts/`, and `output/`, with the example's data and context inputs together under `raw_data/` and an R or Python build script under `scripts/`;
 - prepare one current, already-created SDP folder for later review after the high-level system overview and quickstart;
 - install the latest R/`metasalmon` and Python/`metasalmonpy` packages and verify the examples in each language being taught;
 - prepare one measurement mapping example;
