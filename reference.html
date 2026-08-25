@@ -380,11 +380,16 @@ before the workshop.</p>
 </section><section><h2 class="section-heading" id="recommended-project-layout">Recommended project layout<a class="anchor" aria-label="anchor" href="#recommended-project-layout"></a></h2>
 <hr class="half-width"><pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj
-  raw_data/       # unchanged source CSVs or workbooks
-  context/        # codebooks, methods, caveats, provenance
+  raw_data/       # unchanged input data, codebooks, and context files
+  scripts/        # build_sdp.R or build_sdp.py for code-based lanes
   output/         # generated Salmon Data Packages</code></pre>
-<p>R users should open the <code>.Rproj</code> file. Every lane should
-work from the same project root and use paths relative to it.</p>
+<p>R users should open the <code>.Rproj</code> file. Keep the prepared
+dataset and all context inputs together under <code>raw_data/</code> and
+unchanged while the package is built. Every lane should work from the
+same project root and use paths relative to it. R and Python users put
+the reproducible build in <code>scripts/build_sdp.R</code> or
+<code>scripts/build_sdp.py</code>; spreadsheet users omit the
+script.</p>
 </section><section><h2 class="section-heading" id="dataset-table-and-supported-inputs">Dataset, table, and supported inputs<a class="anchor" aria-label="anchor" href="#dataset-table-and-supported-inputs"></a></h2>
 <hr class="half-width"><p><strong>Dataset</strong> means the complete collection being
 documented. It can contain one or many related tables.</p>

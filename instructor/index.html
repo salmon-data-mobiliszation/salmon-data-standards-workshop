@@ -356,11 +356,11 @@ quickstart data show me?<br>What input structures does
  3. <a href="session-3.html">Use Your Data and Capture Context</a>
 </td>
 <td>
-How do I replace the included example with my own source files?<br>How
-do I represent one dataset that contains several CSVs or workbook
-sheets?<br>What belongs in structured metadata versus a README/context
-note?<br>How can context improve later term mapping without being sent
-to an unapproved service?
+How do I replace the included example with my own source and context
+files?<br>How do I represent one dataset that contains several CSVs or
+workbook sheets?<br>What belongs in structured metadata versus a
+README/context note?<br>How do I start a reproducible package-building
+script without automatically invoking an LLM?
 </td>
 </tr><tr><td>
 <span class="visually-hidden">Duration: </span>03h 55m
@@ -369,9 +369,9 @@ to an unapproved service?
  4. <a href="session-4.html">Review Terms and Measurement Meanings</a>
 </td>
 <td>
-Which terms should we map first?<br>How do I decide whether a suggested
-IRI is good enough to keep?<br>What does I-ADOPT clarify for
-measurement columns?
+How do we keep semantic review small enough to finish in the
+workshop?<br>How do I decide whether a suggested IRI is good enough to
+keep?<br>What does I-ADOPT clarify for measurement columns?
 </td>
 </tr><tr><td>
 <span class="visually-hidden">Duration: </span>05h 30m
@@ -441,11 +441,21 @@ sheets/tables.</li>
 header row, then records in rows and fields in columns. A dataset can
 contain more than one table, so several flat files or workbook sheets
 can still belong to one dataset.</p>
-<p>This tabular workflow does not directly support multidimensional
-formats such as NetCDF, rasters, or nested scientific arrays. Convert an
-appropriate tabular slice only when that conversion preserves the
-meaning of the source; otherwise use a workflow designed for that
-format.</p>
+<p>Bring data that are already organized as tidy rectangular tables. In
+<a href="https://doi.org/10.18637/jss.v059.i10" class="external-link">Wickham’s tidy-data
+formulation</a>, each variable is a column, each observation is a row,
+and each value is a cell. Before the workshop, prepare a tabular copy
+without spreadsheet presentation features such as merged cells, repeated
+title or header rows, notes above the header, or subtotals mixed into
+the observations. If one sheet contains unrelated tables, separate them
+into distinct tables, while retaining the original source outside the
+workshop project.</p>
+<p>NetCDF, rasters, and other multidimensional scientific formats are
+outside the scope of this workshop. Do not flatten a NetCDF file and
+present it as though it were an ordinary spreadsheet or the complete
+source dataset. Use a format-specific packaging workflow instead, or
+bring a separately reviewed and documented tabular derivative whose
+meaning is preserved.</p>
 <p>Choose files you are allowed to discuss in the workshop. If you do
 not have a suitable dataset, use the included example unchanged.</p>
 <p>Before the workshop, try to identify:</p>
@@ -461,8 +471,8 @@ same layout.</p>
 <p>Create these subfolders before the package demo:</p>
 <pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj  # R users
-  raw_data/                   # unchanged source CSVs or workbooks
-  context/                    # codebooks, methods, caveats, provenance
+  raw_data/                   # unchanged input data and context files
+  scripts/                    # reproducible R or Python build scripts
   output/                     # generated Salmon Data Packages</code></pre>
 <p>From R, you can create the folders with:</p>
 <div class="codewrapper sourceCode" id="cb2">
@@ -471,12 +481,16 @@ same layout.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run these commands from the open RStudio Project root.</span></span>
 <span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"raw_data"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"context"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"scripts"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"output"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Copy your source files into <code>raw_data/</code> and leave those
-copies unchanged. Do not put source files directly inside a generated
-package.</p>
+<p>Copy the prepared dataset and its context files—such as codebooks,
+methods, caveats, and provenance notes—into <code>raw_data/</code> and
+leave those inputs unchanged while building the package. R users will
+put the reproducible build in <code>scripts/build_sdp.R</code>; Python
+users will use <code>scripts/build_sdp.py</code>. Spreadsheet users do
+not need a build script. Do not put source files directly inside a
+generated package.</p>
 </section><section><h2 class="section-heading" id="software-options">Software options<a class="anchor" aria-label="anchor" href="#software-options"></a></h2>
 <hr class="half-width"><p>Choose the R, Python, or spreadsheet lane that fits how you work.
 Code-driven activities include examples in both R and Python, with
@@ -616,10 +630,13 @@ it.</p>
 <hr class="half-width"><p>Before the demo, confirm that:</p>
 <ul><li>the project is open at <code>salmon-data-workshop/</code>;</li>
 <li>
-<code>raw_data/</code>, <code>context/</code>, and
+<code>raw_data/</code>, <code>scripts/</code>, and
 <code>output/</code> exist;</li>
-<li>your source files are under <code>raw_data/</code>, or you plan to
-run the included example unchanged; and</li>
+<li>your prepared data and context files are under
+<code>raw_data/</code>, or you plan to run the included example
+unchanged;</li>
+<li>R or Python users have a place for <code>scripts/build_sdp.R</code>
+or <code>scripts/build_sdp.py</code>;</li>
 <li>R users can load <code>metasalmon</code> with
 <code>library(metasalmon)</code>;</li>
 <li>Python users can import <code>metasalmonpy</code>; and</li>

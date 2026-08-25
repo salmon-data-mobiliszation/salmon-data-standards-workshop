@@ -228,9 +228,9 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#replace-the-quickstart-with-your-data">Replace the quickstart with your data</a></li>
-<li><a href="#create-the-package-in-your-software-lane">Create the package in your software lane</a></li>
-<li><a href="#protect-reviewed-work-when-you-rerun">Protect reviewed work when you rerun</a></li>
-<li><a href="#read-supporting-context-separately">Read supporting context separately</a></li>
+<li><a href="#create-the-sdp-using-a-reproducible-script">Create the SDP Using a Reproducible Script</a></li>
+<li><a href="#grow-the-script-into-the-review-workflow">Grow the script into the review workflow</a></li>
+<li><a href="#use-supporting-context-in-the-same-script">Use supporting context in the same script</a></li>
 <li><a href="#context-is-part-of-the-data">Context is part of the data</a></li>
 <li><a href="#what-goes-where">What goes where?</a></li>
 <li><a href="#description-checks">Description checks</a></li>
@@ -356,13 +356,14 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How do I replace the included example with my own source files?</li>
+<ul><li>How do I replace the included example with my own source and context
+files?</li>
 <li>How do I represent one dataset that contains several CSVs or
 workbook sheets?</li>
 <li>What belongs in structured metadata versus a README/context
 note?</li>
-<li>How can context improve later term mapping without being sent to an
-unapproved service?</li>
+<li>How do I start a reproducible package-building script without
+automatically invoking an LLM?</li>
 </ul></div>
 </div>
 </div>
@@ -372,107 +373,105 @@ unapproved service?</li>
 <h3 class="card-title">Objectives</h3>
 <ul><li>Read learner-owned source files from <code>raw_data/</code> using
 reproducible relative paths.</li>
+<li>Build an R or Python script that recreates the package from its
+declared inputs.</li>
 <li>Pass either one table or a named list of tables to
 <code>create_sdp()</code>.</li>
 <li>Keep a multi-table dataset distinct from its individual tables.</li>
 <li>Write useful dataset, table, column, and code descriptions.</li>
-<li>Draft a compact README/context note for reviewers and mapping
-tools.</li>
+<li>Make context available to an optional, explicitly enabled LLM
+review.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
 <section><h2 class="section-heading" id="replace-the-quickstart-with-your-data">Replace the quickstart with your data<a class="anchor" aria-label="anchor" href="#replace-the-quickstart-with-your-data"></a></h2>
-<hr class="half-width"><p>Session 2 used an included dataset, ID, table name, and output
-folder. For personal data, replace all four together:</p>
-<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Example element</th>
-<th>Replace with</th>
-</tr></thead><tbody><tr><td>Bundled <code>system.file()</code> path</td>
-<td>A relative path under <code>raw_data/</code>
-</td>
-</tr><tr><td>
-<code>fraser_coho</code> object</td>
-<td>An object name that describes your table</td>
-</tr><tr><td>
-<code>fraser-coho-example</code> and <code>escapement</code>
-IDs</td>
-<td>Stable IDs for your dataset and table</td>
-</tr><tr><td><code>output/fraser-coho-example-sdp</code></td>
-<td>A new output folder for your package</td>
-</tr></tbody></table><p>Keep source files unchanged under <code>raw_data/</code>, explanatory
-files under <code>context/</code>, and generated packages under
+<hr class="half-width"><p>Session 2 used the dataset included with the package. For this
+chapter, put your new dataset and its supporting context files in
+<code>raw_data/</code>. Context can include an existing data dictionary,
+methods notes, or a short description of caveats that are not visible in
+the table itself.</p>
+<p>Create <code>scripts/build_sdp.R</code> if you are working in R, or
+<code>scripts/build_sdp.py</code> if you are working in Python. Run the
+script from the workshop project root. From this point onward, that
+script records how the unchanged source tables and context inputs in
+<code>raw_data/</code> become a Salmon Data Package under
 <code>output/</code>.</p>
-<pre class="text"><code>salmon-data-workshop/
-  salmon-data-workshop.Rproj
-  raw_data/
-    my-salmon-data.csv
-    related-sites.csv
-    my-salmon-workbook.xlsx
-  context/
-    source-data-dictionary.csv
-    methods-and-caveats.md
-  output/
-    my-salmon-sdp/</code></pre>
-<p>Use only files you are allowed to bring to the workshop. Do not send
-source or context files to an external service unless that use is
-approved.</p>
-</section><section><h2 class="section-heading" id="create-the-package-in-your-software-lane">Create the package in your software lane<a class="anchor" aria-label="anchor" href="#create-the-package-in-your-software-lane"></a></h2>
-<hr class="half-width"><p>Choose the same R, Python, or Spreadsheet lane you used for the
-quickstart. The code lanes create the package for you. The spreadsheet
-lane shows how to assemble the same standard files manually when you
-cannot run either package.</p>
+</section><section><h2 class="section-heading" id="create-the-sdp-using-a-reproducible-script">Create the SDP Using a Reproducible Script<a class="anchor" aria-label="anchor" href="#create-the-sdp-using-a-reproducible-script"></a></h2>
+<hr class="half-width"><p>The R and Python tabs show the same reproducible workflow. The
+Spreadsheet tab explains how to prepare the corresponding tidy inputs
+and inspect the package structure.</p>
 <div class="tabs">
 <nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
 <button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
-  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  <h3 class="tab-header" id="nav-tab-heading-1-R">
   R
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  <h3 class="tab-header" id="nav-tab-heading-1-Python">
   Python
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  <h3 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
   Spreadsheet
-  </h2>
+  </h3>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
 <div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
-<p><strong>One flat CSV</strong></p>
-<p>This is the direct replacement for the quickstart:</p>
-<div class="codewrapper sourceCode" id="cb2">
+<p>Put this shared setup at the top of <code>scripts/build_sdp.R</code>.
+Listing the context files now makes the optional LLM-assisted route
+available later, but the <code>FALSE</code> toggle keeps that route
+off.</p>
+<div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">metasalmon</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Read one rectangular source table from the project folder.</span></span>
-<span><span class="va">own_data_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
-<span>  <span class="st">"raw_data"</span>,</span>
-<span>  <span class="st">"my-salmon-data.csv"</span></span>
+<span><span class="co"># Keep this FALSE unless you deliberately choose the optional LLM-assisted route.</span></span>
+<span><span class="va">use_llm_review</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
+<span></span>
+<span><span class="co"># Pass file paths, not data frames or parsed document objects, as LLM context.</span></span>
+<span><span class="va">context_files</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"source-data-dictionary.csv"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"methods-and-caveats.md"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">own_data</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
-<span>  <span class="va">own_data_path</span>,</span>
+<span><span class="co"># Declared inputs should fail clearly rather than disappear from the workflow.</span></span>
+<span><span class="fu">stopifnot</span><span class="op">(</span><span class="fu">all</span><span class="op">(</span><span class="fu">file.exists</span><span class="op">(</span><span class="va">context_files</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">One flat
+CSV</span></p>
+<p>This is the direct replacement for the quickstart:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Read one rectangular source table from the project folder.</span></span>
+<span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
+<span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"my-salmon-data.csv"</span><span class="op">)</span>,</span>
 <span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Use a new output path. Do not overwrite the reviewed example or an older package.</span></span>
+<span><span class="co"># Rebuild writer-managed package files from the script on each run.</span></span>
 <span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
-<span>  <span class="va">own_data</span>,</span>
+<span>  <span class="va">my_data</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-salmon-sdp"</span><span class="op">)</span>,</span>
 <span>  dataset_id <span class="op">=</span> <span class="st">"my-salmon-data"</span>,</span>
 <span>  table_id <span class="op">=</span> <span class="st">"observations"</span>,</span>
-<span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  seed_semantics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  llm_assess <span class="op">=</span> <span class="va">use_llm_review</span>,</span>
+<span>  llm_context_files <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">use_llm_review</span><span class="op">)</span> <span class="va">context_files</span> <span class="kw">else</span> <span class="cn">NULL</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p><strong>Several CSV tables in one dataset</strong></p>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">Several
+CSV tables in one dataset</span></p>
 <p>A dataset can contain several related tables. Read each one, give
 each a safe unique <code>table_id</code>, and pass a <strong>named
 list</strong>. The list names become table IDs, so use letters, numbers,
@@ -497,16 +496,19 @@ and underscores rather than workbook display labels with spaces.</p>
 <span>  <span class="va">tables</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-multi-table-sdp"</span><span class="op">)</span>,</span>
 <span>  dataset_id <span class="op">=</span> <span class="st">"my-multi-table-dataset"</span>,</span>
-<span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  seed_semantics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  llm_assess <span class="op">=</span> <span class="va">use_llm_review</span>,</span>
+<span>  llm_context_files <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">use_llm_review</span><span class="op">)</span> <span class="va">context_files</span> <span class="kw">else</span> <span class="cn">NULL</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>The package gets one <code>dataset.csv</code> row, two
 <code>tables.csv</code> rows, one data CSV per table, and one
 <code>column_dictionary.csv</code> row for every column in both
 tables.</p>
-<p><strong>Excel workbook with several sheets</strong></p>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">Excel
+workbook with several sheets</span></p>
 <p>An Excel workbook is a container. Read each rectangular sheet
 separately and pass the resulting named list just as you did for several
 CSVs.</p>
@@ -535,16 +537,17 @@ CSVs.</p>
 <span>  <span class="va">workbook_tables</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"my-workbook-sdp"</span><span class="op">)</span>,</span>
 <span>  dataset_id <span class="op">=</span> <span class="st">"my-workbook-dataset"</span>,</span>
-<span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  seed_semantics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  llm_assess <span class="op">=</span> <span class="va">use_llm_review</span>,</span>
+<span>  llm_context_files <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">use_llm_review</span><span class="op">)</span> <span class="va">context_files</span> <span class="kw">else</span> <span class="cn">NULL</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
-<p>Start Python from the same project root and use the same folder
-layout.</p>
-<p><strong>One flat CSV</strong></p>
+<p>Put this shared setup at the top of <code>scripts/build_sdp.py</code>
+and run it from the same project root.</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -554,202 +557,350 @@ layout.</p>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1" aria-label="code-block-5-4"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> create_sdp</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1" aria-label="code-block-5-5"></a></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1" aria-label="code-block-5-6"></a>project_root <span class="op">=</span> Path.cwd()</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1" aria-label="code-block-5-7"></a>own_data_path <span class="op">=</span> project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"my-salmon-data.csv"</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1" aria-label="code-block-5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1" aria-label="code-block-5-9"></a>own_data <span class="op">=</span> pd.read_csv(own_data_path)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1" aria-label="code-block-5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1" aria-label="code-block-5-8"></a><span class="co"># Keep this False unless you deliberately choose the optional LLM-assisted route.</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1" aria-label="code-block-5-9"></a>use_llm_review <span class="op">=</span> <span class="va">False</span></span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1" aria-label="code-block-5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1" aria-label="code-block-5-11"></a>pkg_path <span class="op">=</span> create_sdp(</span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1" aria-label="code-block-5-12"></a>    own_data,</span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1" aria-label="code-block-5-13"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-salmon-sdp"</span>,</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a>    dataset_id<span class="op">=</span><span class="st">"my-salmon-data"</span>,</span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a>    table_id<span class="op">=</span><span class="st">"observations"</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1" aria-label="code-block-5-16"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1" aria-label="code-block-5-17"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1" aria-label="code-block-5-18"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1" aria-label="code-block-5-19"></a>)</span></code></pre>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1" aria-label="code-block-5-11"></a><span class="co"># Pass file paths, not DataFrames or parsed document objects, as LLM context.</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1" aria-label="code-block-5-12"></a>context_files <span class="op">=</span> [</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1" aria-label="code-block-5-13"></a>    project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"source-data-dictionary.csv"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1" aria-label="code-block-5-14"></a>    project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"methods-and-caveats.md"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1" aria-label="code-block-5-15"></a>]</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1" aria-label="code-block-5-16"></a></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1" aria-label="code-block-5-17"></a>missing_context_files <span class="op">=</span> [</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1" aria-label="code-block-5-18"></a>    path <span class="cf">for</span> path <span class="kw">in</span> context_files <span class="cf">if</span> <span class="kw">not</span> path.is_file()</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1" aria-label="code-block-5-19"></a>]</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1" aria-label="code-block-5-20"></a><span class="cf">if</span> missing_context_files:</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1" aria-label="code-block-5-21"></a>    <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1" aria-label="code-block-5-22"></a>        <span class="ss">f"Missing declared context files: </span><span class="sc">{</span>missing_context_files<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1" aria-label="code-block-5-23"></a>    )</span></code></pre>
 </div>
-<p><strong>Several CSV tables in one dataset</strong></p>
-<p>Use a dictionary whose keys are safe table IDs and whose values are
-pandas DataFrames.</p>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">One flat
+CSV</span></p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a>tables <span class="op">=</span> {</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a>    <span class="st">"escapement"</span>: pd.read_csv(</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a>        project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"escapement.csv"</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a>    ),</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a>    <span class="st">"sites"</span>: pd.read_csv(</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a>        project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"sites.csv"</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>    ),</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a>}</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a>multi_pkg_path <span class="op">=</span> create_sdp(</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a>    tables,</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1" aria-label="code-block-6-12"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-multi-table-sdp"</span>,</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1" aria-label="code-block-6-13"></a>    dataset_id<span class="op">=</span><span class="st">"my-multi-table-dataset"</span>,</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1" aria-label="code-block-6-14"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1" aria-label="code-block-6-15"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1" aria-label="code-block-6-16"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1" aria-label="code-block-6-17"></a>)</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a>my_data <span class="op">=</span> pd.read_csv(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a>    project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"my-salmon-data.csv"</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a>pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a>    my_data,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-salmon-sdp"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a>    dataset_id<span class="op">=</span><span class="st">"my-salmon-data"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a>    table_id<span class="op">=</span><span class="st">"observations"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a>    seed_semantics<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a>    llm_assess<span class="op">=</span>use_llm_review,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1" aria-label="code-block-6-12"></a>    llm_context_files<span class="op">=</span>context_files <span class="cf">if</span> use_llm_review <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1" aria-label="code-block-6-13"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1" aria-label="code-block-6-14"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1" aria-label="code-block-6-15"></a>)</span></code></pre>
 </div>
-<p><strong>Excel workbook with several sheets</strong></p>
-<p>Pandas uses <code>openpyxl</code> to read <code>.xlsx</code>
-workbooks. Read each rectangular sheet explicitly and give it a safe
-table ID.</p>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">Several
+CSV tables in one dataset</span></p>
+<p>Use a dictionary whose keys are safe table IDs and whose values are
+pandas DataFrames.</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>workbook_path <span class="op">=</span> project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"my-salmon-workbook.xlsx"</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a>workbook_tables <span class="op">=</span> {</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a>    <span class="st">"escapement"</span>: pd.read_excel(</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1" aria-label="code-block-7-5"></a>        workbook_path,</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1" aria-label="code-block-7-6"></a>        sheet_name<span class="op">=</span><span class="st">"Escapement"</span>,</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>tables <span class="op">=</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a>    <span class="st">"escapement"</span>: pd.read_csv(</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a>        project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"escapement.csv"</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a>    ),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1" aria-label="code-block-7-5"></a>    <span class="st">"sites"</span>: pd.read_csv(</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1" aria-label="code-block-7-6"></a>        project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"sites.csv"</span></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1" aria-label="code-block-7-7"></a>    ),</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1" aria-label="code-block-7-8"></a>    <span class="st">"sites"</span>: pd.read_excel(</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a>        workbook_path,</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1" aria-label="code-block-7-10"></a>        sheet_name<span class="op">=</span><span class="st">"Sites"</span>,</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1" aria-label="code-block-7-11"></a>    ),</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1" aria-label="code-block-7-12"></a>}</span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1" aria-label="code-block-7-13"></a></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1" aria-label="code-block-7-14"></a>workbook_pkg_path <span class="op">=</span> create_sdp(</span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1" aria-label="code-block-7-15"></a>    workbook_tables,</span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1" aria-label="code-block-7-16"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-workbook-sdp"</span>,</span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1" aria-label="code-block-7-17"></a>    dataset_id<span class="op">=</span><span class="st">"my-workbook-dataset"</span>,</span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1" aria-label="code-block-7-18"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1" aria-label="code-block-7-19"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1" aria-label="code-block-7-20"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1" aria-label="code-block-7-21"></a>)</span></code></pre>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1" aria-label="code-block-7-8"></a>}</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1" aria-label="code-block-7-10"></a>multi_pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1" aria-label="code-block-7-11"></a>    tables,</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1" aria-label="code-block-7-12"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-multi-table-sdp"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1" aria-label="code-block-7-13"></a>    dataset_id<span class="op">=</span><span class="st">"my-multi-table-dataset"</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1" aria-label="code-block-7-14"></a>    seed_semantics<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1" aria-label="code-block-7-15"></a>    llm_assess<span class="op">=</span>use_llm_review,</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1" aria-label="code-block-7-16"></a>    llm_context_files<span class="op">=</span>context_files <span class="cf">if</span> use_llm_review <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1" aria-label="code-block-7-17"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1" aria-label="code-block-7-18"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1" aria-label="code-block-7-19"></a>)</span></code></pre>
+</div>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">Excel
+workbook with several sheets</span></p>
+<p>Pandas uses <code>openpyxl</code> to read <code>.xlsx</code>
+workbooks. Read each rectangular sheet explicitly and give it a safe
+table ID.</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a>workbook_path <span class="op">=</span> project_root <span class="op">/</span> <span class="st">"raw_data"</span> <span class="op">/</span> <span class="st">"my-salmon-workbook.xlsx"</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1" aria-label="code-block-8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1" aria-label="code-block-8-3"></a>workbook_tables <span class="op">=</span> {</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1" aria-label="code-block-8-4"></a>    <span class="st">"escapement"</span>: pd.read_excel(</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1" aria-label="code-block-8-5"></a>        workbook_path,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1" aria-label="code-block-8-6"></a>        sheet_name<span class="op">=</span><span class="st">"Escapement"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1" aria-label="code-block-8-7"></a>    ),</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1" aria-label="code-block-8-8"></a>    <span class="st">"sites"</span>: pd.read_excel(</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1" aria-label="code-block-8-9"></a>        workbook_path,</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1" aria-label="code-block-8-10"></a>        sheet_name<span class="op">=</span><span class="st">"Sites"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1" aria-label="code-block-8-11"></a>    ),</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1" aria-label="code-block-8-12"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1" aria-label="code-block-8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1" aria-label="code-block-8-14"></a>workbook_pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1" aria-label="code-block-8-15"></a>    workbook_tables,</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1" aria-label="code-block-8-16"></a>    path<span class="op">=</span>project_root <span class="op">/</span> <span class="st">"output"</span> <span class="op">/</span> <span class="st">"my-workbook-sdp"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1" aria-label="code-block-8-17"></a>    dataset_id<span class="op">=</span><span class="st">"my-workbook-dataset"</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1" aria-label="code-block-8-18"></a>    seed_semantics<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1" aria-label="code-block-8-19"></a>    llm_assess<span class="op">=</span>use_llm_review,</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1" aria-label="code-block-8-20"></a>    llm_context_files<span class="op">=</span>context_files <span class="cf">if</span> use_llm_review <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1" aria-label="code-block-8-21"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1" aria-label="code-block-8-22"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1" aria-label="code-block-8-23"></a>)</span></code></pre>
 </div>
 </div>
 <div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">One flat
+CSV</span></p>
 <p>Copy the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
 SDP CSV template</a> into a new folder under <code>output/</code>. Keep
 your original table unchanged under <code>raw_data/</code>, save a
 rectangular CSV copy under the package’s <code>data/</code> folder, and
 fill the canonical CSVs under <code>metadata/</code> using the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
 field reference</a>.</p>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">Several
+CSV tables in one dataset</span></p>
 <p>For a dataset with several tables, add one row per table to
 <code>metadata/tables.csv</code>, one dictionary row per column to
 <code>metadata/column_dictionary.csv</code>, and one CSV per table under
 <code>data/</code>. Preserve the template headers and folder structure.
 Spreadsheet review can prepare the package metadata, but it does not run
 automated validation.</p>
+<p><span class="h4 d-block mt-4" role="heading" aria-level="4">Excel
+workbook with several sheets</span></p>
+<p>Treat each rectangular sheet as a separate table in the same dataset.
+Give every sheet a stable table ID, save it as a CSV under
+<code>data/</code>, and describe its columns in
+<code>metadata/column_dictionary.csv</code>.</p>
 </div>
 </div>
 </div>
 <p>The R and Python implementations create the same current SDP
 structure. The spreadsheet lane edits that structure directly.</p>
-<p>Clean presentation artifacts before packaging: repeated headings,
-merged cells, notes above the header, subtotals, and two unrelated
-tables on one sheet are not one flat table. Keep the original workbook
-unchanged in <code>raw_data/</code> and document any transformation.</p>
-<p>NetCDF is not an Excel-like multi-table container. Its dimensions,
-coordinates, arrays, and attributes are not preserved by this workflow,
-so do not present a flattened extract as the complete source unless that
-derivative has been explicitly reviewed and described.</p>
-</section><section><h2 class="section-heading" id="protect-reviewed-work-when-you-rerun">Protect reviewed work when you rerun<a class="anchor" aria-label="anchor" href="#protect-reviewed-work-when-you-rerun"></a></h2>
-<hr class="half-width"><p>The safest rule is: <strong>generate a draft once, then treat the
-package you review as the current source state</strong>.</p>
-<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Situation</th>
-<th>Safe action</th>
-</tr></thead><tbody><tr><td>The output folder does not exist</td>
-<td>Generate the draft with <code>overwrite = FALSE</code> /
-<code>overwrite=False</code>.</td>
-</tr><tr><td>A disposable quickstart folder already exists</td>
-<td>Use a new output name, or deliberately remove that disposable
-example outside the lesson before recreating it.</td>
-</tr><tr><td>You manually edited <code>metadata/*.csv</code>
-</td>
-<td>Do not rerun <code>create_sdp()</code> on the same path. Continue
-with <code>read_salmon_datapackage()</code> and validation.</td>
-</tr><tr><td>You need a new version after review</td>
-<td>Read the reviewed package and write a new versioned folder; Chapter
-6 shows this workflow.</td>
-</tr></tbody></table><p>In both language implementations, <code>overwrite = TRUE</code> /
-<code>overwrite=True</code> re-infers and replaces files owned by the
-package writer. That can erase manual edits to canonical metadata or
-declared data resources. <code>prune = TRUE</code> /
-<code>prune=True</code> is more destructive because it empties the
-package before rewriting it. Neither option replaces a versioned backup
-or Git history.</p>
-</section><section><h2 class="section-heading" id="read-supporting-context-separately">Read supporting context separately<a class="anchor" aria-label="anchor" href="#read-supporting-context-separately"></a></h2>
+<p>Before building the package, make each working table tidy: one
+variable per column, one observation per row, and one value per cell.
+Keep the original files in <code>raw_data/</code>, and perform any
+reshaping or removal of decorative spreadsheet content in the
+reproducible script so another person can see exactly how the
+package-ready table was produced.</p>
+</section><section><h2 class="section-heading" id="grow-the-script-into-the-review-workflow">Grow the script into the review workflow<a class="anchor" aria-label="anchor" href="#grow-the-script-into-the-review-workflow"></a></h2>
+<hr class="half-width"><p>From this chapter onward, the files in <code>raw_data/</code> and the
+script are the reproducible source for the derived package. Do not rely
+on an unexplained manual edit inside <code>output/</code>: encode each
+accepted cleaning or metadata decision in the script so it is reapplied
+on the next run.</p>
+<p>The data transformations and accepted review decisions can therefore
+be rerun deterministically from declared inputs. Candidate lookup is a
+separate step: shared vocabularies can evolve, so a later search may
+return different candidates. Record the IRI decisions you accept in the
+script rather than depending on a live search to make the same choice
+forever.</p>
+<p>The complete workflow will grow across the remaining chapters:</p>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Stage</th>
+<th>Reproducible action</th>
+</tr></thead><tbody><tr><td>Read and transform</td>
+<td>Read unchanged source files and express every tidy-data
+transformation in R or Python.</td>
+</tr><tr><td>Create a draft</td>
+<td>Run <code>create_sdp()</code> with
+<code>seed_semantics = TRUE</code> /
+<code>seed_semantics=True</code>.</td>
+</tr><tr><td>Review</td>
+<td>Read the package with <code>read_salmon_datapackage()</code> and
+represent accepted metadata decisions as code.</td>
+</tr><tr><td>Write</td>
+<td>Write the reviewed state with
+<code>write_salmon_datapackage()</code>. Use a versioned path when the
+earlier package must be preserved.</td>
+</tr><tr><td>Check</td>
+<td>Run <code>validate_salmon_datapackage()</code> and fix the script or
+its declared inputs, then rerun.</td>
+</tr></tbody></table><p>In this script-backed workflow, <code>overwrite = TRUE</code> /
+<code>overwrite=True</code> deliberately rebuilds writer-managed files
+and then reapplies the decisions encoded below it. A manual edit that
+exists only in the generated folder can be replaced, which is why
+reviewed changes belong in the script or in a preserved, versioned
+package. Do not use <code>prune = TRUE</code> / <code>prune=True</code>
+here.</p>
+<p>The following small extension shows the pattern. Later chapters add
+semantic review, EML export, and publication steps to the same
+workflow.</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h3 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h3>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reviewed_pkg</span> <span class="op">&lt;-</span> <span class="fu">read_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Replace this example with the description agreed during review.</span></span>
+<span><span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dataset</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span></span>
+<span>    description <span class="op">=</span> <span class="st">"A reviewed description of this salmon dataset."</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">write_salmon_datapackage</span><span class="op">(</span></span>
+<span>  resources <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">resources</span>,</span>
+<span>  dataset_meta <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dataset</span>,</span>
+<span>  table_meta <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">tables</span>,</span>
+<span>  dict <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">dictionary</span>,</span>
+<span>  codes <span class="op">=</span> <span class="va">reviewed_pkg</span><span class="op">$</span><span class="va">codes</span>,</span>
+<span>  path <span class="op">=</span> <span class="va">pkg_path</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">validate_salmon_datapackage</span><span class="op">(</span></span>
+<span>  <span class="va">pkg_path</span>,</span>
+<span>  require_iris <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" tabindex="-1" aria-label="code-block-10-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1" aria-label="code-block-10-2"></a>    read_salmon_datapackage,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1" aria-label="code-block-10-3"></a>    validate_salmon_datapackage,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1" aria-label="code-block-10-4"></a>    write_salmon_datapackage,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1" aria-label="code-block-10-5"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1" aria-label="code-block-10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1" aria-label="code-block-10-7"></a>reviewed_pkg <span class="op">=</span> read_salmon_datapackage(pkg_path)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1" aria-label="code-block-10-8"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1" aria-label="code-block-10-9"></a><span class="co"># Replace this example with the description agreed during review.</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1" aria-label="code-block-10-10"></a>reviewed_dataset <span class="op">=</span> reviewed_pkg[<span class="st">"dataset"</span>].copy()</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1" aria-label="code-block-10-11"></a>reviewed_dataset.loc[:, <span class="st">"description"</span>] <span class="op">=</span> (</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1" aria-label="code-block-10-12"></a>    <span class="st">"A reviewed description of this salmon dataset."</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1" aria-label="code-block-10-13"></a>)</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1" aria-label="code-block-10-14"></a></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1" aria-label="code-block-10-15"></a>pkg_path <span class="op">=</span> write_salmon_datapackage(</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1" aria-label="code-block-10-16"></a>    resources<span class="op">=</span>reviewed_pkg[<span class="st">"resources"</span>],</span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1" aria-label="code-block-10-17"></a>    dataset_meta<span class="op">=</span>reviewed_dataset,</span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1" aria-label="code-block-10-18"></a>    table_meta<span class="op">=</span>reviewed_pkg[<span class="st">"tables"</span>],</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1" aria-label="code-block-10-19"></a>    dict_df<span class="op">=</span>reviewed_pkg[<span class="st">"dictionary"</span>],</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1" aria-label="code-block-10-20"></a>    codes<span class="op">=</span>reviewed_pkg[<span class="st">"codes"</span>],</span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1" aria-label="code-block-10-21"></a>    path<span class="op">=</span>pkg_path,</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1" aria-label="code-block-10-22"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1" aria-label="code-block-10-23"></a>)</span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1" aria-label="code-block-10-24"></a></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1" aria-label="code-block-10-25"></a>validate_salmon_datapackage(</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1" aria-label="code-block-10-26"></a>    pkg_path,</span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1" aria-label="code-block-10-27"></a>    require_iris<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1" aria-label="code-block-10-28"></a>)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<p>Record each manual transformation and metadata decision in a review
+log beside the package. A spreadsheet-only workflow is inspectable but
+is not a fully executable rebuild; use the R or Python helper workflow
+when you need to recreate and validate the package end to end.</p>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="use-supporting-context-in-the-same-script">Use supporting context in the same script<a class="anchor" aria-label="anchor" href="#use-supporting-context-in-the-same-script"></a></h2>
 <hr class="half-width"><p>Source dictionaries, methods notes, and provenance documents help
 people review the inferred templates. Reading these files does not
 automatically merge them into <code>column_dictionary.csv</code>; you
 still decide which statements belong in canonical metadata.</p>
 <div class="tabs">
-<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
-<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
-  <h2 class="tab-header" id="nav-tab-heading-2-R">
+<nav><div id="nav-tab-3" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-3-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-R" type="button" role="tab" aria-controls="nav-tabpanel-3-R" aria-selected="true">
+  <h3 class="tab-header" id="nav-tab-heading-3-R">
   R
-  </h2>
+  </h3>
 </button>
-<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+<button class="nav-link" id="nav-tab-3-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Python" type="button" role="tab" aria-controls="nav-tabpanel-3-Python" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-3-Python">
   Python
-  </h2>
+  </h3>
 </button>
-<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+<button class="nav-link" id="nav-tab-3-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-3-Spreadsheet" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-3-Spreadsheet">
   Spreadsheet
-  </h2>
+  </h3>
 </button>
 </div>
-</nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
-<div class="codewrapper sourceCode" id="cb8">
+</nav><div id="nav-tabContent-3" class="tab-content">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-3-R">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">source_dictionary</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
-<span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"context"</span>, <span class="st">"source-data-dictionary.csv"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"source-data-dictionary.csv"</span><span class="op">)</span>,</span>
 <span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">context_note</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_file</span><span class="op">(</span></span>
-<span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"context"</span>, <span class="st">"methods-and-caveats.md"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">context_paths</span> <span class="op">&lt;-</span> <span class="fu">list.files</span><span class="op">(</span></span>
-<span>  <span class="st">"context"</span>,</span>
-<span>  full.names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  recursive <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"methods-and-caveats.md"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
-<div class="codewrapper sourceCode" id="cb9">
+<div id="nav-tabpanel-3-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Python">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" tabindex="-1" aria-label="code-block-9-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1" aria-label="code-block-9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1" aria-label="code-block-9-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1" aria-label="code-block-9-4"></a></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1" aria-label="code-block-9-5"></a>context_dir <span class="op">=</span> Path(<span class="st">"context"</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1" aria-label="code-block-9-6"></a></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1" aria-label="code-block-9-7"></a>source_dictionary <span class="op">=</span> pd.read_csv(</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1" aria-label="code-block-9-8"></a>    context_dir <span class="op">/</span> <span class="st">"source-data-dictionary.csv"</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1" aria-label="code-block-9-9"></a>)</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1" aria-label="code-block-9-10"></a>context_note <span class="op">=</span> (</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1" aria-label="code-block-9-11"></a>    context_dir <span class="op">/</span> <span class="st">"methods-and-caveats.md"</span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1" aria-label="code-block-9-12"></a>).read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1" aria-label="code-block-9-13"></a>context_paths <span class="op">=</span> <span class="bu">sorted</span>(</span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1" aria-label="code-block-9-14"></a>    path <span class="cf">for</span> path <span class="kw">in</span> context_dir.rglob(<span class="st">"*"</span>) <span class="cf">if</span> path.is_file()</span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1" aria-label="code-block-9-15"></a>)</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" tabindex="-1" aria-label="code-block-12-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1" aria-label="code-block-12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1" aria-label="code-block-12-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1" aria-label="code-block-12-4"></a></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1" aria-label="code-block-12-5"></a>raw_data_dir <span class="op">=</span> Path(<span class="st">"raw_data"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1" aria-label="code-block-12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1" aria-label="code-block-12-7"></a>source_dictionary <span class="op">=</span> pd.read_csv(</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1" aria-label="code-block-12-8"></a>    raw_data_dir <span class="op">/</span> <span class="st">"source-data-dictionary.csv"</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1" aria-label="code-block-12-9"></a>)</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1" aria-label="code-block-12-10"></a>context_note <span class="op">=</span> (</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1" aria-label="code-block-12-11"></a>    raw_data_dir <span class="op">/</span> <span class="st">"methods-and-caveats.md"</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a>).read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
-<p>Open the source dictionary beside the package metadata, and keep the
-methods/caveats note visible while reviewing dataset, table, column, and
-code descriptions. Copy only reviewed statements into canonical
-metadata; preserve longer narrative context in the note.</p>
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Spreadsheet">
+<p>Open the source dictionary and methods/caveats note from
+<code>raw_data/</code> beside the package metadata. Copy only reviewed
+statements into canonical metadata; preserve longer narrative context in
+the note.</p>
 </div>
 </div>
 </div>
-<p><code>context_paths</code> can be reviewed directly and can later be
-supplied to optional, approved LLM-assisted review. Merely creating the
-vector does not send the files anywhere.</p>
+<p><code>llm_context_files</code> accepts local file paths, not the
+parsed <code>source_dictionary</code> or <code>context_note</code>
+objects. With <code>use_llm_review</code> set to <code>FALSE</code>, the
+examples pass <code>NULL</code> / <code>None</code>, so neither
+implementation warns about ignored context or contacts an LLM provider.
+Turning the toggle on explicitly passes the listed files to the
+configured provider; make that choice only after selecting the provider
+and model and confirming that the files are appropriate to send.</p>
+<p><code>seed_semantics = TRUE</code> / <code>seed_semantics=True</code>
+still performs semantic candidate lookup and may contact configured
+vocabulary services. That lookup is separate from LLM assessment.
+<code>check_updates = FALSE</code> / <code>check_updates=False</code>
+disables the unrelated package-version lookup so the script does not
+make that extra request.</p>
 </section><section><h2 class="section-heading" id="context-is-part-of-the-data">Context is part of the data<a class="anchor" aria-label="anchor" href="#context-is-part-of-the-data"></a></h2>
 <hr class="half-width"><p>Many data holders hesitate to share data because they know the
 spreadsheet can be misread. A Salmon Data Package should make that local
@@ -815,14 +966,19 @@ data</h3>
 <p>Choose the single-CSV, multi-CSV, or workbook pattern that matches
 your source.</p>
 <p>Then:</p>
-<ol style="list-style-type: decimal"><li>confirm the dataset ID and every table ID;</li>
-<li>generate a package at a new path with
-<code>overwrite = FALSE</code>;</li>
-<li>improve the dataset description, one table description, and five
-column descriptions; and</li>
-<li>write one README/context-note section.</li>
-</ol><p>Mark anything you are unsure about as a reviewer question rather than
-hiding it.</p>
+<ol style="list-style-type: decimal"><li>add the source and context paths to <code>scripts/build_sdp.R</code>
+or <code>scripts/build_sdp.py</code>;</li>
+<li>confirm the dataset ID and every table ID;</li>
+<li>run the script with <code>use_llm_review</code> set to
+<code>FALSE</code> and <code>seed_semantics</code> set to
+<code>TRUE</code>;</li>
+<li>encode an improved dataset description, one table description, and
+five column descriptions in the script; and</li>
+<li>write one README/context-note section and add its path to
+<code>context_files</code>.</li>
+</ol><p>Rerun the script to confirm that the declared inputs and encoded
+review decisions recreate the package. Mark anything you are unsure
+about as a reviewer question rather than hiding it.</p>
 </div>
 </div>
 </div>
@@ -833,12 +989,14 @@ hiding it.</p>
 <span class="callout-header">Key Points</span>
 <div class="callout-inner">
 <div class="callout-content">
-<ul><li>Replace the example input, IDs, object name, and output path
-together.</li>
+<ul><li>Keep raw data, context inputs, transformations, and reviewed
+metadata decisions connected through one reproducible script.</li>
 <li>One dataset may contain one or many tables; pass multiple tables as
 a named list.</li>
-<li>CSV and rectangular Excel sheets are supported after import to data
-frames; NetCDF is not directly supported.</li>
+<li>Prepare tidy rectangular inputs: one variable per column, one
+observation per row, and one value per cell.</li>
+<li>Semantic seeding is enabled in this chapter; LLM assessment remains
+a separate, explicit opt-in.</li>
 <li>Metadata tables hold structured facts; README/context notes hold
 narrative caveats.</li>
 <li>A clear description is more valuable than an uncertain link to a

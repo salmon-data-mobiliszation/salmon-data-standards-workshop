@@ -437,7 +437,7 @@ SDP structure</td>
 <tr>
 <td>0:15-0:20</td>
 <td>Confirm the project plus <code>raw_data/</code>,
-<code>context/</code>, and <code>output/</code> before code</td>
+<code>scripts/</code>, and <code>output/</code> before code</td>
 </tr>
 <tr>
 <td>0:20-0:32</td>
@@ -482,7 +482,7 @@ and high-level package anatomy</td>
 <tr>
 <td>0:30-0:45</td>
 <td>Create/open project and confirm <code>raw_data/</code>,
-<code>context/</code>, and <code>output/</code>
+<code>scripts/</code>, and <code>output/</code>
 </td>
 </tr>
 <tr>
@@ -559,8 +559,9 @@ suggestions?</li>
 </ul>
 <p>After Session 3:</p>
 <ul>
-<li>Are source data under <code>raw_data/</code>, context under
-<code>context/</code>, and generated packages under
+<li>Are the prepared source data and context files together and
+unchanged under <code>raw_data/</code>, reproducible R/Python builds
+under <code>scripts/</code>, and generated packages under
 <code>output/</code>?</li>
 <li>Can learners read their own file using a path relative to the
 project root?</li>
@@ -625,7 +626,9 @@ objects; use a local dry run for teaching.</li>
 <ul>
 <li>choose a small example dataset;</li>
 <li>prepare an RStudio Project containing <code>raw_data/</code>,
-<code>context/</code>, and <code>output/</code>;</li>
+<code>scripts/</code>, and <code>output/</code>, with the example’s data
+and context inputs together under <code>raw_data/</code> and an R or
+Python build script under <code>scripts/</code>;</li>
 <li>prepare one current, already-created SDP folder for later review
 after the high-level system overview and quickstart;</li>
 <li>install the latest R/<code>metasalmon</code> and

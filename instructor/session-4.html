@@ -236,8 +236,8 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#do-not-map-everything-first">Do not map everything first</a></li>
-<li><a href="#generate-suggestions-for-the-current-package">Generate suggestions for the current package</a></li>
+        <ul><li><a href="#keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded</a></li>
+<li><a href="#generate-suggestions-for-the-shared-example">Generate suggestions for the shared example</a></li>
 <li><a href="#treat-suggestions-as-drafts">Treat suggestions as drafts</a></li>
 <li><a href="#measurement-semantics">Measurement semantics</a></li>
 <li><a href="#optional-llm-assisted-bundle-review">Optional LLM-assisted bundle review</a></li>
@@ -354,7 +354,8 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>Which terms should we map first?</li>
+<ul><li>How do we keep semantic review small enough to finish in the
+workshop?</li>
 <li>How do I decide whether a suggested IRI is good enough to keep?</li>
 <li>What does I-ADOPT clarify for measurement columns?</li>
 </ul></div>
@@ -364,51 +365,82 @@
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Review suggested <code>term_iri</code> values without treating them
-as final.</li>
-<li>Prioritize measurements, units, observation units, and important
-categorical code lists.</li>
-<li>Decompose a measurement using SDP semantic fields without confusing
-units or methods with I-ADOPT roles.</li>
+<ul><li>Review one suggested <code>term_iri</code> for the Fraser Coho
+measurement without treating it as final.</li>
+<li>Decompose that same measurement once using the SDP’s I-ADOPT
+fields.</li>
+<li>Review one unit IRI, one table observation-unit IRI, and one
+method-code IRI without confusing those links with I-ADOPT roles.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="do-not-map-everything-first">Do not map everything first<a class="anchor" aria-label="anchor" href="#do-not-map-everything-first"></a></h2>
-<hr class="half-width"><p>The package does not need an IRI for every field. Start with fields
-where shared meaning changes whether data can be compared:</p>
-<ul><li>measurement variables;</li>
-<li>units;</li>
-<li>observation units, meaning what each row is about;</li>
-<li>categorical code lists that are reused or high-risk;</li>
-<li>fields that carry important constraints, such as origin, life stage,
-method, or inclusion rules.</li>
-</ul><p>Administrative IDs, file names, local notes, and one-off workflow
-fields can often rely on clear descriptions.</p>
-</section><section><h2 class="section-heading" id="generate-suggestions-for-the-current-package">Generate suggestions for the current package<a class="anchor" aria-label="anchor" href="#generate-suggestions-for-the-current-package"></a></h2>
-<hr class="half-width"><p>If you used the fast <code>seed_semantics = FALSE</code> classroom
-path, generate candidates now from the package you reviewed. If semantic
-seeding was enabled during <code>create_sdp()</code>, the package-root
+<section><h2 class="section-heading" id="keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded<a class="anchor" aria-label="anchor" href="#keep-the-workshop-semantic-review-bounded"></a></h2>
+<hr class="half-width"><p>In this workshop, we will not try to map every column. Everyone will
+use the NuSEDS Fraser Coho escapement example for one shared
+semantic-review exercise, even if you are also building a package from
+your own data. That gives the room one case to discuss and keeps the
+decisions small enough to finish.</p>
+<p>We will review exactly these linked decisions:</p>
+<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Decision</th>
+<th>SDP destination</th>
+<th>Shared Fraser Coho example</th>
+</tr></thead><tbody><tr><td>One complete measurement-variable IRI</td>
+<td><code>column_dictionary.csv$term_iri</code></td>
+<td><code>NATURAL_SPAWNERS_TOTAL</code></td>
+</tr><tr><td>One I-ADOPT decomposition</td>
+<td>
+<code>property_iri</code>, <code>entity_iri</code>, and optional
+<code>constraint_iri</code> on that same dictionary row</td>
+<td>abundance for natural-origin salmon in a conservation unit</td>
+</tr><tr><td>One simple unit</td>
+<td><code>column_dictionary.csv$unit_iri</code></td>
+<td>individuals</td>
+</tr><tr><td>What each table row represents</td>
+<td><code>tables.csv$observation_unit_iri</code></td>
+<td>an escapement estimate</td>
+</tr><tr><td>One method</td>
+<td>
+<code>codes.csv$term_iri</code> for one <code>ESTIMATE_METHOD</code>
+value</td>
+<td><code>Area Under the Curve</code></td>
+</tr></tbody></table><p>The method is a code-level example because the NuSEDS estimate method
+varies by row. It is not part of the I-ADOPT decomposition.
+Administrative IDs, file names, local notes, and the other categorical
+code lists can rely on clear descriptions for now and be mapped in a
+later review.</p>
+</section><section><h2 class="section-heading" id="generate-suggestions-for-the-shared-example">Generate suggestions for the shared example<a class="anchor" aria-label="anchor" href="#generate-suggestions-for-the-shared-example"></a></h2>
+<hr class="half-width"><p>Continue with the NuSEDS Fraser Coho package from Session 2, even if
+you created another package from your own data in Session 3. The
+quickstart used <code>seed_semantics = FALSE</code>, so generate
+candidates now from the metadata you reviewed. If semantic seeding was
+already enabled for this package, its package-root
 <code>semantic_suggestions.csv</code> contains the original evidence;
-rerunning after your metadata edits searches only from the current
-package state.</p>
+rerunning after metadata edits searches from the current package
+state.</p>
+<p>The code below subsets the metadata before lookup, so deterministic
+search runs only for the shared measurement and table target. The
+<code>Area Under the Curve</code> method row is populated by the
+deterministic NuSEDS crosswalk during package creation, so this lesson
+reads and reviews that row instead of searching every method code
+again.</p>
 <div class="tabs">
 <nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
 <button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
-  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  <h3 class="tab-header" id="nav-tab-heading-1-R">
   R
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  <h3 class="tab-header" id="nav-tab-heading-1-Python">
   Python
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  <h3 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
   Spreadsheet
-  </h2>
+  </h3>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
@@ -417,143 +449,162 @@ package state.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="fu">read_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">example_pkg_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
+<span>  <span class="st">"output"</span>,</span>
+<span>  <span class="st">"fraser-coho-example-sdp"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="fu">read_salmon_datapackage</span><span class="op">(</span><span class="va">example_pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">measurement_dict</span> <span class="op">&lt;-</span> <span class="va">pkg</span><span class="op">$</span><span class="va">dictionary</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span></span>
+<span>    <span class="va">column_name</span> <span class="op">==</span> <span class="st">"NATURAL_SPAWNERS_TOTAL"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">shared_table</span> <span class="op">&lt;-</span> <span class="va">pkg</span><span class="op">$</span><span class="va">tables</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">table_id</span> <span class="op">==</span> <span class="st">"escapement"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">reviewed_dict</span> <span class="op">&lt;-</span> <span class="fu">suggest_semantics</span><span class="op">(</span></span>
 <span>  df <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">resources</span>,</span>
-<span>  dict <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">dictionary</span>,</span>
-<span>  codes <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">codes</span>,</span>
-<span>  table_meta <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">tables</span>,</span>
-<span>  dataset_meta <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">dataset</span></span>
+<span>  dict <span class="op">=</span> <span class="va">measurement_dict</span>,</span>
+<span>  table_meta <span class="op">=</span> <span class="va">shared_table</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">suggestions</span> <span class="op">&lt;-</span> <span class="fu">attr</span><span class="op">(</span><span class="va">reviewed_dict</span>, <span class="st">"semantic_suggestions"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">suggestions</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">target_scope</span> <span class="op">==</span> <span class="st">"column"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">bounded_suggestions</span> <span class="op">&lt;-</span> <span class="va">suggestions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span></span>
+<span>    <span class="op">(</span></span>
+<span>      <span class="va">target_scope</span> <span class="op">==</span> <span class="st">"column"</span> <span class="op">&amp;</span></span>
+<span>        <span class="va">column_name</span> <span class="op">==</span> <span class="st">"NATURAL_SPAWNERS_TOTAL"</span> <span class="op">&amp;</span></span>
+<span>        <span class="va">dictionary_role</span> <span class="op">%in%</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>          <span class="st">"variable"</span>,</span>
+<span>          <span class="st">"property"</span>,</span>
+<span>          <span class="st">"entity"</span>,</span>
+<span>          <span class="st">"constraint"</span>,</span>
+<span>          <span class="st">"unit"</span></span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|</span></span>
+<span>      <span class="op">(</span></span>
+<span>        <span class="va">target_scope</span> <span class="op">==</span> <span class="st">"table"</span> <span class="op">&amp;</span></span>
+<span>          <span class="va">target_sdp_field</span> <span class="op">==</span> <span class="st">"observation_unit_iri"</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span></span>
+<span>    <span class="va">target_scope</span>,</span>
 <span>    <span class="va">column_name</span>,</span>
 <span>    <span class="va">dictionary_role</span>,</span>
+<span>    <span class="va">target_sdp_field</span>,</span>
 <span>    <span class="va">label</span>,</span>
 <span>    <span class="va">iri</span>,</span>
 <span>    <span class="va">source</span>,</span>
 <span>    <span class="va">definition</span></span>
-<span>  <span class="op">)</span></span></code></pre>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">method_example</span> <span class="op">&lt;-</span> <span class="va">pkg</span><span class="op">$</span><span class="va">codes</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span></span>
+<span>    <span class="va">column_name</span> <span class="op">==</span> <span class="st">"ESTIMATE_METHOD"</span>,</span>
+<span>    <span class="va">code_value</span> <span class="op">==</span> <span class="st">"Area Under the Curve"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span></span>
+<span>    <span class="va">column_name</span>,</span>
+<span>    <span class="va">code_value</span>,</span>
+<span>    <span class="va">term_iri</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">bounded_suggestions</span></span>
+<span><span class="va">method_example</span></span></code></pre>
 </div>
 </div>
 <div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a>    read_salmon_datapackage,</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a>    suggest_semantics,</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>pkg <span class="op">=</span> read_salmon_datapackage(pkg_path)</span>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>    read_salmon_datapackage,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a>    suggest_semantics,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>)</span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>reviewed_dict <span class="op">=</span> suggest_semantics(</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>    df<span class="op">=</span>pkg[<span class="st">"resources"</span>],</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>    dict_df<span class="op">=</span>pkg[<span class="st">"dictionary"</span>],</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a>    codes<span class="op">=</span>pkg[<span class="st">"codes"</span>],</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>    table_meta<span class="op">=</span>pkg[<span class="st">"tables"</span>],</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1" aria-label="code-block-2-13"></a>    dataset_meta<span class="op">=</span>pkg[<span class="st">"dataset"</span>],</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1" aria-label="code-block-2-14"></a>)</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1" aria-label="code-block-2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1" aria-label="code-block-2-16"></a>suggestions <span class="op">=</span> reviewed_dict.attrs[<span class="st">"semantic_suggestions"</span>]</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1" aria-label="code-block-2-17"></a></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1" aria-label="code-block-2-18"></a>column_suggestions <span class="op">=</span> suggestions.loc[</span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1" aria-label="code-block-2-19"></a>    suggestions[<span class="st">"target_scope"</span>].eq(<span class="st">"column"</span>),</span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1" aria-label="code-block-2-20"></a>    [</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1" aria-label="code-block-2-21"></a>        <span class="st">"column_name"</span>,</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1" aria-label="code-block-2-22"></a>        <span class="st">"dictionary_role"</span>,</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1" aria-label="code-block-2-23"></a>        <span class="st">"label"</span>,</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1" aria-label="code-block-2-24"></a>        <span class="st">"iri"</span>,</span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1" aria-label="code-block-2-25"></a>        <span class="st">"source"</span>,</span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1" aria-label="code-block-2-26"></a>        <span class="st">"definition"</span>,</span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1" aria-label="code-block-2-27"></a>    ],</span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1" aria-label="code-block-2-28"></a>]</span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1" aria-label="code-block-2-29"></a></span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1" aria-label="code-block-2-30"></a><span class="bu">print</span>(column_suggestions)</span></code></pre>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>example_pkg_path <span class="op">=</span> Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"fraser-coho-example-sdp"</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>pkg <span class="op">=</span> read_salmon_datapackage(example_pkg_path)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>measurement_dict <span class="op">=</span> pkg[<span class="st">"dictionary"</span>].loc[</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1" aria-label="code-block-2-13"></a>    pkg[<span class="st">"dictionary"</span>][<span class="st">"column_name"</span>].eq(<span class="st">"NATURAL_SPAWNERS_TOTAL"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1" aria-label="code-block-2-14"></a>]</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1" aria-label="code-block-2-15"></a>shared_table <span class="op">=</span> pkg[<span class="st">"tables"</span>].loc[</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1" aria-label="code-block-2-16"></a>    pkg[<span class="st">"tables"</span>][<span class="st">"table_id"</span>].eq(<span class="st">"escapement"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1" aria-label="code-block-2-17"></a>]</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1" aria-label="code-block-2-18"></a></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1" aria-label="code-block-2-19"></a>reviewed_dict <span class="op">=</span> suggest_semantics(</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1" aria-label="code-block-2-20"></a>    df<span class="op">=</span>pkg[<span class="st">"resources"</span>],</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1" aria-label="code-block-2-21"></a>    dict_df<span class="op">=</span>measurement_dict,</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1" aria-label="code-block-2-22"></a>    table_meta<span class="op">=</span>shared_table,</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1" aria-label="code-block-2-23"></a>)</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1" aria-label="code-block-2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1" aria-label="code-block-2-25"></a>suggestions <span class="op">=</span> reviewed_dict.attrs[<span class="st">"semantic_suggestions"</span>]</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1" aria-label="code-block-2-26"></a></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1" aria-label="code-block-2-27"></a>measurement_targets <span class="op">=</span> (</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1" aria-label="code-block-2-28"></a>    suggestions[<span class="st">"target_scope"</span>].eq(<span class="st">"column"</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1" aria-label="code-block-2-29"></a>    <span class="op">&amp;</span> suggestions[<span class="st">"column_name"</span>].eq(<span class="st">"NATURAL_SPAWNERS_TOTAL"</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1" aria-label="code-block-2-30"></a>    <span class="op">&amp;</span> suggestions[<span class="st">"dictionary_role"</span>].isin(</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1" aria-label="code-block-2-31"></a>        [<span class="st">"variable"</span>, <span class="st">"property"</span>, <span class="st">"entity"</span>, <span class="st">"constraint"</span>, <span class="st">"unit"</span>]</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1" aria-label="code-block-2-32"></a>    )</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1" aria-label="code-block-2-33"></a>)</span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1" aria-label="code-block-2-34"></a>table_target <span class="op">=</span> (</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1" aria-label="code-block-2-35"></a>    suggestions[<span class="st">"target_scope"</span>].eq(<span class="st">"table"</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1" aria-label="code-block-2-36"></a>    <span class="op">&amp;</span> suggestions[<span class="st">"target_sdp_field"</span>].eq(<span class="st">"observation_unit_iri"</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1" aria-label="code-block-2-37"></a>)</span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1" aria-label="code-block-2-38"></a></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1" aria-label="code-block-2-39"></a>bounded_suggestions <span class="op">=</span> suggestions.loc[</span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1" aria-label="code-block-2-40"></a>    measurement_targets <span class="op">|</span> table_target,</span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1" aria-label="code-block-2-41"></a>    [</span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1" aria-label="code-block-2-42"></a>        <span class="st">"target_scope"</span>,</span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1" aria-label="code-block-2-43"></a>        <span class="st">"column_name"</span>,</span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1" aria-label="code-block-2-44"></a>        <span class="st">"dictionary_role"</span>,</span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1" aria-label="code-block-2-45"></a>        <span class="st">"target_sdp_field"</span>,</span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1" aria-label="code-block-2-46"></a>        <span class="st">"label"</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1" aria-label="code-block-2-47"></a>        <span class="st">"iri"</span>,</span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1" aria-label="code-block-2-48"></a>        <span class="st">"source"</span>,</span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1" aria-label="code-block-2-49"></a>        <span class="st">"definition"</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1" aria-label="code-block-2-50"></a>    ],</span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1" aria-label="code-block-2-51"></a>]</span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1" aria-label="code-block-2-52"></a></span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1" aria-label="code-block-2-53"></a>method_example <span class="op">=</span> pkg[<span class="st">"codes"</span>].loc[</span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1" aria-label="code-block-2-54"></a>    pkg[<span class="st">"codes"</span>][<span class="st">"column_name"</span>].eq(<span class="st">"ESTIMATE_METHOD"</span>)</span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1" aria-label="code-block-2-55"></a>    <span class="op">&amp;</span> pkg[<span class="st">"codes"</span>][<span class="st">"code_value"</span>].eq(<span class="st">"Area Under the Curve"</span>),</span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1" aria-label="code-block-2-56"></a>    [<span class="st">"column_name"</span>, <span class="st">"code_value"</span>, <span class="st">"term_iri"</span>],</span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1" aria-label="code-block-2-57"></a>]</span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1" aria-label="code-block-2-58"></a></span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1" aria-label="code-block-2-59"></a><span class="bu">print</span>(bounded_suggestions)</span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1" aria-label="code-block-2-60"></a><span class="bu">print</span>(method_example)</span></code></pre>
 </div>
 </div>
 <div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
 <p>Open an instructor-prepared <code>semantic_suggestions.csv</code>
-beside the package metadata. Filter to the field or code you are
-reviewing, then compare each candidate label and definition with the
-source documentation and the data holder’s explanation. Record
+beside the NuSEDS Fraser Coho package metadata. Filter to
+<code>NATURAL_SPAWNERS_TOTAL</code> and the table observation-unit row.
+Then inspect the <code>Area Under the Curve</code> row in
+<code>metadata/codes.csv</code>. Compare each IRI, label, and definition
+with the source documentation and the data holder’s explanation. Record
 <strong>keep</strong>, <strong>replace</strong>,
 <strong>remove</strong>, or <strong>defer</strong>; opening the CSV does
 not accept a suggestion or prove that a link is correct.</p>
 </div>
 </div>
 </div>
-<p>Vocabulary lookup can take a few minutes. For a live workshop,
-instructors can prepare this output in advance. Omitting
+<p>Vocabulary lookup can take a few minutes. Omitting
 <code>sources</code> uses role-aware defaults. If you supply
 <code>sources</code> explicitly, current <code>metasalmon</code> and
 <code>metasalmonpy</code> treat the vector as a strict allowlist for the
 initial search and any LLM-requested bounded retry.</p>
-<p>Vocabulary lookup can fail independently of returning zero matches.
-If a result is unexpectedly empty, inspect a focused search before
-declaring a vocabulary gap:</p>
-<div class="tabs">
-<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
-<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
-  <h2 class="tab-header" id="nav-tab-heading-2-R">
-  R
-  </h2>
-</button>
-<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-2-Python">
-  Python
-  </h2>
-</button>
-<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
-  Spreadsheet
-  </h2>
-</button>
-</div>
-</nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
-<div class="codewrapper sourceCode" id="cb3">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">probe</span> <span class="op">&lt;-</span> <span class="fu">find_terms</span><span class="op">(</span></span>
-<span>  <span class="st">"spawner count"</span>,</span>
-<span>  role <span class="op">=</span> <span class="st">"property"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">attr</span><span class="op">(</span><span class="va">probe</span>, <span class="st">"diagnostics"</span><span class="op">)</span></span></code></pre>
-</div>
-</div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
-<div class="codewrapper sourceCode" id="cb4">
-<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> find_terms</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1" aria-label="code-block-4-3"></a>probe <span class="op">=</span> find_terms(</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a>    <span class="st">"spawner count"</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a>    role<span class="op">=</span><span class="st">"property"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a>)</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a><span class="bu">print</span>(probe.attrs.get(<span class="st">"diagnostics"</span>))</span></code></pre>
-</div>
-</div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
-<p>If an instructor-provided suggestion file is unexpectedly empty, do
-not record a vocabulary gap from that absence alone. Ask for the lookup
-diagnostics or use the linked vocabulary documentation to distinguish a
-service failure from a genuine no-match result.</p>
-</div>
-</div>
-</div>
-<p>A warning or non-success diagnostic is evidence of a lookup problem,
-not evidence that no appropriate term exists. Do not turn a temporary
-service outage into a new-term request.</p>
+<p>At this stage, treat an empty or unexpected result as
+<strong>unresolved</strong>, not as proof that the vocabulary lacks an
+appropriate term. Leave that decision in review and continue with the
+shared example; a later workflow can distinguish a lookup problem from a
+genuine term gap.</p>
 </section><section><h2 class="section-heading" id="treat-suggestions-as-drafts">Treat suggestions as drafts<a class="anchor" aria-label="anchor" href="#treat-suggestions-as-drafts"></a></h2>
 <hr class="half-width"><p>Some tools write semantic suggestions directly into metadata as
 <code>REVIEW: &lt;iri&gt;</code>. That prefix is a warning, not
@@ -632,45 +683,69 @@ them.</p>
 call. Use only an approved provider and appropriate non-sensitive
 context.</p>
 </section><section><h2 class="section-heading" id="example-review">Example review<a class="anchor" aria-label="anchor" href="#example-review"></a></h2>
-<hr class="half-width"><p>Column: <code>natural_spawner_count</code></p>
-<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Question</th>
-<th>Review answer</th>
-</tr></thead><tbody><tr><td>What is measured?</td>
-<td>Count of naturally spawning adult salmon</td>
-</tr><tr><td>Property</td>
-<td>Count or abundance</td>
-</tr><tr><td>Entity</td>
-<td>Adult spawning salmon population</td>
-</tr><tr><td>Constraint</td>
-<td>Natural-origin or naturally spawning, depending on source
-definition</td>
-</tr><tr><td>Unit</td>
-<td>Fish or individuals</td>
+<hr class="half-width"><p>Shared example column: <code>NATURAL_SPAWNERS_TOTAL</code></p>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Decision</th>
+<th>Fraser Coho candidate to review</th>
+</tr></thead><tbody><tr><td>Complete measurement variable, <code>term_iri</code>
+</td>
+<td>Natural-origin spawner abundance; review
+<code>https://w3id.org/gcdfo/salmon#SpawnerAbundance</code> against the
+NuSEDS definition.</td>
+</tr><tr><td>I-ADOPT property, <code>property_iri</code>
+</td>
+<td>Abundance; review <code>https://w3id.org/smn/Abundance</code>.</td>
+</tr><tr><td>I-ADOPT entity, <code>entity_iri</code>
+</td>
+<td>The conservation unit recorded in <code>FULL_CU_IN</code>; review
+<code>https://w3id.org/gcdfo/salmon#ConservationUnit</code>.</td>
+</tr><tr><td>I-ADOPT constraint, <code>constraint_iri</code>
+</td>
+<td>Natural origin; review
+<code>https://w3id.org/smn/NaturalOrigin</code>.</td>
+</tr><tr><td>Unit, <code>unit_iri</code>
+</td>
+<td>Individuals; review <code>https://qudt.org/vocab/unit/INDIV</code>.
+This is measurement semantics, but not an I-ADOPT role.</td>
 </tr><tr><td>Statistical modifier</td>
-<td>Blank here; fill it only when the column is an aggregation, such as
-a <em>peak</em> or <em>mean</em> count</td>
+<td>Leave blank for this exercise; do not infer <em>total</em>,
+<em>peak</em>, or <em>mean</em> without confirming what the source value
+represents.</td>
+</tr><tr><td>Table observation unit</td>
+<td>Each row reports an escapement estimate; review
+<code>https://w3id.org/smn/EscapementEstimate</code> for
+<code>tables.csv$observation_unit_iri</code>.</td>
 </tr><tr><td>Method</td>
-<td>Not a dictionary field: record the survey or estimator on
-<code>tables.csv</code> when it is constant for the table, or as a code
-column when it varies by row</td>
-</tr></tbody></table><div id="challenge-1-review-two-mapped-fields" class="callout discussion">
+<td>
+<code>ESTIMATE_METHOD</code> varies by row. Review the
+<code>Area Under the Curve</code> code mapping to
+<code>https://w3id.org/gcdfo/salmon#AreaUnderTheCurve</code> in
+<code>codes.csv$term_iri</code>; do not put it in the measurement’s
+I-ADOPT fields.</td>
+</tr></tbody></table><div id="challenge-1-complete-the-bounded-fraser-coho-review" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <span class="callout-header">Discussion</span>
-<div id="challenge-1-review-two-mapped-fields" class="callout-inner">
-<h3 class="callout-title">Challenge 1: Review two mapped fields</h3>
+<div id="challenge-1-complete-the-bounded-fraser-coho-review" class="callout-inner">
+<h3 class="callout-title">Challenge 1: Complete the bounded Fraser Coho
+review</h3>
 <div class="callout-content">
-<p>Pick one measurement column and one non-measurement column.</p>
-<p>For each:</p>
-<ul><li>read the description;</li>
-<li>inspect any suggested IRI;</li>
-<li>decide keep, replace, remove, or defer;</li>
-<li>write one sentence explaining the decision.</li>
-</ul><p>For the measurement column, also fill or review the property, entity,
-unit, and optional constraint and statistical-modifier fields, and
-decide where any method information belongs (table level, protocol
-citation, or code column).</p>
+<p>Work with the shared NuSEDS Fraser Coho package, even if you brought
+your own dataset. Complete only this review:</p>
+<ol style="list-style-type: decimal"><li>choose <strong>keep</strong>, <strong>replace</strong>,
+<strong>remove</strong>, or <strong>defer</strong> for the one
+<code>NATURAL_SPAWNERS_TOTAL</code> <code>term_iri</code> candidate, and
+write one sentence explaining why;</li>
+<li>complete one I-ADOPT decomposition of that same measurement by
+reviewing its property, entity, and natural-origin constraint;</li>
+<li>review the QUDT Individual unit IRI;</li>
+<li>review the escapement-estimate IRI that says what each table row
+represents; and</li>
+<li>review the <code>Area Under the Curve</code> method-code IRI in
+<code>codes.csv</code>.</li>
+</ol><p>Do not map additional fields during this exercise. After the
+workshop, use the same sequence for another measurement in your own
+package.</p>
 </div>
 </div>
 </div>
@@ -681,8 +756,9 @@ citation, or code column).</p>
 <span class="callout-header">Key Points</span>
 <div class="callout-inner">
 <div class="callout-content">
-<ul><li>Prioritize semantic review where shared meaning affects comparison
-or reuse.</li>
+<ul><li>The workshop semantic exercise is bounded to one Fraser Coho
+measurement, one I-ADOPT decomposition, one unit, one table observation
+unit, and one method code.</li>
 <li>
 <code>REVIEW:</code> suggestions are evidence to inspect, not final
 answers.</li>

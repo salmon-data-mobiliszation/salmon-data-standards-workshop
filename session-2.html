@@ -364,7 +364,7 @@
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Confirm the project, <code>raw_data/</code>, <code>context/</code>,
+<ul><li>Confirm the project, <code>raw_data/</code>, <code>scripts/</code>,
 and <code>output/</code> layout, unless you already completed this
 during setup.</li>
 <li>Run the bundled example unchanged to generate and inspect
@@ -389,7 +389,7 @@ setup.</li>
 <li>Confirm that the working project is
 <code>salmon-data-workshop/</code>; do not call <code>setwd()</code> to
 jump elsewhere.</li>
-<li>Create the input, context, and output folders before calling
+<li>Create the input, script, and output folders before calling
 <code>create_sdp()</code>.</li>
 </ol><div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -397,14 +397,20 @@ jump elsewhere.</li>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run from the open RStudio Project root.</span></span>
 <span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"raw_data"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"context"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"scripts"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"output"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
 <pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj
-  raw_data/                   # unchanged source files
-  context/                    # codebooks, methods, and caveats
+  raw_data/                   # unchanged data and context inputs
+  scripts/                    # build_sdp.R or build_sdp.py
   output/                     # generated package folders</code></pre>
+<p>Keep the prepared dataset, codebooks, methods, caveats, and other
+context inputs together under <code>raw_data/</code> and do not edit
+them in place while building a package. In Chapter 3, R users will save
+the reproducible build as <code>scripts/build_sdp.R</code>, Python users
+as <code>scripts/build_sdp.py</code>, and spreadsheet users will omit
+the script.</p>
 </section><section><h2 class="section-heading" id="chapter-2-uses-the-bundled-quickstart-data">Chapter 2 uses the bundled quickstart data<a class="anchor" aria-label="anchor" href="#chapter-2-uses-the-bundled-quickstart-data"></a></h2>
 <hr class="half-width"><p>In this chapter, use the prepared starting point for your chosen
 software lane. The R and Python examples use a small NuSEDS-derived
@@ -425,19 +431,19 @@ the other software choices on this page.</p>
 <div class="tabs">
 <nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
 <button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
-  <h2 class="tab-header" id="nav-tab-heading-1-R">
+  <h3 class="tab-header" id="nav-tab-heading-1-R">
   R
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-1-Python">
+  <h3 class="tab-header" id="nav-tab-heading-1-Python">
   Python
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  <h3 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
   Spreadsheet
-  </h2>
+  </h3>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
@@ -629,19 +635,19 @@ lane you selected above.</p>
 <div class="tabs">
 <nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
 <button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
-  <h2 class="tab-header" id="nav-tab-heading-2-R">
+  <h3 class="tab-header" id="nav-tab-heading-2-R">
   R
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-2-Python">
+  <h3 class="tab-header" id="nav-tab-heading-2-Python">
   Python
-  </h2>
+  </h3>
 </button>
 <button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
-  <h2 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  <h3 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
   Spreadsheet
-  </h2>
+  </h3>
 </button>
 </div>
 </nav><div id="nav-tabContent-2" class="tab-content">
