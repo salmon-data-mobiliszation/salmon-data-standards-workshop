@@ -66,16 +66,18 @@ Required:
 - RStudio, Positron, or another R editor; and
 - the `remotes`, `readr`, `dplyr`, `purrr`, `readxl`, and `metasalmon` packages.
 
-Install or update to the latest version from GitHub before the workshop:
+Install the release this lesson is written against, `v0.4.0`, before the workshop:
 
 ```r
 install.packages(c("remotes", "readr", "dplyr", "purrr", "readxl"))
-remotes::install_github("salmon-data-mobilization/metasalmon")
+remotes::install_github("salmon-data-mobilization/metasalmon@v0.4.0")
 
 packageVersion("metasalmon")
 ```
 
-Facilitators should review the [metasalmon changelog][metasalmon-changelog] when preparing to teach.
+`packageVersion("metasalmon")` should report `0.4.0`. Install the pinned tag rather than the default branch: `v0.4.0` is the same release recorded in this lesson's own `renv.lock`, so the code you run locally is the code the lesson site was built with. An unpinned install tracks whatever has landed on `main` since, which is how a lesson and a learner quietly stop agreeing.
+
+Facilitators should review the [metasalmon changelog][metasalmon-changelog] when preparing to teach, and bump both the tag above and the lockfile together when the workshop moves to a newer release.
 
 For validated EML export, also install:
 
@@ -106,14 +108,22 @@ Required:
 - Python 3.9 or newer; and
 - a terminal, notebook, or Python editor.
 
-Create an environment and install or update to the latest version directly from GitHub (no Git installation required):
+Create an environment and install the matching release directly from GitHub (no Git installation required). `metasalmon` and `metasalmonpy` release in lockstep, so the Python lane pins `v0.4.0` too:
 
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install \
-  "metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/heads/main.tar.gz"
+  "metasalmonpy @ https://github.com/salmon-data-mobilization/metasalmonpy/archive/refs/tags/v0.4.0.tar.gz"
 ```
+
+Confirm the installed release:
+
+```bash
+python -c "import metasalmonpy; print(metasalmonpy.__version__)"
+```
+
+That should print `0.4.0`. As in the R lane, install the tag rather than the default branch: the releases carry no wheel assets, so the tag tarball is the pinned artifact.
 
 The installed package and Python import are both named `metasalmonpy`. See the [metasalmonpy documentation][metasalmonpy-docs]. Validated EML export uses the optional `eml` extra, and KNB publication uses the optional `knb` extra. To prepare for both, replace `metasalmonpy` with `metasalmonpy[knb]` in the install command above; the `knb` extra includes EML support.
 
@@ -157,8 +167,8 @@ Before the demo, confirm that:
 - `raw_data/`, `scripts/`, and `output/` exist;
 - your prepared data and context files are under `raw_data/`, or you plan to run the included example unchanged;
 - R or Python users have a place for `scripts/build_sdp.R` or `scripts/build_sdp.py`;
-- R users can load `metasalmon` with `library(metasalmon)`;
-- Python users can import `metasalmonpy`; and
+- R users can load `metasalmon` with `library(metasalmon)`, and `packageVersion("metasalmon")` reports `0.4.0`;
+- Python users can import `metasalmonpy`, and `metasalmonpy.__version__` reports `0.4.0`; and
 - spreadsheet users can open the blank SDP CSV template in their editor.
 
 If your organization restricts software installation, use the spreadsheet lane for the package-structure and metadata-review activities.

@@ -1363,7 +1363,7 @@
     },
     "metasalmon": {
       "Package": "metasalmon",
-      "Version": "0.3.0",
+      "Version": "0.4.0",
       "Source": "GitHub",
       "Type": "Package",
       "Title": "Utilities for Salmon Data Packages",
@@ -1421,8 +1421,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "salmon-data-mobilization",
       "RemoteRepo": "metasalmon",
-      "RemoteRef": "v0.3.0",
-      "RemoteSha": "5a37b11b40782df8a63370294b3f744a5309e8e5"
+      "RemoteRef": "v0.4.0",
+      "RemoteSha": "4e2bbb6c2a7cc578cb05f9f350c834c89796142c"
     },
     "mime": {
       "Package": "mime",

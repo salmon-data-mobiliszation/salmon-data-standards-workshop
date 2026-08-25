@@ -58,6 +58,62 @@ R users should open the `.Rproj` file. Keep the prepared dataset and all context
 
 The output SDP data resources are CSV files.
 
+## Tidy shape and primary keys
+
+An SDP describes data one column and one row at a time: `column_dictionary.csv` says what each column means, and `tables.csv` says what one row represents. That description only works if the table is actually shaped that way. Three rules, from the tidy data conventions:
+
+1. **Each variable is a column.** If survey year is something you recorded, it is a `survey_year` column — not the *names* of several columns.
+2. **Each observation is a row.** One row is one thing that happened: one stream in one year, one fish, one sample.
+3. **Each table holds one kind of observation.** Stream-year counts and individual fish biosamples are two tables, not one.
+
+Rule 3 is what makes the rest work: a primary key can only identify a row when every row is the same kind of thing, and a table-level `method_iri` only makes sense when the whole table was produced the same way.
+
+Full worked examples, including the exact error text, are in the metasalmon [tidy data guide][metasalmon-tidy-data].
+
+### `primary_key` is optional to declare and enforced once declared
+
+`tables.csv$primary_key` holds the column, or comma-separated set of columns, whose values are unique within the table. Leaving it blank is allowed. **Declaring one that does not hold is a hard error** — validation fails rather than warning. Before metasalmon 0.2.6 nothing tested the field, so an older package can claim a key and still contain duplicate rows; the first strict validation after upgrading is where you find out.
+
+| Failure | What validation reports | What it usually means |
+| --- | --- | --- |
+| The key repeats | `declares primary key '...' but N row(s) repeats it` | The key needs another column, or there are duplicate records to remove. Validation cannot tell you which. |
+| The key contains blanks | `column <name> contains missing values` | A row with a blank key column has no identity. Checked separately from duplication, because two blanks are not literally equal and would otherwise slip through. |
+| The key names a missing column | `primary_key references columns not present in data` | Usually a typo, or a column renamed in the data but not in the metadata. |
+
+Choosing one is a matter of asking what one row *is*, then naming the columns that answer it:
+
+| One row is... | `primary_key` |
+| --- | --- |
+| One stream in one year | `stream_id,survey_year` |
+| One stream on one survey date | `stream_id,survey_date` |
+| One individual fish | `sample_id` |
+| One stream-year-species combination | `stream_id,survey_year,species_code` |
+
+If you cannot name a unique set of columns, that is useful information: it usually means the table holds more than one kind of observation, and rule 3 applies.
+
+### Column names that look like data values
+
+The second shape check reads your **column names** and reports ones that look like data — a year per column, or a repeated stem with numeric tails. It is a **warning, never an error**: the package still builds, and validation still passes. It needs at least **three** matching columns, so an ordinary `x2`/`x3` pair is not flagged.
+
+- **Year-like names**: `1998`, `2023`, `X2023` (R adds the `X` when repairing a name that starts with a digit).
+- **A shared stem with numeric tails**: `count_1998`, `count_1999`, `count_2000`, or `pass1`, `pass2`, `pass3`.
+
+It is a heuristic and can be wrong in both directions. A genuine `pass1` column in a three-pass electrofishing design will be flagged; a wide table with columns named `coho`, `chinook`, `sockeye` will not be. Read it as a prompt to look, not a verdict.
+
+The wide shape is a problem for three concrete reasons: the dictionary gets one near-identical row per year column, `tables.csv` cannot say what one row is without ignoring the years spread sideways, and next year's data changes the *schema* rather than adding rows. Reshaping with `tidyr::pivot_longer()` fixes all three:
+
+```r
+long <- tidyr::pivot_longer(
+  wide,
+  cols = -stream_id,
+  names_to = "survey_year",
+  values_to = "spawner_count",
+  names_transform = list(survey_year = as.integer)
+)
+```
+
+`names_to` should be named after what those column names *are* (`survey_year`, not `name`). `names_transform` matters because column names are always text: without it you get `"2021"` as a string, and `value_type` in the dictionary would have to say `string`. In Python, the equivalent is `pandas.melt()` / `DataFrame.melt()` with `var_name` and `value_name`, followed by an explicit dtype cast.
+
 ## Salmon Data Package files
 
 | File | Purpose |
@@ -138,6 +194,8 @@ For publication-ready measurement rows, SDP requires `term_iri`, `property_iri`,
 | `statistical_modifier_iri` | Optional | I-ADOPT statistical modifier: fill it only when the column is an aggregation or summary (mean, maximum, minimum, total, peak), because the summary is part of the variable's identity |
 
 The dictionary does not have a `method_iri` column or a `metadata/methods.csv` registry. A method lives where it is constant: `tables.csv$method_iri` for a whole-table procedure, `protocol_iri`/`protocol_citation` on `tables.csv` or `dataset.csv` for a citable document, or a code column resolving through `codes.csv$term_iri` when the method varies by row.
+
+That is the shape since sdp-0.3.0. A package built before it may still carry a dictionary `method_iri` column, and the route forward is `migrate_sdp_methods(path)` — available in both implementations with the same signature, and with `dry_run = TRUE` / `dry_run=True` to see the proposed moves before writing anything. See the [migration guide][metasalmon-migration].
 
 Do not use `property_iri`, `entity_iri`, `constraint_iri`, or `statistical_modifier_iri` as general relationship fields for identifiers, attributes, or categorical columns.
 

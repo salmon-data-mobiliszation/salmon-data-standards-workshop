@@ -3,7 +3,9 @@
 [metasalmon-quickstart]: https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html
 [metasalmon-changelog]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md
 [metasalmon-eml-workflow]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd
+[metasalmon-knb-rehearsal]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/scripts/build-fraser-coho-knb-rehearsal.R
 [metasalmon-eml-mapping]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/inst/extdata/eml-mapping-template.yml
+[metasalmon-tidy-data]: https://salmon-data-mobilization.github.io/metasalmon/articles/tidy-data-for-sdp.html
 [metasalmon-migration]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd
 [metasalmon-eml-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/write_eml_from_sdp.Rd
 [metasalmon-knb-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/publish_sdp_to_knb.Rd
