@@ -134,7 +134,7 @@ Keep the copied folder structure and header rows unchanged. In this chapter, ins
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-For the R and Python lanes, `seed_semantics = FALSE` / `seed_semantics=False` is the fast classroom option. It skips live searches for links to shared definitions. Chapter 4 shows how to run those searches after the starter metadata has been reviewed.
+For the R and Python lanes, `seed_semantics = FALSE` / `seed_semantics=False` is the fast classroom option. It skips live searches for links to shared definitions. Chapter 3 turns those searches on once the starter metadata has been reviewed, and Chapter 4 decides the candidates they return.
 
 ## Inspect the package files
 
