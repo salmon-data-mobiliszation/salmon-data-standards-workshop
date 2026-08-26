@@ -8,6 +8,11 @@
 [metasalmon-eml-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/write_eml_from_sdp.Rd
 [metasalmon-knb-reference]: https://github.com/salmon-data-mobilization/metasalmon/blob/main/man/publish_sdp_to_knb.Rd
 [metasalmon-chat-decomposition]: https://salmon-data-mobilization.github.io/metasalmon/reference/chat_decomposition.html
+[metasalmon-review-semantics]: https://salmon-data-mobilization.github.io/metasalmon/reference/review_semantics.html
+[metasalmon-accept-suggestion]: https://salmon-data-mobilization.github.io/metasalmon/reference/accept_suggestion.html
+[metasalmon-apply-sdp-semantics]: https://salmon-data-mobilization.github.io/metasalmon/reference/apply_sdp_semantics.html
+[metasalmon-review-metadata]: https://salmon-data-mobilization.github.io/metasalmon/reference/review_metadata.html
+[metasalmon-set-sdp-dataset]: https://salmon-data-mobilization.github.io/metasalmon/reference/set_sdp_dataset.html
 [metasalmon-llm-review]: https://salmon-data-mobilization.github.io/metasalmon/articles/llm-context-review.html
 [metasalmonpy]: https://github.com/salmon-data-mobilization/metasalmonpy
 [metasalmonpy-docs]: https://salmon-data-mobilization.github.io/metasalmonpy/
