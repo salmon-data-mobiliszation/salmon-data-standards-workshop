@@ -284,13 +284,18 @@ The complete workflow will grow across the remaining chapters:
 | --- | --- |
 | Read and transform | Read unchanged source files and express every tidy-data transformation in R or Python. |
 | Create a draft | Run `create_sdp()` with `seed_semantics = TRUE` / `seed_semantics=True`. |
-| Review | Read the package with `read_salmon_datapackage()` and represent accepted metadata decisions as code. |
-| Write | Write the reviewed state with `write_salmon_datapackage()`. Use a versioned path when the earlier package must be preserved. |
+| Review free text | Read the package with `read_salmon_datapackage()` and represent accepted description, contact, and licence decisions as code. |
+| Review semantics | In R, decide each suggested IRI with `review_semantics()` and `accept_suggestion()` in Chapter 4, and write them with `apply_sdp_semantics()`. |
+| Write | Write reviewed free-text state with `write_salmon_datapackage()`. Use a versioned path when the earlier package must be preserved. |
 | Check | Run `validate_salmon_datapackage()` and fix the script or its declared inputs, then rerun. |
 
-In this script-backed workflow, `overwrite = TRUE` / `overwrite=True` deliberately rebuilds writer-managed files and then reapplies the decisions encoded below it. A manual edit that exists only in the generated folder can be replaced, which is why reviewed changes belong in the script or in a preserved, versioned package. Do not use `prune = TRUE` / `prune=True` here.
+Two writers appear in that table, and they are not interchangeable. `write_salmon_datapackage()` rebuilds a whole package from in-memory objects, which is what a free-text edit needs. `apply_sdp_semantics()`, introduced in Chapter 4, changes only the decided cells and leaves every data CSV byte untouched, which is what a semantic decision needs.
 
-The following small extension shows the pattern. Later chapters add semantic review, EML export, and publication steps to the same workflow.
+In this script-backed workflow, `overwrite = TRUE` / `overwrite=True` deliberately rebuilds writer-managed files and then reapplies the decisions encoded below it. A manual edit that exists only in the generated folder can be replaced, which is why reviewed changes belong in the script or in a preserved, versioned package.
+
+Do not use `prune = TRUE` / `prune=True` here, and Chapter 4 is where you would find out why: pruning deletes `semantic_suggestions.csv`, and with it the entire evidence base the semantic review reads. `review_semantics()` then reports that there is nothing to review, and the only way back is a full reseeding search.
+
+The following small extension shows the free-text pattern. Later chapters add semantic review, EML export, and publication steps to the same workflow.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
@@ -483,6 +488,7 @@ Rerun the script to confirm that the declared inputs and encoded review decision
 - One dataset may contain one or many tables; pass multiple tables as a named list.
 - Prepare tidy rectangular inputs: one variable per column, one observation per row, and one value per cell.
 - Semantic seeding is enabled in this chapter; LLM assessment remains a separate, explicit opt-in.
+- Seeding is what makes Chapter 4 possible: the review there reads suggestions rather than searching, so a package built without seeding has nothing to review.
 - Metadata tables hold structured facts; README/context notes hold narrative caveats.
 - A clear description is more valuable than an uncertain link to a shared definition.
 
