@@ -66,6 +66,8 @@ You paste that line into `scripts/build_sdp.R`. **The paste is the audit trail.*
 
 A learner who understands why the spreadsheet was abandoned will not drift back to it. The spreadsheet lane still exists below, because a mixed workshop needs it — but it is now the lane that costs you the record, and this chapter says so plainly.
 
+Be precise about the size of the claim. **Semantic IRI review no longer needs a spreadsheet.** That is not the same as "you never open a spreadsheet again": free-text fields — descriptions, contacts, licences — are still edited by hand, and a slot that retrieval found nothing for never reaches this review at all. The section [What this review cannot decide](#what-this-review-cannot-decide) is not a disclaimer at the end; it is half the lesson. A learner who leaves believing review finishes the package will be corrected by the validator, and will trust the tool less than it deserves.
+
 ::::::::::::::::::::::::::::::::::::: prereq
 
 ## You need a metasalmon new enough to have the review flow
@@ -135,9 +137,9 @@ review <- review_semantics(pkg_path, columns = "NATURAL_SPAWNERS_TOTAL")
 
 ### Python
 
-`metasalmonpy` does not have this API yet. The R-native review flow lands in `metasalmon` first, and the Python equivalent is pending; there is nothing to demonstrate here that would still be true next month.
+**There is no Python equivalent.** Not a partial one, not a differently-spelled one: `metasalmonpy` has no review queue, no accessor for the suggestions attribute, and no function that reads `semantic_suggestions.csv` back. The R-native review flow lands in `metasalmon` first, and the port has not been written. This is a gap, not a deliberate parity difference, so do not go looking for it in the [parity guide][metasalmonpy-parity].
 
-What a Python user can do today is read the same evidence the R queue is built from. `semantic_suggestions.csv` sits at the package root and is written by both implementations:
+What a Python user can do today is read the same evidence the R queue is built from, with pandas rather than with `metasalmonpy`. `semantic_suggestions.csv` sits at the package root and is written by both implementations:
 
 ```python
 from pathlib import Path
@@ -277,7 +279,61 @@ Error in accept_suggestion(sem_review, "FULL_CU_IN", "variable", rank = 3) :
 ℹ To accept a term that is not shortlisted, pass `iri` instead.
 ```
 
-Read `Ranks available: 1.` literally. In the seeded Fraser Coho package, `semantic_suggestions.csv` carries exactly one row per slot rather than a whole ranked list, so every shortlist is one candidate deep and `rank = 1` is the only rank there is. "Accept rank 1" is therefore a much weaker statement than "the best of five" — it is closer to "accept or reject". When rank 1 is wrong, `iri =` is the way out, not rank 2.
+Read `Ranks available: 1.` literally, because it is the most misleading-looking thing on the page. **`create_sdp()` keeps one candidate per role by default** — `semantic_max_per_role = 1` — so the seeded `semantic_suggestions.csv` carries one row per slot rather than a ranked list, and every shortlist you have seen so far is one candidate deep. `rank = 1` is the only rank there is. "Accept rank 1" is therefore a much weaker statement than "the best of five": it is closer to "accept or reject".
+
+Ask for a deeper shortlist at build time, not at review time. The review reads what seeding stored, so this is a `create_sdp()` argument:
+
+```{r, eval = FALSE, purl = FALSE}
+pkg_path <- create_sdp(
+  fraser_coho,
+  path = file.path("output", "fraser-coho-example-sdp"),
+  dataset_id = "fraser-coho-example",
+  table_id = "escapement",
+  seed_semantics = TRUE,
+  semantic_max_per_role = 3,
+  check_updates = FALSE,
+  overwrite = TRUE
+)
+```
+
+The same slot then offers three:
+
+```output
+── escapement · NATURAL_SPAWNERS_TOTAL · variable ────────────────────────────
+   field:   column_dictionary.csv · term_iri
+   current: REVIEW: https://w3id.org/gcdfo/salmon#SpawnerAbundance
+
+   [1] Spawner abundance   gcdfo   score 18.25
+       The abundance (count) of adult salmon that reach spawning grounds in a
+       given system and time period (often operationalized as
+       escapement/spawning escapement).
+       https://w3id.org/gcdfo/salmon#SpawnerAbundance
+       review <- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 1)
+
+   [2] Relative hatchery spawner abundance   gcdfo   score 15.25
+       Hatchery-origin spawner abundance expressed as a relative
+       (dimensionless) abundance metric to a defined reference (commonly
+       benchmarks), for within-series comparison; in rapid-status workflows,
+       relative abundance is computed using the current generational average
+       (geometric mean) divided by CU-specific lower and/or upper benchmarks.
+       https://w3id.org/gcdfo/salmon#RelativeHatcherySpawnerAbundance
+       review <- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 2)
+
+   [3] Relative hatchery spawner abundance change   gcdfo   score 15.25
+       A change metric (delta or percent change, as defined by the workflow)
+       computed from relative hatchery-origin spawner abundance values over
+       time; in rapid-status workflows, percent change is derived from
+       log-transformed series and quantified over the most recent three
+       generations.
+       https://w3id.org/gcdfo/salmon#RelativeHatcherySpawnerAbundanceChange
+       review <- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 3)
+
+       review <- reject_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable")   # no candidate fits
+```
+
+Notice what a deeper shortlist actually bought: ranks 2 and 3 are *hatchery*-origin terms, for a column of *natural*-origin spawners. More candidates gave you more to rule out, not more to choose from — which is useful, and is not the same as more confidence. Depth costs seeding time on every column, so raise it when you are doing careful work on a narrow table, not by default.
+
+Either way, when rank 1 is wrong the reliable escape is `iri =`, not rank 2.
 
 ## Treat suggestions as drafts
 
@@ -322,6 +378,16 @@ If any check fails, reject it, supply the right IRI with `iri =`, or leave it fo
 ## Where the second IRI on the line comes from
 
 Candidates retrieved through OLS print their IRI followed by a browsable OLS4 URL, because the IRI itself does not resolve to a human-readable page. In a terminal that supports hyperlinks you get one clickable label instead. Candidates from `smn`, `gcdfo`, and NVS print one IRI, because that IRI is already the page.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: callout
+
+## What you read is what the vocabulary says
+
+Definitions come from third parties, and some of them contain characters that mean something to R's message formatter. A definition reading *"…returning to spawn in a stream {reach}"* prints exactly that, braces included. The review console emits its lines with `cat()` rather than through a message template, so ontology text is never interpreted — you are reading the definition, not a rendering of it.
+
+That matters for review: a definition that had been silently reformatted, truncated at a brace, or replaced by a formatting error would be the one piece of evidence you most need intact.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -500,6 +566,43 @@ Rebuild the queue afterwards and it is shorter: the slots you decided now hold f
 review_semantics(pkg_path)
 ```
 
+### The decision that stays in the package
+
+Your script is the record of *why*. `semantic_suggestions.csv` now also records *which* — `apply_sdp_semantics()` writes a `decision` column beside the candidates it was choosing between:
+
+```{r, eval = FALSE, purl = FALSE}
+suggestions <- readr::read_csv(
+  file.path(pkg_path, "semantic_suggestions.csv"),
+  show_col_types = FALSE
+)
+
+suggestions[!is.na(suggestions$decision), c("column_name", "dictionary_role", "decision")]
+```
+
+```output
+# A tibble: 8 × 3
+  column_name            dictionary_role      decision
+  <chr>                  <chr>                <chr>
+1 AREA                   variable             rejected
+2 NATURAL_SPAWNERS_TOTAL variable             accepted
+3 NATURAL_SPAWNERS_TOTAL property             not_selected
+4 NATURAL_SPAWNERS_TOTAL entity               accepted
+5 NATURAL_SPAWNERS_TOTAL unit                 accepted
+6 NATURAL_SPAWNERS_TOTAL constraint           accepted
+7 NATURAL_SPAWNERS_TOTAL statistical_modifier accepted
+8 <NA>                   entity               accepted
+```
+
+Row 8 has no `column_name` because it is the table observation-unit slot.
+
+This is the first durable, in-package record of a review decision, and it travels with the package rather than with your project folder. Three values appear:
+
+- `accepted` — this candidate was chosen;
+- `rejected` — the slot was rejected, so no candidate was chosen; and
+- `not_selected` — this candidate was on the shortlist and lost. The `property` row reads `not_selected` because we accepted `smn:Abundance` with `iri =` instead of the shortlisted term.
+
+Read the `property` row as the useful case: it is the one that tells a later reader the shortlist was overruled, which is exactly the fact a copied cell used to hide.
+
 ## The finished script
 
 Session 3 said every accepted decision belongs in the script rather than in a manual edit inside `output/`. This is what that looks like for semantics. Append it to `scripts/build_sdp.R`, below the `create_sdp()` call:
@@ -599,6 +702,8 @@ Then answer the question this chapter exists for: **if you left this project tod
 - The console prints the exact `accept_suggestion()` call; pasting it into your build script is what makes the decision reproducible.
 - `review_semantics()` reads suggestions that already exist. It never searches, and it never contacts an LLM.
 - `REVIEW:` and a blank field both mean undecided; a retrieval score is not agreement.
+- Shortlists are one candidate deep by default (`semantic_max_per_role = 1`); ask for depth at build time, and expect it to give you more to reject rather than more to accept.
+- Semantic IRI review no longer needs a spreadsheet. Free text still does, and gaps never enter the queue at all.
 - The workshop review is bounded to one measurement, its I-ADOPT decomposition, its unit and statistical modifier, one table observation unit, and one deliberate rejection.
 - I-ADOPT roles describe the measurement variable; units are separate, and methods live at the table, protocol, or code level rather than in the dictionary.
 - `apply_sdp_semantics()` is a surgical, re-runnable metadata edit that leaves the data files byte-identical.
