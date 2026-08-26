@@ -388,6 +388,8 @@
 <h3 class="card-title">Questions</h3>
 <ul>
 <li>What parts make up the Salmon Data Integration System?</li>
+<li>How far can this workflow go, from FAIR publication to shared or
+organizational semantic stewardship?</li>
 <li>What is the difference between a dataset, a table, and a flat
 file?</li>
 <li>What does a Salmon Data Package add to an ordinary spreadsheet or
@@ -404,8 +406,9 @@ vocabulary or ontology?</li>
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul>
-<li>State the end goal: a reviewed SDP, a validated EML file, and a
-guarded catalog-publication plan.</li>
+<li>Explain the three workshop destinations: FAIR publication,
+shared-term contribution, and organizational vocabulary or ontology
+stewardship.</li>
 <li>Distinguish a dataset from its one or more tables and recognize
 supported tabular inputs.</li>
 <li>Explain the roles of the SDP, <code>metasalmon</code>, shared
@@ -423,15 +426,48 @@ and salmon-specific SDP conventions.</li>
 <section><h2 class="section-heading" id="start-with-the-end-goal">Start with the end goal<a class="anchor" aria-label="anchor" href="#start-with-the-end-goal"></a>
 </h2>
 <hr class="half-width">
-<p>By the end of the workshop, participants should be able to:</p>
+<p>How far you take this workflow depends on your role, your dataset,
+and what you want to accomplish. The workshop supports three related
+destinations; you do not need to reach all three.</p>
 <ol style="list-style-type: decimal">
-<li>create and review a Salmon Data Package (SDP);</li>
-<li>run a strict publication check with <code>metasalmon</code> or
-<code>metasalmonpy</code>;</li>
-<li>export the reviewed metadata as schema-valid EML 2.2.0; and</li>
-<li>preview an exact KNB/DataONE catalog deposit, then perform the
-upload when they have credentials and redistribution authority.</li>
+<li>
+<strong>Publish FAIR salmon data.</strong> This is the common goal
+for biologists. The <a href="https://doi.org/10.1038/sdata.2016.18" class="external-link">FAIR
+Guiding Principles</a> call for data to be <strong>Findable, Accessible,
+Interoperable, and Reusable</strong>. Accessible does not necessarily
+mean openly downloadable; the access path, conditions, and authority
+should be clear. A reviewed <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md" class="external-link">Salmon
+Data Package</a> keeps the data, metadata, and local context together
+and lets you link selected fields, code values, units, and methods to
+definitions already maintained in international standards and
+community-governed vocabularies or ontologies. From the SDP, you can run
+a strict publication check, export schema-valid EML 2.2.0, and prepare a
+KNB/DataONE catalog deposit. A live upload requires credentials and
+redistribution authority.</li>
+<li>
+<strong>Contribute missing shared terms.</strong> If a concept in
+your dataset has no suitable existing definition, document the gap and
+propose a new term for the <a href="https://github.com/salmon-data-mobilization/salmon-domain-ontology" class="external-link">Salmon
+Domain Ontology</a> or another appropriate governed vocabulary. The
+resource’s stewards decide whether and how the proposal enters the
+shared resource.</li>
+<li>
+<strong>Steward organizational terminology.</strong> The advanced
+destination for data stewards and digital librarians is to create and
+govern organizational controlled vocabularies or ontologies for local
+meanings, then map those terms to shared anchors in the Salmon Domain
+Ontology. This workshop introduces the planning and mapping pattern; a
+complete organizational authoring process must also define governance,
+review, publication, and maintenance under local authority. In this
+role, the Salmon Domain Ontology is an umbrella interoperability layer:
+it connects organizations without requiring them to give up their local
+terminology or authority.</li>
 </ol>
+<p>The Salmon Data Package is the common foundation for all three
+destinations. It makes local meaning reviewable before a term is reused,
+proposed, or mapped. KNB/DataONE publication remains an important
+concrete destination, but it is one route through this broader
+data-integration workflow rather than the only finish line.</p>
 <p>An EML file is structured XML, not an arbitrary XML file with a
 different name. <code>metasalmon</code> and <code>metasalmonpy</code>
 map reviewed SDP facts into the EML model and validate the result
@@ -668,6 +704,13 @@ them?</td>
 bridge mapping</td>
 </tr>
 <tr>
+<td>Stewardship</td>
+<td>Which meanings should remain under organizational authority, and how
+should they connect to shared anchors?</td>
+<td>Plan for a governed local vocabulary or ontology and documented
+bridge-mapping approach</td>
+</tr>
+<tr>
 <td>Publication</td>
 <td>How do reviewed SDP facts become portable catalog metadata?</td>
 <td>Valid EML plus a reviewed KNB/DataONE publication plan</td>
@@ -833,6 +876,9 @@ dataset were shared without that biological context</strong>.</p>
 <li>The integration system connects local data and expert context to an
 SDP, review tools, shared or local semantic resources, EML, and catalog
 publication.</li>
+<li>The common biologist pathway is FAIR publication through a reviewed
+SDP; deeper pathways contribute missing shared terms or map
+organizational vocabularies or ontologies to shared anchors.</li>
 <li>A dataset can contain multiple tables; a flat file contains one
 rectangular table.</li>
 <li>The metadata CSVs are visible review surfaces, not hidden software
@@ -972,7 +1018,7 @@ the other software choices on this page.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
-<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
 <p><code>metasalmon</code> includes a small NuSEDS-derived practice
 table. Generate its templates with semantic searching turned off so the
 first result is fast and local.</p>
@@ -1008,7 +1054,7 @@ first result is fast and local.</p>
 <span><span class="fu">list.files</span><span class="op">(</span><span class="va">pkg_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
+<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
 <p><code>metasalmonpy</code> includes the same NuSEDS-derived practice
 table. Generate its templates with semantic searching turned off so the
 first result is fast and local.</p>
@@ -1043,7 +1089,7 @@ first result is fast and local.</p>
 <span id="cb4-26"><a href="#cb4-26" tabindex="-1" aria-label="code-block-4-26"></a>    <span class="bu">print</span>(path.relative_to(pkg_path))</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
 <p>Spreadsheet participants can inspect the package structure without
 running code. Download or clone the <code>smn-data-pkg</code>
 repository, copy its <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
@@ -1224,7 +1270,7 @@ lane you selected above.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1238,7 +1284,7 @@ lane you selected above.</p>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">missing_terms</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
+<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1253,7 +1299,7 @@ lane you selected above.</p>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"missing_terms"</span>])</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
 <p>Spreadsheet software does not currently run the SDP validator. For
 this quickstart, compare the prepared example’s folder structure and
 metadata headers with the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
@@ -1398,7 +1444,7 @@ and inspect the package structure.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
-<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
 <p>Put this shared setup at the top of <code>scripts/build_sdp.R</code>.
 Listing the context files now makes the optional LLM-assisted route
 available later, but the <code>FALSE</code> toggle keeps that route
@@ -1522,7 +1568,7 @@ CSVs.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <p>Put this shared setup at the top of <code>scripts/build_sdp.py</code>
 and run it from the same project root.</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -1633,7 +1679,7 @@ table ID.</p>
 <span id="cb8-23"><a href="#cb8-23" tabindex="-1" aria-label="code-block-8-23"></a>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
 <p><span class="h4 d-block mt-4" role="heading" aria-level="4">One flat
 CSV</span></p>
 <p>Copy the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
@@ -1768,7 +1814,7 @@ same workflow.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1797,7 +1843,7 @@ same workflow.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1831,7 +1877,7 @@ same workflow.</p>
 <span id="cb10-28"><a href="#cb10-28" tabindex="-1" aria-label="code-block-10-28"></a>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
 <p>Record each manual transformation and metadata decision in a review
 log beside the package. A spreadsheet-only workflow is inspectable but
 is not a fully executable rebuild; use the R or Python helper workflow
@@ -1865,7 +1911,7 @@ still decide which statements belong in canonical metadata.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-3" class="tab-content">
-<div id="nav-tabpanel-3-R" class="tab-pane show active" aria-labelledby="nav-tab-3-R" role="tabpanel">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-3-R">
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1880,7 +1926,7 @@ still decide which statements belong in canonical metadata.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-3-Python" class="tab-pane" aria-labelledby="nav-tab-3-Python" role="tabpanel">
+<div id="nav-tabpanel-3-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Python">
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1898,7 +1944,7 @@ still decide which statements belong in canonical metadata.</p>
 <span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a>).read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-3-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Spreadsheet">
 <p>Open the source dictionary and methods/caveats note from
 <code>raw_data/</code> beside the package metadata. Copy only reviewed
 statements into canonical metadata; preserve longer narrative context in
