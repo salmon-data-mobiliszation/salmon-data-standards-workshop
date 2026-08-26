@@ -4,7 +4,7 @@ title: Setup
 
 ## What you will be ready to do
 
-The workshop starts with ordinary tables and ends with a reviewed Salmon Data Package (SDP), a validated EML 2.2 metadata file, and a preview of the exact objects that `metasalmon` or `metasalmonpy` would upload to the Knowledge Network for Biocomplexity (KNB). A live catalog upload is available only to participants who have the required credentials and authority to redistribute the data.
+The common biologist pathway starts with ordinary tables and prepares the materials needed for FAIR publication: a reviewed Salmon Data Package (SDP), a validated EML 2.2 metadata file, and a preview of the exact objects that `metasalmon` or `metasalmonpy` would upload to the Knowledge Network for Biocomplexity (KNB). Learners whose roles go further can also prepare shared-term proposals or plan an organizational vocabulary or ontology with mappings to the Salmon Domain Ontology. A live catalog upload is available only to participants who have the required credentials and authority to redistribute the data.
 
 ## What to bring
 

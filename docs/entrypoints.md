@@ -26,7 +26,7 @@ This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards 
 
 ## Current episode ladder
 
-1. `episodes/session-1.Rmd`: introduce the salmon data integration system, its SDP and software components, shared and local semantic resources, bounded contexts, and the SDP-to-EML publication direction.
+1. `episodes/session-1.Rmd`: introduce the tiered end goals—FAIR publication, shared-term contribution, and organizational semantic-stewardship planning—plus the salmon data integration system, its SDP and software components, bounded contexts, bridge mappings, and the SDP-to-EML publication direction.
 2. `episodes/session-2.Rmd`: run a prepared quickstart in the selected R, Python, or Spreadsheet lane and inspect the resulting package structure.
 3. `episodes/session-3.Rmd`: bring learner-owned single-table, multi-CSV, or multi-sheet Excel inputs into a reproducible R or Python build script, declare context inputs, seed semantic candidates, and encode accepted review decisions for reruns.
 4. `episodes/session-4.Rmd`: use the shared NuSEDS Fraser Coho example to run metasalmon's R-native semantic review — `review_semantics()` prints the decision call, the learner pastes it into the build script, and `apply_sdp_semantics()` writes it — covering one measurement IRI, one I-ADOPT decomposition, one unit, one statistical modifier, one table observation-unit IRI, and one deliberate rejection, with optional bundle-aware LLM review named as a separate opt-in.

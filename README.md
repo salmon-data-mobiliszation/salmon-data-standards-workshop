@@ -1,15 +1,15 @@
 # Salmon Data Standards Workshop
 
-This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The end goal is practical publication: preserve the context behind local data, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Code-driven activities include R and Python examples, with separate spreadsheet instructions where a no-code path is useful.
+This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The common biologist pathway is practical FAIR publication: preserve the context behind local data, link selected meanings to shared definitions, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Depending on the learner's goals, the pathway can extend to proposing missing shared terms or planning how an organizational vocabulary or ontology will be governed and mapped to the Salmon Domain Ontology. Code-driven activities include R and Python examples, with separate spreadsheet instructions where a no-code path is useful.
 
-The material is being refactored for the Salmon Ontology Development Working Group from an ontology-development-first course into an SDP-first learning path. An ontology is a maintained set of concepts and definitions that also records how the concepts relate. Learners use shared definitions where they help; they are not expected to build an ontology or give every field an ontology term.
+The material is being refactored for the Salmon Ontology Development Working Group from an ontology-development-first course into an SDP-first learning path. An ontology is a maintained set of concepts and definitions that also records how the concepts relate. Biologists can complete the common pathway by reusing shared definitions where they help; they do not need to build an ontology or give every field an ontology term. The advanced stewardship pathway addresses organizational vocabularies, ontologies, and bridge mappings for learners whose roles require them.
 
 ## Learning Path
 
 1. **Structure first**: create a draft Salmon Data Package from existing data with R/`metasalmon`, the paired Python/`metasalmonpy` workflow, or the blank SDP CSV template.
 2. **Context next**: write dataset, table, column, code, caveat, and method notes that travel with the data.
 3. **Meaning where it matters**: review suggested term mappings, focusing first on measurement columns and important code lists.
-4. **Contribution paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology.
+4. **Contribution and stewardship paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology; where needed, plan how organizational terms will be governed and mapped to shared anchors.
 5. **Publication**: map SDP fields into EML, validate the export, preview the exact catalog deposit, and upload only with appropriate credentials and redistribution authority.
 
 ## Audience
@@ -25,7 +25,7 @@ No terminology-standards background is assumed. Session 1 defines semantic links
 
 ## R and Python implementations
 
-The R package `metasalmon` and Python package `metasalmonpy` are maintained at behavioral parity, with functionality and release numbers kept in lockstep. Examples use idiomatic syntax for each language rather than forcing literal API mimicry; deliberate differences are recorded in the [metasalmonpy parity guide](https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html). Workshop setup pins both packages to `v0.4.0`, the release this lesson is written against and the one recorded in `renv/profiles/lesson-requirements/renv.lock`.
+The R package `metasalmon` and Python package `metasalmonpy` are intended to remain behaviorally aligned, but the current workshop records an open catch-up window: R is pinned to `metasalmon` `v0.5.0`, while Python is pinned to `metasalmonpy` `v0.4.0`. Session 4's native semantic-review workflow is therefore taught only in R until the Python port lands. Examples use idiomatic syntax for each language rather than forcing literal API mimicry; deliberate differences are recorded in the [metasalmonpy parity guide](https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html).
 
 ## Formats
 

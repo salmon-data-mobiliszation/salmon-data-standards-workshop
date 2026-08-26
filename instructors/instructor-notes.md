@@ -6,13 +6,13 @@ title: 'Instructor Notes'
 
 Start with the end goal, then the learner's data—not ontology theory. In the first five minutes, say:
 
-> By the end, you will know how a reviewed Salmon Data Package becomes a validated EML file and how to preview an upload to a catalog such as KNB. A live upload is a separate, authorized publication action.
+> How far you take this workflow depends on your goals. The common biologist pathway is FAIR publication through a reviewed Salmon Data Package, validated EML, and a guarded catalog plan. The pathway can extend to proposing missing shared terms or planning how organizational terminology will be governed and mapped to the Salmon Domain Ontology. A live upload is a separate, authorized publication action.
 
 The first hands-on win is still a package that someone else can review. The first code example should only generate templates; do not turn it into a full semantic or publication demonstration.
 
 Before using specialized language, say:
 
-> An ontology is a maintained set of concepts and definitions that also records how the concepts relate. In this workshop, learners use shared definitions; they do not build an ontology.
+> An ontology is a maintained set of concepts and definitions that also records how the concepts relate. Biologists can complete the common pathway by reusing shared definitions; data stewards and digital librarians can follow the advanced pathway for organizational vocabularies, ontologies, and bridge mappings.
 
 Say "link to a shared definition" before introducing "semantic link" or "semantic mapping." Present R and Python as equivalent language lanes, and point spreadsheet participants to the separate no-code subsection where one is provided.
 
@@ -34,7 +34,7 @@ Use this when the goal is awareness and recruitment.
 
 | Time | Activity |
 | --- | --- |
-| 0:00-0:05 | State the reviewed SDP -> valid EML -> guarded catalog end goal |
+| 0:00-0:05 | Introduce the tiered destinations; focus this format on reviewed SDP -> valid EML -> guarded catalog plan |
 | 0:05-0:15 | Introduce the integration system and give a high-level tour of the SDP structure |
 | 0:15-0:20 | Confirm the project plus `raw_data/`, `scripts/`, and `output/` before code |
 | 0:20-0:32 | Run the simple `create_sdp()` template-generation example; point out the R, Python, and spreadsheet lanes |
