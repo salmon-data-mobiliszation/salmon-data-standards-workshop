@@ -7,6 +7,7 @@ exercises: 15
 :::::::::::::::::::::::::::::::::::::: questions
 
 - What parts make up the Salmon Data Integration System?
+- How far can this workflow go, from FAIR publication to shared or organizational semantic stewardship?
 - What is the difference between a dataset, a table, and a flat file?
 - What does a Salmon Data Package add to an ordinary spreadsheet or CSV?
 - When should a team reuse, extend, or federate a controlled vocabulary or ontology?
@@ -16,7 +17,7 @@ exercises: 15
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- State the end goal: a reviewed SDP, a validated EML file, and a guarded catalog-publication plan.
+- Explain the three workshop destinations: FAIR publication, shared-term contribution, and organizational vocabulary or ontology stewardship.
 - Distinguish a dataset from its one or more tables and recognize supported tabular inputs.
 - Explain the roles of the SDP, `metasalmon`, shared semantic resources, and local vocabularies or ontologies.
 - Choose between reusing a shared term, proposing a shared extension, and keeping a local term with an explicit bridge mapping.
@@ -26,12 +27,13 @@ exercises: 15
 
 ## Start with the end goal
 
-By the end of the workshop, participants should be able to:
+How far you take this workflow depends on your role, your dataset, and what you want to accomplish. The workshop supports three related destinations; you do not need to reach all three.
 
-1. create and review a Salmon Data Package (SDP);
-2. run a strict publication check with `metasalmon` or `metasalmonpy`;
-3. export the reviewed metadata as schema-valid EML 2.2.0; and
-4. preview an exact KNB/DataONE catalog deposit, then perform the upload when they have credentials and redistribution authority.
+1. **Publish FAIR salmon data.** This is the common goal for biologists. The [FAIR Guiding Principles][fair-principles] call for data to be **Findable, Accessible, Interoperable, and Reusable**. Accessible does not necessarily mean openly downloadable; the access path, conditions, and authority should be clear. A reviewed [Salmon Data Package][sdp-specification] keeps the data, metadata, and local context together and lets you link selected fields, code values, units, and methods to definitions already maintained in international standards and community-governed vocabularies or ontologies. From the SDP, you can run a strict publication check, export schema-valid EML 2.2.0, and prepare a KNB/DataONE catalog deposit. A live upload requires credentials and redistribution authority.
+2. **Contribute missing shared terms.** If a concept in your dataset has no suitable existing definition, document the gap and propose a new term for the [Salmon Domain Ontology][sdo] or another appropriate governed vocabulary. The resource's stewards decide whether and how the proposal enters the shared resource.
+3. **Steward organizational terminology.** The advanced destination for data stewards and digital librarians is to create and govern organizational controlled vocabularies or ontologies for local meanings, then map those terms to shared anchors in the Salmon Domain Ontology. This workshop introduces the planning and mapping pattern; a complete organizational authoring process must also define governance, review, publication, and maintenance under local authority. In this role, the Salmon Domain Ontology is an umbrella interoperability layer: it connects organizations without requiring them to give up their local terminology or authority.
+
+The Salmon Data Package is the common foundation for all three destinations. It makes local meaning reviewable before a term is reused, proposed, or mapped. KNB/DataONE publication remains an important concrete destination, but it is one route through this broader data-integration workflow rather than the only finish line.
 
 An EML file is structured XML, not an arbitrary XML file with a different name. `metasalmon` and `metasalmonpy` map reviewed SDP facts into the EML model and validate the result against EML 2.2.0. A live KNB call creates persistent production objects, so the workshop uses a credential-free dry run unless an authorized publication exercise has been arranged.
 
@@ -95,6 +97,7 @@ The workshop supports one flat table, multiple CSV tables, or multiple rectangul
 | Context | What does a reviewer need to know to avoid misuse? | Metadata and README/context note |
 | Meaning | Which fields should link to shared definitions? | Reviewed mappings for measurements and key code lists |
 | Contribution | Which shared definitions are missing, and who should maintain them? | Decision to reuse, request a shared extension, or publish a local bridge mapping |
+| Stewardship | Which meanings should remain under organizational authority, and how should they connect to shared anchors? | Plan for a governed local vocabulary or ontology and documented bridge-mapping approach |
 | Publication | How do reviewed SDP facts become portable catalog metadata? | Valid EML plus a reviewed KNB/DataONE publication plan |
 
 ## What is in a Salmon Data Package?
@@ -160,6 +163,7 @@ Write down **one thing that could be misunderstood if the dataset were shared wi
 ::::::::::::::::::::::::::::::::::::: keypoints
 
 - The integration system connects local data and expert context to an SDP, review tools, shared or local semantic resources, EML, and catalog publication.
+- The common biologist pathway is FAIR publication through a reviewed SDP; deeper pathways contribute missing shared terms or map organizational vocabularies or ontologies to shared anchors.
 - A dataset can contain multiple tables; a flat file contains one rectangular table.
 - The metadata CSVs are visible review surfaces, not hidden software internals.
 - SDP is a custom Frictionless profile with explicit external-standard alignments and salmon-specific rules.

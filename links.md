@@ -26,6 +26,7 @@
 [frictionless-data-package]: https://specs.frictionlessdata.io/data-package/
 [frictionless-table-schema]: https://specs.frictionlessdata.io/table-schema/
 [eml-specification]: https://eml.ecoinformatics.org/
+[fair-principles]: https://doi.org/10.1038/sdata.2016.18
 [knb]: https://knb.ecoinformatics.org/
 [hnap-guide]: https://schemas.metadata.geo.ca/hnap/2.3.1/HNAP.md
 [iadopt]: https://w3id.org/iadopt/ont/
