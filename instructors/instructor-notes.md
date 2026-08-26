@@ -140,7 +140,7 @@ Before delivery:
 - choose a small example dataset;
 - prepare an RStudio Project containing `raw_data/`, `scripts/`, and `output/`, with the example's data and context inputs together under `raw_data/` and an R or Python build script under `scripts/`;
 - prepare one current, already-created SDP folder for later review after the high-level system overview and quickstart;
-- install the latest R/`metasalmon` and Python/`metasalmonpy` packages and verify the examples in each language being taught;
+- install the pinned releases — R/`metasalmon` **v0.5.0** and Python/`metasalmonpy` **v0.4.0**, per `learners/setup.md` — and verify the examples in each language being taught. The two numbers differ on purpose: Session 4's review flow shipped in metasalmon 0.5.0 and has no Python port yet;
 - prepare one measurement mapping example;
 - prepare semantic suggestion output in advance if live vocabulary lookup would interrupt the schedule. Seeding the shared Fraser Coho example takes roughly three minutes of live vocabulary lookup on a 17-column table, so build it before the session and hand out the folder; Session 4's review itself makes no network call and is instant;
 - prepare one categorical code-list example;

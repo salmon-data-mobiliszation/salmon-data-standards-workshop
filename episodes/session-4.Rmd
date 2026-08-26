@@ -29,25 +29,10 @@ exercises: 40
 # dependency loads and keeps {metasalmon} registered for sandpaper's renv
 # machinery, exactly as the same chunk does in Session 6.
 #
-# It deliberately does NOT assert that review_semantics() exists. The lesson's
-# renv lockfile pins one released metasalmon, and a hard assertion here would
-# turn "the pin is behind the release" into a failed website build. The note
-# below is the softer signal instead: it goes to stderr rather than through
-# message(), because include = FALSE discards captured messages and this one is
-# meant for the build log.
-#
-# Retires when: the lockfile pins a metasalmon that exports review_semantics().
-# Delete the whole `if` at that point; the library() call stays.
+# The build-log note that used to sit here — warning that the pinned metasalmon
+# did not export review_semantics() — was removed when the lockfile moved to
+# v0.5.0, which is the retirement condition it named for itself.
 library(metasalmon)
-
-if (!exists("review_semantics", where = asNamespace("metasalmon"), inherits = FALSE)) {
-  cat(
-    "NOTE: pinned metasalmon ", as.character(utils::packageVersion("metasalmon")),
-    " does not export review_semantics(); session-4.Rmd teaches it. ",
-    "Update renv/profiles/lesson-requirements/renv.lock.\n",
-    sep = "", file = stderr()
-  )
-}
 ```
 
 ## The decision that used to leave no record
@@ -66,20 +51,19 @@ You paste that line into `scripts/build_sdp.R`. **The paste is the audit trail.*
 
 A learner who understands why the spreadsheet was abandoned will not drift back to it. The spreadsheet lane still exists below, because a mixed workshop needs it — but it is now the lane that costs you the record, and this chapter says so plainly.
 
-Be precise about the size of the claim. **Semantic IRI review no longer needs a spreadsheet.** That is not the same as "you never open a spreadsheet again": free-text fields — descriptions, contacts, licences — are still edited by hand, and a slot that retrieval found nothing for never reaches this review at all. The section [What this review cannot decide](#what-this-review-cannot-decide) is not a disclaimer at the end; it is half the lesson. A learner who leaves believing review finishes the package will be corrected by the validator, and will trust the tool less than it deserves.
+Be precise about the size of the claim. **This chapter's flow decides semantic IRIs, and it is not the whole package.** Free-text fields — descriptions, contacts, licences — are outside it, and a slot that retrieval found nothing for never reaches this queue at all. Neither of those is a spreadsheet job any more: `review_metadata()` and the `set_sdp_*()` setters, which shipped in the same release, close both, and the section [What this review cannot decide](#what-this-review-cannot-decide) is where they are named. That section is not a disclaimer at the end; it is half the lesson. A learner who leaves believing *this queue* finishes the package will be corrected by the validator, and will trust the tool less than it deserves.
 
 ::::::::::::::::::::::::::::::::::::: prereq
 
-## You need a metasalmon new enough to have the review flow
+## You need metasalmon 0.5.0 or newer
 
-`review_semantics()` and its companions are recent. Check before you start, and reinstall from the [metasalmon repository][metasalmon] if the answer is `FALSE`:
+The review flow shipped in **metasalmon 0.5.0**. Check before you start, and reinstall the pinned tag from the Setup page if the answer is older:
 
 ```{r, eval = FALSE, purl = FALSE}
 packageVersion("metasalmon")
-exists("review_semantics", where = asNamespace("metasalmon"), inherits = FALSE)
 ```
 
-The [changelog][metasalmon-changelog] names the release that introduced it.
+An earlier metasalmon loads without complaint and then has none of the functions this chapter uses. The [changelog][metasalmon-changelog] has the 0.5.0 entry.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -138,6 +122,8 @@ review <- review_semantics(pkg_path, columns = "NATURAL_SPAWNERS_TOTAL")
 ### Python
 
 **There is no Python equivalent.** Not a partial one, not a differently-spelled one: `metasalmonpy` has no review queue, no accessor for the suggestions attribute, and no function that reads `semantic_suggestions.csv` back. The R-native review flow lands in `metasalmon` first, and the port has not been written. This is a gap, not a deliberate parity difference, so do not go looking for it in the [parity guide][metasalmonpy-parity].
+
+This is also why the Setup page pins the two lanes to different releases: metasalmon `v0.5.0` is the release this chapter teaches, and metasalmonpy's newest is `v0.4.0`. Pinning both makes the lesson reproducible; only the port will make it equivalent.
 
 What a Python user can do today is read the same evidence the R queue is built from, with pandas rather than with `metasalmonpy`. `semantic_suggestions.csv` sits at the package root and is written by both implementations:
 
@@ -238,7 +224,7 @@ review <- reject_suggestion(
 )
 ```
 
-`reason` is carried on the review object and shown in the console, and it reaches the package only as the word `rejected` in `semantic_suggestions.csv` — the sentence itself is not stored there. So the reason survives in exactly one place: the line you paste into your script. Write it as if that were true, because it is.
+`reason` is carried on the review object, shown in the console, **and written to disk** — `semantic_suggestions.csv` has a `decision_reason` column beside `decision`, so the sentence travels with the package rather than only with your project folder. Write it for a reader who has neither your script nor you: it is the one field that says why a slot is deliberately empty rather than merely unfinished.
 
 Accept a term the search did not surface by naming it directly instead of a rank:
 
@@ -603,6 +589,17 @@ This is the first durable, in-package record of a review decision, and it travel
 
 Read the `property` row as the useful case: it is the one that tells a later reader the shortlist was overruled, which is exactly the fact a copied cell used to hide.
 
+A fourth column, `decision_reason`, carries the sentence you passed to `reject_suggestion()`. Add it to the selection above to see it:
+
+```{r, eval = FALSE, purl = FALSE}
+suggestions[
+  !is.na(suggestions$decision),
+  c("column_name", "dictionary_role", "decision", "decision_reason")
+]
+```
+
+`review_semantics()` reads that column back, so rebuilding the queue tomorrow keeps your rejections out of it instead of asking the same question again.
+
 ## The finished script
 
 Session 3 said every accepted decision belongs in the script rather than in a manual edit inside `output/`. This is what that looks like for semantics. Append it to `scripts/build_sdp.R`, below the `create_sdp()` call:
@@ -641,15 +638,33 @@ One caveat about rerunning. The decisions replay deterministically, but the *can
 
 Say these out loud in the workshop. A tool that hides its limits teaches learners to trust it in the places it is weakest.
 
-**A slot with no candidate never appears.** The queue is built from shortlists, not from gaps. A required field that retrieval found nothing for is silently absent from the review, so a completed review can still fail `require_iris = TRUE`. The validation report — not the empty queue — is the authority on whether the package is finished.
+**A slot with no candidate never appears in *this* queue.** `review_semantics()` is built from shortlists, not from gaps, so a required field that retrieval found nothing for is silently absent from it. That is a property of the semantic queue, not a limit of the package: `review_metadata()` reads the package against the rules that actually decide strict validation — the schema's required fields, the `MISSING …:` placeholders, the measurement-IRI requirement and the table observation-unit requirement — so a field no retrieval ever touched is as visible to it as one with five candidates. Run it after this chapter, and treat *its* report, rather than an empty semantic queue, as the authority on whether the package is finished.
 
-**An empty queue is not proof of completion.** Filter to a column that does not exist and the console still reports "No unfilled semantic slots with suggestions", which reads like success. Check the column name before believing it.
+**Free-text fields have their own R-native flow, and it is not this one.** Descriptions, contacts, licences and the other `MISSING …:` placeholders are outside the semantic review, but they are no longer a spreadsheet job either. `review_metadata()` prints the exact `set_sdp_dataset()` / `set_sdp_table()` / `set_sdp_column()` / `set_sdp_code()` call for each one, with the value left as a `<…>` placeholder you replace:
 
-**Free-text fields are still edited by hand.** Descriptions, contacts, licences, and the other `MISSING …:` placeholders are outside this flow; strict validation reports them as errors. Session 6 covers that gate.
+```{r, eval = FALSE, purl = FALSE}
+review_metadata(pkg_path)
 
-**Rejections do not persist into a fresh queue.** `apply_sdp_semantics()` records the rejection in `semantic_suggestions.csv` and clears the field — but a blank field is undecided, so calling `review_semantics()` again re-queues the slot you rejected, with no sign that you already looked at it. Your script is the record; the queue is not. This is a real rough edge, and it is another reason the decisions belong in `scripts/build_sdp.R`.
+set_sdp_dataset(pkg_path,
+  creator = "Fisheries and Oceans Canada - Pacific Region"
+)
+```
 
-**Some suggestion targets are not decidable here at all.** A target that has no single IRI field to write into — the dataset keyword list, for example — is reported and skipped rather than shown as something you can accept. Edit those in the metadata CSVs directly.
+The same rule as this chapter applies: **the printed call is the contract, and the paste is the audit trail.** Pasting one unedited is refused — a `creator` field reading `<add creator, team, or originating program>` would pass strict validation while saying nothing, which is worse than the placeholder it replaced, because the marker is gone. Session 6 covers where that gate sits in the publication workflow.
+
+**Some suggestion targets are not decidable in the semantic queue.** A target with no single IRI field to write into — the dataset keyword list, for example — is reported and skipped rather than shown as something you can accept. Set those with `set_sdp_dataset(pkg_path, keywords = "…")`, which checks the field name against the schema, so a misspelling is an error rather than a silent no-op.
+
+::::::::::::::::::::::::::::::::::::: callout
+
+## Two rough edges this chapter used to carry, and where they went
+
+Earlier drafts of this lesson taught two real defects, because they were real: a rejection did not survive rebuilding the queue, and an empty queue under a mistyped `columns` filter printed the *completion* message — telling a learner who typed `columns = "TYPO"` that their package was finished.
+
+Both were fixed in **metasalmon 0.5.0**, and both were found by teaching this API rather than by testing it. `review_semantics()` now replays recorded decisions and keeps decided slots out of the default queue (pass `include_filled = TRUE` to see them), the rejection *reason* is written to a `decision_reason` column and read back, and a `columns` value matching no column is an error that names the columns that do exist.
+
+They are worth naming rather than quietly deleting. The shared shape is the lesson: **a feature that writes a record and never reads it back has not been round-tripped, and no test that only writes will say so.**
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Optional LLM-assisted bundle review
 
@@ -663,7 +678,7 @@ Context files must be passed as existing local file paths through `llm_context_f
 
 ## Function reference
 
-Full argument lists and return values: [`review_semantics()`][metasalmon-review-semantics], [`accept_suggestion()` and `reject_suggestion()`][metasalmon-accept-suggestion], [`apply_sdp_semantics()`][metasalmon-apply-sdp-semantics].
+Full argument lists and return values: [`review_semantics()`][metasalmon-review-semantics], [`accept_suggestion()` and `reject_suggestion()`][metasalmon-accept-suggestion], [`apply_sdp_semantics()`][metasalmon-apply-sdp-semantics], [`review_metadata()`][metasalmon-review-metadata], and the [`set_sdp_*()` setters][metasalmon-set-sdp-dataset].
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
@@ -703,11 +718,11 @@ Then answer the question this chapter exists for: **if you left this project tod
 - `review_semantics()` reads suggestions that already exist. It never searches, and it never contacts an LLM.
 - `REVIEW:` and a blank field both mean undecided; a retrieval score is not agreement.
 - Shortlists are one candidate deep by default (`semantic_max_per_role = 1`); ask for depth at build time, and expect it to give you more to reject rather than more to accept.
-- Semantic IRI review no longer needs a spreadsheet. Free text still does, and gaps never enter the queue at all.
+- No part of getting a package to strict validation needs a spreadsheet any more: this queue decides the IRIs, and `review_metadata()` plus the `set_sdp_*()` setters decide the free text and the gaps this queue never shows.
 - The workshop review is bounded to one measurement, its I-ADOPT decomposition, its unit and statistical modifier, one table observation unit, and one deliberate rejection.
 - I-ADOPT roles describe the measurement variable; units are separate, and methods live at the table, protocol, or code level rather than in the dictionary.
 - `apply_sdp_semantics()` is a surgical, re-runnable metadata edit that leaves the data files byte-identical.
-- The queue shows shortlists, not gaps — the validation report decides whether the package is finished.
+- The queue shows shortlists, not gaps — `review_metadata()` shows the gaps, and the validation report decides whether the package is finished.
 - Optional LLM assessment is generated earlier and only on explicit opt-in; the review flow only displays it.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

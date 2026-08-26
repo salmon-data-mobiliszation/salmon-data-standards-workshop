@@ -19,8 +19,8 @@ This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards 
 
 ## Software lanes
 
-- R instructions use the latest `metasalmon` from the repository without a version pin. The *lesson build* is a separate matter: `renv/profiles/lesson-requirements/renv.lock` pins one released `metasalmon`, and that pin must be bumped whenever an episode starts teaching a newer function. `episodes/session-4.Rmd` writes a note to the build log when the pin is behind what it teaches.
-- Python instructions use the latest `metasalmonpy` from the repository without a version pin.
+- R instructions pin `metasalmon` to the **`v0.5.0`** release tag, and `renv/profiles/lesson-requirements/renv.lock` pins the same release, so a learner's install and the lesson build are the same package. Bump the two together — `learners/setup.md` and the lockfile — whenever an episode starts teaching a newer function. The build-log note `episodes/session-4.Rmd` used to emit when the pin was behind what it taught has been removed; the pin is no longer behind, and that was the condition the note named for its own retirement.
+- Python instructions pin `metasalmonpy` to the **`v0.4.0`** release tag tarball (its releases carry no wheel assets). **The two lanes are deliberately on different numbers**: the R-native review flow `episodes/session-4.Rmd` teaches shipped in metasalmon 0.5.0 and has not been ported to Python, so that episode's Python lane is empty and says so. Pinning fixes reproducibility on both lanes; only the port closes the capability gap.
 - Spreadsheet instructions use the same canonical SDP CSV files and appear separately where no code is required.
 - `metasalmon` and `metasalmonpy` are treated as behaviorally aligned implementations; deliberate language differences belong in the upstream parity guide.
 
