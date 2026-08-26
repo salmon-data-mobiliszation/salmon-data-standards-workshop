@@ -341,9 +341,32 @@ Deferred measurement gaps are valid in draft or review state. They will not pass
 
 The canonical SDP does not contain every fact EML requires. For example, a free-text `creator` cell cannot safely be guessed into structured people, organizations, ORCIDs, and metadata-provider roles. Measurement scale and the meanings of missing-value tokens also need explicit review.
 
+## What a package needs before EML export will run
+
+`write_eml_from_sdp()` and `publish_sdp_to_knb()` are gates, not conversions. Both refuse a package that is not finished, and the refusals arrive one at a time. A first attempt on a freshly created package fails four times in a row, so it is worth knowing the whole list before you start.
+
+This is not hypothetical: the list below is what a real deposit of the shipped Fraser Coho example to the KNB **test** node required on 2026-08-25, and the executable record of it is metasalmon's [KNB rehearsal script][metasalmon-knb-rehearsal]. Read that script as the worked golden path; the stages map onto this list.
+
+| Prerequisite | Where it lives | Why it stops you |
+| --- | --- | --- |
+| Every measurement column carries a complete annotation | `column_dictionary.csv`: `term_iri`, `property_iri`, `entity_iri`, `unit_iri` | Strict validation with `require_iris = TRUE` refuses an unannotated measurement column. A column you skipped in Session 4 surfaces here, not earlier. |
+| No placeholders remain | `dataset.csv` and `tables.csv` | `create_sdp()` writes `MISSING METADATA:` for facts it cannot know — description, creator, contact, license, source citation. Strict validation refuses to ship them. |
+| Each table says what one row is | `tables.csv$observation_unit_iri` | A blank observation unit is a canonical review target. It must be decided, not defaulted. |
+| The reviewed closure exists | `metadata/semantic_vocabulary.csv` and `reviewed_semantic_selections.csv` | Both are required: one evidence row per canonical measurement IRI, and exactly one accepted row per canonical review target. |
+
+::::::::::::::::::::::::::::::::::::: callout
+
+## The reviewed closure has no public producer yet
+
+The last row is different in kind from the other three. `metasalmon` and `metasalmonpy` **validate** `semantic_vocabulary.csv` and `reviewed_semantic_selections.csv`, but neither package exports a function that **writes** them, and no vignette shows their contents. The rehearsal script has to reach into package internals to build them, which is not something you can or should reproduce from the published documentation.
+
+The practical consequence for this workshop: you can go all the way to strict validation on your own package, and you can read a prepared dry-run manifest, but you cannot produce a complete deposit unaided until that gap closes. Your instructor supplies the two artifacts for any live exercise. This is tracked as metasalmon backlog **#116**; the workshop will teach the supported route as soon as one exists, rather than teaching an internal call that may change.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 ## Export validated EML
 
-The code blocks from here to the end of this section operate on `pkg_path`, the reviewed package you have been building through the workshop; they are shown for you to run in your own session and are not executed when the lesson website is built.
+The code blocks from here to the end of this section operate on `pkg_path`, the reviewed package you have been building through the workshop; they are shown for you to run in your own session and are not executed when the lesson website is built. They stay display-only for the reason above: a genuine run needs a fully reviewed package and the reviewed closure, and this lesson will not fabricate either to make a code block render.
 
 Create `metadata/eml-mapping.yml` from metasalmon's [canonical mapping template][metasalmon-eml-mapping]. R users can copy the template from their installed package with the code below; Python and spreadsheet users can download the linked file and save it at the same package-relative path.
 

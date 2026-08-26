@@ -25,7 +25,7 @@ No terminology-standards background is assumed. Session 1 defines semantic links
 
 ## R and Python implementations
 
-The R package `metasalmon` and Python package `metasalmonpy` are maintained at behavioral parity, with functionality and release numbers kept in lockstep. Examples use idiomatic syntax for each language rather than forcing literal API mimicry; deliberate differences are recorded in the [metasalmonpy parity guide](https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html). Workshop setup installs the latest version of each package.
+The R package `metasalmon` and Python package `metasalmonpy` are maintained at behavioral parity, with functionality and release numbers kept in lockstep. Examples use idiomatic syntax for each language rather than forcing literal API mimicry; deliberate differences are recorded in the [metasalmonpy parity guide](https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html). Workshop setup pins both packages to `v0.4.0`, the release this lesson is written against and the one recorded in `renv/profiles/lesson-requirements/renv.lock`.
 
 ## Formats
 
