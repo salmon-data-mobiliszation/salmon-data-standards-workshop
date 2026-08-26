@@ -415,6 +415,9 @@ a named list.</li>
 observation per row, and one value per cell.</li>
 <li>Semantic seeding is enabled in this chapter; LLM assessment remains
 a separate, explicit opt-in.</li>
+<li>Seeding is what makes Chapter 4 possible: the review there reads
+suggestions rather than searching, so a package built without seeding
+has nothing to review.</li>
 <li>Metadata tables hold structured facts; README/context notes hold
 narrative caveats.</li>
 <li>A clear description is more valuable than an uncertain link to a
@@ -422,18 +425,37 @@ shared definition.</li>
 </ul></section><section id="session-4"><h2 class="section-heading"><a href="session-4.html">Review Terms and Measurement Meanings</a></h2>
 <hr class="half-width">
 <ul>
-<li>The workshop semantic exercise is bounded to one Fraser Coho
-measurement, one I-ADOPT decomposition, one unit, one table observation
-unit, and one method code.</li>
+<li>The console prints the exact <code>accept_suggestion()</code> call;
+pasting it into your build script is what makes the decision
+reproducible.</li>
 <li>
-<code>REVIEW:</code> suggestions are evidence to inspect, not final
-answers.</li>
-<li>Optional LLM review selects from deterministic candidates and
-remains subject to deterministic checks.</li>
-<li>SDP measurement semantic fields are measurement-only in the column
-dictionary; methods live at the table, protocol, or code level rather
-than in the dictionary, and I-ADOPT itself does not model units or
-methods.</li>
+<code>review_semantics()</code> reads suggestions that already
+exist. It never searches, and it never contacts an LLM.</li>
+<li>
+<code>REVIEW:</code> and a blank field both mean undecided; a
+retrieval score is not agreement.</li>
+<li>Shortlists are one candidate deep by default
+(<code>semantic_max_per_role = 1</code>); ask for depth at build time,
+and expect it to give you more to reject rather than more to
+accept.</li>
+<li>No part of getting a package to strict validation needs a
+spreadsheet any more: this queue decides the IRIs, and
+<code>review_metadata()</code> plus the <code>set_sdp_*()</code> setters
+decide the free text and the gaps this queue never shows.</li>
+<li>The workshop review is bounded to one measurement, its I-ADOPT
+decomposition, its unit and statistical modifier, one table observation
+unit, and one deliberate rejection.</li>
+<li>I-ADOPT roles describe the measurement variable; units are separate,
+and methods live at the table, protocol, or code level rather than in
+the dictionary.</li>
+<li>
+<code>apply_sdp_semantics()</code> is a surgical, re-runnable
+metadata edit that leaves the data files byte-identical.</li>
+<li>The queue shows shortlists, not gaps —
+<code>review_metadata()</code> shows the gaps, and the validation report
+decides whether the package is finished.</li>
+<li>Optional LLM assessment is generated earlier and only on explicit
+opt-in; the review flow only displays it.</li>
 </ul></section><section id="session-5"><h2 class="section-heading"><a href="session-5.html">Code Lists, SKOS, and Local Vocabulary</a></h2>
 <hr class="half-width">
 <ul>
@@ -498,7 +520,7 @@ requests.</li>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.2" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.1" class="external-link">varnish (1.1.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.2" class="external-link">varnish (1.1.2)</a></p>
 		</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -521,8 +543,8 @@ requests.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/key-points.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/key-points.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-25",
-  "datePublished": "2026-08-25"
+  "dateModified": "2026-08-26",
+  "datePublished": "2026-08-26"
 }
 
   </script><script>

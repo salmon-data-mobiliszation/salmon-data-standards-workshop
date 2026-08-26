@@ -309,7 +309,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Reference</h1>
-        <p>Last updated on 2026-08-25 |
+        <p>Last updated on 2026-08-26 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -326,7 +326,8 @@
 tables.</li>
 <li>Improve dataset, table, column, code, and README/context
 descriptions.</li>
-<li>Review suggested semantic links.</li>
+<li>Review suggested semantic links, recording each decision as a line
+of code in the build script rather than as an edited cell.</li>
 <li>Focus first on measurements, units, observation units, and important
 code lists.</li>
 <li>Render and review unresolved-term routes: <code>smn</code>,
@@ -350,6 +351,27 @@ upload only with explicit authority and credentials.</li>
 </tr><tr><td>Suggest shared definitions</td>
 <td><code>suggest_semantics()</code></td>
 <td><code>suggest_semantics()</code></td>
+</tr><tr><td>Build a semantic review queue</td>
+<td><code>review_semantics()</code></td>
+<td>pending</td>
+</tr><tr><td>Decide one review slot</td>
+<td>
+<code>accept_suggestion()</code>,
+<code>reject_suggestion()</code>
+</td>
+<td>pending</td>
+</tr><tr><td>Write review decisions back</td>
+<td><code>apply_sdp_semantics()</code></td>
+<td>pending</td>
+</tr><tr><td>Report required-but-unfilled metadata</td>
+<td><code>review_metadata()</code></td>
+<td>pending</td>
+</tr><tr><td>Fill a free-text metadata field</td>
+<td>
+<code>set_sdp_dataset()</code>, <code>set_sdp_table()</code>,
+<code>set_sdp_column()</code>, <code>set_sdp_code()</code>
+</td>
+<td>pending</td>
 </tr><tr><td>Detect unresolved gaps</td>
 <td><code>detect_semantic_term_gaps()</code></td>
 <td><code>detect_semantic_term_gaps()</code></td>
@@ -373,10 +395,20 @@ extra)</td>
 <code>publish_sdp_to_knb()</code> (requires the <code>knb</code>
 extra)</td>
 </tr></tbody></table><p>The two implementations are maintained at behavioral parity and
-release in lockstep. Their syntax remains idiomatic to each language;
-see the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html" class="external-link">metasalmonpy
-parity guide</a> for deliberate differences. Install the latest packages
-before the workshop.</p>
+normally release in lockstep. Their syntax remains idiomatic to each
+language; see the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html" class="external-link">metasalmonpy
+parity guide</a> for deliberate differences. Install the
+<strong>pinned</strong> releases before the workshop —
+<code>metasalmon</code> v0.5.0 and <code>metasalmonpy</code> v0.4.0 —
+not the latest default branch; the Setup page has both commands and says
+why the numbers differ.</p>
+<p>Rows marked <em>pending</em> are the R-native semantic review flow,
+which lands in <code>metasalmon</code> first. It is not a deliberate
+parity difference; the Python equivalent has not shipped yet. Python
+users decide the same slots by reading
+<code>semantic_suggestions.csv</code> and editing the target metadata
+field named by its <code>target_sdp_file</code> and
+<code>target_sdp_field</code> columns.</p>
 </section><section><h2 class="section-heading" id="recommended-project-layout">Recommended project layout<a class="anchor" aria-label="anchor" href="#recommended-project-layout"></a></h2>
 <hr class="half-width"><pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj
@@ -783,7 +815,7 @@ suggestion that must be checked before publication.</p>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.2" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.1" class="external-link">varnish (1.1.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.2" class="external-link">varnish (1.1.2)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -805,8 +837,8 @@ suggestion that must be checked before publication.</p>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/reference.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/reference.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-25",
-  "datePublished": "2026-08-25"
+  "dateModified": "2026-08-26",
+  "datePublished": "2026-08-26"
 }
 
   </script><script>

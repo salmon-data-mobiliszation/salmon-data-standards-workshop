@@ -326,16 +326,16 @@
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-2.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Create a Draft
+          Previous: Create a Draft Salmon Data Package...
         </a>
         <a class="chapter-link float-end" href="session-4.html" rel="next">
-          Next: Review Terms and...
+          Next: Review Terms and Measurement Meanings...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Use Your Data and Capture Context</h1>
-        <p>Last updated on 2026-08-25 |
+        <p>Last updated on 2026-08-26 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -419,7 +419,7 @@ and inspect the package structure.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
-<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
 <p>Put this shared setup at the top of <code>scripts/build_sdp.R</code>.
 Listing the context files now makes the optional LLM-assisted route
 available later, but the <code>FALSE</code> toggle keeps that route
@@ -543,7 +543,7 @@ CSVs.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
+<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
 <p>Put this shared setup at the top of <code>scripts/build_sdp.py</code>
 and run it from the same project root.</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -654,7 +654,7 @@ table ID.</p>
 <span id="cb8-23"><a href="#cb8-23" tabindex="-1" aria-label="code-block-8-23"></a>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
 <p><span class="h4 d-block mt-4" role="heading" aria-level="4">One flat
 CSV</span></p>
 <p>Copy the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
@@ -710,26 +710,42 @@ transformation in R or Python.</td>
 <td>Run <code>create_sdp()</code> with
 <code>seed_semantics = TRUE</code> /
 <code>seed_semantics=True</code>.</td>
-</tr><tr><td>Review</td>
+</tr><tr><td>Review free text</td>
 <td>Read the package with <code>read_salmon_datapackage()</code> and
-represent accepted metadata decisions as code.</td>
+represent accepted description, contact, and licence decisions as
+code.</td>
+</tr><tr><td>Review semantics</td>
+<td>In R, decide each suggested IRI with <code>review_semantics()</code>
+and <code>accept_suggestion()</code> in Chapter 4, and write them with
+<code>apply_sdp_semantics()</code>.</td>
 </tr><tr><td>Write</td>
-<td>Write the reviewed state with
+<td>Write reviewed free-text state with
 <code>write_salmon_datapackage()</code>. Use a versioned path when the
 earlier package must be preserved.</td>
 </tr><tr><td>Check</td>
 <td>Run <code>validate_salmon_datapackage()</code> and fix the script or
 its declared inputs, then rerun.</td>
-</tr></tbody></table><p>In this script-backed workflow, <code>overwrite = TRUE</code> /
+</tr></tbody></table><p>Two writers appear in that table, and they are not interchangeable.
+<code>write_salmon_datapackage()</code> rebuilds a whole package from
+in-memory objects, which is what a free-text edit needs.
+<code>apply_sdp_semantics()</code>, introduced in Chapter 4, changes
+only the decided cells and leaves every data CSV byte untouched, which
+is what a semantic decision needs.</p>
+<p>In this script-backed workflow, <code>overwrite = TRUE</code> /
 <code>overwrite=True</code> deliberately rebuilds writer-managed files
 and then reapplies the decisions encoded below it. A manual edit that
 exists only in the generated folder can be replaced, which is why
 reviewed changes belong in the script or in a preserved, versioned
-package. Do not use <code>prune = TRUE</code> / <code>prune=True</code>
-here.</p>
-<p>The following small extension shows the pattern. Later chapters add
-semantic review, EML export, and publication steps to the same
-workflow.</p>
+package.</p>
+<p>Do not use <code>prune = TRUE</code> / <code>prune=True</code> here,
+and Chapter 4 is where you would find out why: pruning deletes
+<code>semantic_suggestions.csv</code>, and with it the entire evidence
+base the semantic review reads. <code>review_semantics()</code> then
+reports that there is nothing to review, and the only way back is a full
+reseeding search.</p>
+<p>The following small extension shows the free-text pattern. Later
+chapters add semantic review, EML export, and publication steps to the
+same workflow.</p>
 <div class="tabs">
 <nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
 <button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
@@ -749,7 +765,7 @@ workflow.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -778,7 +794,7 @@ workflow.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
+<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -812,7 +828,7 @@ workflow.</p>
 <span id="cb10-28"><a href="#cb10-28" tabindex="-1" aria-label="code-block-10-28"></a>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
 <p>Record each manual transformation and metadata decision in a review
 log beside the package. A spreadsheet-only workflow is inspectable but
 is not a fully executable rebuild; use the R or Python helper workflow
@@ -844,7 +860,7 @@ still decide which statements belong in canonical metadata.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-3" class="tab-content">
-<div id="nav-tabpanel-3-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-3-R">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" aria-labelledby="nav-tab-3-R" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -859,7 +875,7 @@ still decide which statements belong in canonical metadata.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-3-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Python">
+<div id="nav-tabpanel-3-Python" class="tab-pane" aria-labelledby="nav-tab-3-Python" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -877,7 +893,7 @@ still decide which statements belong in canonical metadata.</p>
 <span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a>).read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Spreadsheet">
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-3-Spreadsheet" role="tabpanel">
 <p>Open the source dictionary and methods/caveats note from
 <code>raw_data/</code> beside the package metadata. Copy only reviewed
 statements into canonical metadata; preserve longer narrative context in
@@ -952,11 +968,11 @@ it.</p>
 <p>This note is useful for people and for optional LLM-assisted review.
 It gives mapping tools evidence that is not visible from column names
 alone.</p>
-<div id="challenge-1-move-from-the-example-to-your-data" class="callout discussion">
+<div id="challenge-1-move-from-the-example-to-your-data" class="callout challenge">
 <div class="callout-square">
-<i class="callout-icon" data-feather="message-circle"></i>
+<i class="callout-icon" data-feather="zap"></i>
 </div>
-<span class="callout-header">Discussion</span>
+<span class="callout-header">Challenge</span>
 <div id="challenge-1-move-from-the-example-to-your-data" class="callout-inner">
 <h3 class="callout-title">Challenge 1: Move from the example to your
 data</h3>
@@ -995,6 +1011,9 @@ a named list.</li>
 observation per row, and one value per cell.</li>
 <li>Semantic seeding is enabled in this chapter; LLM assessment remains
 a separate, explicit opt-in.</li>
+<li>Seeding is what makes Chapter 4 possible: the review there reads
+suggestions rather than searching, so a package built without seeding
+has nothing to review.</li>
 <li>Metadata tables hold structured facts; README/context notes hold
 narrative caveats.</li>
 <li>A clear description is more valuable than an uncertain link to a
@@ -1011,10 +1030,10 @@ shared definition.</li>
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-2.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Create a Draft
+          Previous: Create a Draft Salmon Data Package...
         </a>
         <a class="chapter-link float-end" href="session-4.html" rel="next">
-          Next: Review Terms and...
+          Next: Review Terms and Measurement Meanings...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -1040,7 +1059,7 @@ shared definition.</li>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.2" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.1" class="external-link">varnish (1.1.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.2" class="external-link">varnish (1.1.2)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1062,8 +1081,8 @@ shared definition.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-3.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-3.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-25",
-  "datePublished": "2026-08-25"
+  "dateModified": "2026-08-26",
+  "datePublished": "2026-08-26"
 }
 
   </script><script>

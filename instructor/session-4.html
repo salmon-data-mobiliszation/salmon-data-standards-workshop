@@ -236,12 +236,19 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded</a></li>
-<li><a href="#generate-suggestions-for-the-shared-example">Generate suggestions for the shared example</a></li>
+        <ul><li><a href="#the-decision-that-used-to-leave-no-record">The decision that used to leave no record</a></li>
+<li><a href="#keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded</a></li>
+<li><a href="#your-package-must-already-carry-suggestions">Your package must already carry suggestions</a></li>
+<li><a href="#build-the-review-queue">Build the review queue</a></li>
+<li><a href="#read-one-slot">Read one slot</a></li>
+<li><a href="#decide-in-your-script">Decide, in your script</a></li>
 <li><a href="#treat-suggestions-as-drafts">Treat suggestions as drafts</a></li>
-<li><a href="#measurement-semantics">Measurement semantics</a></li>
+<li><a href="#measurement-semantics-and-i-adopt">Measurement semantics and I-ADOPT</a></li>
+<li><a href="#write-the-decisions-back">Write the decisions back</a></li>
+<li><a href="#the-finished-script">The finished script</a></li>
+<li><a href="#what-this-review-cannot-decide">What this review cannot decide</a></li>
 <li><a href="#optional-llm-assisted-bundle-review">Optional LLM-assisted bundle review</a></li>
-<li><a href="#example-review">Example review</a></li>
+<li><a href="#function-reference">Function reference</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
 
@@ -324,16 +331,16 @@
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="../instructor/session-3.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Use Your Data and
+          Previous: Use Your Data and Capture Context...
         </a>
         <a class="chapter-link float-end" href="../instructor/session-5.html" rel="next">
-          Next: Code Lists, SKOS,...
+          Next: Code Lists, SKOS, and Local Vocabulary...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Review Terms and Measurement Meanings</h1>
-        <p>Last updated on 2026-08-25 |
+        <p>Last updated on 2026-08-26 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -354,10 +361,12 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How do we keep semantic review small enough to finish in the
+<ul><li>Where does the record of a semantic decision live?</li>
+<li>How do we keep semantic review small enough to finish in the
 workshop?</li>
 <li>How do I decide whether a suggested IRI is good enough to keep?</li>
 <li>What does I-ADOPT clarify for measurement columns?</li>
+<li>What can this review <em>not</em> decide for me?</li>
 </ul></div>
 </div>
 </div>
@@ -365,67 +374,137 @@ workshop?</li>
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Review one suggested <code>term_iri</code> for the Fraser Coho
-measurement without treating it as final.</li>
-<li>Decompose that same measurement once using the SDP’s I-ADOPT
-fields.</li>
-<li>Review one unit IRI, one table observation-unit IRI, and one
-method-code IRI without confusing those links with I-ADOPT roles.</li>
+<ul><li>Build a review queue from the suggestions your package already
+carries, without running a new search.</li>
+<li>Read one slot’s shortlist and decide it with a call you paste into
+<code>scripts/build_sdp.R</code>.</li>
+<li>Decompose one measurement once using the SDP’s I-ADOPT fields.</li>
+<li>Write the decisions back with <code>apply_sdp_semantics()</code> and
+confirm the data files did not change.</li>
+<li>Name the decisions this review cannot reach, and say where they are
+still made.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded<a class="anchor" aria-label="anchor" href="#keep-the-workshop-semantic-review-bounded"></a></h2>
-<hr class="half-width"><p>In this workshop, we will not try to map every column. Everyone will
-use the NuSEDS Fraser Coho escapement example for one shared
-semantic-review exercise, even if you are also building a package from
-your own data. That gives the room one case to discuss and keeps the
-decisions small enough to finish.</p>
-<p>We will review exactly these linked decisions:</p>
+<section><h2 class="section-heading" id="the-decision-that-used-to-leave-no-record">The decision that used to leave no record<a class="anchor" aria-label="anchor" href="#the-decision-that-used-to-leave-no-record"></a></h2>
+<hr class="half-width"><p>By the end of Session 3 your package was reproducible almost
+everywhere. <code>raw_data/</code> holds unchanged inputs,
+<code>scripts/build_sdp.R</code> turns them into a package, and
+rerunning the script rebuilds the same bytes.</p>
+<p>Almost everywhere. Until now, the documented way to accept a semantic
+link was to open <code>metadata/column_dictionary.csv</code> in a
+spreadsheet, read <code>semantic_suggestions.csv</code> beside it, and
+copy an IRI across by hand. That worked. But the only record it left was
+the changed cell. Six months later the cell says <em>what</em> was
+decided and nothing at all about <em>why</em>, <em>by whom</em>, or
+<em>what else was on the shortlist</em>. It was the one unreproducible
+link in a chain that is otherwise byte-for-byte reproducible.</p>
+<p>This chapter replaces that step. <code>review_semantics()</code>
+prints a shortlist and, under every candidate, the exact line of R that
+accepts it:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code><span>       <span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"variable"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
+</div>
+<p>You paste that line into <code>scripts/build_sdp.R</code>.
+<strong>The paste is the audit trail.</strong> There is no prompt, no
+menu, and no interactive review screen, and that is a design decision
+rather than an omission: anything you answer at a prompt vanishes when
+the session ends, which would leave the decision exactly as
+unreproducible as the spreadsheet it replaces.</p>
+<p>A learner who understands why the spreadsheet was abandoned will not
+drift back to it. The spreadsheet lane still exists below, because a
+mixed workshop needs it — but it is now the lane that costs you the
+record, and this chapter says so plainly.</p>
+<p>Be precise about the size of the claim. <strong>This chapter’s flow
+decides semantic IRIs, and it is not the whole package.</strong>
+Free-text fields — descriptions, contacts, licences — are outside it,
+and a slot that retrieval found nothing for never reaches this queue at
+all. Neither of those is a spreadsheet job any more:
+<code>review_metadata()</code> and the <code>set_sdp_*()</code> setters,
+which shipped in the same release, close both, and the section <a href="#what-this-review-cannot-decide">What this review cannot
+decide</a> is where they are named. That section is not a disclaimer at
+the end; it is half the lesson. A learner who leaves believing <em>this
+queue</em> finishes the package will be corrected by the validator, and
+will trust the tool less than it deserves.</p>
+<div id="you-need-metasalmon-0.5.0-or-newer" class="callout prereq">
+<div class="callout-square">
+<i class="callout-icon" data-feather="check"></i>
+</div>
+<span class="callout-header">Prerequisite</span>
+<div id="you-need-metasalmon-0.5.0-or-newer" class="callout-inner">
+<h3 class="callout-title">You need metasalmon 0.5.0 or newer</h3>
+<div class="callout-content">
+<p>The review flow shipped in <strong>metasalmon 0.5.0</strong>. Check
+before you start, and reinstall the pinned tag from the Setup page if
+the answer is older:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">packageVersion</span><span class="op">(</span><span class="st">"metasalmon"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>An earlier metasalmon loads without complaint and then has none of
+the functions this chapter uses. The <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/NEWS.md" class="external-link">changelog</a>
+has the 0.5.0 entry.</p>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded<a class="anchor" aria-label="anchor" href="#keep-the-workshop-semantic-review-bounded"></a></h2>
+<hr class="half-width"><p>We will not try to map every column. Everyone will use the NuSEDS
+Fraser Coho escapement package from Session 2, even if you are also
+building a package from your own data. That gives the room one case to
+discuss and keeps the decisions small enough to finish.</p>
+<p>We will decide exactly these linked slots:</p>
 <table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Decision</th>
 <th>SDP destination</th>
-<th>Shared Fraser Coho example</th>
-</tr></thead><tbody><tr><td>One complete measurement-variable IRI</td>
+<th>Shared Fraser Coho slot</th>
+</tr></thead><tbody><tr><td>One complete measurement variable</td>
 <td><code>column_dictionary.csv$term_iri</code></td>
 <td><code>NATURAL_SPAWNERS_TOTAL</code></td>
 </tr><tr><td>One I-ADOPT decomposition</td>
 <td>
-<code>property_iri</code>, <code>entity_iri</code>, and optional
-<code>constraint_iri</code> on that same dictionary row</td>
-<td>abundance for natural-origin salmon in a conservation unit</td>
-</tr><tr><td>One simple unit</td>
+<code>property_iri</code>, <code>entity_iri</code>,
+<code>constraint_iri</code> on that same row</td>
+<td>abundance, of a population, natural-origin</td>
+</tr><tr><td>One unit</td>
 <td><code>column_dictionary.csv$unit_iri</code></td>
-<td>individuals</td>
+<td>a count</td>
+</tr><tr><td>One statistical modifier</td>
+<td><code>column_dictionary.csv$statistical_modifier_iri</code></td>
+<td>a total</td>
 </tr><tr><td>What each table row represents</td>
 <td><code>tables.csv$observation_unit_iri</code></td>
-<td>an escapement estimate</td>
-</tr><tr><td>One method</td>
-<td>
-<code>codes.csv$term_iri</code> for one <code>ESTIMATE_METHOD</code>
-value</td>
-<td><code>Area Under the Curve</code></td>
-</tr></tbody></table><p>The method is a code-level example because the NuSEDS estimate method
-varies by row. It is not part of the I-ADOPT decomposition.
-Administrative IDs, file names, local notes, and the other categorical
-code lists can rely on clear descriptions for now and be mapped in a
-later review.</p>
-</section><section><h2 class="section-heading" id="generate-suggestions-for-the-shared-example">Generate suggestions for the shared example<a class="anchor" aria-label="anchor" href="#generate-suggestions-for-the-shared-example"></a></h2>
-<hr class="half-width"><p>Continue with the NuSEDS Fraser Coho package from Session 2, even if
-you created another package from your own data in Session 3. The
-quickstart used <code>seed_semantics = FALSE</code>, so generate
-candidates now from the metadata you reviewed. If semantic seeding was
-already enabled for this package, its package-root
-<code>semantic_suggestions.csv</code> contains the original evidence;
-rerunning after metadata edits searches from the current package
-state.</p>
-<p>The code below subsets the metadata before lookup, so deterministic
-search runs only for the shared measurement and table target. The
-<code>Area Under the Curve</code> method row is populated by the
-deterministic NuSEDS crosswalk during package creation, so this lesson
-reads and reviews that row instead of searching every method code
-again.</p>
-<div class="tabs">
+<td>an escapement</td>
+</tr><tr><td>One deliberate rejection</td>
+<td>any slot</td>
+<td><code>AREA</code></td>
+</tr></tbody></table><p>Administrative IDs, file names, local notes, and the other
+categorical code lists can rely on clear descriptions for now and be
+mapped in a later review.</p>
+</section><section><h2 class="section-heading" id="your-package-must-already-carry-suggestions">Your package must already carry suggestions<a class="anchor" aria-label="anchor" href="#your-package-must-already-carry-suggestions"></a></h2>
+<hr class="half-width"><p><code>review_semantics()</code> <strong>never searches and never
+contacts a network or an LLM.</strong> It reads the suggestions your
+package already has. That is why Session 3 turned
+<code>seed_semantics = TRUE</code> on: without it there is nothing to
+review, and the function says so rather than quietly returning an empty
+queue.</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>Error in review_semantics(pkg_path) : No semantic suggestions to review.
+ℹ Run `suggest_semantics()`, or `create_sdp()` with `seed_semantics = TRUE`,
+  first.</code></pre>
+</div>
+<p>If the Session 2 package was built with
+<code>seed_semantics = FALSE</code>, rebuild it once with seeding on
+before continuing. Expect the search itself to take a few minutes; that
+cost is paid once, at build time, and never again during review.</p>
+</section><section><h2 class="section-heading" id="build-the-review-queue">Build the review queue<a class="anchor" aria-label="anchor" href="#build-the-review-queue"></a></h2>
+<hr class="half-width"><div class="tabs">
 <nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
 <button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
   <h3 class="tab-header" id="nav-tab-heading-1-R">
@@ -444,180 +523,411 @@ again.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
-<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
-<div class="codewrapper sourceCode" id="cb1">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_pkg_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span></span>
-<span>  <span class="st">"output"</span>,</span>
-<span>  <span class="st">"fraser-coho-example-sdp"</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">metasalmon</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="fu">read_salmon_datapackage</span><span class="op">(</span><span class="va">example_pkg_path</span><span class="op">)</span></span>
+<span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"fraser-coho-example-sdp"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">measurement_dict</span> <span class="op">&lt;-</span> <span class="va">pkg</span><span class="op">$</span><span class="va">dictionary</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span></span>
-<span>    <span class="va">column_name</span> <span class="op">==</span> <span class="st">"NATURAL_SPAWNERS_TOTAL"</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="co"># One row per candidate; one queue entry per undecided slot. No search runs.</span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">review_semantics</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">shared_table</span> <span class="op">&lt;-</span> <span class="va">pkg</span><span class="op">$</span><span class="va">tables</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">table_id</span> <span class="op">==</span> <span class="st">"escapement"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">reviewed_dict</span> <span class="op">&lt;-</span> <span class="fu">suggest_semantics</span><span class="op">(</span></span>
-<span>  df <span class="op">=</span> <span class="va">pkg</span><span class="op">$</span><span class="va">resources</span>,</span>
-<span>  dict <span class="op">=</span> <span class="va">measurement_dict</span>,</span>
-<span>  table_meta <span class="op">=</span> <span class="va">shared_table</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">suggestions</span> <span class="op">&lt;-</span> <span class="fu">attr</span><span class="op">(</span><span class="va">reviewed_dict</span>, <span class="st">"semantic_suggestions"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">bounded_suggestions</span> <span class="op">&lt;-</span> <span class="va">suggestions</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span></span>
-<span>    <span class="op">(</span></span>
-<span>      <span class="va">target_scope</span> <span class="op">==</span> <span class="st">"column"</span> <span class="op">&amp;</span></span>
-<span>        <span class="va">column_name</span> <span class="op">==</span> <span class="st">"NATURAL_SPAWNERS_TOTAL"</span> <span class="op">&amp;</span></span>
-<span>        <span class="va">dictionary_role</span> <span class="op">%in%</span> <span class="fu">c</span><span class="op">(</span></span>
-<span>          <span class="st">"variable"</span>,</span>
-<span>          <span class="st">"property"</span>,</span>
-<span>          <span class="st">"entity"</span>,</span>
-<span>          <span class="st">"constraint"</span>,</span>
-<span>          <span class="st">"unit"</span></span>
-<span>        <span class="op">)</span></span>
-<span>    <span class="op">)</span> <span class="op">|</span></span>
-<span>      <span class="op">(</span></span>
-<span>        <span class="va">target_scope</span> <span class="op">==</span> <span class="st">"table"</span> <span class="op">&amp;</span></span>
-<span>          <span class="va">target_sdp_field</span> <span class="op">==</span> <span class="st">"observation_unit_iri"</span></span>
-<span>      <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span></span>
-<span>    <span class="va">target_scope</span>,</span>
-<span>    <span class="va">column_name</span>,</span>
-<span>    <span class="va">dictionary_role</span>,</span>
-<span>    <span class="va">target_sdp_field</span>,</span>
-<span>    <span class="va">label</span>,</span>
-<span>    <span class="va">iri</span>,</span>
-<span>    <span class="va">source</span>,</span>
-<span>    <span class="va">definition</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">method_example</span> <span class="op">&lt;-</span> <span class="va">pkg</span><span class="op">$</span><span class="va">codes</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span></span>
-<span>    <span class="va">column_name</span> <span class="op">==</span> <span class="st">"ESTIMATE_METHOD"</span>,</span>
-<span>    <span class="va">code_value</span> <span class="op">==</span> <span class="st">"Area Under the Curve"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span></span>
-<span>    <span class="va">column_name</span>,</span>
-<span>    <span class="va">code_value</span>,</span>
-<span>    <span class="va">term_iri</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">bounded_suggestions</span></span>
-<span><span class="va">method_example</span></span></code></pre>
+<span><span class="va">review</span></span></code></pre>
+</div>
+<p>To work through one column at a time, filter the queue:</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">review_semantics</span><span class="op">(</span><span class="va">pkg_path</span>, columns <span class="op">=</span> <span class="st">"NATURAL_SPAWNERS_TOTAL"</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
-<div class="codewrapper sourceCode" id="cb2">
+<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
+<p><strong>There is no Python equivalent.</strong> Not a partial one,
+not a differently-spelled one: <code>metasalmonpy</code> has no review
+queue, no accessor for the suggestions attribute, and no function that
+reads <code>semantic_suggestions.csv</code> back. The R-native review
+flow lands in <code>metasalmon</code> first, and the port has not been
+written. This is a gap, not a deliberate parity difference, so do not go
+looking for it in the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html" class="external-link">parity
+guide</a>.</p>
+<p>This is also why the Setup page pins the two lanes to different
+releases: metasalmon <code>v0.5.0</code> is the release this chapter
+teaches, and metasalmonpy’s newest is <code>v0.4.0</code>. Pinning both
+makes the lesson reproducible; only the port will make it
+equivalent.</p>
+<p>What a Python user can do today is read the same evidence the R queue
+is built from, with pandas rather than with <code>metasalmonpy</code>.
+<code>semantic_suggestions.csv</code> sits at the package root and is
+written by both implementations:</p>
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> (</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>    read_salmon_datapackage,</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a>    suggest_semantics,</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>)</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>example_pkg_path <span class="op">=</span> Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"fraser-coho-example-sdp"</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>pkg <span class="op">=</span> read_salmon_datapackage(example_pkg_path)</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1" aria-label="code-block-2-12"></a>measurement_dict <span class="op">=</span> pkg[<span class="st">"dictionary"</span>].loc[</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1" aria-label="code-block-2-13"></a>    pkg[<span class="st">"dictionary"</span>][<span class="st">"column_name"</span>].eq(<span class="st">"NATURAL_SPAWNERS_TOTAL"</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1" aria-label="code-block-2-14"></a>]</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1" aria-label="code-block-2-15"></a>shared_table <span class="op">=</span> pkg[<span class="st">"tables"</span>].loc[</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1" aria-label="code-block-2-16"></a>    pkg[<span class="st">"tables"</span>][<span class="st">"table_id"</span>].eq(<span class="st">"escapement"</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1" aria-label="code-block-2-17"></a>]</span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1" aria-label="code-block-2-18"></a></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1" aria-label="code-block-2-19"></a>reviewed_dict <span class="op">=</span> suggest_semantics(</span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1" aria-label="code-block-2-20"></a>    df<span class="op">=</span>pkg[<span class="st">"resources"</span>],</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1" aria-label="code-block-2-21"></a>    dict_df<span class="op">=</span>measurement_dict,</span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1" aria-label="code-block-2-22"></a>    table_meta<span class="op">=</span>shared_table,</span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1" aria-label="code-block-2-23"></a>)</span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1" aria-label="code-block-2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1" aria-label="code-block-2-25"></a>suggestions <span class="op">=</span> reviewed_dict.attrs[<span class="st">"semantic_suggestions"</span>]</span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1" aria-label="code-block-2-26"></a></span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1" aria-label="code-block-2-27"></a>measurement_targets <span class="op">=</span> (</span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1" aria-label="code-block-2-28"></a>    suggestions[<span class="st">"target_scope"</span>].eq(<span class="st">"column"</span>)</span>
-<span id="cb2-29"><a href="#cb2-29" tabindex="-1" aria-label="code-block-2-29"></a>    <span class="op">&amp;</span> suggestions[<span class="st">"column_name"</span>].eq(<span class="st">"NATURAL_SPAWNERS_TOTAL"</span>)</span>
-<span id="cb2-30"><a href="#cb2-30" tabindex="-1" aria-label="code-block-2-30"></a>    <span class="op">&amp;</span> suggestions[<span class="st">"dictionary_role"</span>].isin(</span>
-<span id="cb2-31"><a href="#cb2-31" tabindex="-1" aria-label="code-block-2-31"></a>        [<span class="st">"variable"</span>, <span class="st">"property"</span>, <span class="st">"entity"</span>, <span class="st">"constraint"</span>, <span class="st">"unit"</span>]</span>
-<span id="cb2-32"><a href="#cb2-32" tabindex="-1" aria-label="code-block-2-32"></a>    )</span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1" aria-label="code-block-2-33"></a>)</span>
-<span id="cb2-34"><a href="#cb2-34" tabindex="-1" aria-label="code-block-2-34"></a>table_target <span class="op">=</span> (</span>
-<span id="cb2-35"><a href="#cb2-35" tabindex="-1" aria-label="code-block-2-35"></a>    suggestions[<span class="st">"target_scope"</span>].eq(<span class="st">"table"</span>)</span>
-<span id="cb2-36"><a href="#cb2-36" tabindex="-1" aria-label="code-block-2-36"></a>    <span class="op">&amp;</span> suggestions[<span class="st">"target_sdp_field"</span>].eq(<span class="st">"observation_unit_iri"</span>)</span>
-<span id="cb2-37"><a href="#cb2-37" tabindex="-1" aria-label="code-block-2-37"></a>)</span>
-<span id="cb2-38"><a href="#cb2-38" tabindex="-1" aria-label="code-block-2-38"></a></span>
-<span id="cb2-39"><a href="#cb2-39" tabindex="-1" aria-label="code-block-2-39"></a>bounded_suggestions <span class="op">=</span> suggestions.loc[</span>
-<span id="cb2-40"><a href="#cb2-40" tabindex="-1" aria-label="code-block-2-40"></a>    measurement_targets <span class="op">|</span> table_target,</span>
-<span id="cb2-41"><a href="#cb2-41" tabindex="-1" aria-label="code-block-2-41"></a>    [</span>
-<span id="cb2-42"><a href="#cb2-42" tabindex="-1" aria-label="code-block-2-42"></a>        <span class="st">"target_scope"</span>,</span>
-<span id="cb2-43"><a href="#cb2-43" tabindex="-1" aria-label="code-block-2-43"></a>        <span class="st">"column_name"</span>,</span>
-<span id="cb2-44"><a href="#cb2-44" tabindex="-1" aria-label="code-block-2-44"></a>        <span class="st">"dictionary_role"</span>,</span>
-<span id="cb2-45"><a href="#cb2-45" tabindex="-1" aria-label="code-block-2-45"></a>        <span class="st">"target_sdp_field"</span>,</span>
-<span id="cb2-46"><a href="#cb2-46" tabindex="-1" aria-label="code-block-2-46"></a>        <span class="st">"label"</span>,</span>
-<span id="cb2-47"><a href="#cb2-47" tabindex="-1" aria-label="code-block-2-47"></a>        <span class="st">"iri"</span>,</span>
-<span id="cb2-48"><a href="#cb2-48" tabindex="-1" aria-label="code-block-2-48"></a>        <span class="st">"source"</span>,</span>
-<span id="cb2-49"><a href="#cb2-49" tabindex="-1" aria-label="code-block-2-49"></a>        <span class="st">"definition"</span>,</span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1" aria-label="code-block-2-50"></a>    ],</span>
-<span id="cb2-51"><a href="#cb2-51" tabindex="-1" aria-label="code-block-2-51"></a>]</span>
-<span id="cb2-52"><a href="#cb2-52" tabindex="-1" aria-label="code-block-2-52"></a></span>
-<span id="cb2-53"><a href="#cb2-53" tabindex="-1" aria-label="code-block-2-53"></a>method_example <span class="op">=</span> pkg[<span class="st">"codes"</span>].loc[</span>
-<span id="cb2-54"><a href="#cb2-54" tabindex="-1" aria-label="code-block-2-54"></a>    pkg[<span class="st">"codes"</span>][<span class="st">"column_name"</span>].eq(<span class="st">"ESTIMATE_METHOD"</span>)</span>
-<span id="cb2-55"><a href="#cb2-55" tabindex="-1" aria-label="code-block-2-55"></a>    <span class="op">&amp;</span> pkg[<span class="st">"codes"</span>][<span class="st">"code_value"</span>].eq(<span class="st">"Area Under the Curve"</span>),</span>
-<span id="cb2-56"><a href="#cb2-56" tabindex="-1" aria-label="code-block-2-56"></a>    [<span class="st">"column_name"</span>, <span class="st">"code_value"</span>, <span class="st">"term_iri"</span>],</span>
-<span id="cb2-57"><a href="#cb2-57" tabindex="-1" aria-label="code-block-2-57"></a>]</span>
-<span id="cb2-58"><a href="#cb2-58" tabindex="-1" aria-label="code-block-2-58"></a></span>
-<span id="cb2-59"><a href="#cb2-59" tabindex="-1" aria-label="code-block-2-59"></a><span class="bu">print</span>(bounded_suggestions)</span>
-<span id="cb2-60"><a href="#cb2-60" tabindex="-1" aria-label="code-block-2-60"></a><span class="bu">print</span>(method_example)</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a>pkg_path <span class="op">=</span> Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"fraser-coho-example-sdp"</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>suggestions <span class="op">=</span> pd.read_csv(pkg_path <span class="op">/</span> <span class="st">"semantic_suggestions.csv"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a><span class="bu">print</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a>    suggestions[</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a>        [</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1" aria-label="code-block-6-12"></a>            <span class="st">"column_name"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1" aria-label="code-block-6-13"></a>            <span class="st">"dictionary_role"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1" aria-label="code-block-6-14"></a>            <span class="st">"target_sdp_file"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1" aria-label="code-block-6-15"></a>            <span class="st">"target_sdp_field"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1" aria-label="code-block-6-16"></a>            <span class="st">"label"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1" aria-label="code-block-6-17"></a>            <span class="st">"iri"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1" aria-label="code-block-6-18"></a>            <span class="st">"source"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1" aria-label="code-block-6-19"></a>            <span class="st">"score"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1" aria-label="code-block-6-20"></a>        ]</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1" aria-label="code-block-6-21"></a>    ]</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1" aria-label="code-block-6-22"></a>)</span></code></pre>
 </div>
+<p>Decide from that table, then edit the target field in the canonical
+metadata CSV. Record each decision in <code>scripts/build_sdp.py</code>
+as a comment or an explicit assignment, so the reasoning survives the
+way the pasted R call does. Until the Python review flow ships, that
+discipline is manual rather than enforced.</p>
 </div>
-<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
-<p>Open an instructor-prepared <code>semantic_suggestions.csv</code>
-beside the NuSEDS Fraser Coho package metadata. Filter to
-<code>NATURAL_SPAWNERS_TOTAL</code> and the table observation-unit row.
-Then inspect the <code>Area Under the Curve</code> row in
-<code>metadata/codes.csv</code>. Compare each IRI, label, and definition
-with the source documentation and the data holder’s explanation. Record
-<strong>keep</strong>, <strong>replace</strong>,
-<strong>remove</strong>, or <strong>defer</strong>; opening the CSV does
-not accept a suggestion or prove that a link is correct.</p>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<p>Open <code>semantic_suggestions.csv</code> at the package root beside
+<code>metadata/column_dictionary.csv</code>. Filter to
+<code>NATURAL_SPAWNERS_TOTAL</code> and to the <code>tables.csv</code>
+row whose <code>target_sdp_field</code> is
+<code>observation_unit_iri</code>. Compare each <code>label</code>,
+<code>iri</code>, and <code>definition</code> with the source
+documentation and the data holder’s explanation, then write the accepted
+IRI into the target field named by <code>target_sdp_file</code> and
+<code>target_sdp_field</code>.</p>
+<p>Be clear about the cost. This lane records the <em>outcome</em> and
+not the <em>reasoning</em>: nothing in the saved file says which other
+candidates you saw, or why you preferred this one. Keep a written review
+log beside the package so the next reader is not guessing. Opening the
+CSV does not accept a suggestion and is not evidence that a link is
+correct.</p>
 </div>
 </div>
 </div>
-<p>Vocabulary lookup can take a few minutes. Omitting
-<code>sources</code> uses role-aware defaults. If you supply
-<code>sources</code> explicitly, current <code>metasalmon</code> and
-<code>metasalmonpy</code> treat the vector as a strict allowlist for the
-initial search and any LLM-requested bounded retry.</p>
-<p>At this stage, treat an empty or unexpected result as
-<strong>unresolved</strong>, not as proof that the vocabulary lacks an
-appropriate term. Leave that decision in review and continue with the
-shared example; a later workflow can distinguish a lookup problem from a
-genuine term gap.</p>
+</section><section><h2 class="section-heading" id="read-one-slot">Read one slot<a class="anchor" aria-label="anchor" href="#read-one-slot"></a></h2>
+<hr class="half-width"><p>Each queue entry is one block. This is the
+<code>NATURAL_SPAWNERS_TOTAL</code> variable slot — the first block you
+see after filtering with <code>columns =</code> — printed exactly as it
+appears:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>── escapement · NATURAL_SPAWNERS_TOTAL · variable ────────────────────────────
+   field:   column_dictionary.csv · term_iri
+   current: REVIEW: https://w3id.org/gcdfo/salmon#SpawnerAbundance
+
+   [1] Spawner abundance   gcdfo   score 18.25
+       The abundance (count) of adult salmon that reach spawning grounds in a
+       given system and time period (often operationalized as
+       escapement/spawning escapement).
+       https://w3id.org/gcdfo/salmon#SpawnerAbundance
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 1)
+
+       review &lt;- reject_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable")   # no candidate fits</code></pre>
+</div>
+<p>Read it in this order:</p>
+<ul><li>
+<strong>the heading</strong> — table, column, and semantic
+role;</li>
+<li>
+<strong><code>field:</code></strong> — the exact file and column
+this decision writes into, so you can check the result yourself;</li>
+<li>
+<strong><code>current:</code></strong> — what the field holds
+<em>now</em>;</li>
+<li>
+<strong>the shortlist</strong> — <code>[1]</code>, <code>[2]</code>,
+… in the order the ranked search produced, each with its label, source
+vocabulary, score, definition, and IRI; and</li>
+<li>
+<strong>the calls</strong> — one per candidate, plus one
+rejection.</li>
+</ul><p><code>current:</code> has three states, and the difference
+matters.</p>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>
+<code>current:</code> shows</th>
+<th>What it means</th>
+</tr></thead><tbody><tr><td><code>REVIEW: &lt;iri&gt;</code></td>
+<td>Seeding wrote a draft, because its unattended compatibility check
+passed. Still undecided.</td>
+</tr><tr><td><code>&lt;blank&gt;</code></td>
+<td>Seeding found a candidate but declined to draft it. Still undecided,
+and the queue shows it for exactly that reason.</td>
+</tr><tr><td><code>&lt;unknown&gt;</code></td>
+<td>The queue could not read the current value — the metadata row was
+missing or matched ambiguously. Read the CSV before deciding.</td>
+</tr></tbody></table><p>Undecided is undecided. A <code>REVIEW:</code> prefix is a marker
+meaning <em>nobody has looked at this</em>, not a weak endorsement, and
+strict validation refuses to publish a package that still contains
+one.</p>
+<p>The variable answers “what complete measurement is this column?” For
+<code>NATURAL_SPAWNERS_TOTAL</code> the candidate says spawner
+abundance, from <code>gcdfo</code>, with a definition that matches the
+NuSEDS field. Read the definition, not the label. Then accept it.</p>
+</section><section><h2 class="section-heading" id="decide-in-your-script">Decide, in your script<a class="anchor" aria-label="anchor" href="#decide-in-your-script"></a></h2>
+<hr class="half-width"><p><code>accept_suggestion()</code> and <code>reject_suggestion()</code>
+take a review and return a review. Nothing is written to disk until you
+say so, so a whole review is an ordinary re-runnable R script.</p>
+<div class="tabs">
+<nav><div id="nav-tab-2" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-2-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-R" type="button" role="tab" aria-controls="nav-tabpanel-2-R" aria-selected="true">
+  <h3 class="tab-header" id="nav-tab-heading-2-R">
+  R
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-2-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Python" type="button" role="tab" aria-controls="nav-tabpanel-2-Python" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-2-Python">
+  Python
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-2-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-2-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-2-Spreadsheet" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-2-Spreadsheet">
+  Spreadsheet
+  </h3>
+</button>
+</div>
+</nav><div id="nav-tabContent-2" class="tab-content">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"variable"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Reject when nothing on the shortlist fits, and say why:</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">reject_suggestion</span><span class="op">(</span></span>
+<span>  <span class="va">review</span>,</span>
+<span>  <span class="st">"AREA"</span>,</span>
+<span>  <span class="st">"variable"</span>,</span>
+<span>  reason <span class="op">=</span> <span class="st">"DFO statistical area, not a body of water"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p><code>reason</code> is carried on the review object, shown in the
+console, <strong>and written to disk</strong> —
+<code>semantic_suggestions.csv</code> has a <code>decision_reason</code>
+column beside <code>decision</code>, so the sentence travels with the
+package rather than only with your project folder. Write it for a reader
+who has neither your script nor you: it is the one field that says why a
+slot is deliberately empty rather than merely unfinished.</p>
+<p>Accept a term the search did not surface by naming it directly
+instead of a rank:</p>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span></span>
+<span>  <span class="va">review</span>,</span>
+<span>  <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>,</span>
+<span>  <span class="st">"property"</span>,</span>
+<span>  iri <span class="op">=</span> <span class="st">"https://w3id.org/smn/Abundance"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
+<p>Pending, as above. Apply the decision by editing the target field in
+the canonical metadata CSV named by <code>target_sdp_file</code> and
+<code>target_sdp_field</code>, and record the reasoning in
+<code>scripts/build_sdp.py</code>.</p>
+</div>
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
+<p>Type the accepted IRI into the target field, with no
+<code>REVIEW:</code> prefix. Leave the field blank for a rejection and
+write the reason in your review log.</p>
+</div>
+</div>
+</div>
+<p>Two things make the printed call safe to paste rather than merely
+suggestive. The argument set is computed by <em>resolving</em> it, so
+<code>table =</code> and <code>code_value =</code> appear only when they
+are needed to address one slot and never otherwise. And the object name
+is read from your own binding — bind the review to
+<code>sem_review</code> and the printed calls say
+<code>sem_review &lt;- accept_suggestion(sem_review, …)</code>.</p>
+<p>Mistakes are caught by name, not by silence:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>Error in accept_suggestion(sem_review, "FULL_CU", "variable", rank = 1) :
+  No review slot matches that column and role.
+✖ Asked for: FULL_CU · variable
+ℹ FULL_CU_IN · variable</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>Error in accept_suggestion(sem_review, "FULL_CU_IN", "variable", rank = 3) :
+  No candidate with that `rank` in this slot.
+ℹ Ranks available: 1.
+ℹ To accept a term that is not shortlisted, pass `iri` instead.</code></pre>
+</div>
+<p>Read <code>Ranks available: 1.</code> literally, because it is the
+most misleading-looking thing on the page.
+<strong><code>create_sdp()</code> keeps one candidate per role by
+default</strong> — <code>semantic_max_per_role = 1</code> — so the
+seeded <code>semantic_suggestions.csv</code> carries one row per slot
+rather than a ranked list, and every shortlist you have seen so far is
+one candidate deep. <code>rank = 1</code> is the only rank there is.
+“Accept rank 1” is therefore a much weaker statement than “the best of
+five”: it is closer to “accept or reject”.</p>
+<p>Ask for a deeper shortlist at build time, not at review time. The
+review reads what seeding stored, so this is a <code>create_sdp()</code>
+argument:</p>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
+<span>  <span class="va">fraser_coho</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"fraser-coho-example-sdp"</span><span class="op">)</span>,</span>
+<span>  dataset_id <span class="op">=</span> <span class="st">"fraser-coho-example"</span>,</span>
+<span>  table_id <span class="op">=</span> <span class="st">"escapement"</span>,</span>
+<span>  seed_semantics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  semantic_max_per_role <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>The same slot then offers three:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>── escapement · NATURAL_SPAWNERS_TOTAL · variable ────────────────────────────
+   field:   column_dictionary.csv · term_iri
+   current: REVIEW: https://w3id.org/gcdfo/salmon#SpawnerAbundance
+
+   [1] Spawner abundance   gcdfo   score 18.25
+       The abundance (count) of adult salmon that reach spawning grounds in a
+       given system and time period (often operationalized as
+       escapement/spawning escapement).
+       https://w3id.org/gcdfo/salmon#SpawnerAbundance
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 1)
+
+   [2] Relative hatchery spawner abundance   gcdfo   score 15.25
+       Hatchery-origin spawner abundance expressed as a relative
+       (dimensionless) abundance metric to a defined reference (commonly
+       benchmarks), for within-series comparison; in rapid-status workflows,
+       relative abundance is computed using the current generational average
+       (geometric mean) divided by CU-specific lower and/or upper benchmarks.
+       https://w3id.org/gcdfo/salmon#RelativeHatcherySpawnerAbundance
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 2)
+
+   [3] Relative hatchery spawner abundance change   gcdfo   score 15.25
+       A change metric (delta or percent change, as defined by the workflow)
+       computed from relative hatchery-origin spawner abundance values over
+       time; in rapid-status workflows, percent change is derived from
+       log-transformed series and quantified over the most recent three
+       generations.
+       https://w3id.org/gcdfo/salmon#RelativeHatcherySpawnerAbundanceChange
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 3)
+
+       review &lt;- reject_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable")   # no candidate fits</code></pre>
+</div>
+<p>Notice what a deeper shortlist actually bought: ranks 2 and 3 are
+<em>hatchery</em>-origin terms, for a column of <em>natural</em>-origin
+spawners. More candidates gave you more to rule out, not more to choose
+from — which is useful, and is not the same as more confidence. Depth
+costs seeding time on every column, so raise it when you are doing
+careful work on a narrow table, not by default.</p>
+<p>Either way, when rank 1 is wrong the reliable escape is
+<code>iri =</code>, not rank 2.</p>
 </section><section><h2 class="section-heading" id="treat-suggestions-as-drafts">Treat suggestions as drafts<a class="anchor" aria-label="anchor" href="#treat-suggestions-as-drafts"></a></h2>
-<hr class="half-width"><p>Some tools write semantic suggestions directly into metadata as
-<code>REVIEW: &lt;iri&gt;</code>. That prefix is a warning, not
-approval.</p>
+<hr class="half-width"><p>A score is a retrieval score. It measures how well a query matched a
+label and a definition; it is not agreement, and it is not evidence
+about your column.</p>
+<p>Here is the very first slot in the unfiltered Fraser Coho queue:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>── escapement · AREA · variable ──────────────────────────────────────────────
+   field:   column_dictionary.csv · term_iri
+   current: &lt;blank&gt;
+
+   [1] water body   ols   score 9.35
+       The term body of water most often refers to large accumulations of
+       water, such as oceans, seas, and lakes, but it includes smaller pools
+       of water such as ponds, wetlands, or more rarely, puddles. A body of
+       water does not have to be still or contained; Rivers, streams, canals,
+       and other geographical features where water moves from one place to
+       another are also considered bodies of water.
+       http://purl.obolibrary.org/obo/ENVO_00000063  https://www.ebi.ac.uk/ols4/ontologies/envo/classes/http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FENVO_00000063
+       review &lt;- accept_suggestion(review, "AREA", "variable", rank = 1)
+
+       review &lt;- reject_suggestion(review, "AREA", "variable")   # no candidate fits</code></pre>
+</div>
+<p><code>AREA</code> in NuSEDS is a DFO statistical management area — an
+administrative identifier. The top and only candidate is an ENVO class
+for a body of water. It scores 9.35 and it is wrong. Reject it.</p>
+<p><code>WATERSHED_CDE</code> is the sharper case, and it is the reason
+step 2 of the checklist below is not redundant with step 1. Its top
+candidate is labelled <strong>watershed</strong>, which matches the
+column name about as well as a label can. Read the definition and it
+turns out to be <em>“the separation between neighbouring drainage
+basins”</em> — the divide, not the basin. The column stores neither: it
+stores a code. The label matched and the concept did not, which is
+precisely the failure a label-only check cannot see.</p>
 <p>Keep a suggested IRI only when:</p>
 <ol style="list-style-type: decimal"><li>the label matches what the column means;</li>
 <li>the definition matches the dataset context;</li>
 <li>the scope is right;</li>
 <li>the unit is compatible with the values;</li>
 <li>the mapping does not erase an important caveat.</li>
-</ol><p>If any check fails, replace it, remove it, or add it to the term-gap
-plan.</p>
-</section><section><h2 class="section-heading" id="measurement-semantics">Measurement semantics<a class="anchor" aria-label="anchor" href="#measurement-semantics"></a></h2>
+</ol><p>If any check fails, reject it, supply the right IRI with
+<code>iri =</code>, or leave it for the term-gap workflow in Session
+6.</p>
+<div id="where-the-second-iri-on-the-line-comes-from" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="where-the-second-iri-on-the-line-comes-from" class="callout-inner">
+<h3 class="callout-title">Where the second IRI on the line comes
+from</h3>
+<div class="callout-content">
+<p>Candidates retrieved through OLS print their IRI followed by a
+browsable OLS4 URL, because the IRI itself does not resolve to a
+human-readable page. In a terminal that supports hyperlinks you get one
+clickable label instead. Candidates from <code>smn</code>,
+<code>gcdfo</code>, and NVS print one IRI, because that IRI is already
+the page.</p>
+</div>
+</div>
+</div>
+<div id="what-you-read-is-what-the-vocabulary-says" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="what-you-read-is-what-the-vocabulary-says" class="callout-inner">
+<h3 class="callout-title">What you read is what the vocabulary says</h3>
+<div class="callout-content">
+<p>Definitions come from third parties, and some of them contain
+characters that mean something to R’s message formatter. A definition
+reading <em>“…returning to spawn in a stream {reach}”</em> prints
+exactly that, braces included. The review console emits its lines with
+<code>cat()</code> rather than through a message template, so ontology
+text is never interpreted — you are reading the definition, not a
+rendering of it.</p>
+<p>That matters for review: a definition that had been silently
+reformatted, truncated at a brace, or replaced by a formatting error
+would be the one piece of evidence you most need intact.</p>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="measurement-semantics-and-i-adopt">Measurement semantics and I-ADOPT<a class="anchor" aria-label="anchor" href="#measurement-semantics-and-i-adopt"></a></h2>
 <hr class="half-width"><p>For <code>column_role = measurement</code>, SDP combines a variable
 link, I-ADOPT-style meaning components, a unit link, and an optional
 statistical-modifier link.</p>
@@ -626,8 +936,8 @@ statistical-modifier link.</p>
 </tr></thead><tbody><tr><td><code>term_iri</code></td>
 <td>What complete measurement variable is this?</td>
 </tr><tr><td><code>property_iri</code></td>
-<td>I-ADOPT property: what characteristic is measured, such as count,
-length, mass, or temperature?</td>
+<td>I-ADOPT property: what characteristic is measured — count, length,
+mass, temperature?</td>
 </tr><tr><td><code>entity_iri</code></td>
 <td>I-ADOPT entity/object of interest: what is being measured?</td>
 </tr><tr><td><code>constraint_iri</code></td>
@@ -636,116 +946,519 @@ meaning?</td>
 </tr><tr><td><code>unit_iri</code></td>
 <td>What unit are the values in?</td>
 </tr><tr><td><code>statistical_modifier_iri</code></td>
-<td>Optional: is the column an aggregation or summary — a mean, maximum,
-minimum, total, or peak — rather than a single observation?</td>
-</tr></tbody></table><p><strong>Methods do not live in the column dictionary.</strong> A
-method describes how a value was produced, not what the column is, so it
-is recorded where it is actually constant: a procedure shared by a whole
-table goes in <code>tables.csv$method_iri</code>, a citable protocol
-document goes in
-<code>protocol_iri</code>/<code>protocol_citation</code> on
-<code>tables.csv</code> or <code>dataset.csv</code>, and a method that
-varies row by row becomes a code column in the data whose values resolve
-through <code>codes.csv$term_iri</code> to shared-vocabulary procedures.
-A statistical modifier is the one kind of “how” that stays in the
+<td>Optional: is the column an aggregation — a mean, maximum, minimum,
+total, or peak — rather than a single observation?</td>
+</tr></tbody></table><p>The queue shows one slot per field, so the decomposition is decided
+one question at a time.</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>── escapement · NATURAL_SPAWNERS_TOTAL · property ────────────────────────────
+   field:   column_dictionary.csv · property_iri
+   current: REVIEW: https://w3id.org/gcdfo/salmon#SpawnerAbundance
+
+   [1] Spawner abundance   gcdfo   score 18.95
+       The abundance (count) of adult salmon that reach spawning grounds in a
+       given system and time period (often operationalized as
+       escapement/spawning escapement).
+       https://w3id.org/gcdfo/salmon#SpawnerAbundance
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "property", rank = 1)</code></pre>
+</div>
+<p>This one deserves a stop. Retrieval offered the <em>same term</em>
+for <code>term_iri</code> and <code>property_iri</code>, and it cannot
+be right in both places: “spawner abundance” is a whole measurement
+variable, whereas the I-ADOPT property is the bare characteristic being
+measured. Decomposing a variable into itself records nothing. The
+property here is abundance:</p>
+<div class="codewrapper sourceCode" id="cb17">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span></span>
+<span>  <span class="va">review</span>,</span>
+<span>  <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>,</span>
+<span>  <span class="st">"property"</span>,</span>
+<span>  iri <span class="op">=</span> <span class="st">"https://w3id.org/smn/Abundance"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>This is the normal case for <code>iri =</code>, and it is worth
+naming as a general habit: when the property and the variable retrieve
+the same term, the property slot almost certainly needs a broader
+one.</p>
+<p>The remaining three slots:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>── escapement · NATURAL_SPAWNERS_TOTAL · entity ──────────────────────────────
+   field:   column_dictionary.csv · entity_iri
+   current: REVIEW: https://w3id.org/smn/Population
+
+   [1] Population   smn   score 15.55
+       A group of organisms of the same species occupying a defined area that
+       interbreed and share a gene pool. In salmon, populations are composed
+       of one or more demes and form the biological basis for Conservation
+       Units.
+       https://w3id.org/smn/Population
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "entity", rank = 1)
+
+── escapement · NATURAL_SPAWNERS_TOTAL · unit ────────────────────────────────
+   field:   column_dictionary.csv · unit_iri
+   current: REVIEW: http://qudt.org/vocab/unit/COUNT
+
+   [1] Count   qudt   score 4.65
+       http://qudt.org/vocab/unit/COUNT
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "unit", rank = 1)
+
+── escapement · NATURAL_SPAWNERS_TOTAL · constraint ──────────────────────────
+   field:   column_dictionary.csv · constraint_iri
+   current: REVIEW: https://w3id.org/smn/NaturalOrigin
+
+   [1] Natural-origin   smn   score 8.6
+       Individuals that are born and reared in the wild (natural
+       environment).
+       https://w3id.org/smn/NaturalOrigin
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "constraint", rank = 1)</code></pre>
+</div>
+<p>Note the unit candidate: score 4.65 and no definition at all. A low
+score with nothing to read is a prompt to check the vocabulary yourself,
+not a reason to accept faster. Confirm that a count is what the NuSEDS
+column actually stores before keeping it.</p>
+<p>The statistical modifier is the one kind of “how” that stays in the
 dictionary, because a <em>mean</em> weight and a <em>maximum</em> weight
-are different variables.</p>
+are genuinely different variables:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>── escapement · NATURAL_SPAWNERS_TOTAL · statistical_modifier ────────────────
+   field:   column_dictionary.csv · statistical_modifier_iri
+   current: REVIEW: https://w3id.org/smn/TotalStatisticalModifier
+
+   [1] Total   smn   score 15.15
+       The reported value is the sum or cumulative total of the summarized
+       observations, such as an annual total catch or cumulative escapement.
+       https://w3id.org/smn/TotalStatisticalModifier
+       review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "statistical_modifier", rank = 1)</code></pre>
+</div>
+<p>The candidate is offered because the column name contains
+<em>TOTAL</em>. That is a name, not a fact about the values. Confirm
+with the data holder that the column really is a sum before accepting
+it; if you cannot confirm it, reject the slot rather than inheriting a
+claim from a column name.</p>
+<div class="section level3">
+<h3 id="the-table-slot-has-no-column">The table slot has no column<a class="anchor" aria-label="anchor" href="#the-table-slot-has-no-column"></a></h3>
+<p>One queue entry is not about a column at all.
+<code>tables.csv$observation_unit_iri</code> records what one row of the
+table represents, so the printed call names the table instead:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>── escapement · entity ───────────────────────────────────────────────────────
+   field:   tables.csv · observation_unit_iri
+   current: REVIEW: https://w3id.org/smn/Escapement
+
+   [1] Escapement   smn   score 14.4
+       The number of mature salmon that pass through (or escape) fisheries
+       and return to fresh water to spawn.
+       https://w3id.org/smn/Escapement
+       review &lt;- accept_suggestion(review, role = "entity", rank = 1, table = "escapement")</code></pre>
+</div>
+<p>Paste it as printed. <code>columns =</code> filters on column names,
+so a <code>columns</code> filter always hides this slot; build the queue
+without one when you want to reach it.</p>
+</div>
+<div class="section level3">
+<h3 id="methods-do-not-live-in-the-column-dictionary">Methods do not live in the column dictionary<a class="anchor" aria-label="anchor" href="#methods-do-not-live-in-the-column-dictionary"></a></h3>
+<p>A method describes how a value was produced, not what the column
+<em>is</em>, so it is recorded where it is actually constant: a
+procedure shared by a whole table goes in
+<code>tables.csv$method_iri</code>; a citable protocol document goes in
+<code>protocol_iri</code>/<code>protocol_citation</code> on
+<code>tables.csv</code> or <code>dataset.csv</code>; and a method that
+varies row by row becomes a code column whose values resolve through
+<code>codes.csv$term_iri</code> to shared-vocabulary procedures.</p>
+<p>In the Fraser Coho package, <code>ESTIMATE_METHOD</code> is exactly
+that row-varying case, and metasalmon’s deterministic NuSEDS crosswalk
+has already filled several of its code rows during package creation —
+<code>Area Under the Curve</code> resolves to
+<code>https://w3id.org/gcdfo/salmon#AreaUnderTheCurve</code> with no
+<code>REVIEW:</code> prefix at all. Those rows are written directly and
+produce no suggestions, so <strong>they never appear in the review
+queue</strong>. Open <code>metadata/codes.csv</code> and check them by
+eye. A crosswalk is a defensible default, not a decision you made.</p>
 <p>Important boundary: <code>property_iri</code>,
 <code>entity_iri</code>, <code>constraint_iri</code>, and
 <code>statistical_modifier_iri</code> are I-ADOPT-style
-measurement-variable components. <code>unit_iri</code> is also
-measurement semantics, but units are not an I-ADOPT role, and methods
-are not part of the variable at all. Do not use these fields as
-general-purpose relationship fields for identifiers, attributes, or
-categorical columns.</p>
-</section><section><h2 class="section-heading" id="optional-llm-assisted-bundle-review">Optional LLM-assisted bundle review<a class="anchor" aria-label="anchor" href="#optional-llm-assisted-bundle-review"></a></h2>
-<hr class="half-width"><p>Adding <code>llm_assess = TRUE</code> in R or
-<code>llm_assess=True</code> in Python, plus an approved provider and
-model, asks the LLM to judge the retrieved candidates; it does not let
-the model invent IRIs. A measurement’s variable, property, entity, unit,
-constraint, and statistical-modifier candidates are reviewed together as
-one bundle. A statistical-modifier candidate is proposed only when the
-column’s name, label, or description names an aggregation such as total,
-mean, maximum, minimum, or peak. Method candidates apply to code values,
-where codes can resolve to shared <code>sosa:Procedure</code>
-concepts.</p>
-<p>The package clients bound retries for temporary provider failures and
-keep credentials out of reported URLs. These safeguards reduce avoidable
-failures; they do not authorize unbounded retries, sensitive context, or
-unattended acceptance of LLM decisions.</p>
-<p>Deterministic validators can downgrade an unsupported
-<code>accept</code> decision to <code>review</code>, but they never
-substitute or invent a term. Suggested candidates written into the
-dictionary carry the <code>REVIEW:</code> prefix until a person confirms
-them.</p>
-<p>Context files must be passed as existing local file paths through
-<code>llm_context_files</code>, and context alone does not enable an LLM
-call. Use only an approved provider and appropriate non-sensitive
-context.</p>
-</section><section><h2 class="section-heading" id="example-review">Example review<a class="anchor" aria-label="anchor" href="#example-review"></a></h2>
-<hr class="half-width"><p>Shared example column: <code>NATURAL_SPAWNERS_TOTAL</code></p>
-<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Decision</th>
-<th>Fraser Coho candidate to review</th>
-</tr></thead><tbody><tr><td>Complete measurement variable, <code>term_iri</code>
-</td>
-<td>Natural-origin spawner abundance; review
-<code>https://w3id.org/gcdfo/salmon#SpawnerAbundance</code> against the
-NuSEDS definition.</td>
-</tr><tr><td>I-ADOPT property, <code>property_iri</code>
-</td>
-<td>Abundance; review <code>https://w3id.org/smn/Abundance</code>.</td>
-</tr><tr><td>I-ADOPT entity, <code>entity_iri</code>
-</td>
-<td>The conservation unit recorded in <code>FULL_CU_IN</code>; review
-<code>https://w3id.org/gcdfo/salmon#ConservationUnit</code>.</td>
-</tr><tr><td>I-ADOPT constraint, <code>constraint_iri</code>
-</td>
-<td>Natural origin; review
-<code>https://w3id.org/smn/NaturalOrigin</code>.</td>
-</tr><tr><td>Unit, <code>unit_iri</code>
-</td>
-<td>Individuals; review <code>https://qudt.org/vocab/unit/INDIV</code>.
-This is measurement semantics, but not an I-ADOPT role.</td>
-</tr><tr><td>Statistical modifier</td>
-<td>Leave blank for this exercise; do not infer <em>total</em>,
-<em>peak</em>, or <em>mean</em> without confirming what the source value
-represents.</td>
-</tr><tr><td>Table observation unit</td>
-<td>Each row reports an escapement estimate; review
-<code>https://w3id.org/smn/EscapementEstimate</code> for
-<code>tables.csv$observation_unit_iri</code>.</td>
-</tr><tr><td>Method</td>
-<td>
-<code>ESTIMATE_METHOD</code> varies by row. Review the
-<code>Area Under the Curve</code> code mapping to
-<code>https://w3id.org/gcdfo/salmon#AreaUnderTheCurve</code> in
-<code>codes.csv$term_iri</code>; do not put it in the measurement’s
-I-ADOPT fields.</td>
-</tr></tbody></table><div id="challenge-1-complete-the-bounded-fraser-coho-review" class="callout discussion">
-<div class="callout-square">
-<i class="callout-icon" data-feather="message-circle"></i>
+measurement-variable components. <code>unit_iri</code> is measurement
+semantics too, but units are not an I-ADOPT role, and methods are not
+part of the variable at all. Do not use these fields as general-purpose
+relationship fields for identifiers, attributes, or categorical
+columns.</p>
 </div>
-<span class="callout-header">Discussion</span>
+</section><section><h2 class="section-heading" id="write-the-decisions-back">Write the decisions back<a class="anchor" aria-label="anchor" href="#write-the-decisions-back"></a></h2>
+<hr class="half-width"><p>Decisions live only in the review object until you apply them.</p>
+<div class="tabs">
+<nav><div id="nav-tab-3" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-3-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-R" type="button" role="tab" aria-controls="nav-tabpanel-3-R" aria-selected="true">
+  <h3 class="tab-header" id="nav-tab-heading-3-R">
+  R
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-3-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Python" type="button" role="tab" aria-controls="nav-tabpanel-3-Python" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-3-Python">
+  Python
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-3-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-3-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-3-Spreadsheet" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-3-Spreadsheet">
+  Spreadsheet
+  </h3>
+</button>
+</div>
+</nav><div id="nav-tabContent-3" class="tab-content">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" aria-labelledby="nav-tab-3-R" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb21">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">apply_sdp_semantics</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="va">review</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>✔ Applied 8 semantic review decisions to 'output/fraser-coho-example-sdp'.
+ℹ Check the result with `validate_salmon_datapackage(path, require_iris =
+  TRUE)`.</code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-3-Python" class="tab-pane" aria-labelledby="nav-tab-3-Python" role="tabpanel">
+<p>Pending. Edit the target metadata CSV fields directly, then
+revalidate.</p>
+</div>
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-3-Spreadsheet" role="tabpanel">
+<p>Save the metadata CSVs you edited, keeping the header row and column
+order unchanged.</p>
+</div>
+</div>
+</div>
+<p><code>apply_sdp_semantics()</code> is deliberately narrow, and the
+narrowness is the safety property:</p>
+<ul><li>accepted IRIs are written with the <code>REVIEW:</code> prefix
+stripped;</li>
+<li>rejected slots are cleared;</li>
+<li>
+<strong>undecided slots are left exactly as they were</strong>,
+<code>REVIEW:</code> markers and all;</li>
+<li>
+<code>term_type</code> is kept in step with <code>term_iri</code>,
+so the dictionary never claims a kind for a term it no longer
+holds;</li>
+<li>
+<code>datapackage.json</code> and
+<code>semantic_suggestions.csv</code> are updated in the same
+transaction, because the descriptor duplicates the dictionary’s IRI
+fields and a half-applied edit would leave the package quietly
+self-inconsistent; and</li>
+<li><strong>no data CSV byte is touched.</strong></li>
+</ul><p>That last point is the difference from
+<code>write_salmon_datapackage()</code>, which rebuilds a whole package
+from in-memory objects. Applying a review is a surgical metadata edit.
+Applying the same review twice produces identical bytes, which is what
+makes it safe to leave in a build script that runs every day.</p>
+<p>Check the claim rather than believing it — the file hash of
+<code>data/escapement.csv</code> is the same before and after:</p>
+<div class="codewrapper sourceCode" id="cb23">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">before</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu">md5sum</span><span class="op">(</span><span class="fu">file.path</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="st">"data"</span>, <span class="st">"escapement.csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">apply_sdp_semantics</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="va">review</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">identical</span><span class="op">(</span><span class="va">before</span>, <span class="fu">tools</span><span class="fu">::</span><span class="fu">md5sum</span><span class="op">(</span><span class="fu">file.path</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="st">"data"</span>, <span class="st">"escapement.csv"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TRUE</span></span></code></pre>
+</div>
+<p>Rebuild the queue afterwards and it is shorter: the slots you decided
+now hold final IRIs, so they drop out.</p>
+<div class="codewrapper sourceCode" id="cb24">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">review_semantics</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="the-decision-that-stays-in-the-package">The decision that stays in the package<a class="anchor" aria-label="anchor" href="#the-decision-that-stays-in-the-package"></a></h3>
+<p>Your script is the record of <em>why</em>.
+<code>semantic_suggestions.csv</code> now also records <em>which</em> —
+<code>apply_sdp_semantics()</code> writes a <code>decision</code> column
+beside the candidates it was choosing between:</p>
+<div class="codewrapper sourceCode" id="cb25">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">suggestions</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
+<span>  <span class="fu">file.path</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="st">"semantic_suggestions.csv"</span><span class="op">)</span>,</span>
+<span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">suggestions</span><span class="op">[</span><span class="op">!</span><span class="fu">is.na</span><span class="op">(</span><span class="va">suggestions</span><span class="op">$</span><span class="va">decision</span><span class="op">)</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"column_name"</span>, <span class="st">"dictionary_role"</span>, <span class="st">"decision"</span><span class="op">)</span><span class="op">]</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code># A tibble: 8 × 3
+  column_name            dictionary_role      decision
+  &lt;chr&gt;                  &lt;chr&gt;                &lt;chr&gt;
+1 AREA                   variable             rejected
+2 NATURAL_SPAWNERS_TOTAL variable             accepted
+3 NATURAL_SPAWNERS_TOTAL property             not_selected
+4 NATURAL_SPAWNERS_TOTAL entity               accepted
+5 NATURAL_SPAWNERS_TOTAL unit                 accepted
+6 NATURAL_SPAWNERS_TOTAL constraint           accepted
+7 NATURAL_SPAWNERS_TOTAL statistical_modifier accepted
+8 &lt;NA&gt;                   entity               accepted</code></pre>
+</div>
+<p>Row 8 has no <code>column_name</code> because it is the table
+observation-unit slot.</p>
+<p>This is the first durable, in-package record of a review decision,
+and it travels with the package rather than with your project folder.
+Three values appear:</p>
+<ul><li>
+<code>accepted</code> — this candidate was chosen;</li>
+<li>
+<code>rejected</code> — the slot was rejected, so no candidate was
+chosen; and</li>
+<li>
+<code>not_selected</code> — this candidate was on the shortlist and
+lost. The <code>property</code> row reads <code>not_selected</code>
+because we accepted <code>smn:Abundance</code> with <code>iri =</code>
+instead of the shortlisted term.</li>
+</ul><p>Read the <code>property</code> row as the useful case: it is the one
+that tells a later reader the shortlist was overruled, which is exactly
+the fact a copied cell used to hide.</p>
+<p>A fourth column, <code>decision_reason</code>, carries the sentence
+you passed to <code>reject_suggestion()</code>. Add it to the selection
+above to see it:</p>
+<div class="codewrapper sourceCode" id="cb27">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">suggestions</span><span class="op">[</span></span>
+<span>  <span class="op">!</span><span class="fu">is.na</span><span class="op">(</span><span class="va">suggestions</span><span class="op">$</span><span class="va">decision</span><span class="op">)</span>,</span>
+<span>  <span class="fu">c</span><span class="op">(</span><span class="st">"column_name"</span>, <span class="st">"dictionary_role"</span>, <span class="st">"decision"</span>, <span class="st">"decision_reason"</span><span class="op">)</span></span>
+<span><span class="op">]</span></span></code></pre>
+</div>
+<p><code>review_semantics()</code> reads that column back, so rebuilding
+the queue tomorrow keeps your rejections out of it instead of asking the
+same question again.</p>
+</div>
+</section><section><h2 class="section-heading" id="the-finished-script">The finished script<a class="anchor" aria-label="anchor" href="#the-finished-script"></a></h2>
+<hr class="half-width"><p>Session 3 said every accepted decision belongs in the script rather
+than in a manual edit inside <code>output/</code>. This is what that
+looks like for semantics. Append it to <code>scripts/build_sdp.R</code>,
+below the <code>create_sdp()</code> call:</p>
+<div class="codewrapper sourceCode" id="cb28">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">review_semantics</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"variable"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span></span>
+<span>  <span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"property"</span>,</span>
+<span>  iri <span class="op">=</span> <span class="st">"https://w3id.org/smn/Abundance"</span>          <span class="co"># the shortlist offered the whole variable</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"entity"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"unit"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"constraint"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"statistical_modifier"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, role <span class="op">=</span> <span class="st">"entity"</span>, rank <span class="op">=</span> <span class="fl">1</span>, table <span class="op">=</span> <span class="st">"escapement"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">reject_suggestion</span><span class="op">(</span></span>
+<span>  <span class="va">review</span>, <span class="st">"AREA"</span>, <span class="st">"variable"</span>,</span>
+<span>  reason <span class="op">=</span> <span class="st">"DFO statistical area, not a body of water"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">apply_sdp_semantics</span><span class="op">(</span><span class="va">pkg_path</span>, <span class="va">review</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">validate_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span>, require_iris <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Every line is a decision, every decision can carry its reasoning in a
+comment beside it, and the whole thing reruns. That is the property the
+spreadsheet could not give you.</p>
+<p>Expect <code>validate_salmon_datapackage()</code> to still warn here:
+the slots you did not decide keep their <code>REVIEW:</code> markers,
+and the free-text placeholders are untouched. That is the correct state
+for a package mid-review.</p>
+<p>One caveat about rerunning. The decisions replay deterministically,
+but the <em>candidates</em> do not: shared vocabularies evolve, so a
+future <code>create_sdp(seed_semantics = TRUE)</code> may retrieve a
+different shortlist and <code>rank = 1</code> may then name a different
+term. Where an accepted IRI must never drift, write it as
+<code>iri = "…"</code> instead of <code>rank = 1</code>. That converts a
+position into a commitment.</p>
+</section><section><h2 class="section-heading" id="what-this-review-cannot-decide">What this review cannot decide<a class="anchor" aria-label="anchor" href="#what-this-review-cannot-decide"></a></h2>
+<hr class="half-width"><p>Say these out loud in the workshop. A tool that hides its limits
+teaches learners to trust it in the places it is weakest.</p>
+<p><strong>A slot with no candidate never appears in <em>this</em>
+queue.</strong> <code>review_semantics()</code> is built from
+shortlists, not from gaps, so a required field that retrieval found
+nothing for is silently absent from it. That is a property of the
+semantic queue, not a limit of the package:
+<code>review_metadata()</code> reads the package against the rules that
+actually decide strict validation — the schema’s required fields, the
+<code>MISSING …:</code> placeholders, the measurement-IRI requirement
+and the table observation-unit requirement — so a field no retrieval
+ever touched is as visible to it as one with five candidates. Run it
+after this chapter, and treat <em>its</em> report, rather than an empty
+semantic queue, as the authority on whether the package is finished.</p>
+<p><strong>Free-text fields have their own R-native flow, and it is not
+this one.</strong> Descriptions, contacts, licences and the other
+<code>MISSING …:</code> placeholders are outside the semantic review,
+but they are no longer a spreadsheet job either.
+<code>review_metadata()</code> prints the exact
+<code>set_sdp_dataset()</code> / <code>set_sdp_table()</code> /
+<code>set_sdp_column()</code> / <code>set_sdp_code()</code> call for
+each one, with the value left as a <code>&lt;…&gt;</code> placeholder
+you replace:</p>
+<div class="codewrapper sourceCode" id="cb29">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">review_metadata</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">set_sdp_dataset</span><span class="op">(</span><span class="va">pkg_path</span>,</span>
+<span>  creator <span class="op">=</span> <span class="st">"Fisheries and Oceans Canada - Pacific Region"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>The same rule as this chapter applies: <strong>the printed call is
+the contract, and the paste is the audit trail.</strong> Pasting one
+unedited is refused — a <code>creator</code> field reading
+<code>&lt;add creator, team, or originating program&gt;</code> would
+pass strict validation while saying nothing, which is worse than the
+placeholder it replaced, because the marker is gone. Session 6 covers
+where that gate sits in the publication workflow.</p>
+<p><strong>Some suggestion targets are not decidable in the semantic
+queue.</strong> A target with no single IRI field to write into — the
+dataset keyword list, for example — is reported and skipped rather than
+shown as something you can accept. Set those with
+<code>set_sdp_dataset(pkg_path, keywords = "…")</code>, which checks the
+field name against the schema, so a misspelling is an error rather than
+a silent no-op.</p>
+<div id="two-rough-edges-this-chapter-used-to-carry-and-where-they-went" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="two-rough-edges-this-chapter-used-to-carry-and-where-they-went" class="callout-inner">
+<h3 class="callout-title">Two rough edges this chapter used to carry,
+and where they went</h3>
+<div class="callout-content">
+<p>Earlier drafts of this lesson taught two real defects, because they
+were real: a rejection did not survive rebuilding the queue, and an
+empty queue under a mistyped <code>columns</code> filter printed the
+<em>completion</em> message — telling a learner who typed
+<code>columns = "TYPO"</code> that their package was finished.</p>
+<p>Both were fixed in <strong>metasalmon 0.5.0</strong>, and both were
+found by teaching this API rather than by testing it.
+<code>review_semantics()</code> now replays recorded decisions and keeps
+decided slots out of the default queue (pass
+<code>include_filled = TRUE</code> to see them), the rejection
+<em>reason</em> is written to a <code>decision_reason</code> column and
+read back, and a <code>columns</code> value matching no column is an
+error that names the columns that do exist.</p>
+<p>They are worth naming rather than quietly deleting. The shared shape
+is the lesson: <strong>a feature that writes a record and never reads it
+back has not been round-tripped, and no test that only writes will say
+so.</strong></p>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="optional-llm-assisted-bundle-review">Optional LLM-assisted bundle review<a class="anchor" aria-label="anchor" href="#optional-llm-assisted-bundle-review"></a></h2>
+<hr class="half-width"><p>This is a <strong>separate step, and it is strictly opt-in.</strong>
+Nothing in this chapter contacts an LLM:
+<code>review_semantics()</code>, <code>accept_suggestion()</code>,
+<code>reject_suggestion()</code>, and <code>apply_sdp_semantics()</code>
+make no network call of any kind. LLM assessment happens earlier, during
+<code>suggest_semantics()</code> or <code>create_sdp()</code>, and only
+when you pass <code>llm_assess = TRUE</code> in R or
+<code>llm_assess=True</code> in Python together with an approved
+provider and model. Supplying context files alone never triggers a
+call.</p>
+<p>When suggestions were generated that way, the review console surfaces
+the assessment under the candidate as an extra <code>llm:</code> line
+with its decision, confidence, and rationale. It surfaces it; it never
+generates it. If you did not opt in, those lines simply are not
+there.</p>
+<p>What the assessment is allowed to do is judge the retrieved
+candidates. It cannot invent an IRI. A measurement’s variable, property,
+entity, unit, constraint, and statistical-modifier candidates are
+reviewed together as one bundle, and a statistical-modifier candidate is
+proposed only when the column’s name, label, or description names an
+aggregation. Deterministic validators can downgrade an unsupported
+<code>accept</code> to <code>review</code>, but they never substitute a
+term.</p>
+<p>Context files must be passed as existing local file paths through
+<code>llm_context_files</code>, never as parsed data frames or
+documents. Use only an approved provider and non-sensitive context. An
+LLM decision is evidence for your review, not a replacement for it: you
+still paste the call.</p>
+</section><section><h2 class="section-heading" id="function-reference">Function reference<a class="anchor" aria-label="anchor" href="#function-reference"></a></h2>
+<hr class="half-width"><p>Full argument lists and return values: <a href="https://salmon-data-mobilization.github.io/metasalmon/reference/review_semantics.html" class="external-link"><code>review_semantics()</code></a>,
+<a href="https://salmon-data-mobilization.github.io/metasalmon/reference/accept_suggestion.html" class="external-link"><code>accept_suggestion()</code>
+and <code>reject_suggestion()</code></a>, <a href="https://salmon-data-mobilization.github.io/metasalmon/reference/apply_sdp_semantics.html" class="external-link"><code>apply_sdp_semantics()</code></a>,
+<a href="https://salmon-data-mobilization.github.io/metasalmon/reference/review_metadata.html" class="external-link"><code>review_metadata()</code></a>,
+and the <a href="https://salmon-data-mobilization.github.io/metasalmon/reference/set_sdp_dataset.html" class="external-link"><code>set_sdp_*()</code>
+setters</a>.</p>
+<div id="challenge-1-complete-the-bounded-fraser-coho-review" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
 <div id="challenge-1-complete-the-bounded-fraser-coho-review" class="callout-inner">
 <h3 class="callout-title">Challenge 1: Complete the bounded Fraser Coho
 review</h3>
 <div class="callout-content">
 <p>Work with the shared NuSEDS Fraser Coho package, even if you brought
-your own dataset. Complete only this review:</p>
-<ol style="list-style-type: decimal"><li>choose <strong>keep</strong>, <strong>replace</strong>,
-<strong>remove</strong>, or <strong>defer</strong> for the one
-<code>NATURAL_SPAWNERS_TOTAL</code> <code>term_iri</code> candidate, and
-write one sentence explaining why;</li>
-<li>complete one I-ADOPT decomposition of that same measurement by
-reviewing its property, entity, and natural-origin constraint;</li>
-<li>review the QUDT Individual unit IRI;</li>
-<li>review the escapement-estimate IRI that says what each table row
-represents; and</li>
-<li>review the <code>Area Under the Curve</code> method-code IRI in
-<code>codes.csv</code>.</li>
-</ol><p>Do not map additional fields during this exercise. After the
-workshop, use the same sequence for another measurement in your own
-package.</p>
+your own dataset.</p>
+<ol style="list-style-type: decimal"><li>Build the queue with <code>review_semantics()</code> and count the
+slots.</li>
+<li>Decide the six <code>NATURAL_SPAWNERS_TOTAL</code> slots: variable,
+property, entity, unit, constraint, statistical modifier. Use
+<code>iri =</code> where the shortlist is wrong, and write one sentence
+in the script saying why.</li>
+<li>Decide the table observation-unit slot.</li>
+<li>Reject <code>AREA</code> with a reason.</li>
+<li>Apply the decisions and confirm <code>data/escapement.csv</code> is
+byte-identical.</li>
+<li>Open <code>metadata/codes.csv</code> and check the
+<code>ESTIMATE_METHOD</code> rows the crosswalk filled. Which would you
+keep? Which would you question?</li>
+</ol><p>Do not map additional fields during this exercise.</p>
+</div>
+</div>
+</div>
+<div id="challenge-2-prove-the-review-is-reproducible" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-2-prove-the-review-is-reproducible" class="callout-inner">
+<h3 class="callout-title">Challenge 2: Prove the review is
+reproducible</h3>
+<div class="callout-content">
+<p>Delete <code>output/fraser-coho-example-sdp/</code> and rerun
+<code>scripts/build_sdp.R</code> from the top. Budget a few minutes:
+this reruns the seeding search as well as the review.</p>
+<ul><li>Does the package come back with the same accepted IRIs?</li>
+<li>Which of your decisions would survive a vocabulary change, and which
+are pinned to <code>rank = 1</code>?</li>
+<li>Rerun <code>apply_sdp_semantics()</code> a second time without
+changing anything. What changed on disk?</li>
+<li>Rebuild the queue after applying. Which slots came back, and
+why?</li>
+</ul><p>Then answer the question this chapter exists for: <strong>if you left
+this project today, what would the next person be able to reconstruct —
+and what would they have to guess?</strong></p>
 </div>
 </div>
 </div>
@@ -756,18 +1469,37 @@ package.</p>
 <span class="callout-header">Key Points</span>
 <div class="callout-inner">
 <div class="callout-content">
-<ul><li>The workshop semantic exercise is bounded to one Fraser Coho
-measurement, one I-ADOPT decomposition, one unit, one table observation
-unit, and one method code.</li>
+<ul><li>The console prints the exact <code>accept_suggestion()</code> call;
+pasting it into your build script is what makes the decision
+reproducible.</li>
 <li>
-<code>REVIEW:</code> suggestions are evidence to inspect, not final
-answers.</li>
-<li>Optional LLM review selects from deterministic candidates and
-remains subject to deterministic checks.</li>
-<li>SDP measurement semantic fields are measurement-only in the column
-dictionary; methods live at the table, protocol, or code level rather
-than in the dictionary, and I-ADOPT itself does not model units or
-methods.</li>
+<code>review_semantics()</code> reads suggestions that already
+exist. It never searches, and it never contacts an LLM.</li>
+<li>
+<code>REVIEW:</code> and a blank field both mean undecided; a
+retrieval score is not agreement.</li>
+<li>Shortlists are one candidate deep by default
+(<code>semantic_max_per_role = 1</code>); ask for depth at build time,
+and expect it to give you more to reject rather than more to
+accept.</li>
+<li>No part of getting a package to strict validation needs a
+spreadsheet any more: this queue decides the IRIs, and
+<code>review_metadata()</code> plus the <code>set_sdp_*()</code> setters
+decide the free text and the gaps this queue never shows.</li>
+<li>The workshop review is bounded to one measurement, its I-ADOPT
+decomposition, its unit and statistical modifier, one table observation
+unit, and one deliberate rejection.</li>
+<li>I-ADOPT roles describe the measurement variable; units are separate,
+and methods live at the table, protocol, or code level rather than in
+the dictionary.</li>
+<li>
+<code>apply_sdp_semantics()</code> is a surgical, re-runnable
+metadata edit that leaves the data files byte-identical.</li>
+<li>The queue shows shortlists, not gaps —
+<code>review_metadata()</code> shows the gaps, and the validation report
+decides whether the package is finished.</li>
+<li>Optional LLM assessment is generated earlier and only on explicit
+opt-in; the review flow only displays it.</li>
 </ul></div>
 </div>
 </div>
@@ -780,10 +1512,10 @@ methods.</li>
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="../instructor/session-3.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Use Your Data and
+          Previous: Use Your Data and Capture Context...
         </a>
         <a class="chapter-link float-end" href="../instructor/session-5.html" rel="next">
-          Next: Code Lists, SKOS,...
+          Next: Code Lists, SKOS, and Local Vocabulary...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -809,7 +1541,7 @@ methods.</li>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.2" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.1" class="external-link">varnish (1.1.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.2" class="external-link">varnish (1.1.2)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -831,8 +1563,8 @@ methods.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-4.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-4.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-25",
-  "datePublished": "2026-08-25"
+  "dateModified": "2026-08-26",
+  "datePublished": "2026-08-26"
 }
 
   </script><script>

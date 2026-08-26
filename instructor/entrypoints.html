@@ -309,7 +309,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Entrypoints</h1>
-        <p>Last updated on 2026-08-25 |
+        <p>Last updated on 2026-08-26 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/docs/entrypoints.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -352,10 +352,24 @@ personas.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="software-lanes">Software lanes<a class="anchor" aria-label="anchor" href="#software-lanes"></a></h2>
-<ul><li>R instructions use the latest <code>metasalmon</code> from the
-repository without a version pin.</li>
-<li>Python instructions use the latest <code>metasalmonpy</code> from
-the repository without a version pin.</li>
+<ul><li>R instructions pin <code>metasalmon</code> to the
+<strong><code>v0.5.0</code></strong> release tag, and
+<code>renv/profiles/lesson-requirements/renv.lock</code> pins the same
+release, so a learner’s install and the lesson build are the same
+package. Bump the two together — <code>learners/setup.md</code> and the
+lockfile — whenever an episode starts teaching a newer function. The
+build-log note <code>episodes/session-4.Rmd</code> used to emit when the
+pin was behind what it taught has been removed; the pin is no longer
+behind, and that was the condition the note named for its own
+retirement.</li>
+<li>Python instructions pin <code>metasalmonpy</code> to the
+<strong><code>v0.4.0</code></strong> release tag tarball (its releases
+carry no wheel assets). <strong>The two lanes are deliberately on
+different numbers</strong>: the R-native review flow
+<code>episodes/session-4.Rmd</code> teaches shipped in metasalmon 0.5.0
+and has not been ported to Python, so that episode’s Python lane is
+empty and says so. Pinning fixes reproducibility on both lanes; only the
+port closes the capability gap.</li>
 <li>Spreadsheet instructions use the same canonical SDP CSV files and
 appear separately where no code is required.</li>
 <li>
@@ -381,9 +395,13 @@ R or Python build script, declare context inputs, seed semantic
 candidates, and encode accepted review decisions for reruns.</li>
 <li>
 <code>episodes/session-4.Rmd</code>: use the shared NuSEDS Fraser
-Coho example to review one measurement IRI, one I-ADOPT decomposition,
-one unit, one table observation-unit IRI, and one method-code IRI, with
-optional bundle-aware LLM review.</li>
+Coho example to run metasalmon’s R-native semantic review —
+<code>review_semantics()</code> prints the decision call, the learner
+pastes it into the build script, and <code>apply_sdp_semantics()</code>
+writes it — covering one measurement IRI, one I-ADOPT decomposition, one
+unit, one statistical modifier, one table observation-unit IRI, and one
+deliberate rejection, with optional bundle-aware LLM review named as a
+separate opt-in.</li>
 <li>
 <code>episodes/session-5.Rmd</code>: code lists, SKOS, and local
 vocabulary.</li>
@@ -505,7 +523,7 @@ server.</p>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.20.2" class="external-link">sandpaper (0.20.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.1" class="external-link">varnish (1.1.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.21.0" class="external-link">sandpaper (0.21.0)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.9" class="external-link">pegboard (0.7.9)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.1.2" class="external-link">varnish (1.1.2)</a></p>
 		</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -527,8 +545,8 @@ server.</p>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/entrypoints.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/entrypoints.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-25",
-  "datePublished": "2026-08-25"
+  "dateModified": "2026-08-26",
+  "datePublished": "2026-08-26"
 }
 
   </script><script>
