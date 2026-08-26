@@ -6,7 +6,7 @@ title: Reference
 
 1. Create a draft package from one table or a named list of tables.
 2. Improve dataset, table, column, code, and README/context descriptions.
-3. Review suggested semantic links.
+3. Review suggested semantic links, recording each decision as a line of code in the build script rather than as an edited cell.
 4. Focus first on measurements, units, observation units, and important code lists.
 5. Render and review unresolved-term routes: `smn`, `gcdfo`, `profile`, or `skip`.
 6. Run strict validation only when the SDP is final enough for publication.
@@ -20,6 +20,11 @@ title: Reference
 | Create a package | `metasalmon::create_sdp()` | `metasalmonpy.create_sdp()` |
 | Read a package | `read_salmon_datapackage()` | `read_salmon_datapackage()` |
 | Suggest shared definitions | `suggest_semantics()` | `suggest_semantics()` |
+| Build a semantic review queue | `review_semantics()` | pending |
+| Decide one review slot | `accept_suggestion()`, `reject_suggestion()` | pending |
+| Write review decisions back | `apply_sdp_semantics()` | pending |
+| Report required-but-unfilled metadata | `review_metadata()` | pending |
+| Fill a free-text metadata field | `set_sdp_dataset()`, `set_sdp_table()`, `set_sdp_column()`, `set_sdp_code()` | pending |
 | Detect unresolved gaps | `detect_semantic_term_gaps()` | `detect_semantic_term_gaps()` |
 | Render request drafts | `render_ontology_term_request()` | `render_ontology_term_request()` |
 | Validate during review | `validate_salmon_datapackage(..., require_iris = FALSE)` | `validate_salmon_datapackage(..., require_iris=False)` |
@@ -27,7 +32,9 @@ title: Reference
 | Export validated EML | `write_eml_from_sdp()` | `write_eml_from_sdp()` (requires the `eml` extra) |
 | Plan or run a KNB deposit | `publish_sdp_to_knb()` | `publish_sdp_to_knb()` (requires the `knb` extra) |
 
-The two implementations are maintained at behavioral parity and release in lockstep. Their syntax remains idiomatic to each language; see the [metasalmonpy parity guide][metasalmonpy-parity] for deliberate differences. Install the latest packages before the workshop.
+The two implementations are maintained at behavioral parity and normally release in lockstep. Their syntax remains idiomatic to each language; see the [metasalmonpy parity guide][metasalmonpy-parity] for deliberate differences. Install the **pinned** releases before the workshop — `metasalmon` v0.5.0 and `metasalmonpy` v0.4.0 — not the latest default branch; the Setup page has both commands and says why the numbers differ.
+
+Rows marked *pending* are the R-native semantic review flow, which lands in `metasalmon` first. It is not a deliberate parity difference; the Python equivalent has not shipped yet. Python users decide the same slots by reading `semantic_suggestions.csv` and editing the target metadata field named by its `target_sdp_file` and `target_sdp_field` columns.
 
 ## Recommended project layout
 

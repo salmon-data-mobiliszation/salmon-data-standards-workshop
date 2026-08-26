@@ -19,6 +19,7 @@ Say "link to a shared definition" before introducing "semantic link" or "semanti
 Repeat these messages throughout:
 
 - A clear description is better than a forced IRI.
+- A decision that is not in the script did not happen. The pasted call is the audit trail.
 - Not every field needs an ontology term.
 - Measurement columns deserve the most careful semantic review.
 - Local context should be preserved and mapped, not renamed away.
@@ -99,8 +100,10 @@ After Session 3:
 After Session 4:
 
 - Which measurement mappings are accepted?
-- Which are removed or deferred?
+- Which are rejected, and is the reason recorded in the script rather than only in the room?
+- Can a learner point at the line in `scripts/build_sdp.R` that made each decision, and rerun it?
 - Are units treated separately from I-ADOPT roles, statistical modifiers used only for aggregations, and methods placed at the table, protocol, or code level rather than in the dictionary?
+- Can they say what the review queue does *not* show them?
 
 After Sessions 5 and 6:
 
@@ -117,6 +120,10 @@ After Sessions 5 and 6:
 
 - Learners try to fill every semantic field. Redirect to "measurements first."
 - Learners trust `REVIEW:` suggestions. Ask them to read the definition and scope.
+- Learners read the retrieval score as a confidence score. It is neither. `AREA` in the shared example retrieves an ENVO body of water at score 9.35 and is wrong; use it as the worked counterexample.
+- Learners assume `rank = 1` was the best of several. In a one-shot seeded package each slot's shortlist is one candidate deep, so `rank = 1` is usually the only rank there is. Show them `Ranks available: 1.`
+- Learners decide in the console and never paste the call into the script. That is the spreadsheet problem in a new costume; stop and have them paste before moving on.
+- Learners treat an empty review queue as a finished package. The queue shows shortlists, not gaps; the validation report is the authority.
 - Groups debate ontology classes too early. Bring them back to the package row, column, code value, or caveat.
 - Local method bins get proposed as shared terms. Ask whether another organization would use the same definition.
 - Participants add extra columns to canonical metadata CSVs. Put extra context in the README or sidecar notes instead.
@@ -133,9 +140,9 @@ Before delivery:
 - choose a small example dataset;
 - prepare an RStudio Project containing `raw_data/`, `scripts/`, and `output/`, with the example's data and context inputs together under `raw_data/` and an R or Python build script under `scripts/`;
 - prepare one current, already-created SDP folder for later review after the high-level system overview and quickstart;
-- install the latest R/`metasalmon` and Python/`metasalmonpy` packages and verify the examples in each language being taught;
+- install the pinned releases — R/`metasalmon` **v0.5.0** and Python/`metasalmonpy` **v0.4.0**, per `learners/setup.md` — and verify the examples in each language being taught. The two numbers differ on purpose: Session 4's review flow shipped in metasalmon 0.5.0 and has no Python port yet;
 - prepare one measurement mapping example;
-- prepare semantic suggestion output in advance if live vocabulary lookup would interrupt the schedule;
+- prepare semantic suggestion output in advance if live vocabulary lookup would interrupt the schedule. Seeding the shared Fraser Coho example takes roughly three minutes of live vocabulary lookup on a 17-column table, so build it before the session and hand out the folder; Session 4's review itself makes no network call and is instant;
 - prepare one categorical code-list example;
 - prepare one unresolved term with routing rationale;
 - if demonstrating optional LLM review, use an approved provider and non-sensitive context, and show how bundle decisions can be downgraded to manual review;
