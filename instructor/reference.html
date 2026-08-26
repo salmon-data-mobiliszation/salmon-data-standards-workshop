@@ -447,6 +447,123 @@ named list.</td>
 <td>Not directly supported; use a format-specific workflow or an
 explicitly reviewed tabular derivative.</td>
 </tr></tbody></table><p>The output SDP data resources are CSV files.</p>
+</section><section><h2 class="section-heading" id="tidy-shape-and-primary-keys">Tidy shape and primary keys<a class="anchor" aria-label="anchor" href="#tidy-shape-and-primary-keys"></a></h2>
+<hr class="half-width"><p>An SDP describes data one column and one row at a time:
+<code>column_dictionary.csv</code> says what each column means, and
+<code>tables.csv</code> says what one row represents. That description
+only works if the table is actually shaped that way. Three rules, from
+the tidy data conventions:</p>
+<ol style="list-style-type: decimal"><li>
+<strong>Each variable is a column.</strong> If survey year is
+something you recorded, it is a <code>survey_year</code> column — not
+the <em>names</em> of several columns.</li>
+<li>
+<strong>Each observation is a row.</strong> One row is one thing
+that happened: one stream in one year, one fish, one sample.</li>
+<li>
+<strong>Each table holds one kind of observation.</strong>
+Stream-year counts and individual fish biosamples are two tables, not
+one.</li>
+</ol><p>Rule 3 is what makes the rest work: a primary key can only identify a
+row when every row is the same kind of thing, and a table-level
+<code>method_iri</code> only makes sense when the whole table was
+produced the same way.</p>
+<p>Full worked examples, including the exact error text, are in the
+metasalmon <a href="https://salmon-data-mobilization.github.io/metasalmon/articles/tidy-data-for-sdp.html" class="external-link">tidy
+data guide</a>.</p>
+<div class="section level3">
+<h3 id="primary_key-is-optional-to-declare-and-enforced-once-declared">
+<code>primary_key</code> is optional to declare and enforced once
+declared<a class="anchor" aria-label="anchor" href="#primary_key-is-optional-to-declare-and-enforced-once-declared"></a></h3>
+<p><code>tables.csv$primary_key</code> holds the column, or
+comma-separated set of columns, whose values are unique within the
+table. Leaving it blank is allowed. <strong>Declaring one that does not
+hold is a hard error</strong> — validation fails rather than warning.
+Before metasalmon 0.2.6 nothing tested the field, so an older package
+can claim a key and still contain duplicate rows; the first strict
+validation after upgrading is where you find out.</p>
+<table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Failure</th>
+<th>What validation reports</th>
+<th>What it usually means</th>
+</tr></thead><tbody><tr><td>The key repeats</td>
+<td><code>declares primary key '...' but N row(s) repeats it</code></td>
+<td>The key needs another column, or there are duplicate records to
+remove. Validation cannot tell you which.</td>
+</tr><tr><td>The key contains blanks</td>
+<td><code>column &lt;name&gt; contains missing values</code></td>
+<td>A row with a blank key column has no identity. Checked separately
+from duplication, because two blanks are not literally equal and would
+otherwise slip through.</td>
+</tr><tr><td>The key names a missing column</td>
+<td><code>primary_key references columns not present in data</code></td>
+<td>Usually a typo, or a column renamed in the data but not in the
+metadata.</td>
+</tr></tbody></table><p>Choosing one is a matter of asking what one row <em>is</em>, then
+naming the columns that answer it:</p>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>One row is…</th>
+<th><code>primary_key</code></th>
+</tr></thead><tbody><tr><td>One stream in one year</td>
+<td><code>stream_id,survey_year</code></td>
+</tr><tr><td>One stream on one survey date</td>
+<td><code>stream_id,survey_date</code></td>
+</tr><tr><td>One individual fish</td>
+<td><code>sample_id</code></td>
+</tr><tr><td>One stream-year-species combination</td>
+<td><code>stream_id,survey_year,species_code</code></td>
+</tr></tbody></table><p>If you cannot name a unique set of columns, that is useful
+information: it usually means the table holds more than one kind of
+observation, and rule 3 applies.</p>
+</div>
+<div class="section level3">
+<h3 id="column-names-that-look-like-data-values">Column names that look like data values<a class="anchor" aria-label="anchor" href="#column-names-that-look-like-data-values"></a></h3>
+<p>The second shape check reads your <strong>column names</strong> and
+reports ones that look like data — a year per column, or a repeated stem
+with numeric tails. It is a <strong>warning, never an error</strong>:
+the package still builds, and validation still passes. It needs at least
+<strong>three</strong> matching columns, so an ordinary
+<code>x2</code>/<code>x3</code> pair is not flagged.</p>
+<ul><li>
+<strong>Year-like names</strong>: <code>1998</code>,
+<code>2023</code>, <code>X2023</code> (R adds the <code>X</code> when
+repairing a name that starts with a digit).</li>
+<li>
+<strong>A shared stem with numeric tails</strong>:
+<code>count_1998</code>, <code>count_1999</code>,
+<code>count_2000</code>, or <code>pass1</code>, <code>pass2</code>,
+<code>pass3</code>.</li>
+</ul><p>It is a heuristic and can be wrong in both directions. A genuine
+<code>pass1</code> column in a three-pass electrofishing design will be
+flagged; a wide table with columns named <code>coho</code>,
+<code>chinook</code>, <code>sockeye</code> will not be. Read it as a
+prompt to look, not a verdict.</p>
+<p>The wide shape is a problem for three concrete reasons: the
+dictionary gets one near-identical row per year column,
+<code>tables.csv</code> cannot say what one row is without ignoring the
+years spread sideways, and next year’s data changes the <em>schema</em>
+rather than adding rows. Reshaping with
+<code>tidyr::pivot_longer()</code> fixes all three:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">long</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">pivot_longer</span><span class="op">(</span></span>
+<span>  <span class="va">wide</span>,</span>
+<span>  cols <span class="op">=</span> <span class="op">-</span><span class="va">stream_id</span>,</span>
+<span>  names_to <span class="op">=</span> <span class="st">"survey_year"</span>,</span>
+<span>  values_to <span class="op">=</span> <span class="st">"spawner_count"</span>,</span>
+<span>  names_transform <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>survey_year <span class="op">=</span> <span class="va">as.integer</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p><code>names_to</code> should be named after what those column names
+<em>are</em> (<code>survey_year</code>, not <code>name</code>).
+<code>names_transform</code> matters because column names are always
+text: without it you get <code>"2021"</code> as a string, and
+<code>value_type</code> in the dictionary would have to say
+<code>string</code>. In Python, the equivalent is
+<code>pandas.melt()</code> / <code>DataFrame.melt()</code> with
+<code>var_name</code> and <code>value_name</code>, followed by an
+explicit dtype cast.</p>
+</div>
 </section><section><h2 class="section-heading" id="salmon-data-package-files">Salmon Data Package files<a class="anchor" aria-label="anchor" href="#salmon-data-package-files"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>File</th>
 <th>Purpose</th>
@@ -630,6 +747,13 @@ procedure, <code>protocol_iri</code>/<code>protocol_citation</code> on
 <code>tables.csv</code> or <code>dataset.csv</code> for a citable
 document, or a code column resolving through
 <code>codes.csv$term_iri</code> when the method varies by row.</p>
+<p>That is the shape since sdp-0.3.0. A package built before it may
+still carry a dictionary <code>method_iri</code> column, and the route
+forward is <code>migrate_sdp_methods(path)</code> — available in both
+implementations with the same signature, and with
+<code>dry_run = TRUE</code> / <code>dry_run=True</code> to see the
+proposed moves before writing anything. See the <a href="https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/migrating-to-sdp-0-3-0.Rmd" class="external-link">migration
+guide</a>.</p>
 <p>Do not use <code>property_iri</code>, <code>entity_iri</code>,
 <code>constraint_iri</code>, or <code>statistical_modifier_iri</code> as
 general relationship fields for identifiers, attributes, or categorical
