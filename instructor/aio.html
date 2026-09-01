@@ -1449,7 +1449,7 @@ and inspect the package structure.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
-<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
 <p>Put this shared setup at the top of <code>scripts/build_sdp.R</code>.
 Listing the context files now makes the optional LLM-assisted route
 available later, but the <code>FALSE</code> toggle keeps that route
@@ -1573,7 +1573,7 @@ CSVs.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <p>Put this shared setup at the top of <code>scripts/build_sdp.py</code>
 and run it from the same project root.</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -1684,7 +1684,7 @@ table ID.</p>
 <span id="cb8-23"><a href="#cb8-23" tabindex="-1" aria-label="code-block-8-23"></a>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
 <p><span class="h4 d-block mt-4" role="heading" aria-level="4">One flat
 CSV</span></p>
 <p>Copy the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
@@ -1819,7 +1819,7 @@ same workflow.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1848,7 +1848,7 @@ same workflow.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1882,7 +1882,7 @@ same workflow.</p>
 <span id="cb10-28"><a href="#cb10-28" tabindex="-1" aria-label="code-block-10-28"></a>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
 <p>Record each manual transformation and metadata decision in a review
 log beside the package. A spreadsheet-only workflow is inspectable but
 is not a fully executable rebuild; use the R or Python helper workflow
@@ -1916,7 +1916,7 @@ still decide which statements belong in canonical metadata.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-3" class="tab-content">
-<div id="nav-tabpanel-3-R" class="tab-pane show active" aria-labelledby="nav-tab-3-R" role="tabpanel">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-3-R">
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1931,7 +1931,7 @@ still decide which statements belong in canonical metadata.</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-3-Python" class="tab-pane" aria-labelledby="nav-tab-3-Python" role="tabpanel">
+<div id="nav-tabpanel-3-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Python">
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1949,7 +1949,7 @@ still decide which statements belong in canonical metadata.</p>
 <span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a>).read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-3-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Spreadsheet">
 <p>Open the source dictionary and methods/caveats note from
 <code>raw_data/</code> beside the package metadata. Copy only reviewed
 statements into canonical metadata; preserve longer narrative context in
@@ -2338,7 +2338,7 @@ cost is paid once, at build time, and never again during review.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
-<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2360,7 +2360,7 @@ cost is paid once, at build time, and never again during review.</p>
 <code class="sourceCode R"><span><span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">review_semantics</span><span class="op">(</span><span class="va">pkg_path</span>, columns <span class="op">=</span> <span class="st">"NATURAL_SPAWNERS_TOTAL"</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
+<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
 <p><strong>There is no Python equivalent.</strong> Not a partial one,
 not a differently-spelled one: <code>metasalmonpy</code> has no review
 queue, no accessor for the suggestions attribute, and no function that
@@ -2410,7 +2410,7 @@ as a comment or an explicit assignment, so the reasoning survives the
 way the pasted R call does. Until the Python review flow ships, that
 discipline is manual rather than enforced.</p>
 </div>
-<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
 <p>Open <code>semantic_suggestions.csv</code> at the package root beside
 <code>metadata/column_dictionary.csv</code>. Filter to
 <code>NATURAL_SPAWNERS_TOTAL</code> and to the <code>tables.csv</code>
@@ -2534,7 +2534,7 @@ say so, so a whole review is an ordinary re-runnable R script.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2574,13 +2574,13 @@ instead of a rank:</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
+<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
 <p>Pending, as above. Apply the decision by editing the target field in
 the canonical metadata CSV named by <code>target_sdp_file</code> and
 <code>target_sdp_field</code>, and record the reasoning in
 <code>scripts/build_sdp.py</code>.</p>
 </div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
 <p>Type the accepted IRI into the target field, with no
 <code>REVIEW:</code> prefix. Leave the field blank for a rejection and
 write the reason in your review log.</p>
@@ -2984,7 +2984,7 @@ columns.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-3" class="tab-content">
-<div id="nav-tabpanel-3-R" class="tab-pane show active" aria-labelledby="nav-tab-3-R" role="tabpanel">
+<div id="nav-tabpanel-3-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-3-R">
 <div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -2999,11 +2999,11 @@ columns.</p>
   TRUE)`.</code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-3-Python" class="tab-pane" aria-labelledby="nav-tab-3-Python" role="tabpanel">
+<div id="nav-tabpanel-3-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Python">
 <p>Pending. Edit the target metadata CSV fields directly, then
 revalidate.</p>
 </div>
-<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-3-Spreadsheet" role="tabpanel">
+<div id="nav-tabpanel-3-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-3-Spreadsheet">
 <p>Save the metadata CSVs you edited, keeping the header row and column
 order unchanged.</p>
 </div>
@@ -4860,8 +4860,8 @@ requests.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/aio.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/aio.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-26",
-  "datePublished": "2026-08-26"
+  "dateModified": "2026-09-01",
+  "datePublished": "2026-09-01"
 }
 
   </script><script>
